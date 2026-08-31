@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>หน้าหลัก (Home) - Lost & Found ICT</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Prompt', sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: #f8fafc;
+      color: #1e293b;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    .container-fluid {
+      width: 100%;
+      padding: 0 48px;
+    }
+
+    /* ---------------- 1. Navbar ---------------- */
+    .navbar {
+      background: #ffffff;
+      border-bottom: 2px solid #edf2f7;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+      width: 100%;
+    }
+
+    .navbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 90px;
+      padding: 0 48px;
+      gap: 32px;
+    }
+
+    /* ฝั่งซ้าย: โลโก้ + Home + My Activity */
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 48px;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #003b7a;
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      flex-shrink: 0;
+    }
+
+    .nav-brand i {
+      font-size: 36px;
+      color: #003b7a;
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      font-size: 20px;
+      font-weight: 500;
+      color: #64748b;
+      transition: color 0.2s;
+      position: relative;
+      padding-bottom: 6px;
+      white-space: nowrap;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: #003b7a;
+      font-weight: 700;
+    }
+
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 100%;
+      height: 3.5px;
+      background: #003b7a;
+      border-radius: 3px;
+    }
+
+    /* ฝั่งขวา: [ช่องค้นหา] [ปุ่ม + โพสต์] [Profile] */
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav-search-form {
+      position: relative;
+      width: 380px;
+    }
+
+    .nav-search-box {
+      display: flex;
+      align-items: center;
+      background: #f1f5f9;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 50px;
+      padding: 10px 22px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-search-box:focus-within {
+      background: #ffffff;
+      border-color: #003b7a;
+      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.12);
+    }
+
+    .nav-search-box i {
+      color: #64748b;
+      font-size: 18px;
+      margin-right: 12px;
+    }
+
+    .nav-search-box input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 17px;
+      color: #1e293b;
+      font-weight: 400;
+    }
+
+    .nav-search-box input::placeholder {
+      color: #94a3b8;
+    }
+
+    .btn-post {
+      background: #003b7a;
+      color: #ffffff;
+      border: none;
+      padding: 11px 26px;
+      border-radius: 50px;
+      font-size: 17px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(0, 59, 122, 0.2);
+    }
+
+    .btn-post:hover {
+      background: #002d5e;
+      transform: translateY(-1px);
+    }
+
+    .nav-profile {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: #334155;
+      font-size: 18px;
+      font-weight: 600;
+      padding: 8px 12px;
+      border-radius: 10px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .nav-profile i {
+      font-size: 20px;
+      color: #64748b;
+    }
+
+    .nav-profile:hover {
+      background: #f1f5f9;
+      color: #003b7a;
+    }
+
+    /* ---------------- 2. Hero Section ---------------- */
+    .hero-wrapper-full {
+      width: 100%;
+      padding: 24px 48px 0 48px;
+      margin-bottom: 56px;
+    }
+
+    .hero-section {
+      width: 100%;
+      position: relative;
+      border-radius: 28px;
+      overflow: hidden;
+      min-height: 440px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      text-align: center;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .hero-animated-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1800&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;
+      animation: heroFloatZoom 14s ease-in-out infinite alternate;
+      z-index: 1;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.72) 0%, rgba(0, 59, 122, 0.68) 100%);
+      z-index: 2;
+    }
+
+    @keyframes heroFloatZoom {
+      0% {
+        transform: scale(1) translate(0, 0);
+      }
+      50% {
+        transform: scale(1.06) translate(-8px, -4px);
+      }
+      100% {
+        transform: scale(1.12) translate(6px, 4px);
+      }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 3;
+      width: 100%;
+      max-width: 1100px;
+      color: #ffffff;
+      padding: 0 24px 56px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-content h1 {
+      font-size: 72px;
+      font-weight: 900;
+      margin-bottom: 16px;
+      letter-spacing: -1px;
+      line-height: 1.15;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 2px 6px rgba(0, 0, 0, 0.8);
+      animation: fadeIn 0.8s ease-out;
+      white-space: nowrap;
+    }
+
+    .hero-content p {
+      font-size: 26px;
+      color: #f8fafc;
+      font-weight: 500;
+      letter-spacing: 0.2px;
+      text-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+      animation: fadeIn 1s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ---------------- 3. Main Content Body ---------------- */
+    main {
+      flex: 1;
+      padding-bottom: 48px;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 56px;
+    }
+
+    .stat-card {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 22px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 14px rgba(0, 30, 80, 0.04);
+      border: 1.5px solid #edf2f7;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 30, 80, 0.08);
+    }
+
+    .stat-icon {
+      font-size: 30px;
+      margin-bottom: 8px;
+    }
+
+    .stat-icon.blue { color: #0284c7; }
+    .stat-icon.green { color: #10b981; }
+    .stat-icon.amber { color: #d97706; }
+
+    .stat-number {
+      font-size: 42px;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.1;
+    }
+
+    .stat-label {
+      font-size: 18px;
+      color: #475569;
+      margin-top: 6px;
+      font-weight: 600;
+    }
+
+    /* ---------------- Recent Items Section ---------------- */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      scroll-margin-top: 110px;
+    }
+
+    .section-header h2 {
+      font-size: 32px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .section-header .view-all {
+      font-size: 18px;
+      color: #0056b3;
+      text-decoration: none;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-header .view-all:hover {
+      text-decoration: underline;
+    }
+
+    .items-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-bottom: 56px;
+    }
+
+    .item-card {
+      background: #ffffff;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1.5px solid #edf2f7;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .item-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .item-image-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      min-height: 220px;
+      background: #f1f5f9;
+      overflow: hidden;
+    }
+
+    .item-image-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transition: transform 0.3s ease;
+    }
+
+    .item-card:hover .item-image-wrapper img {
+      transform: scale(1.04);
+    }
+
+    .item-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #22c55e;
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    }
+
+    /* ---------------- ข้อมูลและปุ่มดูรายละเอียดใต้การ์ด ---------------- */
+    .item-body {
+      padding: 20px 22px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: #ffffff;
+      gap: 16px;
+    }
+
+    .item-info {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .item-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.25;
+    }
+
+    .item-meta {
+      font-size: 16px;
+      color: #334155;
+      font-weight: 500;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .item-meta span {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .item-meta span i {
+      font-size: 17px;
+      color: #003b7a;
+      width: 20px;
+      text-align: center;
+    }
+
+    /* ปุ่มดูรายละเอียด */
+    .btn-detail {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      background: #f8fafc;
+      color: #003b7a;
+      border: 1.5px solid #cbd5e1;
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-size: 15.5px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-detail:hover {
+      background: #003b7a;
+      color: #ffffff;
+      border-color: #003b7a;
+      box-shadow: 0 4px 12px rgba(0, 59, 122, 0.2);
+    }
+
+    .btn-detail i {
+      font-size: 14px;
+      transition: transform 0.2s ease;
+    }
+
+    .btn-detail:hover i {
+      transform: translateX(4px);
+    }
+
+    /* How It Works */
+    .how-it-works {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 44px 32px;
+      border: 1.5px solid #edf2f7;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+    }
+
+    .how-it-works h2 {
+      font-size: 28px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 36px;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+
+    .step-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .step-icon {
+      width: 68px;
+      height: 68px;
+      background: #0056b3;
+      color: #ffffff;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      margin-bottom: 16px;
+      box-shadow: 0 6px 16px rgba(0, 86, 179, 0.2);
+    }
+
+    .step-title {
+      font-size: 19px;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 6px;
+    }
+
+    .step-desc {
+      font-size: 15.5px;
+      color: #64748b;
+      line-height: 1.55;
+      max-width: 280px;
+    }
+
+    /* ---------------- Footer ---------------- */
+    .footer {
+      background: #ffffff;
+      border-top: 1.5px solid #edf2f7;
+      margin-top: auto;
+      padding: 24px 0;
+      width: 100%;
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 15px;
+      color: #64748b;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-links a {
+      color: #64748b;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: #003b7a;
+    }
+
+    /* ---------------- Responsive ---------------- */
+    @media (max-width: 1200px) {
+      .hero-content h1 {
+        font-size: 56px;
+      }
+      .hero-content p {
+        font-size: 22px;
+      }
+    }
+
+    @media (max-width: 992px) {
+      .navbar-inner {
+        padding: 0 24px;
+        gap: 16px;
+      }
+      .nav-left {
+        gap: 24px;
+      }
+      .nav-search-form {
+        width: 240px;
+      }
+      .hero-content {
+        padding-bottom: 40px;
+      }
+      .hero-content h1 {
+        font-size: 44px;
+        white-space: normal;
+      }
+      .hero-content p {
+        font-size: 18px;
+      }
+      .items-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .navbar-inner {
+        height: auto;
+        padding: 16px 20px;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .nav-left, .nav-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+      .nav-search-form {
+        width: 100%;
+      }
+      .container-fluid {
+        padding: 0 20px;
+      }
+      .hero-wrapper-full {
+        padding: 16px 20px 0 20px;
+      }
+      .hero-content h1 {
+        font-size: 34px;
+      }
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      .items-grid {
+        grid-template-columns: 1fr;
+      }
+      .steps-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      .footer-inner {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      
+      <div class="nav-left">
+        <a href="home.html" class="nav-brand">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Lost & Found ICT</span>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="home.html" class="nav-link active">Home</a></li>
+          <li><a href="#" class="nav-link">My Activity</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-actions">
+        <form class="nav-search-form" onsubmit="handleSearch(event)">
+          <div class="nav-search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="ค้นหารายการ...">
+          </div>
+        </form>
+
+        <a href="#" class="btn-post">
+          <i class="fa-solid fa-plus"></i>
+          <span>โพสต์</span>
+        </a>
+
+        <a href="#" class="nav-profile">
+          <i class="fa-regular fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <div class="hero-wrapper-full">
+    <section class="hero-section">
+      <div class="hero-animated-bg"></div>
+      <div class="hero-overlay"></div>
+      
+      <div class="hero-content">
+        <h1>ค้นหาสิ่งของคุณที่ทำหาย</h1>
+        <p>ระบบจัดการของหายที่น่าเชื่อถือ สะดวก และรวดเร็วที่สุด</p>
+      </div>
+    </section>
+  </div>
+
+  <main class="container-fluid">
+    
+    <section class="stats-grid">
+      <div class="stat-card">
+        <i class="fa-regular fa-calendar stat-icon blue"></i>
+        <div class="stat-number">5</div>
+        <div class="stat-label">พบวันนี้</div>
+      </div>
+      <div class="stat-card">
+        <i class="fa-regular fa-circle-check stat-icon green"></i>
+        <div class="stat-number">20</div>
+        <div class="stat-label">ส่งคืนสำเร็จ</div>
+      </div>
+      <div class="stat-card">
+        <i class="fa-regular fa-folder-open stat-icon amber"></i>
+        <div class="stat-number">50</div>
+        <div class="stat-label">รายการที่ยังเปิดอยู่</div>
+      </div>
+    </section>
+
+    <section id="recent-items-section">
+      <div class="section-header">
+        <h2>รายการพบล่าสุด</h2>
+        <a href="#" class="view-all">
+          <span>ดูทั้งหมด</span>
+          <i class="fa-solid fa-angle-right"></i>
+        </a>
+      </div>
+
+      <div class="items-grid">
+        <div class="item-card">
+          <div class="item-image-wrapper">
+            <img src="images/key.jpeg" alt="กุญแจรถ">
+            <span class="item-badge">พบใหม่</span>
+          </div>
+          <div class="item-body">
+            <div class="item-info">
+              <div class="item-title">กุญแจรถ</div>
+              <div class="item-meta">
+                <span><i class="fa-regular fa-calendar"></i> 1 ก.ย. 2026</span>
+                <span><i class="fa-solid fa-location-dot"></i> ICT1102/1</span>
+              </div>
+            </div>
+            <a href="#" class="btn-detail">
+              <span>ดูรายละเอียด</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="item-card">
+          <div class="item-image-wrapper">
+            <img src="images/wallet.jpeg" alt="กระเป๋าสตางค์">
+          </div>
+          <div class="item-body">
+            <div class="item-info">
+              <div class="item-title">กระเป๋าสตางค์</div>
+              <div class="item-meta">
+                <span><i class="fa-regular fa-calendar"></i> 31 ส.ค. 2026</span>
+                <span><i class="fa-solid fa-location-dot"></i> โรงอาหาร</span>
+              </div>
+            </div>
+            <a href="#" class="btn-detail">
+              <span>ดูรายละเอียด</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="item-card">
+          <div class="item-image-wrapper">
+            <img src="images/umbrella.jpeg" alt="ร่ม">
+          </div>
+          <div class="item-body">
+            <div class="item-info">
+              <div class="item-title">ร่ม</div>
+              <div class="item-meta">
+                <span><i class="fa-regular fa-calendar"></i> 30 ส.ค. 2026</span>
+                <span><i class="fa-solid fa-location-dot"></i> ห้องสาขาวิศวกรรมซอฟต์แวร์</span>
+              </div>
+            </div>
+            <a href="#" class="btn-detail">
+              <span>ดูรายละเอียด</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="item-card">
+          <div class="item-image-wrapper">
+            <img src="images/phone.jpeg" alt="โทรศัพท์มือถือ">
+          </div>
+          <div class="item-body">
+            <div class="item-info">
+              <div class="item-title">โทรศัพท์มือถือ</div>
+              <div class="item-meta">
+                <span><i class="fa-regular fa-calendar"></i> 30 ส.ค. 2026</span>
+                <span><i class="fa-solid fa-location-dot"></i> ICT1111</span>
+              </div>
+            </div>
+            <a href="#" class="btn-detail">
+              <span>ดูรายละเอียด</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="how-it-works">
+      <h2>วิธีการใช้งาน</h2>
+      <div class="steps-grid">
+        <div class="step-item">
+          <div class="step-icon">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </div>
+          <div class="step-title">1. ค้นหาหรือแจ้ง</div>
+          <div class="step-desc">ค้นหาของที่คุณทำหายในระบบ หรือแจ้งข้อมูลกรณีไม่พบ</div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-icon">
+            <i class="fa-solid fa-clipboard-check"></i>
+          </div>
+          <div class="step-title">2. ยืนยันตัวตน</div>
+          <div class="step-desc">แสดงหลักฐานความเป็นเจ้าของ</div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-icon">
+            <i class="fa-solid fa-box-archive"></i>
+          </div>
+          <div class="step-title">3. รับคืน</div>
+          <div class="step-desc">นัดรับสิ่งของตามตำแหน่งที่กำหนด</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container-fluid footer-inner">
+      <div>
+        <strong>Lost & Found ICT</strong> &copy; 2026 Lost & Found System. All rights reserved.
+      </div>
+      <div class="footer-links">
+        <a href="#">Contact Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function handleSearch(event) {
+      event.preventDefault();
+      const query = document.getElementById('searchInput').value;
+      console.log('Search Query:', query);
+
+      const target = document.getElementById('recent-items-section');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  </script>
+
+</body>
+</html>
