@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>รายละเอียดสิ่งของ - Lost & Found ICT</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Prompt', sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: #f8fafc;
+      color: #1e293b;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    /* ---------------- 1. Navbar (ล็อกขนาดและโครงสร้างตรงกันทุกหน้า 100%) ---------------- */
+    .navbar {
+      background: #ffffff;
+      border-bottom: 2px solid #edf2f7;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+      width: 100%;
+    }
+
+    .navbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 94px;
+      padding: 0 48px;
+      gap: 32px;
+      width: 100%;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 48px;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #003b7a;
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      flex-shrink: 0;
+    }
+
+    .nav-brand i {
+      font-size: 38px;
+      color: #003b7a;
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      font-size: 21px;
+      font-weight: 500;
+      color: #64748b;
+      transition: color 0.2s;
+      position: relative;
+      padding-bottom: 6px;
+      white-space: nowrap;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: #003b7a;
+      font-weight: 700;
+    }
+
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: #003b7a;
+      border-radius: 3px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav-search-form {
+      position: relative;
+      width: 400px;
+    }
+
+    .nav-search-box {
+      display: flex;
+      align-items: center;
+      background: #f1f5f9;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 50px;
+      padding: 11px 22px;
+      transition: all 0.2s ease;
+      width: 100%;
+    }
+
+    .nav-search-box:focus-within {
+      background: #ffffff;
+      border-color: #003b7a;
+      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.12);
+    }
+
+    .nav-search-box i {
+      color: #64748b;
+      font-size: 18px;
+      margin-right: 12px;
+      flex-shrink: 0;
+    }
+
+    .nav-search-box input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 17.5px;
+      color: #1e293b;
+      font-weight: 400;
+      width: 100%;
+    }
+
+    .btn-post {
+      background: #003b7a;
+      color: #ffffff;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-size: 17.5px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(0, 59, 122, 0.2);
+    }
+
+    .btn-post:hover {
+      background: #002d5e;
+      transform: translateY(-1px);
+    }
+
+    .nav-profile {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: #334155;
+      font-size: 18.5px;
+      font-weight: 600;
+      padding: 8px 12px;
+      border-radius: 10px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .nav-profile i {
+      font-size: 22px;
+      color: #64748b;
+    }
+
+    .nav-profile:hover {
+      background: #f1f5f9;
+      color: #003b7a;
+    }
+
+    /* ---------------- 2. Breadcrumb Navigation ---------------- */
+    .breadcrumb-container {
+      width: 100%;
+      padding: 32px 48px 0 48px;
+      display: flex;
+      align-items: center;
+    }
+
+    .breadcrumb-list {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      list-style: none;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .breadcrumb-list a {
+      text-decoration: none;
+      color: #64748b;
+      transition: color 0.2s ease;
+    }
+
+    .breadcrumb-list a:hover {
+      color: #003b7a;
+      text-decoration: underline;
+    }
+
+    .breadcrumb-list .separator {
+      color: #94a3b8;
+      font-size: 14px;
+    }
+
+    .breadcrumb-list .current {
+      color: #0f172a;
+      font-weight: 800;
+    }
+
+    /* ---------------- 3. Main Detail Layout (Full-Width) ---------------- */
+    .detail-main {
+      flex: 1;
+      padding: 24px 48px 64px 48px;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 36px;
+      align-items: flex-start;
+    }
+
+    /* ---------------- ฝั่งซ้าย: Gallery ---------------- */
+    .detail-left {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .gallery-card {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 24px;
+      border: 1.5px solid #edf2f7;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+    }
+
+    .main-image-box {
+      position: relative;
+      width: 100%;
+      height: 520px;
+      border-radius: 18px;
+      overflow: hidden;
+      background: #f8fafc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #f1f5f9;
+    }
+
+    .main-image-box img {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+    }
+
+    .btn-fullscreen {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 48px;
+      height: 48px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(4px);
+      border: none;
+      border-radius: 14px;
+      font-size: 20px;
+      color: #1e293b;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+      transition: all 0.2s ease;
+    }
+
+    .btn-fullscreen:hover {
+      background: #ffffff;
+      color: #003b7a;
+      transform: scale(1.05);
+    }
+
+    /* แถบรูปย่อ (Thumbnails) */
+    .thumbnail-list {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      width: 100%;
+    }
+
+    .thumb-item {
+      height: 120px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 2.5px solid transparent;
+      cursor: pointer;
+      background: #f1f5f9;
+      position: relative;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .thumb-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .thumb-item.active {
+      border-color: #0056b3;
+      box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.2);
+    }
+
+    .thumb-item:hover {
+      transform: translateY(-3px);
+    }
+
+    .thumb-more {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #f8fafc;
+      border: 1.5px dashed #cbd5e1;
+      color: #475569;
+      font-size: 15.5px;
+      font-weight: 700;
+      gap: 6px;
+    }
+
+    .thumb-more i {
+      font-size: 22px;
+    }
+
+    /* ---------------- ฝั่งขวา: รายละเอียด ---------------- */
+    .detail-right {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 40px 36px;
+      border: 1.5px solid #edf2f7;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      width: 100%;
+    }
+
+    .tag-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* ป้ายสถานะ */
+    .badge-status {
+      font-size: 15px;
+      font-weight: 700;
+      padding: 7px 18px;
+      border-radius: 50px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-status.badge-new {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .badge-status.badge-storage {
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+
+    .badge-status.badge-claim {
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    .badge-status.badge-lost {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .badge-category {
+      background: #f1f5f9;
+      color: #475569;
+      font-size: 15px;
+      font-weight: 600;
+      padding: 7px 18px;
+      border-radius: 50px;
+    }
+
+    .item-header-info {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .detail-title {
+      font-size: 34px;
+      font-weight: 900;
+      color: #0f172a;
+      line-height: 1.25;
+      letter-spacing: -0.5px;
+    }
+
+    .reference-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 17px;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    .ref-code {
+      background: #f1f5f9;
+      padding: 4px 12px;
+      border-radius: 8px;
+      font-weight: 700;
+      color: #334155;
+      font-family: monospace;
+    }
+
+    .meta-info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px 28px;
+      padding-top: 20px;
+      border-top: 1.5px solid #f1f5f9;
+    }
+
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .meta-item.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .meta-item-label {
+      font-size: 16px;
+      color: #64748b;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .meta-item-label i {
+      color: #003b7a;
+      font-size: 18px;
+    }
+
+    .meta-item-val {
+      font-size: 20px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .desc-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .desc-title {
+      font-size: 19px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .desc-box {
+      background: #f8fafc;
+      border: 1.5px solid #edf2f7;
+      border-radius: 16px;
+      padding: 20px 24px;
+      font-size: 17px;
+      line-height: 1.75;
+      color: #334155;
+    }
+
+    .claim-action-box {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-top: 10px;
+    }
+
+    .btn-claim {
+      background: #0056b3;
+      color: #ffffff;
+      border: none;
+      border-radius: 16px;
+      padding: 18px 24px;
+      font-size: 20px;
+      font-weight: 800;
+      cursor: pointer;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 4px 16px rgba(0, 86, 179, 0.3);
+      transition: all 0.2s ease;
+    }
+
+    .btn-claim:hover {
+      background: #003b7a;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 86, 179, 0.4);
+    }
+
+    .claim-notice {
+      text-align: center;
+      font-size: 15px;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    /* ---------------- 4. Footer ---------------- */
+    .footer {
+      background: #ffffff;
+      border-top: 1.5px solid #edf2f7;
+      margin-top: auto;
+      padding: 24px 0;
+      width: 100%;
+    }
+
+    .footer-inner {
+      padding: 0 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 15px;
+      color: #64748b;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-links a {
+      color: #64748b;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: #003b7a;
+    }
+
+    /* ---------------- Responsive ---------------- */
+    @media (max-width: 1200px) {
+      .detail-main {
+        grid-template-columns: 1fr;
+        padding: 20px 24px 48px 24px;
+      }
+      .navbar-inner, .breadcrumb-container, .footer-inner {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+      .main-image-box {
+        height: 440px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .navbar-inner {
+        height: auto;
+        padding: 16px 20px;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .nav-left, .nav-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+      .nav-search-form {
+        width: 100%;
+      }
+      .breadcrumb-container {
+        padding: 20px 20px 0 20px;
+      }
+      .detail-main {
+        padding: 16px 20px 40px 20px;
+      }
+      .main-image-box {
+        height: 320px;
+      }
+      .thumb-item {
+        height: 80px;
+      }
+      .meta-info-grid {
+        grid-template-columns: 1fr;
+      }
+      .footer-inner {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. Header / Navbar -->
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="nav-left">
+        <a href="home.html" class="nav-brand">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Lost & Found ICT</span>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="home.html" class="nav-link active">Home</a></li>
+          <li><a href="browse.html" class="nav-link">My Activity</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-actions">
+        <form class="nav-search-form" action="browse.html" method="GET">
+          <div class="nav-search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" name="search" placeholder="ค้นหารายการ...">
+          </div>
+        </form>
+
+        <a href="report.html" class="btn-post">
+          <i class="fa-solid fa-plus"></i>
+          <span>โพสต์</span>
+        </a>
+
+        <a href="#" class="nav-profile">
+          <i class="fa-regular fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. Breadcrumb Navigation -->
+  <div class="breadcrumb-container">
+    <ul class="breadcrumb-list">
+      <li><a href="home.html">หน้าหลัก</a></li>
+      <li class="separator"><i class="fa-solid fa-chevron-right"></i></li>
+      <li><a href="browse.html">ค้นหาสิ่งของ</a></li>
+      <li class="separator"><i class="fa-solid fa-chevron-right"></i></li>
+      <li class="current">รายละเอียด</li>
+    </ul>
+  </div>
+
+  <!-- 3. Main Detail Content -->
+  <main class="detail-main">
+    
+    <!-- ฝั่งซ้าย: แกลเลอรีรูปภาพ -->
+    <div class="detail-left">
+      <div class="gallery-card">
+        <div class="main-image-box">
+          <img id="mainDisplayImg" src="" alt="ภาพสิ่งของ">
+          <button type="button" class="btn-fullscreen" title="ดูรูปขนาดเต็ม" onclick="alert('แสดงรูปภาพขนาดเต็ม')">
+            <i class="fa-solid fa-expand"></i>
+          </button>
+        </div>
+
+        <!-- แถบรูปย่อย Thumbnail -->
+        <div class="thumbnail-list" id="thumbnailContainer"></div>
+      </div>
+    </div>
+
+    <!-- ฝั่งขวา: รายละเอียดสิ่งของ + ปุ่ม Action -->
+    <div class="detail-right">
+      
+      <!-- Tags แถวบน -->
+      <div class="tag-row">
+        <span class="badge-status" id="detailStatus">
+          <i class="fa-regular fa-circle-check"></i>
+          <span id="statusText">สถานะ: พบใหม่</span>
+        </span>
+        <span class="badge-category" id="detailCategory">
+          <span>หมวดหมู่: กระเป๋า/กุญแจ</span>
+        </span>
+      </div>
+
+      <!-- หัวข้อ + รหัสอ้างอิง -->
+      <div class="item-header-info">
+        <h1 class="detail-title" id="detailTitle">ชื่อสิ่งของ</h1>
+        <div class="reference-box">
+          <span>รหัสอ้างอิง:</span>
+          <span class="ref-code" id="detailRef">REF-202609-001</span>
+        </div>
+      </div>
+
+      <!-- วันที่ / เวลา / สถานที่พบ / จุดรับของ -->
+      <div class="meta-info-grid">
+        <div class="meta-item">
+          <div class="meta-item-label">
+            <i class="fa-regular fa-calendar"></i>
+            <span>วันที่พบ</span>
+          </div>
+          <div class="meta-item-val" id="detailDate">1 ก.ย. 2026</div>
+        </div>
+
+        <div class="meta-item">
+          <div class="meta-item-label">
+            <i class="fa-regular fa-clock"></i>
+            <span>เวลาที่พบโดยประมาณ</span>
+          </div>
+          <div class="meta-item-val" id="detailTime">10:30 น.</div>
+        </div>
+
+        <div class="meta-item full-width">
+          <div class="meta-item-label">
+            <i class="fa-solid fa-location-dot"></i>
+            <span>สถานที่พบ</span>
+          </div>
+          <div class="meta-item-val" id="detailLocation">ห้องเรียน ICT1102/1</div>
+        </div>
+
+        <div class="meta-item full-width" id="storageWrapper">
+          <div class="meta-item-label">
+            <i class="fa-solid fa-box-archive"></i>
+            <span>จุดรับของปัจจุบัน</span>
+          </div>
+          <div class="meta-item-val" id="detailStorage">ศูนย์รับแจ้งของหาย อาคารคณะ ICT (ชั้น 1)</div>
+        </div>
+      </div>
+
+      <!-- รายละเอียดเพิ่มเติม -->
+      <div class="desc-section">
+        <h3 class="desc-title">รายละเอียดเพิ่มเติม</h3>
+        <div class="desc-box" id="detailDescription">
+          รายละเอียดสิ่งของ
+        </div>
+      </div>
+
+      <!-- ปุ่มอ้างสิทธิ์ -->
+      <div class="claim-action-box" id="claimActionBox">
+        <button type="button" class="btn-claim" onclick="handleClaim()">
+          <i class="fa-solid fa-hand"></i>
+          <span>อ้างสิทธิ์ความเป็นเจ้าของ</span>
+        </button>
+        <div class="claim-notice">
+          คุณจะต้องเข้าสู่ระบบและยืนยันตัวตนเพื่อทำรายการนี้
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- 4. Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <strong>Lost & Found ICT</strong> &copy; 2026 Lost & Found System. All rights reserved.
+      </div>
+      <div class="footer-links">
+        <a href="#">Contact Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 5. Database จำลองและ Logic ดึงข้อมูลตาม URL Param (?id=...) -->
+  <script>
+    const itemsDB = {
+      key: {
+        title: "กุญแจรถ",
+        ref: "REF-202609-001",
+        category: "กระเป๋า/สัมภาระ/กุญแจ",
+        status: "พบใหม่",
+        statusClass: "badge-new",
+        type: "found",
+        date: "1 กันยายน 2026",
+        time: "09:15 น.",
+        location: "ห้องปฏิบัติการคอมพิวเตอร์ ICT1102/1",
+        storage: "ศูนย์รับแจ้งของหาย อาคารคณะ ICT (ชั้น 1 ห้องธุรการ)",
+        description: "กุญแจรถจักรยานยนต์ Honda พร้อมพวงกุญแจโลหะสลักหมายเลข ตกอยู่ใต้โต๊ะคอมพิวเตอร์แถวที่ 3 เจ้าของกรุณานำสำเนาเล่มทะเบียนหรือกุญแจสำรองมาแสดงยืนยัน",
+        images: ["images/key.jpeg", "images/key.jpeg", "images/key.jpeg"]
+      },
+      phone: {
+        title: "โทรศัพท์มือถือ",
+        ref: "REF-202609-002",
+        category: "อุปกรณ์อิเล็กทรอนิกส์",
+        status: "พบใหม่",
+        statusClass: "badge-new",
+        type: "found",
+        date: "1 กันยายน 2026",
+        time: "11:40 น.",
+        location: "ห้องเรียนบรรยาย ICT1111",
+        storage: "เคาน์เตอร์ประชาสัมพันธ์ คณะ ICT",
+        description: "สมาร์ทโฟนใส่เคสใสตกแต่งลวดลายกราฟิกโบว์สีดำ ติดฟิล์มกระจก แบตเตอรี่ใกล้หมด ล็อกรหัสผ่านหน้าจอไว้ เจ้าของสามารถปลดล็อกหน้าจอเพื่อยืนยันตัวตนได้",
+        images: ["images/phone.jpeg", "images/phone.jpeg", "images/phone.jpeg"]
+      },
+      wallet: {
+        title: "กระเป๋าสตางค์",
+        ref: "REF-202608-089",
+        category: "กระเป๋า/สัมภาระ/กุญแจ",
+        status: "แจ้งหาย",
+        statusClass: "badge-lost",
+        type: "lost",
+        date: "31 สิงหาคม 2026",
+        time: "14:30 น.",
+        location: "โรงอาหาร",
+        storage: "",
+        description: "กระเป๋าสตางค์แบบพับ สีครีม ลายดอกไม้ ภายในมีบัตรนิสิตและบัตรเอทีเอ็ม หากผู้ใดพบเห็นกรุณาติดต่อส่งคืนที่จุดประชาสัมพันธ์",
+        images: ["images/wallet.jpeg", "images/wallet.jpeg", "images/wallet.jpeg"]
+      },
+      airpods: {
+        title: "หูฟังไร้สายเคสสีขาว",
+        ref: "REF-202608-075",
+        category: "อุปกรณ์อิเล็กทรอนิกส์",
+        status: "อยู่ที่จุดรับฝาก",
+        statusClass: "badge-storage",
+        type: "found",
+        date: "29 สิงหาคม 2026",
+        time: "12:15 น.",
+        location: "โรงอาหาร",
+        storage: "ห้องประสานงานกิจการนิสิต คณะ ICT",
+        description: "หูฟังไร้สายเคสสีขาว พร้อมตัวหูฟังทั้งสองข้าง ใช้งานได้ปกติ ไม่มีสติกเกอร์แปะ เจ้าของสามารถเชื่อมต่อบลูทูธเพื่อยืนยันความเป็นเจ้าของได้",
+        images: ["images/airpods.jpeg", "images/airpods.jpeg", "images/airpods.jpeg"]
+      },
+      glasses: {
+        title: "แว่นตา",
+        ref: "REF-202608-062",
+        category: "ของใช้ส่วนตัว",
+        status: "แจ้งหาย",
+        statusClass: "badge-lost",
+        type: "lost",
+        date: "28 สิงหาคม 2026",
+        time: "16:00 น.",
+        location: "ห้องสาขาคอมพิวเตอร์กราฟิก",
+        storage: "",
+        description: "แว่นสายตากรอบโลหะทรงกลมสีเงิน เลนส์สายตา ทำตกหล่นบริเวณโต๊ะทำงานในห้องสาขา หากมีผู้พบเจอติดต่อด่วน",
+        images: ["images/glasses.jpeg", "images/glasses.jpeg", "images/glasses.jpeg"]
+      },
+      umbrella: {
+        title: "ร่ม",
+        ref: "REF-202608-051",
+        category: "ของใช้ส่วนตัว",
+        status: "กำลังยื่นคำร้องขอรับคืน",
+        statusClass: "badge-claim",
+        type: "found",
+        date: "27 สิงหาคม 2026",
+        time: "17:20 น.",
+        location: "ห้องสาขาวิศวกรรมซอฟต์แวร์",
+        storage: "ห้องพักอาจารย์สาขาวิชา SE",
+        description: "ร่มพับกันแดด/ฝน ลายตารางหมากรุกสีขาวดำ ด้ามจับไม้ มีสายรัดโบว์และซองใส่ร่มเข้าชุดกัน",
+        images: ["images/umbrella.jpeg", "images/umbrella.jpeg", "images/umbrella.jpeg"]
+      }
+    };
+
+    function loadItemDetail() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const itemId = urlParams.get('id') || 'key';
+      const item = itemsDB[itemId] || itemsDB['key'];
+
+      document.getElementById('detailTitle').textContent = item.title;
+      document.getElementById('detailRef').textContent = item.ref;
+      document.getElementById('detailCategory').innerHTML = `<span>หมวดหมู่: ${item.category}</span>`;
+      document.getElementById('detailDate').textContent = item.date;
+      document.getElementById('detailTime').textContent = item.time;
+      document.getElementById('detailLocation').textContent = item.location;
+      document.getElementById('detailDescription').textContent = item.description;
+
+      const storageWrapper = document.getElementById('storageWrapper');
+      if (item.type === 'lost' || item.status === 'พบใหม่') {
+        storageWrapper.style.display = 'none';
+      } else {
+        storageWrapper.style.display = 'flex';
+        document.getElementById('detailStorage').textContent = item.storage;
+      }
+
+      const statusEl = document.getElementById('detailStatus');
+      statusEl.className = `badge-status ${item.statusClass}`;
+      document.getElementById('statusText').textContent = `สถานะ: ${item.status}`;
+
+      const claimBox = document.getElementById('claimActionBox');
+      if (item.type === 'lost' || item.status === 'พบใหม่') {
+        claimBox.style.display = 'none';
+      } else {
+        claimBox.style.display = 'flex';
+      }
+
+      const mainImg = document.getElementById('mainDisplayImg');
+      mainImg.src = item.images[0];
+      mainImg.alt = item.title;
+
+      const thumbContainer = document.getElementById('thumbnailContainer');
+      thumbContainer.innerHTML = '';
+      item.images.forEach((imgSrc, index) => {
+        const thumb = document.createElement('div');
+        thumb.className = `thumb-item ${index === 0 ? 'active' : ''}`;
+        thumb.onclick = function() { changeImage(this, imgSrc); };
+        thumb.innerHTML = `<img src="${imgSrc}" alt="${item.title}">`;
+        thumbContainer.appendChild(thumb);
+      });
+
+      const moreThumb = document.createElement('div');
+      moreThumb.className = 'thumb-item thumb-more';
+      moreThumb.onclick = function() { alert('แสดงภาพเพิ่มเติมทั้งหมด'); };
+      moreThumb.innerHTML = `<i class="fa-regular fa-images"></i><span>+2 ภาพ</span>`;
+      thumbContainer.appendChild(moreThumb);
+    }
+
+    function changeImage(element, src) {
+      document.getElementById('mainDisplayImg').src = src;
+      document.querySelectorAll('.thumb-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      element.classList.add('active');
+    }
+
+    function handleClaim() {
+      alert('กำลังเปิดแบบฟอร์มยืนยันตัวตนเพื่ออ้างสิทธิ์ความเป็นเจ้าของ');
+    }
+
+    document.addEventListener('DOMContentLoaded', loadItemDetail);
+  </script>
+
+</body>
+</html>

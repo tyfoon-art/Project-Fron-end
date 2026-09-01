@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ค้นหารายการ - Lost & Found ICT</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Prompt', sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: #f8fafc;
+      color: #1e293b;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    /* ---------------- 1. Navbar ---------------- */
+    .navbar {
+      background: #ffffff;
+      border-bottom: 2px solid #edf2f7;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+      width: 100%;
+    }
+
+    .navbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 94px;
+      padding: 0 48px;
+      gap: 32px;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 48px;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #003b7a;
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      flex-shrink: 0;
+    }
+
+    .nav-brand i {
+      font-size: 38px;
+      color: #003b7a;
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      font-size: 21px;
+      font-weight: 500;
+      color: #64748b;
+      transition: color 0.2s;
+      position: relative;
+      padding-bottom: 6px;
+      white-space: nowrap;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: #003b7a;
+      font-weight: 700;
+    }
+
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: #003b7a;
+      border-radius: 3px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav-search-form {
+      position: relative;
+      width: 400px;
+    }
+
+    .nav-search-box {
+      display: flex;
+      align-items: center;
+      background: #f1f5f9;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 50px;
+      padding: 11px 22px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-search-box:focus-within {
+      background: #ffffff;
+      border-color: #003b7a;
+      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.12);
+    }
+
+    .nav-search-box i {
+      color: #64748b;
+      font-size: 18px;
+      margin-right: 12px;
+    }
+
+    .nav-search-box input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 17.5px;
+      color: #1e293b;
+      font-weight: 400;
+    }
+
+    .btn-post {
+      background: #003b7a;
+      color: #ffffff;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-size: 17.5px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(0, 59, 122, 0.2);
+    }
+
+    .btn-post:hover {
+      background: #002d5e;
+      transform: translateY(-1px);
+    }
+
+    .nav-profile {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: #334155;
+      font-size: 18.5px;
+      font-weight: 600;
+      padding: 8px 12px;
+      border-radius: 10px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .nav-profile i {
+      font-size: 22px;
+      color: #64748b;
+    }
+
+    .nav-profile:hover {
+      background: #f1f5f9;
+      color: #003b7a;
+    }
+
+    /* ---------------- 2. Breadcrumb Navigation ---------------- */
+    .breadcrumb-container {
+      width: 100%;
+      padding: 32px 48px 0 48px;
+      display: flex;
+      align-items: center;
+    }
+
+    .breadcrumb-list {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      list-style: none;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .breadcrumb-list a {
+      text-decoration: none;
+      color: #64748b;
+      transition: color 0.2s ease;
+    }
+
+    .breadcrumb-list a:hover {
+      color: #003b7a;
+      text-decoration: underline;
+    }
+
+    .breadcrumb-list .separator {
+      color: #94a3b8;
+      font-size: 14px;
+    }
+
+    .breadcrumb-list .current {
+      color: #0f172a;
+      font-weight: 800;
+    }
+
+    /* ---------------- 3. Main Layout ---------------- */
+    .browse-main {
+      flex: 1;
+      padding: 24px 48px 64px 48px;
+      width: 100%;
+      display: flex;
+      gap: 36px;
+      align-items: flex-start;
+    }
+
+    /* ---------------- Sidebar Filter ---------------- */
+    .sidebar-filter {
+      width: 380px !important;
+      flex-shrink: 0;
+      background: #ffffff;
+      padding: 32px 28px;
+      border-radius: 24px;
+      border: 1.5px solid #edf2f7;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 26px;
+      position: sticky;
+      top: 114px;
+    }
+
+    .filter-title {
+      font-size: 30px !important;
+      font-weight: 900;
+      color: #0f172a;
+      letter-spacing: -0.5px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #f1f5f9;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .filter-label {
+      font-size: 21px !important;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .checkbox-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      font-size: 18px !important;
+      font-weight: 500;
+      color: #334155;
+      user-select: none;
+      transition: color 0.15s;
+    }
+
+    .checkbox-item:hover {
+      color: #003b7a;
+    }
+
+    .checkbox-item input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 24px !important;
+      height: 24px !important;
+      border: 2px solid #94a3b8;
+      border-radius: 7px;
+      outline: none;
+      cursor: pointer;
+      display: grid;
+      place-content: center;
+      transition: all 0.15s;
+    }
+
+    .checkbox-item input[type="checkbox"]:checked {
+      background-color: #003b7a;
+      border-color: #003b7a;
+    }
+
+    .checkbox-item input[type="checkbox"]:checked::before {
+      content: "\f00c";
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      font-size: 14px;
+      color: #ffffff;
+    }
+
+    .select-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+
+    .select-wrapper select {
+      width: 100%;
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 14px;
+      padding: 14px 44px 14px 18px;
+      font-size: 17.5px !important;
+      font-weight: 500;
+      color: #1e293b;
+      cursor: pointer;
+      outline: none;
+      appearance: none;
+      transition: border-color 0.2s;
+    }
+
+    .select-wrapper select:focus {
+      border-color: #003b7a;
+    }
+
+    .select-wrapper i {
+      position: absolute;
+      right: 18px;
+      font-size: 16px;
+      color: #64748b;
+      pointer-events: none;
+    }
+
+    .input-custom-wrapper {
+      width: 100%;
+    }
+
+    .input-custom-wrapper input {
+      width: 100%;
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 14px;
+      padding: 13px 18px;
+      font-size: 17px;
+      font-weight: 500;
+      color: #1e293b;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .input-custom-wrapper input:focus {
+      border-color: #003b7a;
+      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.12);
+    }
+
+    .input-custom-wrapper input::placeholder {
+      color: #94a3b8;
+      font-size: 15.5px;
+    }
+
+    .btn-apply-filter {
+      background: #003b7a;
+      color: #ffffff;
+      border: none;
+      border-radius: 14px;
+      padding: 15px;
+      font-size: 19px !important;
+      font-weight: 800;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 6px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(0, 59, 122, 0.25);
+    }
+
+    .btn-apply-filter:hover {
+      background: #002d5e;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0, 59, 122, 0.35);
+    }
+
+    /* ---------------- Right Content Area ---------------- */
+    .content-area {
+      flex: 1;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .results-summary-bar {
+      width: 100%;
+      background: #ffffff;
+      border: 1.5px solid #edf2f7;
+      border-radius: 18px;
+      padding: 20px 30px;
+      font-size: 23px !important;
+      font-weight: 800;
+      color: #0f172a;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* ---------------- Grid 3 คอลัมน์ ---------------- */
+    .items-grid {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+
+    .item-card {
+      background: #ffffff;
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1.5px solid #edf2f7;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      width: 100%;
+    }
+
+    .item-card.hidden {
+      display: none !important;
+    }
+
+    .item-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.09);
+    }
+
+    .item-image-wrapper {
+      position: relative;
+      width: 100%;
+      height: 360px !important;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 8px;
+    }
+
+    .item-image-wrapper img {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: contain !important;
+      border-radius: 16px;
+      transition: transform 0.3s ease;
+    }
+
+    .item-card:hover .item-image-wrapper img {
+      transform: scale(1.03);
+    }
+
+    /* ---------------- สไตล์ป้ายสถานะ (Badges) ---------------- */
+    .item-badge {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      font-size: 14.5px;
+      font-weight: 700;
+      padding: 6px 16px;
+      border-radius: 50px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      letter-spacing: 0.2px;
+    }
+
+    /* 1. สถานะ: ตามหาเจ้าของ / พบแล้ว (สีเขียว) */
+    .item-badge.badge-found,
+    .item-badge.badge-new {
+      background: #dcfce7;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+    }
+
+    /* 2. สถานะ: แจ้งหาย (สีแดง/ส้มอ่อน) */
+    .item-badge.badge-lost {
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #fecaca;
+    }
+
+    /* 3. สถานะ: อยู่ที่จุดรับฝาก (สีฟ้า) */
+    .item-badge.badge-storage {
+      background: #e0f2fe;
+      color: #0369a1;
+      border: 1px solid #bae6fd;
+    }
+
+    /* 4. สถานะ: กำลังยื่นคำร้อง (สีส้ม) */
+    .item-badge.badge-claim {
+      background: #fef3c7;
+      color: #b45309;
+      border: 1px solid #fde68a;
+    }
+
+    .item-body {
+      padding: 24px 26px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+      background: #ffffff;
+      border-top: 1.5px solid #f1f5f9;
+    }
+
+    .item-info {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .item-title {
+      font-size: 25px !important;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.25;
+    }
+
+    .item-category {
+      font-size: 16.5px;
+      color: #64748b;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .item-meta {
+      font-size: 17.5px !important;
+      color: #334155;
+      font-weight: 500;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .item-meta span {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .item-meta span i {
+      font-size: 19px;
+      color: #003b7a;
+      width: 22px;
+      text-align: center;
+    }
+
+    .btn-detail {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      background: #f8fafc;
+      color: #003b7a;
+      border: 1.5px solid #cbd5e1;
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-size: 17px !important;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-detail:hover {
+      background: #003b7a;
+      color: #ffffff;
+      border-color: #003b7a;
+      box-shadow: 0 4px 14px rgba(0, 59, 122, 0.2);
+    }
+
+    .btn-detail i {
+      font-size: 15px;
+      transition: transform 0.2s ease;
+    }
+
+    .btn-detail:hover i {
+      transform: translateX(4px);
+    }
+
+    .no-results {
+      grid-column: 1 / -1;
+      background: #ffffff;
+      border: 1.5px dashed #cbd5e1;
+      border-radius: 20px;
+      padding: 60px 20px;
+      text-align: center;
+      color: #64748b;
+      font-size: 20px;
+      font-weight: 600;
+      display: none;
+    }
+
+    .no-results i {
+      font-size: 48px;
+      color: #94a3b8;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    /* ---------------- 4. Footer ---------------- */
+    .footer {
+      background: #ffffff;
+      border-top: 1.5px solid #edf2f7;
+      margin-top: auto;
+      padding: 24px 0;
+      width: 100%;
+    }
+
+    .footer-inner {
+      padding: 0 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 15px;
+      color: #64748b;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-links a {
+      color: #64748b;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: #003b7a;
+    }
+
+    /* ---------------- Responsive ---------------- */
+    @media (max-width: 1400px) {
+      .items-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 992px) {
+      .navbar-inner, .breadcrumb-container, .browse-main, .footer-inner {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+      .browse-main {
+        flex-direction: column;
+        padding-top: 16px;
+      }
+      .sidebar-filter {
+        width: 100% !important;
+        position: static;
+      }
+      .items-grid {
+        grid-template-columns: 1fr;
+      }
+      .footer-inner {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      
+      <div class="nav-left">
+        <a href="home.html" class="nav-brand">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Lost & Found ICT</span>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="home.html" class="nav-link active">Home</a></li>
+          <li><a href="browse.html" class="nav-link">My Activity</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-actions">
+        <form class="nav-search-form" onsubmit="event.preventDefault(); applyFilter();">
+          <div class="nav-search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="ค้นหารายการ..." oninput="applyFilter()">
+          </div>
+        </form>
+
+        <a href="#" class="btn-post">
+          <i class="fa-solid fa-plus"></i>
+          <span>โพสต์</span>
+        </a>
+
+        <a href="#" class="nav-profile">
+          <i class="fa-regular fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <div class="breadcrumb-container">
+    <ul class="breadcrumb-list">
+      <li><a href="home.html">หน้าหลัก</a></li>
+      <li class="separator"><i class="fa-solid fa-chevron-right"></i></li>
+      <li class="current">ค้นหาสิ่งของ</li>
+    </ul>
+  </div>
+
+  <main class="browse-main">
+    
+    <aside class="sidebar-filter">
+      <h2 class="filter-title">ตัวกรองการค้นหา</h2>
+
+      <div class="filter-group">
+        <label class="filter-label">สถานะ</label>
+        <div class="checkbox-list">
+          <label class="checkbox-item">
+            <input type="checkbox" name="type_status" value="found" checked onchange="applyFilter()">
+            <span>ตามหาเจ้าของ</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="type_status" value="lost" checked onchange="applyFilter()">
+            <span>แจ้งหาย</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">หมวดหมู่</label>
+        <div class="checkbox-list">
+          <label class="checkbox-item">
+            <input type="checkbox" name="category" value="electronics" onchange="applyFilter()">
+            <span>อุปกรณ์อิเล็กทรอนิกส์</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="category" value="Study Equipment" onchange="applyFilter()">
+            <span>อุปกรณ์การเรียน</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="category" value="Bags & Keys" onchange="applyFilter()">
+            <span>กระเป๋า/สัมภาระ/กุญแจ</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="category" value="Personal Items" onchange="applyFilter()">
+            <span>ของใช้ส่วนตัว</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="category" value="Other" onchange="applyFilter()">
+            <span>เอกสาร/บัตร/อื่นๆ</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">สถานะรายการ</label>
+        <div class="select-wrapper">
+          <select name="status_filter" id="statusFilter" onchange="applyFilter()">
+            <option value="all">ทั้งหมดทุกสถานะ</option>
+            <option value="พบใหม่">พบใหม่</option>
+            <option value="อยู่ที่จุดรับฝาก">อยู่ที่จุดรับฝาก</option>
+            <option value="กำลังยื่นคำร้องขอรับคืน">กำลังยื่นคำร้องขอรับคืน</option>
+          </select>
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">วันที่</label>
+        <div class="select-wrapper">
+          <select name="date_filter" id="dateFilter" onchange="applyFilter()">
+            <option value="all">ทั้งหมด</option>
+            <option value="today">วันนี้</option>
+            <option value="yesterday">เมื่อวานนี้</option>
+            <option value="7days">7 วันที่ผ่านมา</option>
+            <option value="30days">30 วันที่ผ่านมา</option>
+          </select>
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">สถานที่พบ</label>
+        <div class="select-wrapper">
+          <select name="location_filter" id="locationFilter" onchange="handleMainLocationChange()">
+            <option value="all">ทั้งหมด</option>
+            <option value="ห้องเรียน">ห้องเรียน</option>
+            <option value="โรงอาหาร">โรงอาหาร</option>
+            <option value="ห้องสาขา">ห้องสาขา</option>
+            <option value="ลานจอดรถ">ลานจอดรถ</option>
+          </select>
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+      </div>
+
+      <div class="filter-group" id="customClassroomGroup" style="display: none;">
+        <label class="filter-label">ระบุห้องเรียน</label>
+        <div class="input-custom-wrapper">
+          <input type="text" 
+                 id="customClassroomInput" 
+                 placeholder="เช่น ICT1102/1" 
+                 oninput="applyFilter()">
+        </div>
+      </div>
+
+      <div class="filter-group" id="customDepartmentGroup" style="display: none;">
+        <label class="filter-label">ระบุชื่อสาขา</label>
+        <div class="input-custom-wrapper">
+          <input type="text" 
+                 id="customDepartmentInput" 
+                 placeholder="เช่น วิศวกรรมซอฟต์แวร์" 
+                 oninput="applyFilter()">
+        </div>
+      </div>
+
+      <button type="button" class="btn-apply-filter" onclick="applyFilter()">นำไปใช้</button>
+    </aside>
+
+    <section class="content-area">
+      <div class="results-summary-bar">
+        <span id="resultCountText">พบ 6 รายการ</span>
+      </div>
+
+      <div class="items-grid" id="itemsGrid">
+        
+        <div class="item-card" 
+             data-type="found"
+             data-category="Bags & Keys" 
+             data-location="ICT1102/1" 
+             data-date="2026-09-01" 
+             data-status="พบใหม่"
+             data-title="กุญแจรถ">
+          <div class="item-image-wrapper">
+            <img src="images/key.jpeg" alt="กุญแจรถ">
+            <span class="item-badge badge-found">
+              <i class="fa-regular fa-circle-check"></i> พบแล้ว
+            </span>
+          </div>
+          <div class="item-body">
+            <div class="item-info">
+              <h3 class="item-title">กุญแจรถ</h3>
+              <div class="item-category">กระเป๋า/สัมภาระ/กุญแจ</div>
+              <div class="item-meta">
+                <span><i class="fa-regular fa-calendar"></i> 1 ก.ย. 2026</span>
+                <span><i class="fa-solid fa-location-dot"></i> ICT1102/1</span>
+              </div>
+            </div>
+            <a href="detail.html?id=key" class="btn-detail">
+              <span>ดูรายละเอียด</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="item-card" 
+             data-type="found"
+             data-category="electronics" 
+             data-location="ICT1111" 
+             data-date="2026-09-01" 
+             data-status="พบใหม่"
+             data-title="โทรศัพท์มือถือ">
+          <div class="item-image-wrapper">
+            <img src="images/phone.jpeg" alt="โทรศัพท์มือถือ">
+            <span class="item-badge badge-found">
+              <i class="fa-regular fa-circle-check"></i> พบแล้ว
+            </span>
+          </div>
+          <div class="item-body">
+            <div class="item-info">
+              <h3 class="item-title">โทรศัพท์มือถือ</h3>
+              <div class="item-category">อุปกรณ์อิเล็กทรอนิกส์</div>
+              <div class="item-meta">
+                <span><i class="fa-regular fa-calendar"></i> 1 ก.ย. 2026</span>
+                <span><i class="fa-solid fa-location-dot"></i> ICT1111</span>
+              </div>
+            </div>
+            <a href="detail.html?id=phone" class="btn-detail">
+              <span>ดูรายละเอียด</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="item-card" 
+             data-type="lost"
+             data-category="Bags & Keys" 
+             data-location="โรงอาหาร" 
+             data-date="2026-08-31" 
+             data-status="แจ้งหาย"
+             data-title="กระเป๋าสตางค์">
+          <div class="item-image-wrapper">
+            <img src="images/wallet.jpeg" alt="กระเป๋าสตางค์">
+            <span class="item-badge badge-lost">
+              <i class="fa-regular fa-circle-xmark"></i> แจ้งหาย
+            </span>
+          </div>
+          <div class="item-body">
+            <div class="item-info">
+              <h3 class="item-title">กระเป๋าสตางค์</h3>
+              <div class="item-category">กระเป๋า/สัมภาระ/กุญแจ</div>
+              <div class="item-meta">
+                <span><i class="fa-regular fa-calendar"></i> 31 ส.ค. 2026</span>
+                <span><i class="fa-solid fa-location-dot"></i> โรงอาหาร</span>
+              </div>
+            </div>
+            <a href="detail.html?id=wallet" class="btn-detail">
+              <span>ดูรายละเอียด</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="item-card" 
+             data-type="found"
+             data-category="electronics" 
+             data-location="โรงอาหาร" 
+             data-date="2026-08-29" 
+             data-status="อยู่ที่จุดรับฝาก"
+             data-title="หูฟังไร้สายเคสสีขาว">
+          <div class="item-image-wrapper">
+            <img src="images/airpods.jpeg" alt="หูฟังไร้สาย">
+            <span class="item-badge badge-storage">อยู่ที่จุดรับฝาก</span>
+          </div>
+          <div class="item-body">
+            <div class="item-info">
+              <h3 class="item-title">หูฟังไร้สายเคสสีขาว</h3>
+              <div class="item-category">อุปกรณ์อิเล็กทรอนิกส์</div>
+              <div class="item-meta">
+                <span><i class="fa-regular fa-calendar"></i> 29 ส.ค. 2026</span>
+                <span><i class="fa-solid fa-location-dot"></i> โรงอาหาร</span>
+              </div>
+            </div>
+            <a href="detail.html?id=airpods" class="btn-detail">
+              <span>ดูรายละเอียด</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="item-card" 
+             data-type="lost"
+             data-category="Personal Items" 
+             data-location="ห้องสาขาคอมพิวเตอร์กราฟิก" 
+             data-date="2026-08-28" 
+             data-status="แจ้งหาย"
+             data-title="แว่นตากันแดดกรอบดำ">
+          <div class="item-image-wrapper">
+            <img src="images/glasses.jpeg" alt="แว่นตากันแดด">
+            <span class="item-badge badge-lost">
+              <i class="fa-regular fa-circle-xmark"></i> แจ้งหาย
+            </span>
+          </div>
+          <div class="item-body">
+            <div class="item-info">
+              <h3 class="item-title">แว่นตา</h3>
+              <div class="item-category">ของใช้ส่วนตัว</div>
+              <div class="item-meta">
+                <span><i class="fa-regular fa-calendar"></i> 28 ส.ค. 2026</span>
+                <span><i class="fa-solid fa-location-dot"></i> ห้องสาขาคอมพิวเตอร์กราฟิก</span>
+              </div>
+            </div>
+            <a href="detail.html?id=glasses" class="btn-detail">
+              <span>ดูรายละเอียด</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="item-card" 
+             data-type="found"
+             data-category="Personal Items" 
+             data-location="ห้องสาขาวิศวกรรมซอฟต์แวร์" 
+             data-date="2026-08-27" 
+             data-status="กำลังยื่นคำร้องขอรับคืน"
+             data-title="ร่ม">
+          <div class="item-image-wrapper">
+            <img src="images/umbrella.jpeg" alt="ร่ม">
+            <span class="item-badge badge-claim">กำลังยื่นคำร้องขอรับคืน</span>
+          </div>
+          <div class="item-body">
+            <div class="item-info">
+              <h3 class="item-title">ร่ม</h3>
+              <div class="item-category">ของใช้ส่วนตัว</div>
+              <div class="item-meta">
+                <span><i class="fa-regular fa-calendar"></i> 27 ส.ค. 2026</span>
+                <span><i class="fa-solid fa-location-dot"></i> ห้องสาขาวิศวกรรมซอฟต์แวร์</span>
+              </div>
+            </div>
+            <a href="detail.html?id=umbrella" class="btn-detail">
+              <span>ดูรายละเอียด</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="no-results" id="noResults">
+          <i class="fa-solid fa-box-open"></i>
+          <div>ไม่พบรายการที่ตรงกับเงื่อนไขการค้นหา</div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <strong>Lost & Found ICT</strong> &copy; 2026 Lost & Found System. All rights reserved.
+      </div>
+      <div class="footer-links">
+        <a href="#">Contact Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function handleMainLocationChange() {
+      const mainLoc = document.getElementById('locationFilter').value;
+      const customClassroomGroup = document.getElementById('customClassroomGroup');
+      const customDepartmentGroup = document.getElementById('customDepartmentGroup');
+      const customClassroomInput = document.getElementById('customClassroomInput');
+      const customDepartmentInput = document.getElementById('customDepartmentInput');
+
+      customClassroomGroup.style.display = 'none';
+      customDepartmentGroup.style.display = 'none';
+      customClassroomInput.value = '';
+      customDepartmentInput.value = '';
+
+      if (mainLoc === 'ห้องเรียน') {
+        customClassroomGroup.style.display = 'flex';
+      } else if (mainLoc === 'ห้องสาขา') {
+        customDepartmentGroup.style.display = 'flex';
+      }
+
+      applyFilter();
+    }
+
+    function sortCardsByDate() {
+      const grid = document.getElementById('itemsGrid');
+      const cards = Array.from(grid.querySelectorAll('.item-card'));
+      const noResultsBox = document.getElementById('noResults');
+
+      cards.sort((a, b) => {
+        const dateA = new Date(a.getAttribute('data-date')).getTime();
+        const dateB = new Date(b.getAttribute('data-date')).getTime();
+        return dateB - dateA;
+      });
+
+      cards.forEach(card => grid.appendChild(card));
+      if (noResultsBox) grid.appendChild(noResultsBox);
+    }
+
+    function applyFilter() {
+      // 1. รับค่าสถานะตามหาเจ้าของ / แจ้งหาย
+      const selectedTypes = Array.from(document.querySelectorAll('input[name="type_status"]:checked'))
+                                 .map(cb => cb.value);
+
+      // 2. รับค่าหมวดหมู่
+      const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked'))
+                                      .map(cb => cb.value);
+
+      // 3. รับค่าตัวกรองความคืบหน้า, วันที่, สถานที่, คำค้นหา
+      const selectedStatus = document.getElementById('statusFilter').value;
+      const selectedDate = document.getElementById('dateFilter').value;
+      const mainLocation = document.getElementById('locationFilter').value;
+      const customClassroomText = document.getElementById('customClassroomInput').value.trim().toLowerCase();
+      const customDepartmentText = document.getElementById('customDepartmentInput').value.trim().toLowerCase();
+      const searchQuery = document.getElementById('searchInput').value.trim().toLowerCase();
+
+      const currentDate = new Date('2026-09-01');
+      const cards = document.querySelectorAll('.item-card');
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const cardType = card.getAttribute('data-type');
+        const cardCategory = card.getAttribute('data-category');
+        const cardLocation = card.getAttribute('data-location');
+        const cardLocationLower = cardLocation.toLowerCase();
+        const cardDateStr = card.getAttribute('data-date');
+        const cardStatus = card.getAttribute('data-status');
+        const cardTitle = card.getAttribute('data-title').toLowerCase();
+        const cardDate = new Date(cardDateStr);
+
+        const diffTime = Math.abs(currentDate - cardDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        // ตรวจสอบเงื่อนไขสถานะ (Found / Lost)
+        const matchType = selectedTypes.length === 0 || selectedTypes.includes(cardType);
+
+        // ตรวจสอบเงื่อนไขหมวดหมู่
+        const matchCategory = selectedCategories.length === 0 || selectedCategories.includes(cardCategory);
+
+        // ตรวจสอบเงื่อนไขสถานะความคืบหน้า
+        const matchStatus = (selectedStatus === 'all') || (cardStatus === selectedStatus);
+
+        // ตรวจสอบเงื่อนไขวันที่
+        let matchDate = true;
+        if (selectedDate === 'today') {
+          matchDate = (cardDateStr === '2026-09-01');
+        } else if (selectedDate === 'yesterday') {
+          matchDate = (cardDateStr === '2026-08-31');
+        } else if (selectedDate === '7days') {
+          matchDate = (diffDays <= 7);
+        } else if (selectedDate === '30days') {
+          matchDate = (diffDays <= 30);
+        }
+
+        // ตรวจสอบเงื่อนไขสถานที่
+        let matchLocation = true;
+        if (mainLocation === 'ห้องเรียน') {
+          if (customClassroomText !== '') {
+            matchLocation = cardLocationLower.includes(customClassroomText);
+          } else {
+            matchLocation = cardLocation.startsWith('ICT') || cardLocationLower.includes('ห้องเรียน');
+          }
+        } else if (mainLocation === 'ห้องสาขา') {
+          if (customDepartmentText !== '') {
+            matchLocation = cardLocationLower.includes(customDepartmentText);
+          } else {
+            matchLocation = cardLocationLower.includes('สาขา');
+          }
+        } else if (mainLocation !== 'all') {
+          matchLocation = cardLocationLower.includes(mainLocation.toLowerCase());
+        }
+
+        // ตรวจสอบคำค้นหา
+        const matchSearch = searchQuery === '' || 
+                            cardTitle.includes(searchQuery) || 
+                            cardLocationLower.includes(searchQuery) ||
+                            (cardStatus && cardStatus.toLowerCase().includes(searchQuery));
+
+        // สรุปผล
+        if (matchType && matchCategory && matchStatus && matchDate && matchLocation && matchSearch) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      document.getElementById('resultCountText').textContent = `พบ ${visibleCount} รายการ`;
+
+      const noResultsBox = document.getElementById('noResults');
+      if (noResultsBox) {
+        noResultsBox.style.display = (visibleCount === 0) ? 'block' : 'none';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      sortCardsByDate();
+      applyFilter();
+    });
+  </script>
+
+</body>
+</html>

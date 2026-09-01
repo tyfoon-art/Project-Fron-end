@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>สถานที่และเวลา - Lost & Found ICT</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Prompt', sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: #f8fafc;
+      color: #1e293b;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    /* ---------------- 1. Navbar ---------------- */
+    .navbar {
+      background: #ffffff;
+      border-bottom: 2px solid #edf2f7;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+      width: 100%;
+    }
+
+    .navbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 94px;
+      padding: 0 48px;
+      gap: 32px;
+      width: 100%;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 48px;
+      flex-shrink: 0;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #003b7a;
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      flex-shrink: 0;
+    }
+
+    .nav-brand i {
+      font-size: 38px;
+      color: #003b7a;
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+      flex-shrink: 0;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      font-size: 21px;
+      font-weight: 500;
+      color: #64748b;
+      transition: color 0.2s;
+      position: relative;
+      padding-bottom: 6px;
+      white-space: nowrap;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: #003b7a;
+      font-weight: 700;
+    }
+
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: #003b7a;
+      border-radius: 3px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-shrink: 0;
+    }
+
+    .nav-search-form {
+      position: relative;
+      width: 400px;
+      flex-shrink: 0;
+    }
+
+    .nav-search-box {
+      display: flex;
+      align-items: center;
+      background: #f1f5f9;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 50px;
+      padding: 11px 22px;
+      transition: all 0.2s ease;
+      width: 100%;
+    }
+
+    .nav-search-box:focus-within {
+      background: #ffffff;
+      border-color: #003b7a;
+      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.12);
+    }
+
+    .nav-search-box i {
+      color: #64748b;
+      font-size: 18px;
+      margin-right: 12px;
+      flex-shrink: 0;
+    }
+
+    .nav-search-box input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 17.5px;
+      color: #1e293b;
+      font-weight: 400;
+      width: 100%;
+    }
+
+    .btn-post {
+      background: #003b7a;
+      color: #ffffff;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-size: 17.5px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(0, 59, 122, 0.2);
+      flex-shrink: 0;
+    }
+
+    .btn-post:hover {
+      background: #002d5e;
+      transform: translateY(-1px);
+    }
+
+    .nav-profile {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: #334155;
+      font-size: 18.5px;
+      font-weight: 600;
+      padding: 8px 12px;
+      border-radius: 10px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .nav-profile i {
+      font-size: 22px;
+      color: #64748b;
+    }
+
+    .nav-profile:hover {
+      background: #f1f5f9;
+      color: #003b7a;
+    }
+
+    /* ---------------- 2. Main Report Container (Full-Width) ---------------- */
+    .report-main {
+      flex: 1;
+      padding: 32px 48px 64px 48px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .report-header {
+      padding: 0 12px;
+    }
+
+    .report-header h1 {
+      font-size: 34px;
+      font-weight: 900;
+      color: #0f172a;
+      margin-bottom: 6px;
+    }
+
+    .report-header p {
+      font-size: 18px;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    /* ---------------- 3. Form Card ---------------- */
+    .form-card {
+      background: #ffffff;
+      border-radius: 24px;
+      border: 1.5px solid #edf2f7;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+      padding: 40px 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+      width: 100%;
+    }
+
+    /* Progress & Steps Tracker (ขั้นตอนที่ 2) */
+    .steps-tracker-top {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      border-bottom: 1.5px solid #f1f5f9;
+      padding-bottom: 24px;
+    }
+
+    .steps-top-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 16.5px;
+      font-weight: 700;
+      color: #475569;
+    }
+
+    .progress-bar-track {
+      width: 100%;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 50px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      width: 50%; /* ขั้นตอนที่ 2 จาก 4 */
+      height: 100%;
+      background: #003b7a;
+      border-radius: 50px;
+      transition: width 0.3s ease;
+    }
+
+    .steps-circles-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      text-align: center;
+    }
+
+    .step-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .step-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      color: #64748b;
+      font-size: 17px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #cbd5e1;
+      transition: all 0.2s ease;
+    }
+
+    .step-node.completed .step-circle {
+      background: #22c55e;
+      color: #ffffff;
+      border-color: #22c55e;
+    }
+
+    .step-node.active .step-circle {
+      background: #003b7a;
+      color: #ffffff;
+      border-color: #003b7a;
+      box-shadow: 0 0 0 4px rgba(0, 59, 122, 0.15);
+    }
+
+    .step-label {
+      font-size: 16px;
+      font-weight: 600;
+      color: #64748b;
+    }
+
+    .step-node.active .step-label {
+      color: #003b7a;
+      font-weight: 800;
+    }
+
+    /* Form Fields */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .form-label {
+      font-size: 18.5px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .form-label span {
+      color: #dc2626;
+    }
+
+    .form-input, .form-select {
+      width: 100%;
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 14px;
+      padding: 16px 20px;
+      font-size: 18px;
+      font-weight: 500;
+      color: #1e293b;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .form-input:focus, .form-select:focus {
+      border-color: #003b7a;
+      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.12);
+    }
+
+    .select-box-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .select-box-wrapper select {
+      appearance: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+      padding-right: 48px;
+    }
+
+    .select-box-wrapper i {
+      position: absolute;
+      right: 20px;
+      color: #64748b;
+      font-size: 16px;
+      pointer-events: none;
+    }
+
+    /* Form Actions Button (ย้อนกลับ / ถัดไป) */
+    .form-actions-row {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 16px;
+      border-top: 1.5px solid #f1f5f9;
+    }
+
+    .btn-back {
+      background: #f1f5f9;
+      color: #334155;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 14px;
+      padding: 18px 36px;
+      font-size: 19px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-back:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .btn-next {
+      background: #003b7a;
+      color: #ffffff;
+      border: none;
+      border-radius: 14px;
+      padding: 18px 40px;
+      font-size: 19px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 16px rgba(0, 59, 122, 0.25);
+      transition: all 0.2s ease;
+    }
+
+    .btn-next:hover {
+      background: #002d5e;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 59, 122, 0.35);
+    }
+
+    /* ---------------- 4. Footer ---------------- */
+    .footer {
+      background: #ffffff;
+      border-top: 1.5px solid #edf2f7;
+      margin-top: auto;
+      padding: 24px 0;
+      width: 100%;
+    }
+
+    .footer-inner {
+      padding: 0 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 15px;
+      color: #64748b;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-links a {
+      color: #64748b;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: #003b7a;
+    }
+
+    /* ---------------- Responsive ---------------- */
+    @media (max-width: 992px) {
+      .navbar-inner, .report-main, .footer-inner {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+      .steps-circles-row {
+        display: none;
+      }
+      .form-card {
+        padding: 24px 20px;
+      }
+      .footer-inner {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. Header / Navbar -->
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="nav-left">
+        <a href="home.html" class="nav-brand">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Lost & Found ICT</span>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="home.html" class="nav-link">Home</a></li>
+          <li><a href="browse.html" class="nav-link">Browse</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-actions">
+        <form class="nav-search-form" action="browse.html" method="GET">
+          <div class="nav-search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" name="search" placeholder="ค้นหารายการ...">
+          </div>
+        </form>
+
+        <a href="report.html" class="btn-post">
+          <i class="fa-solid fa-plus"></i>
+          <span>โพสต์</span>
+        </a>
+
+        <a href="#" class="nav-profile">
+          <i class="fa-regular fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. Main Report Form Layout (Step 2: สถานที่และเวลา) -->
+  <main class="report-main">
+    
+    <div class="report-header">
+      <h1>แจ้งของหาย / พบของ</h1>
+      <p>ระบุสถานที่และเวลาที่เกิดเหตุเพื่อให้ผู้เกี่ยวข้องตรวจสอบได้แม่นยำยิ่งขึ้น</p>
+    </div>
+
+    <!-- Multi-Step Card -->
+    <div class="form-card">
+      
+      <!-- Progress Bar Tracker -->
+      <div class="steps-tracker-top">
+        <div class="steps-top-info">
+          <span>ขั้นตอน 2 จาก 4</span>
+          <span style="color: #003b7a;">สถานที่และเวลา</span>
+        </div>
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill"></div>
+        </div>
+
+        <div class="steps-circles-row" style="margin-top: 12px;">
+          <div class="step-node completed">
+            <div class="step-circle"><i class="fa-solid fa-check"></i></div>
+            <div class="step-label">รายละเอียด</div>
+          </div>
+          <div class="step-node active">
+            <div class="step-circle">2</div>
+            <div class="step-label">สถานที่และเวลา</div>
+          </div>
+          <div class="step-node">
+            <div class="step-circle">3</div>
+            <div class="step-label">รูปภาพ</div>
+          </div>
+          <div class="step-node">
+            <div class="step-circle">4</div>
+            <div class="step-label">ข้อมูลติดต่อ</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- สถานที่เกิดเหตุ / พบ -->
+      <div class="form-group">
+        <label class="form-label">สถานที่เกิดเหตุ / พบสิ่งของ <span>*</span></label>
+        <div class="select-box-wrapper">
+          <select class="form-select" id="locationSelect" onchange="handleLocationChange()">
+            <option value="" disabled selected>เลือกสถานที่</option>
+            <option value="classroom">ห้องเรียน</option>
+            <option value="canteen">โรงอาหารกลาง</option>
+            <option value="department">ห้องสาขา</option>
+            <option value="parking">ลานจอดรถคณะ ICT</option>
+            <option value="library">หอสมุดกลาง</option>
+          </select>
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+      </div>
+
+      <!-- ช่องกรอกห้องเรียน (จะแสดงเมื่อเลือก "ห้องเรียน") -->
+      <div class="form-group" id="customClassroomGroup" style="display: none;">
+        <label class="form-label">ระบุห้องเรียน <span>*</span></label>
+        <input type="text" class="form-input" id="customClassroomInput" placeholder="เช่น ICT1102/1, 1111...">
+      </div>
+
+      <!-- ช่องกรอกชื่อสาขา (จะแสดงเมื่อเลือก "ห้องสาขา") -->
+      <div class="form-group" id="customDepartmentGroup" style="display: none;">
+        <label class="form-label">ระบุชื่อสาขา <span>*</span></label>
+        <input type="text" class="form-input" id="customDepartmentInput" placeholder="เช่น วิศวกรรมซอฟต์แวร์, วิทยาการคอมฯ...">
+      </div>
+
+      <!-- วันที่เกิดเหตุ / พบ (จำกัดให้เลือกได้เฉพาะวันปัจจุบันหรือในอดีตเท่านั้น ห้ามเลือกวันพรุ่งนี้หรืออนาคต) -->
+      <div class="form-group">
+        <label class="form-label">วันที่ <span>*</span></label>
+        <input type="date" class="form-input" id="dateInput">
+      </div>
+
+      <!-- เวลาโดยประมาณ -->
+      <div class="form-group">
+        <label class="form-label">เวลาโดยประมาณ</label>
+        <input type="time" class="form-input" id="timeInput">
+      </div>
+
+      <!-- ปุ่มย้อนกลับและถัดไป -->
+      <div class="form-actions-row">
+        <button type="button" class="btn-back" onclick="location.href='report.html'">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span>ย้อนกลับ</span>
+        </button>
+        <button type="button" class="btn-next" onclick="validateAndNext()">
+          <span>ถัดไป</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- 4. Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <strong>Lost & Found ICT</strong> &copy; 2026 Lost & Found System. All rights reserved.
+      </div>
+      <div class="footer-links">
+        <a href="#">Contact Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Script สำหรับล็อกวันที่ไม่ให้เลือกอนาคต และแสดงฟิลด์ย่อย -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // วันที่ปัจจุบัน (1 ก.ย. 2026)
+      const todayStr = '2026-09-01';
+      const dateInput = document.getElementById('dateInput');
+      dateInput.value = todayStr;
+      dateInput.max = todayStr; // ล็อกไม่ให้เลือกวันที่เกินกว่าวันปัจจุบัน (ห้ามเลือกวันพรุ่งนี้หรืออนาคต)
+    });
+
+    function handleLocationChange() {
+      const locVal = document.getElementById('locationSelect').value;
+      const classroomGroup = document.getElementById('customClassroomGroup');
+      const deptGroup = document.getElementById('customDepartmentGroup');
+
+      classroomGroup.style.display = 'none';
+      deptGroup.style.display = 'none';
+
+      if (locVal === 'classroom') {
+        classroomGroup.style.display = 'flex';
+      } else if (locVal === 'department') {
+        deptGroup.style.display = 'flex';
+      }
+    }
+
+    function validateAndNext() {
+      const dateInput = document.getElementById('dateInput').value;
+      const maxDate = '2026-09-01';
+
+      if (dateInput > maxDate) {
+        alert('ไม่อนุญาตให้เลือกวันที่ในอนาคต กรุณาเลือกวันปัจจุบันหรือวันที่ในอดีต');
+        return;
+      }
+
+      alert('ไปสู่ขั้นตอนที่ 3: รูปภาพ');
+    }
+  </script>
+
+</body>
+</html>
