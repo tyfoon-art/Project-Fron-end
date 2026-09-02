@@ -512,33 +512,20 @@
       letter-spacing: 0.2px;
     }
 
-    /* 1. สถานะ: ตามหาเจ้าของ / พบแล้ว (สีเขียว) */
-    .item-badge.badge-found,
     .item-badge.badge-new {
-      background: #dcfce7;
-      color: #15803d;
-      border: 1px solid #bbf7d0;
+      background: #22c55e;
+      color: #ffffff;
     }
 
-    /* 2. สถานะ: แจ้งหาย (สีแดง/ส้มอ่อน) */
+    .item-badge.badge-storage {
+      background: #0284c7;
+      color: #ffffff;
+    }
+
     .item-badge.badge-lost {
       background: #fee2e2;
       color: #b91c1c;
       border: 1px solid #fecaca;
-    }
-
-    /* 3. สถานะ: อยู่ที่จุดรับฝาก (สีฟ้า) */
-    .item-badge.badge-storage {
-      background: #e0f2fe;
-      color: #0369a1;
-      border: 1px solid #bae6fd;
-    }
-
-    /* 4. สถานะ: กำลังยื่นคำร้อง (สีส้ม) */
-    .item-badge.badge-claim {
-      background: #fef3c7;
-      color: #b45309;
-      border: 1px solid #fde68a;
     }
 
     .item-body {
@@ -647,7 +634,6 @@
       display: block;
     }
 
-    /* ---------------- 4. Footer ---------------- */
     .footer {
       background: #ffffff;
       border-top: 1.5px solid #edf2f7;
@@ -680,7 +666,6 @@
       color: #003b7a;
     }
 
-    /* ---------------- Responsive ---------------- */
     @media (max-width: 1400px) {
       .items-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -715,7 +700,6 @@
 
   <header class="navbar">
     <div class="navbar-inner">
-      
       <div class="nav-left">
         <a href="home.html" class="nav-brand">
           <i class="fa-solid fa-graduation-cap"></i>
@@ -723,8 +707,8 @@
         </a>
 
         <ul class="nav-menu">
-          <li><a href="home.html" class="nav-link active">Home</a></li>
-          <li><a href="browse.html" class="nav-link">My Activity</a></li>
+          <li><a href="home.html" class="nav-link">Home</a></li>
+          <li><a href="activity.html" class="nav-link">My Activity</a></li>
         </ul>
       </div>
 
@@ -732,21 +716,20 @@
         <form class="nav-search-form" onsubmit="event.preventDefault(); applyFilter();">
           <div class="nav-search-box">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="searchInput" placeholder="ค้นหารายการ..." oninput="applyFilter()">
+            <input type="text" id="searchInput" placeholder="ค้นหารายการ...">
           </div>
         </form>
 
-        <a href="#" class="btn-post">
+        <a href="report.html" class="btn-post">
           <i class="fa-solid fa-plus"></i>
           <span>โพสต์</span>
         </a>
 
-        <a href="#" class="nav-profile">
+        <a href="profile.html" class="nav-profile">
           <i class="fa-regular fa-user"></i>
           <span>Profile</span>
         </a>
       </div>
-
     </div>
   </header>
 
@@ -767,11 +750,11 @@
         <label class="filter-label">สถานะ</label>
         <div class="checkbox-list">
           <label class="checkbox-item">
-            <input type="checkbox" name="type_status" value="found" checked onchange="applyFilter()">
+            <input type="checkbox" name="type_status" value="found" checked>
             <span>ตามหาเจ้าของ</span>
           </label>
           <label class="checkbox-item">
-            <input type="checkbox" name="type_status" value="lost" checked onchange="applyFilter()">
+            <input type="checkbox" name="type_status" value="lost" checked>
             <span>แจ้งหาย</span>
           </label>
         </div>
@@ -781,23 +764,23 @@
         <label class="filter-label">หมวดหมู่</label>
         <div class="checkbox-list">
           <label class="checkbox-item">
-            <input type="checkbox" name="category" value="electronics" onchange="applyFilter()">
+            <input type="checkbox" name="category" value="electronics">
             <span>อุปกรณ์อิเล็กทรอนิกส์</span>
           </label>
           <label class="checkbox-item">
-            <input type="checkbox" name="category" value="Study Equipment" onchange="applyFilter()">
+            <input type="checkbox" name="category" value="Study Equipment">
             <span>อุปกรณ์การเรียน</span>
           </label>
           <label class="checkbox-item">
-            <input type="checkbox" name="category" value="Bags & Keys" onchange="applyFilter()">
+            <input type="checkbox" name="category" value="Bags & Keys">
             <span>กระเป๋า/สัมภาระ/กุญแจ</span>
           </label>
           <label class="checkbox-item">
-            <input type="checkbox" name="category" value="Personal Items" onchange="applyFilter()">
+            <input type="checkbox" name="category" value="Personal Items">
             <span>ของใช้ส่วนตัว</span>
           </label>
           <label class="checkbox-item">
-            <input type="checkbox" name="category" value="Other" onchange="applyFilter()">
+            <input type="checkbox" name="category" value="Other">
             <span>เอกสาร/บัตร/อื่นๆ</span>
           </label>
         </div>
@@ -806,11 +789,11 @@
       <div class="filter-group">
         <label class="filter-label">สถานะรายการ</label>
         <div class="select-wrapper">
-          <select name="status_filter" id="statusFilter" onchange="applyFilter()">
+          <select name="status_filter" id="statusFilter">
             <option value="all">ทั้งหมดทุกสถานะ</option>
             <option value="พบใหม่">พบใหม่</option>
             <option value="อยู่ที่จุดรับฝาก">อยู่ที่จุดรับฝาก</option>
-            <option value="กำลังยื่นคำร้องขอรับคืน">กำลังยื่นคำร้องขอรับคืน</option>
+            <option value="แจ้งหาย">แจ้งหาย</option>
           </select>
           <i class="fa-solid fa-chevron-down"></i>
         </div>
@@ -819,7 +802,7 @@
       <div class="filter-group">
         <label class="filter-label">วันที่</label>
         <div class="select-wrapper">
-          <select name="date_filter" id="dateFilter" onchange="applyFilter()">
+          <select name="date_filter" id="dateFilter">
             <option value="all">ทั้งหมด</option>
             <option value="today">วันนี้</option>
             <option value="yesterday">เมื่อวานนี้</option>
@@ -847,20 +830,14 @@
       <div class="filter-group" id="customClassroomGroup" style="display: none;">
         <label class="filter-label">ระบุห้องเรียน</label>
         <div class="input-custom-wrapper">
-          <input type="text" 
-                 id="customClassroomInput" 
-                 placeholder="เช่น ICT1102/1" 
-                 oninput="applyFilter()">
+          <input type="text" id="customClassroomInput" placeholder="เช่น ICT1102/1">
         </div>
       </div>
 
       <div class="filter-group" id="customDepartmentGroup" style="display: none;">
         <label class="filter-label">ระบุชื่อสาขา</label>
         <div class="input-custom-wrapper">
-          <input type="text" 
-                 id="customDepartmentInput" 
-                 placeholder="เช่น วิศวกรรมซอฟต์แวร์" 
-                 oninput="applyFilter()">
+          <input type="text" id="customDepartmentInput" placeholder="เช่น วิศวกรรมซอฟต์แวร์">
         </div>
       </div>
 
@@ -869,186 +846,16 @@
 
     <section class="content-area">
       <div class="results-summary-bar">
-        <span id="resultCountText">พบ 6 รายการ</span>
+        <span id="resultCountText">พบ 0 รายการ</span>
       </div>
 
       <div class="items-grid" id="itemsGrid">
-        
-        <div class="item-card" 
-             data-type="found"
-             data-category="Bags & Keys" 
-             data-location="ICT1102/1" 
-             data-date="2026-09-01" 
-             data-status="พบใหม่"
-             data-title="กุญแจรถ">
-          <div class="item-image-wrapper">
-            <img src="images/key.jpeg" alt="กุญแจรถ">
-            <span class="item-badge badge-found">
-              <i class="fa-regular fa-circle-check"></i> พบแล้ว
-            </span>
-          </div>
-          <div class="item-body">
-            <div class="item-info">
-              <h3 class="item-title">กุญแจรถ</h3>
-              <div class="item-category">กระเป๋า/สัมภาระ/กุญแจ</div>
-              <div class="item-meta">
-                <span><i class="fa-regular fa-calendar"></i> 1 ก.ย. 2026</span>
-                <span><i class="fa-solid fa-location-dot"></i> ICT1102/1</span>
-              </div>
-            </div>
-            <a href="detail.html?id=key" class="btn-detail">
-              <span>ดูรายละเอียด</span>
-              <i class="fa-solid fa-arrow-right"></i>
-            </a>
-          </div>
-        </div>
+        <!-- JavaScript เรนเดอร์รายการแบบ Real-time -->
+      </div>
 
-        <div class="item-card" 
-             data-type="found"
-             data-category="electronics" 
-             data-location="ICT1111" 
-             data-date="2026-09-01" 
-             data-status="พบใหม่"
-             data-title="โทรศัพท์มือถือ">
-          <div class="item-image-wrapper">
-            <img src="images/phone.jpeg" alt="โทรศัพท์มือถือ">
-            <span class="item-badge badge-found">
-              <i class="fa-regular fa-circle-check"></i> พบแล้ว
-            </span>
-          </div>
-          <div class="item-body">
-            <div class="item-info">
-              <h3 class="item-title">โทรศัพท์มือถือ</h3>
-              <div class="item-category">อุปกรณ์อิเล็กทรอนิกส์</div>
-              <div class="item-meta">
-                <span><i class="fa-regular fa-calendar"></i> 1 ก.ย. 2026</span>
-                <span><i class="fa-solid fa-location-dot"></i> ICT1111</span>
-              </div>
-            </div>
-            <a href="detail.html?id=phone" class="btn-detail">
-              <span>ดูรายละเอียด</span>
-              <i class="fa-solid fa-arrow-right"></i>
-            </a>
-          </div>
-        </div>
-
-        <div class="item-card" 
-             data-type="lost"
-             data-category="Bags & Keys" 
-             data-location="โรงอาหาร" 
-             data-date="2026-08-31" 
-             data-status="แจ้งหาย"
-             data-title="กระเป๋าสตางค์">
-          <div class="item-image-wrapper">
-            <img src="images/wallet.jpeg" alt="กระเป๋าสตางค์">
-            <span class="item-badge badge-lost">
-              <i class="fa-regular fa-circle-xmark"></i> แจ้งหาย
-            </span>
-          </div>
-          <div class="item-body">
-            <div class="item-info">
-              <h3 class="item-title">กระเป๋าสตางค์</h3>
-              <div class="item-category">กระเป๋า/สัมภาระ/กุญแจ</div>
-              <div class="item-meta">
-                <span><i class="fa-regular fa-calendar"></i> 31 ส.ค. 2026</span>
-                <span><i class="fa-solid fa-location-dot"></i> โรงอาหาร</span>
-              </div>
-            </div>
-            <a href="detail.html?id=wallet" class="btn-detail">
-              <span>ดูรายละเอียด</span>
-              <i class="fa-solid fa-arrow-right"></i>
-            </a>
-          </div>
-        </div>
-
-        <div class="item-card" 
-             data-type="found"
-             data-category="electronics" 
-             data-location="โรงอาหาร" 
-             data-date="2026-08-29" 
-             data-status="อยู่ที่จุดรับฝาก"
-             data-title="หูฟังไร้สายเคสสีขาว">
-          <div class="item-image-wrapper">
-            <img src="images/airpods.jpeg" alt="หูฟังไร้สาย">
-            <span class="item-badge badge-storage">อยู่ที่จุดรับฝาก</span>
-          </div>
-          <div class="item-body">
-            <div class="item-info">
-              <h3 class="item-title">หูฟังไร้สายเคสสีขาว</h3>
-              <div class="item-category">อุปกรณ์อิเล็กทรอนิกส์</div>
-              <div class="item-meta">
-                <span><i class="fa-regular fa-calendar"></i> 29 ส.ค. 2026</span>
-                <span><i class="fa-solid fa-location-dot"></i> โรงอาหาร</span>
-              </div>
-            </div>
-            <a href="detail.html?id=airpods" class="btn-detail">
-              <span>ดูรายละเอียด</span>
-              <i class="fa-solid fa-arrow-right"></i>
-            </a>
-          </div>
-        </div>
-
-        <div class="item-card" 
-             data-type="lost"
-             data-category="Personal Items" 
-             data-location="ห้องสาขาคอมพิวเตอร์กราฟิก" 
-             data-date="2026-08-28" 
-             data-status="แจ้งหาย"
-             data-title="แว่นตากันแดดกรอบดำ">
-          <div class="item-image-wrapper">
-            <img src="images/glasses.jpeg" alt="แว่นตากันแดด">
-            <span class="item-badge badge-lost">
-              <i class="fa-regular fa-circle-xmark"></i> แจ้งหาย
-            </span>
-          </div>
-          <div class="item-body">
-            <div class="item-info">
-              <h3 class="item-title">แว่นตา</h3>
-              <div class="item-category">ของใช้ส่วนตัว</div>
-              <div class="item-meta">
-                <span><i class="fa-regular fa-calendar"></i> 28 ส.ค. 2026</span>
-                <span><i class="fa-solid fa-location-dot"></i> ห้องสาขาคอมพิวเตอร์กราฟิก</span>
-              </div>
-            </div>
-            <a href="detail.html?id=glasses" class="btn-detail">
-              <span>ดูรายละเอียด</span>
-              <i class="fa-solid fa-arrow-right"></i>
-            </a>
-          </div>
-        </div>
-
-        <div class="item-card" 
-             data-type="found"
-             data-category="Personal Items" 
-             data-location="ห้องสาขาวิศวกรรมซอฟต์แวร์" 
-             data-date="2026-08-27" 
-             data-status="กำลังยื่นคำร้องขอรับคืน"
-             data-title="ร่ม">
-          <div class="item-image-wrapper">
-            <img src="images/umbrella.jpeg" alt="ร่ม">
-            <span class="item-badge badge-claim">กำลังยื่นคำร้องขอรับคืน</span>
-          </div>
-          <div class="item-body">
-            <div class="item-info">
-              <h3 class="item-title">ร่ม</h3>
-              <div class="item-category">ของใช้ส่วนตัว</div>
-              <div class="item-meta">
-                <span><i class="fa-regular fa-calendar"></i> 27 ส.ค. 2026</span>
-                <span><i class="fa-solid fa-location-dot"></i> ห้องสาขาวิศวกรรมซอฟต์แวร์</span>
-              </div>
-            </div>
-            <a href="detail.html?id=umbrella" class="btn-detail">
-              <span>ดูรายละเอียด</span>
-              <i class="fa-solid fa-arrow-right"></i>
-            </a>
-          </div>
-        </div>
-
-        <div class="no-results" id="noResults">
-          <i class="fa-solid fa-box-open"></i>
-          <div>ไม่พบรายการที่ตรงกับเงื่อนไขการค้นหา</div>
-        </div>
-
+      <div class="no-results" id="noResults" style="display: none;">
+        <i class="fa-solid fa-box-open"></i>
+        <div>ไม่พบรายการที่ตรงกับเงื่อนไขการค้นหา</div>
       </div>
     </section>
   </main>
@@ -1068,6 +875,184 @@
   </footer>
 
   <script>
+    // ชุดรายชื่อบัญชีผู้ใช้อื่นๆ สำหรับสุ่มคละกัน
+    const otherUsers = ['ณัฐพล ศรีสุข', 'กัญญา ใจดี', 'แสนดี ใจงาม', 'อารยา สายใจ'];
+
+    const defaultDatabaseItems = [
+      {
+        id: 'key1',
+        title: 'กุญแจรถ',
+        category: 'Bags & Keys',
+        location: 'ICT1102/1',
+        image: 'images/key.jpeg',
+        fallbackImage: 'https://images.unsplash.com/photo-1582139329536-e7284fece509?q=80&w=600&auto=format&fit=crop',
+        timestamp: new Date().toISOString(),
+        type: 'found',
+        status: 'พบใหม่',
+        poster: 'ณัฐพล ศรีสุข'
+      },
+      {
+        id: 'phone1',
+        title: 'โทรศัพท์มือถือ',
+        category: 'electronics',
+        location: 'ICT1111',
+        image: 'images/phone.jpeg',
+        fallbackImage: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=600&auto=format&fit=crop',
+        timestamp: new Date().toISOString(),
+        type: 'found',
+        status: 'พบใหม่',
+        poster: 'กัญญา ใจดี'
+      },
+      {
+        id: 'bottle1',
+        title: 'กระบอกน้ำเก็บความเย็น',
+        category: 'Personal Items',
+        location: 'โรงอาหาร ICT',
+        image: 'images/water-bottle.jpeg',
+        fallbackImage: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?q=80&w=600&auto=format&fit=crop',
+        timestamp: new Date(Date.now() - (48 * 60 * 60 * 1000)).toISOString(),
+        type: 'found',
+        status: 'อยู่ที่จุดรับฝาก',
+        poster: 'แสนดี ใจงาม'
+      },
+      {
+        id: 'glasses1',
+        title: 'แว่นตา',
+        category: 'Personal Items',
+        location: 'ห้องสาขาคอมพิวเตอร์กราฟิก',
+        image: 'images/glasses.jpeg',
+        fallbackImage: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?q=80&w=600&auto=format&fit=crop',
+        timestamp: new Date(Date.now() - (72 * 60 * 60 * 1000)).toISOString(),
+        type: 'lost',
+        status: 'แจ้งหาย',
+        poster: 'อารยา สายใจ'
+      }
+    ];
+
+    function getSystemItems() {
+      let stored = localStorage.getItem('systemFoundItems');
+      if (!stored) {
+        localStorage.setItem('systemFoundItems', JSON.stringify(defaultDatabaseItems));
+        return defaultDatabaseItems;
+      }
+      let items = JSON.parse(stored);
+      // ตรวจสอบและสุ่มใส่ชื่อให้โพสต์ที่ยังไม่มีชื่อผู้โพสต์ หรือบังคับอัปเดตชื่อให้คละกัน
+      items = items.map(item => {
+        if (!item.poster || item.poster === 'สมชาย' || item.poster === 'ผู้ใช้งานอื่น') {
+          const randomIndex = Math.floor(Math.random() * otherUsers.length);
+          item.poster = otherUsers[randomIndex];
+        }
+        return item;
+      });
+      localStorage.setItem('systemFoundItems', JSON.stringify(items));
+      return items;
+    }
+
+    function formatThaiDate(isoDateString) {
+      const d = new Date(isoDateString);
+      const monthsThai = [
+        "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
+        "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."
+      ];
+      return `${d.getDate()} ${monthsThai[d.getMonth()]} ${d.getFullYear() + 543}`;
+    }
+
+    function renderBrowseItems() {
+      const items = getSystemItems();
+      const grid = document.getElementById('itemsGrid');
+      grid.innerHTML = '';
+
+      const now = new Date();
+      now.setHours(0, 0, 0, 0);
+
+      items.forEach(item => {
+        if (item.type === 'lost' && (item.status === 'completed' || item.status === 'closed' || item.isResolved)) {
+          return;
+        }
+
+        const itemDateNormalized = new Date(item.timestamp);
+        itemDateNormalized.setHours(0, 0, 0, 0);
+
+        const isToday = (itemDateNormalized.getTime() === now.getTime());
+
+        let statusText = '';
+        let badgeClass = '';
+        let badgeIcon = '';
+
+        if (item.type === 'lost') {
+          statusText = 'แจ้งหาย';
+          badgeClass = 'badge-lost';
+          badgeIcon = 'fa-regular fa-circle-xmark';
+        } else {
+          if (isToday && item.status !== 'อยู่ที่จุดรับฝาก') {
+            statusText = 'พบใหม่';
+            badgeClass = 'badge-new';
+            badgeIcon = 'fa-solid fa-sparkles';
+          } else {
+            statusText = 'อยู่ที่จุดรับฝาก';
+            badgeClass = 'badge-storage';
+            badgeIcon = 'fa-solid fa-box-archive';
+          }
+        }
+
+        const card = document.createElement('div');
+        card.className = 'item-card';
+        card.setAttribute('data-type', item.type || 'found');
+        card.setAttribute('data-category', item.category);
+        card.setAttribute('data-location', item.location);
+        card.setAttribute('data-date', item.timestamp.split('T')[0]);
+        card.setAttribute('data-status', statusText);
+        card.setAttribute('data-title', item.title);
+
+        card.innerHTML = `
+          <div class="item-image-wrapper">
+            <img src="${item.image}" alt="${item.title}" onerror="this.src='${item.fallbackImage || 'https://images.unsplash.com/photo-1582139329536-e7284fece509?q=80&w=600&auto=format&fit=crop'}">
+            <span class="item-badge ${badgeClass}">
+              <i class="${badgeIcon}"></i> ${statusText}
+            </span>
+          </div>
+          <div class="item-body">
+            <div class="item-info">
+              <h3 class="item-title">${item.title}</h3>
+              <div class="item-category">${getCategoryNameThai(item.category)}</div>
+              <div class="item-meta">
+                <span><i class="fa-regular fa-calendar"></i> ${formatThaiDate(item.timestamp)}</span>
+                <span><i class="fa-solid fa-location-dot"></i> ${item.location}</span>
+                <span style="font-size: 15px; color: #64748b; margin-top: 4px;"><i class="fa-regular fa-user" style="color: #64748b;"></i> ผู้โพสต์: ${item.poster}</span>
+              </div>
+            </div>
+            <a href="detail.html?id=${item.id}" class="btn-detail">
+              <span>ดูรายละเอียด</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function getCategoryNameThai(catKey) {
+      const map = {
+        'Bags & Keys': 'กระเป๋า/สัมภาระ/กุญแจ',
+        'electronics': 'อุปกรณ์อิเล็กทรอนิกส์',
+        'Study Equipment': 'อุปกรณ์การเรียน',
+        'Personal Items': 'ของใช้ส่วนตัว',
+        'Other': 'เอกสาร/บัตร/อื่นๆ'
+      };
+      return map[catKey] || catKey;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderBrowseItems();
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const searchQuery = urlParams.get('search');
+      if (searchQuery) {
+        document.getElementById('searchInput').value = searchQuery;
+      }
+      applyFilter();
+    });
+
     function handleMainLocationChange() {
       const mainLoc = document.getElementById('locationFilter').value;
       const customClassroomGroup = document.getElementById('customClassroomGroup');
@@ -1085,35 +1070,15 @@
       } else if (mainLoc === 'ห้องสาขา') {
         customDepartmentGroup.style.display = 'flex';
       }
-
-      applyFilter();
-    }
-
-    function sortCardsByDate() {
-      const grid = document.getElementById('itemsGrid');
-      const cards = Array.from(grid.querySelectorAll('.item-card'));
-      const noResultsBox = document.getElementById('noResults');
-
-      cards.sort((a, b) => {
-        const dateA = new Date(a.getAttribute('data-date')).getTime();
-        const dateB = new Date(b.getAttribute('data-date')).getTime();
-        return dateB - dateA;
-      });
-
-      cards.forEach(card => grid.appendChild(card));
-      if (noResultsBox) grid.appendChild(noResultsBox);
     }
 
     function applyFilter() {
-      // 1. รับค่าสถานะตามหาเจ้าของ / แจ้งหาย
       const selectedTypes = Array.from(document.querySelectorAll('input[name="type_status"]:checked'))
-                                 .map(cb => cb.value);
+                                       .map(cb => cb.value);
 
-      // 2. รับค่าหมวดหมู่
       const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked'))
-                                      .map(cb => cb.value);
+                                        .map(cb => cb.value);
 
-      // 3. รับค่าตัวกรองความคืบหน้า, วันที่, สถานที่, คำค้นหา
       const selectedStatus = document.getElementById('statusFilter').value;
       const selectedDate = document.getElementById('dateFilter').value;
       const mainLocation = document.getElementById('locationFilter').value;
@@ -1121,7 +1086,9 @@
       const customDepartmentText = document.getElementById('customDepartmentInput').value.trim().toLowerCase();
       const searchQuery = document.getElementById('searchInput').value.trim().toLowerCase();
 
-      const currentDate = new Date('2026-09-01');
+      const currentDate = new Date();
+      currentDate.setHours(0, 0, 0, 0);
+
       const cards = document.querySelectorAll('.item-card');
       let visibleCount = 0;
 
@@ -1133,33 +1100,28 @@
         const cardDateStr = card.getAttribute('data-date');
         const cardStatus = card.getAttribute('data-status');
         const cardTitle = card.getAttribute('data-title').toLowerCase();
+        
         const cardDate = new Date(cardDateStr);
+        cardDate.setHours(0, 0, 0, 0);
 
-        const diffTime = Math.abs(currentDate - cardDate);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        const diffTime = currentDate - cardDate;
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-        // ตรวจสอบเงื่อนไขสถานะ (Found / Lost)
         const matchType = selectedTypes.length === 0 || selectedTypes.includes(cardType);
-
-        // ตรวจสอบเงื่อนไขหมวดหมู่
         const matchCategory = selectedCategories.length === 0 || selectedCategories.includes(cardCategory);
-
-        // ตรวจสอบเงื่อนไขสถานะความคืบหน้า
         const matchStatus = (selectedStatus === 'all') || (cardStatus === selectedStatus);
 
-        // ตรวจสอบเงื่อนไขวันที่
         let matchDate = true;
         if (selectedDate === 'today') {
-          matchDate = (cardDateStr === '2026-09-01');
+          matchDate = (diffDays === 0);
         } else if (selectedDate === 'yesterday') {
-          matchDate = (cardDateStr === '2026-08-31');
+          matchDate = (diffDays === 1);
         } else if (selectedDate === '7days') {
-          matchDate = (diffDays <= 7);
+          matchDate = (diffDays >= 0 && diffDays <= 7);
         } else if (selectedDate === '30days') {
-          matchDate = (diffDays <= 30);
+          matchDate = (diffDays >= 0 && diffDays <= 30);
         }
 
-        // ตรวจสอบเงื่อนไขสถานที่
         let matchLocation = true;
         if (mainLocation === 'ห้องเรียน') {
           if (customClassroomText !== '') {
@@ -1177,13 +1139,11 @@
           matchLocation = cardLocationLower.includes(mainLocation.toLowerCase());
         }
 
-        // ตรวจสอบคำค้นหา
         const matchSearch = searchQuery === '' || 
                             cardTitle.includes(searchQuery) || 
                             cardLocationLower.includes(searchQuery) ||
                             (cardStatus && cardStatus.toLowerCase().includes(searchQuery));
 
-        // สรุปผล
         if (matchType && matchCategory && matchStatus && matchDate && matchLocation && matchSearch) {
           card.classList.remove('hidden');
           visibleCount++;
@@ -1199,11 +1159,6 @@
         noResultsBox.style.display = (visibleCount === 0) ? 'block' : 'none';
       }
     }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      sortCardsByDate();
-      applyFilter();
-    });
   </script>
 
 </body>

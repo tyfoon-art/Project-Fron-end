@@ -251,7 +251,7 @@
       width: 100%;
     }
 
-    /* Progress & Steps Tracker (ขั้นตอนที่ 3) */
+    /* Progress & Steps Tracker */
     .steps-tracker-top {
       display: flex;
       flex-direction: column;
@@ -278,7 +278,7 @@
     }
 
     .progress-bar-fill {
-      width: 75%; /* ขั้นตอนที่ 3 จาก 4 */
+      width: 100%;
       height: 100%;
       background: #003b7a;
       border-radius: 50px;
@@ -287,7 +287,7 @@
 
     .steps-circles-row {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 16px;
       text-align: center;
     }
@@ -372,6 +372,19 @@
     .upload-dropzone:hover {
       border-color: #003b7a;
       background: #f0f7ff;
+    }
+
+    .upload-dropzone.error {
+      border-color: #dc2626;
+      background: #fef2f2;
+    }
+
+    .error-text {
+      color: #dc2626;
+      font-size: 15px;
+      font-weight: 600;
+      margin-top: -4px;
+      display: none;
     }
 
     .upload-icon-box {
@@ -462,7 +475,33 @@
       background: #dc2626;
     }
 
-    /* Form Actions Button (ย้อนกลับ / ถัดไป) */
+    /* Secret Upload Box (รูปตำหนิลับ) */
+    .secret-upload-box {
+      background: #fffbeb;
+      border: 2px dashed #f59e0b;
+      border-radius: 20px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .secret-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #b45309;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .secret-desc {
+      font-size: 15px;
+      color: #78350f;
+      line-height: 1.6;
+    }
+
+    /* Form Actions Button */
     .form-actions-row {
       display: flex;
       justify-content: space-between;
@@ -490,26 +529,26 @@
       color: #0f172a;
     }
 
-    .btn-next {
-      background: #003b7a;
+    .btn-submit {
+      background: #16a34a;
       color: #ffffff;
       border: none;
       border-radius: 14px;
-      padding: 18px 40px;
+      padding: 18px 44px;
       font-size: 19px;
       font-weight: 800;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      box-shadow: 0 4px 16px rgba(0, 59, 122, 0.25);
+      box-shadow: 0 4px 16px rgba(22, 163, 74, 0.25);
       transition: all 0.2s ease;
     }
 
-    .btn-next:hover {
-      background: #002d5e;
+    .btn-submit:hover {
+      background: #15803d;
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0, 59, 122, 0.35);
+      box-shadow: 0 6px 20px rgba(22, 163, 74, 0.35);
     }
 
     /* ---------------- 4. Footer ---------------- */
@@ -545,7 +584,6 @@
       color: #003b7a;
     }
 
-    /* ---------------- Responsive ---------------- */
     @media (max-width: 992px) {
       .navbar-inner, .report-main, .footer-inner {
         padding-left: 20px;
@@ -578,7 +616,7 @@
 
         <ul class="nav-menu">
           <li><a href="home.html" class="nav-link">Home</a></li>
-          <li><a href="browse.html" class="nav-link">Browse</a></li>
+          <li><a href="browse.html" class="nav-link">My Activity</a></li>
         </ul>
       </div>
 
@@ -603,12 +641,12 @@
     </div>
   </header>
 
-  <!-- 2. Main Report Form Layout (Step 3: รูปภาพ) -->
+  <!-- 2. Main Report Form Layout -->
   <main class="report-main">
     
     <div class="report-header">
       <h1>แจ้งของหาย / พบของ</h1>
-      <p>เพิ่มรูปถ่ายสิ่งของหรือจุดที่พบ เพื่อช่วยให้ผู้อื่นสังเกตเห็นและตรวจสอบได้ง่ายขึ้น</p>
+      <p>เพิ่มรูปถ่ายสิ่งของและรูปตำหนิเฉพาะสำหรับตรวจสอบความเป็นเจ้าของ</p>
     </div>
 
     <!-- Multi-Step Card -->
@@ -617,8 +655,8 @@
       <!-- Progress Bar Tracker -->
       <div class="steps-tracker-top">
         <div class="steps-top-info">
-          <span>ขั้นตอน 3 จาก 4</span>
-          <span style="color: #003b7a;">รูปภาพสิ่งของ</span>
+          <span>ขั้นตอน 3 จาก 3</span>
+          <span style="color: #003b7a;">รูปภาพสิ่งของและตำหนิเฉพาะ</span>
         </div>
         <div class="progress-bar-track">
           <div class="progress-bar-fill"></div>
@@ -635,20 +673,16 @@
           </div>
           <div class="step-node active">
             <div class="step-circle">3</div>
-            <div class="step-label">รูปภาพ</div>
-          </div>
-          <div class="step-node">
-            <div class="step-circle">4</div>
-            <div class="step-label">ข้อมูลติดต่อ</div>
+            <div class="step-label">รูปภาพและตำหนิ</div>
           </div>
         </div>
       </div>
 
-      <!-- อัปโหลดรูปภาพ -->
+      <!-- อัปโหลดรูปภาพสาธารณะ -->
       <div class="form-group">
-        <label class="form-label">อัปโหลดรูปภาพ <span>*</span></label>
+        <label class="form-label">รูปภาพสิ่งของทั่วไป (แสดงสาธารณะ) <span>*</span></label>
         
-        <div class="upload-dropzone" onclick="document.getElementById('fileInput').click()">
+        <div class="upload-dropzone" id="dropzoneBox" onclick="document.getElementById('fileInput').click()">
           <div class="upload-icon-box">
             <i class="fa-solid fa-cloud-arrow-up"></i>
           </div>
@@ -657,23 +691,50 @@
           <div class="upload-btn-fake">เลือกไฟล์รูปภาพ</div>
           <input type="file" id="fileInput" accept="image/*" multiple style="display: none;" onchange="handleFiles(this.files)">
         </div>
+        <div class="error-text" id="imageError">กรุณาอัปโหลดรูปภาพสิ่งของอย่างน้อย 1 รูป</div>
       </div>
 
-      <!-- ส่วนแสดงตัวอย่างรูปภาพ (Preview) -->
+      <!-- ส่วนแสดงตัวอย่างรูปภาพทั่วไป -->
       <div class="form-group" id="previewGroup" style="display: none;">
         <label class="form-label">รูปภาพที่เลือก (<span id="fileCount">0</span>/5)</label>
         <div class="preview-grid" id="previewContainer"></div>
       </div>
 
-      <!-- ปุ่มย้อนกลับและถัดไป -->
+      <!-- ส่วนอัปโหลดรูปตำหนิลับ เฉพาะเจ้าของและเจ้าหน้าที่เห็น -->
+      <div class="secret-upload-box">
+        <div class="secret-title">
+          <i class="fa-solid fa-lock"></i>
+          <span>รูปตำหนิเฉพาะ (ข้อมูลลับ - เห็นเฉพาะเจ้าของโพสต์และเจ้าหน้าที่)</span>
+        </div>
+        <div class="secret-desc">
+          อัปโหลดรูปภาพรอยตำหนิ รอยขีดข่วน ซีเรียลนัมเบอร์ หรือจุดสังเกตลับ เพื่อใช้ให้เจ้าหน้าที่ตรวจสอบยืนยันสิทธิ์กับผู้ที่มาขอรับคืน (บุคคลทั่วไปมองไม่เห็น)
+        </div>
+
+        <div class="upload-dropzone" style="background: #ffffff; border-color: #f59e0b;" onclick="document.getElementById('secretFileInput').click()">
+          <div class="upload-icon-box" style="background: #fef3c7; color: #d97706;">
+            <i class="fa-solid fa-key"></i>
+          </div>
+          <div class="upload-title" style="color: #b45309;">คลิกอัปโหลดรูปตำหนิลับ (1 รูป)</div>
+          <div class="upload-btn-fake" style="background: #d97706;">เลือกรูปลับตำหนิ</div>
+          <input type="file" id="secretFileInput" accept="image/*" style="display: none;" onchange="handleSecretFile(this.files)">
+        </div>
+
+        <!-- Preview รูปลับ -->
+        <div id="secretPreviewContainer" style="display: none; position: relative; width: 140px; height: 140px; border-radius: 12px; overflow: hidden; border: 2px solid #f59e0b;">
+          <img id="secretImgTag" src="" alt="Secret Preview" style="width: 100%; height: 100%; object-fit: cover;">
+          <button type="button" class="btn-remove-img" onclick="removeSecretImage()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </div>
+
+      <!-- ปุ่มย้อนกลับและยืนยัน -->
       <div class="form-actions-row">
         <button type="button" class="btn-back" onclick="location.href='report-step2.html'">
           <i class="fa-solid fa-arrow-left"></i>
           <span>ย้อนกลับ</span>
         </button>
-        <button type="button" class="btn-next" onclick="alert('ไปสู่ขั้นตอนที่ 4: ข้อมูลติดต่อ')">
-          <span>ถัดไป</span>
-          <i class="fa-solid fa-arrow-right"></i>
+        <button type="button" class="btn-submit" onclick="handleSubmit()">
+          <i class="fa-solid fa-check"></i>
+          <span>ยืนยันการโพสต์ประกาศ</span>
         </button>
       </div>
 
@@ -696,42 +757,48 @@
     </div>
   </footer>
 
-  <!-- Script สำหรับจัดการตัวอย่างรูปภาพ -->
+  <!-- Script จัดการและบันทึกข้อมูลลง localStorage -->
   <script>
-    let selectedFiles = [];
+    let selectedImagesBase64 = [];
+    let secretImageBase64 = '';
 
     function handleFiles(files) {
+      for (let i = 0; i < files.length; i++) {
+        if (selectedImagesBase64.length >= 5) {
+          alert('อัปโหลดรูปภาพได้สูงสุดไม่เกิน 5 รูปครับ');
+          break;
+        }
+        const file = files[i];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          selectedImagesBase64.push(e.target.result);
+          renderPreviews();
+          clearImageError();
+        }
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function renderPreviews() {
       const previewGroup = document.getElementById('previewGroup');
       const previewContainer = document.getElementById('previewContainer');
       const fileCountSpan = document.getElementById('fileCount');
 
-      for (let i = 0; i < files.length; i++) {
-        if (selectedFiles.length >= 5) {
-          alert('อัปโหลดรูปภาพได้สูงสุดไม่เกิน 5 รูปครับ');
-          break;
-        }
-        selectedFiles.push(files[i]);
-      }
-
       previewContainer.innerHTML = '';
-      if (selectedFiles.length > 0) {
+      if (selectedImagesBase64.length > 0) {
         previewGroup.style.display = 'flex';
-        fileCountSpan.textContent = selectedFiles.length;
+        fileCountSpan.textContent = selectedImagesBase64.length;
 
-        selectedFiles.forEach((file, index) => {
-          const reader = new FileReader();
-          reader.onload = function(e) {
-            const item = document.createElement('div');
-            item.className = 'preview-item';
-            item.innerHTML = `
-              <img src="${e.target.result}" alt="Preview">
-              <button type="button" class="btn-remove-img" onclick="removeImage(${index})">
-                <i class="fa-solid fa-xmark"></i>
-              </button>
-            `;
-            previewContainer.appendChild(item);
-          }
-          reader.readAsDataURL(file);
+        selectedImagesBase64.forEach((imgSrc, index) => {
+          const item = document.createElement('div');
+          item.className = 'preview-item';
+          item.innerHTML = `
+            <img src="${imgSrc}" alt="Preview">
+            <button type="button" class="btn-remove-img" onclick="removeImage(${index})">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          `;
+          previewContainer.appendChild(item);
         });
       } else {
         previewGroup.style.display = 'none';
@@ -739,34 +806,75 @@
     }
 
     function removeImage(index) {
-      selectedFiles.splice(index, 1);
-      // สร้าง Event จำลองเพื่ออัปเดตหน้าจอใหม่
-      const previewGroup = document.getElementById('previewGroup');
-      const previewContainer = document.getElementById('previewContainer');
-      const fileCountSpan = document.getElementById('fileCount');
+      selectedImagesBase64.splice(index, 1);
+      renderPreviews();
+    }
 
-      previewContainer.innerHTML = '';
-      fileCountSpan.textContent = selectedFiles.length;
+    function clearImageError() {
+      document.getElementById('dropzoneBox').classList.remove('error');
+      document.getElementById('imageError').style.display = 'none';
+    }
 
-      if (selectedFiles.length > 0) {
-        selectedFiles.forEach((file, idx) => {
-          const reader = new FileReader();
-          reader.onload = function(e) {
-            const item = document.createElement('div');
-            item.className = 'preview-item';
-            item.innerHTML = `
-              <img src="${e.target.result}" alt="Preview">
-              <button type="button" class="btn-remove-img" onclick="removeImage(${idx})">
-                <i class="fa-solid fa-xmark"></i>
-              </button>
-            `;
-            previewContainer.appendChild(item);
-          }
-          reader.readAsDataURL(file);
-        });
-      } else {
-        previewGroup.style.display = 'none';
+    function handleSecretFile(files) {
+      if (files.length > 0) {
+        const file = files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          secretImageBase64 = e.target.result;
+          document.getElementById('secretImgTag').src = secretImageBase64;
+          document.getElementById('secretPreviewContainer').style.display = 'block';
+        }
+        reader.readAsDataURL(file);
       }
+    }
+
+    function removeSecretImage() {
+      secretImageBase64 = '';
+      document.getElementById('secretFileInput').value = '';
+      document.getElementById('secretPreviewContainer').style.display = 'none';
+    }
+
+    function handleSubmit() {
+      if (selectedImagesBase64.length === 0) {
+        document.getElementById('dropzoneBox').classList.add('error');
+        document.getElementById('imageError').style.display = 'block';
+        return;
+      }
+
+      const tempTitle = sessionStorage.getItem('report_title') || 'กระเป๋าผ้าแคนวาส';
+      const tempCategory = sessionStorage.getItem('report_category') || 'Bags & Keys';
+      const tempLocation = sessionStorage.getItem('report_location') || 'ห้องเรียน ICT';
+      const tempType = sessionStorage.getItem('report_type') || 'found';
+      const tempDesc = sessionStorage.getItem('report_desc') || 'พบสิ่งของวางทิ้งไว้บริเวณเก้าอี้พักคอย';
+      const tempTime = sessionStorage.getItem('report_time') || '09:00 น.';
+
+      const newPostId = 'item_' + Date.now();
+      const primaryImage = selectedImagesBase64[0];
+
+      const newPostObject = {
+        id: newPostId,
+        title: tempTitle,
+        category: tempCategory,
+        location: tempLocation,
+        image: primaryImage,
+        images: selectedImagesBase64,
+        secretImage: secretImageBase64,
+        timestamp: new Date().toISOString(),
+        time: tempTime,
+        type: tempType,
+        status: tempType === 'lost' ? 'แจ้งหาย' : 'พบใหม่',
+        description: tempDesc,
+        poster: localStorage.getItem('currentUserName') || 'นพวรรณ คงพันธประเสริฐ',
+        posterRole: tempType === 'lost' ? 'นิสิตผู้ทำของหาย (คณะ ICT)' : 'ผู้แจ้งประกาศ (คณะ ICT)',
+        ref: 'REF-' + new Date().getFullYear() + String(new Date().getMonth() + 1).padStart(2, '0') + '-' + Math.floor(100 + Math.random() * 900)
+      };
+
+      let existingItems = JSON.parse(localStorage.getItem('systemFoundItems') || '[]');
+      existingItems.unshift(newPostObject);
+      localStorage.setItem('systemFoundItems', JSON.stringify(existingItems));
+
+      sessionStorage.clear();
+      window.location.href = 'home.html';
     }
   </script>
 

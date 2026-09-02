@@ -21,7 +21,6 @@
 
     html {
       scroll-behavior: smooth;
-      scrollbar-gutter: stable;
     }
 
     body {
@@ -39,7 +38,7 @@
       padding: 0 48px;
     }
 
-    /* Navbar */
+    /* ---------------- 1. Navbar ---------------- */
     .navbar {
       background: #ffffff;
       border-bottom: 2px solid #edf2f7;
@@ -54,11 +53,12 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 94px;
+      height: 90px;
       padding: 0 48px;
       gap: 32px;
     }
 
+    /* ฝั่งซ้าย: โลโก้ + Home + My Activity */
     .nav-left {
       display: flex;
       align-items: center;
@@ -71,14 +71,14 @@
       gap: 12px;
       text-decoration: none;
       color: #003b7a;
-      font-size: 34px;
+      font-size: 32px;
       font-weight: 800;
       letter-spacing: -0.5px;
       flex-shrink: 0;
     }
 
     .nav-brand i {
-      font-size: 38px;
+      font-size: 36px;
       color: #003b7a;
     }
 
@@ -91,7 +91,7 @@
 
     .nav-link {
       text-decoration: none;
-      font-size: 21px;
+      font-size: 20px;
       font-weight: 500;
       color: #64748b;
       transition: color 0.2s;
@@ -112,11 +112,12 @@
       bottom: -6px;
       left: 0;
       width: 100%;
-      height: 4px;
+      height: 3.5px;
       background: #003b7a;
       border-radius: 3px;
     }
 
+    /* ฝั่งขวา: [ช่องค้นหา] [ปุ่ม + โพสต์] [Profile] */
     .nav-actions {
       display: flex;
       align-items: center;
@@ -125,7 +126,7 @@
 
     .nav-search-form {
       position: relative;
-      width: 400px;
+      width: 380px;
     }
 
     .nav-search-box {
@@ -134,7 +135,7 @@
       background: #f1f5f9;
       border: 1.5px solid #cbd5e1;
       border-radius: 50px;
-      padding: 11px 22px;
+      padding: 10px 22px;
       transition: all 0.2s ease;
     }
 
@@ -155,18 +156,22 @@
       border: none;
       outline: none;
       background: transparent;
-      font-size: 17.5px;
+      font-size: 17px;
       color: #1e293b;
       font-weight: 400;
+    }
+
+    .nav-search-box input::placeholder {
+      color: #94a3b8;
     }
 
     .btn-post {
       background: #003b7a;
       color: #ffffff;
       border: none;
-      padding: 12px 28px;
+      padding: 11px 26px;
       border-radius: 50px;
-      font-size: 17.5px;
+      font-size: 17px;
       font-weight: 600;
       text-decoration: none;
       display: inline-flex;
@@ -189,7 +194,7 @@
       gap: 8px;
       text-decoration: none;
       color: #334155;
-      font-size: 18.5px;
+      font-size: 18px;
       font-weight: 600;
       padding: 8px 12px;
       border-radius: 10px;
@@ -198,7 +203,7 @@
     }
 
     .nav-profile i {
-      font-size: 22px;
+      font-size: 20px;
       color: #64748b;
     }
 
@@ -207,11 +212,11 @@
       color: #003b7a;
     }
 
-    /* Hero Section */
+    /* ---------------- 2. Hero Section ---------------- */
     .hero-wrapper-full {
       width: 100%;
       padding: 24px 48px 0 48px;
-      margin-bottom: 48px;
+      margin-bottom: 56px;
     }
 
     .hero-section {
@@ -251,16 +256,22 @@
     }
 
     @keyframes heroFloatZoom {
-      0% { transform: scale(1) translate(0, 0); }
-      50% { transform: scale(1.06) translate(-8px, -4px); }
-      100% { transform: scale(1.12) translate(6px, 4px); }
+      0% {
+        transform: scale(1) translate(0, 0);
+      }
+      50% {
+        transform: scale(1.06) translate(-8px, -4px);
+      }
+      100% {
+        transform: scale(1.12) translate(6px, 4px);
+      }
     }
 
     .hero-content {
       position: relative;
       z-index: 3;
       width: 100%;
-      max-width: 1200px;
+      max-width: 1100px;
       color: #ffffff;
       padding: 0 24px 56px 24px;
       display: flex;
@@ -270,7 +281,7 @@
     }
 
     .hero-content h1 {
-      font-size: clamp(48px, 5.5vw, 84px);
+      font-size: 72px;
       font-weight: 900;
       margin-bottom: 16px;
       letter-spacing: -1px;
@@ -281,7 +292,7 @@
     }
 
     .hero-content p {
-      font-size: clamp(18px, 2vw, 28px);
+      font-size: 26px;
       color: #f8fafc;
       font-weight: 500;
       letter-spacing: 0.2px;
@@ -294,23 +305,24 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Main Content Body */
+    /* ---------------- 3. Main Content Body ---------------- */
     main {
       flex: 1;
-      padding-bottom: 64px;
+      padding-bottom: 48px;
     }
 
+    /* Stats Grid */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 28px;
+      gap: 24px;
       margin-bottom: 56px;
     }
 
     .stat-card {
       background: #ffffff;
-      border-radius: 20px;
-      padding: 24px 20px;
+      border-radius: 18px;
+      padding: 22px 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -326,8 +338,8 @@
     }
 
     .stat-icon {
-      font-size: 34px;
-      margin-bottom: 10px;
+      font-size: 30px;
+      margin-bottom: 8px;
     }
 
     .stat-icon.blue { color: #0284c7; }
@@ -335,24 +347,26 @@
     .stat-icon.amber { color: #d97706; }
 
     .stat-number {
-      font-size: 46px;
+      font-size: 42px;
       font-weight: 800;
       color: #0f172a;
       line-height: 1.1;
     }
 
     .stat-label {
-      font-size: 19px;
+      font-size: 18px;
       color: #475569;
       margin-top: 6px;
       font-weight: 600;
     }
 
+    /* ---------------- Recent Items Section ---------------- */
     .section-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
+      scroll-margin-top: 110px;
     }
 
     .section-header h2 {
@@ -362,137 +376,103 @@
     }
 
     .section-header .view-all {
-      font-size: 19px;
-      color: #003b7a;
+      font-size: 18px;
+      color: #0056b3;
       text-decoration: none;
-      font-weight: 700;
+      font-weight: 600;
       display: flex;
       align-items: center;
-      gap: 8px;
-      transition: color 0.2s;
+      gap: 6px;
     }
 
     .section-header .view-all:hover {
-      color: #002d5e;
       text-decoration: underline;
     }
 
     .items-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 30px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
       margin-bottom: 56px;
     }
 
     .item-card {
       background: #ffffff;
-      border-radius: 22px;
+      border-radius: 18px;
       overflow: hidden;
       border: 1.5px solid #edf2f7;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
       display: flex;
       flex-direction: column;
       height: 100%;
-      width: 100%;
     }
 
     .item-card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.09);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
     }
 
     .item-image-wrapper {
       position: relative;
       width: 100%;
-      height: 360px !important;
-      background: #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      aspect-ratio: 4 / 3;
+      min-height: 220px;
+      background: #f1f5f9;
       overflow: hidden;
-      padding: 6px;
     }
 
     .item-image-wrapper img {
-      width: 100% !important;
-      height: 100% !important;
-      object-fit: contain !important;
-      border-radius: 16px;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
       transition: transform 0.3s ease;
     }
 
     .item-card:hover .item-image-wrapper img {
-      transform: scale(1.03);
+      transform: scale(1.04);
     }
 
-    .item-badge-new {
+    .item-badge {
       position: absolute;
-      top: 14px;
-      right: 14px;
+      top: 12px;
+      right: 12px;
       background: #22c55e;
       color: #ffffff;
-      font-size: 14.5px;
-      font-weight: 700;
-      padding: 6px 16px;
-      border-radius: 50px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
-      z-index: 2;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
     }
 
-    .item-badge-found {
-      position: absolute;
-      top: 14px;
-      right: 14px;
-      background: #0284c7;
-      color: #ffffff;
-      font-size: 14.5px;
-      font-weight: 700;
-      padding: 6px 16px;
-      border-radius: 50px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
-      z-index: 2;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
+    /* ---------------- ข้อมูลและปุ่มดูรายละเอียดใต้การ์ด ---------------- */
     .item-body {
-      padding: 24px 26px;
+      padding: 20px 22px;
       flex: 1;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 18px;
       background: #ffffff;
-      border-top: 1.5px solid #f1f5f9;
+      gap: 16px;
     }
 
     .item-info {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
     }
 
     .item-title {
-      font-size: 25px !important;
+      font-size: 24px;
       font-weight: 800;
       color: #0f172a;
       line-height: 1.25;
     }
 
-    .item-category {
-      font-size: 16.5px;
-      color: #64748b;
-      font-weight: 500;
-      margin-bottom: 4px;
-    }
-
     .item-meta {
-      font-size: 17.5px !important;
+      font-size: 16px;
       color: #334155;
       font-weight: 500;
       display: flex;
@@ -503,16 +483,17 @@
     .item-meta span {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
     .item-meta span i {
-      font-size: 19px;
+      font-size: 17px;
       color: #003b7a;
-      width: 22px;
+      width: 20px;
       text-align: center;
     }
 
+    /* ปุ่มดูรายละเอียด */
     .btn-detail {
       display: flex;
       align-items: center;
@@ -522,10 +503,10 @@
       background: #f8fafc;
       color: #003b7a;
       border: 1.5px solid #cbd5e1;
-      padding: 12px 20px;
+      padding: 10px 16px;
       border-radius: 12px;
-      font-size: 17px !important;
-      font-weight: 700;
+      font-size: 15.5px;
+      font-weight: 600;
       text-decoration: none;
       transition: all 0.2s ease;
     }
@@ -534,11 +515,11 @@
       background: #003b7a;
       color: #ffffff;
       border-color: #003b7a;
-      box-shadow: 0 4px 14px rgba(0, 59, 122, 0.2);
+      box-shadow: 0 4px 12px rgba(0, 59, 122, 0.2);
     }
 
     .btn-detail i {
-      font-size: 15px;
+      font-size: 14px;
       transition: transform 0.2s ease;
     }
 
@@ -546,75 +527,27 @@
       transform: translateX(4px);
     }
 
-    .empty-today-box {
-      grid-column: 1 / -1;
-      background: #ffffff;
-      border: 1.5px dashed #cbd5e1;
-      border-radius: 24px;
-      padding: 64px 24px;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-    }
-
-    .empty-today-box i {
-      font-size: 48px;
-      color: #94a3b8;
-    }
-
-    .empty-today-box h3 {
-      font-size: 22px;
-      color: #334155;
-      font-weight: 700;
-    }
-
-    .empty-today-box p {
-      font-size: 17px;
-      color: #64748b;
-    }
-
-    .empty-today-box .btn-browse-history {
-      margin-top: 8px;
-      background: #003b7a;
-      color: #ffffff;
-      padding: 12px 28px;
-      border-radius: 50px;
-      font-size: 16px;
-      font-weight: 600;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      transition: background 0.2s;
-    }
-
-    .empty-today-box .btn-browse-history:hover {
-      background: #002d5e;
-    }
-
+    /* How It Works */
     .how-it-works {
       background: #ffffff;
-      border-radius: 24px;
-      padding: 48px 36px;
+      border-radius: 20px;
+      padding: 44px 32px;
       border: 1.5px solid #edf2f7;
       text-align: center;
-      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.03);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
     }
 
     .how-it-works h2 {
-      font-size: 30px;
+      font-size: 28px;
       font-weight: 800;
       color: #0f172a;
-      margin-bottom: 40px;
+      margin-bottom: 36px;
     }
 
     .steps-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 36px;
+      gap: 32px;
     }
 
     .step-item {
@@ -624,33 +557,34 @@
     }
 
     .step-icon {
-      width: 76px;
-      height: 76px;
-      background: #003b7a;
+      width: 68px;
+      height: 68px;
+      background: #0056b3;
       color: #ffffff;
-      border-radius: 20px;
+      border-radius: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 30px;
-      margin-bottom: 18px;
-      box-shadow: 0 6px 18px rgba(0, 59, 122, 0.25);
+      font-size: 26px;
+      margin-bottom: 16px;
+      box-shadow: 0 6px 16px rgba(0, 86, 179, 0.2);
     }
 
     .step-title {
-      font-size: 21px;
+      font-size: 19px;
       font-weight: 700;
       color: #1e293b;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .step-desc {
-      font-size: 16.5px;
+      font-size: 15.5px;
       color: #64748b;
-      line-height: 1.6;
-      max-width: 300px;
+      line-height: 1.55;
+      max-width: 280px;
     }
 
+    /* ---------------- Footer ---------------- */
     .footer {
       background: #ffffff;
       border-top: 1.5px solid #edf2f7;
@@ -660,7 +594,6 @@
     }
 
     .footer-inner {
-      padding: 0 48px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -683,20 +616,64 @@
       color: #003b7a;
     }
 
-    @media (max-width: 1280px) {
+    /* ---------------- Responsive ---------------- */
+    @media (max-width: 1200px) {
+      .hero-content h1 {
+        font-size: 56px;
+      }
+      .hero-content p {
+        font-size: 22px;
+      }
+    }
+
+    @media (max-width: 992px) {
+      .navbar-inner {
+        padding: 0 24px;
+        gap: 16px;
+      }
+      .nav-left {
+        gap: 24px;
+      }
+      .nav-search-form {
+        width: 240px;
+      }
+      .hero-content {
+        padding-bottom: 40px;
+      }
+      .hero-content h1 {
+        font-size: 44px;
+        white-space: normal;
+      }
+      .hero-content p {
+        font-size: 18px;
+      }
       .items-grid {
         grid-template-columns: repeat(2, 1fr);
       }
     }
 
-    @media (max-width: 992px) {
-      .navbar-inner, .hero-wrapper-full, .container-fluid, .footer-inner {
-        padding-left: 20px;
-        padding-right: 20px;
+    @media (max-width: 768px) {
+      .navbar-inner {
+        height: auto;
+        padding: 16px 20px;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .nav-left, .nav-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+      .nav-search-form {
+        width: 100%;
+      }
+      .container-fluid {
+        padding: 0 20px;
+      }
+      .hero-wrapper-full {
+        padding: 16px 20px 0 20px;
       }
       .hero-content h1 {
-        font-size: 40px;
-        white-space: normal;
+        font-size: 34px;
       }
       .stats-grid {
         grid-template-columns: 1fr;
@@ -707,7 +684,7 @@
       }
       .steps-grid {
         grid-template-columns: 1fr;
-        gap: 24px;
+        gap: 20px;
       }
       .footer-inner {
         flex-direction: column;
@@ -721,6 +698,7 @@
 
   <header class="navbar">
     <div class="navbar-inner">
+      
       <div class="nav-left">
         <a href="home.html" class="nav-brand">
           <i class="fa-solid fa-graduation-cap"></i>
@@ -729,28 +707,29 @@
 
         <ul class="nav-menu">
           <li><a href="home.html" class="nav-link active">Home</a></li>
-          <li><a href="activity.html" class="nav-link">My Activity</a></li>
+          <li><a href="#" class="nav-link">My Activity</a></li>
         </ul>
       </div>
 
       <div class="nav-actions">
-        <form class="nav-search-form" action="browse.html" method="GET">
+        <form class="nav-search-form" onsubmit="handleSearch(event)">
           <div class="nav-search-box">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" name="search" placeholder="ค้นหารายการ...">
+            <input type="text" id="searchInput" placeholder="ค้นหารายการ...">
           </div>
         </form>
 
-        <a href="report.html" class="btn-post">
+        <a href="#" class="btn-post">
           <i class="fa-solid fa-plus"></i>
           <span>โพสต์</span>
         </a>
 
-        <a href="profile.html" class="nav-profile">
+        <a href="#" class="nav-profile">
           <i class="fa-regular fa-user"></i>
           <span>Profile</span>
         </a>
       </div>
+
     </div>
   </header>
 
@@ -771,30 +750,107 @@
     <section class="stats-grid">
       <div class="stat-card">
         <i class="fa-regular fa-calendar stat-icon blue"></i>
-        <div class="stat-number" id="statTodayFound">0</div>
+        <div class="stat-number">5</div>
         <div class="stat-label">พบวันนี้</div>
       </div>
       <div class="stat-card">
         <i class="fa-regular fa-circle-check stat-icon green"></i>
-        <div class="stat-number" id="statReturnedSuccess">0</div>
+        <div class="stat-number">20</div>
         <div class="stat-label">ส่งคืนสำเร็จ</div>
       </div>
       <div class="stat-card">
         <i class="fa-regular fa-folder-open stat-icon amber"></i>
-        <div class="stat-number" id="statOpenItems">0</div>
+        <div class="stat-number">50</div>
         <div class="stat-label">รายการที่ยังเปิดอยู่</div>
       </div>
     </section>
 
-    <section>
+    <section id="recent-items-section">
       <div class="section-header">
-        <h2>รายการล่าสุด</h2>
-        <a href="browse.html" class="view-all">
+        <h2>รายการพบล่าสุด</h2>
+        <a href="#" class="view-all">
+          <span>ดูทั้งหมด</span>
+          <i class="fa-solid fa-angle-right"></i>
         </a>
       </div>
 
-      <div class="items-grid" id="recentItemsContainer">
-        <!-- เรนเดอร์ข้อมูลจริงแบบ Real-time -->
+      <div class="items-grid">
+        <div class="item-card">
+          <div class="item-image-wrapper">
+            <img src="images/key.jpeg" alt="กุญแจรถ">
+            <span class="item-badge">พบใหม่</span>
+          </div>
+          <div class="item-body">
+            <div class="item-info">
+              <div class="item-title">กุญแจรถ</div>
+              <div class="item-meta">
+                <span><i class="fa-regular fa-calendar"></i> 1 ก.ย. 2026</span>
+                <span><i class="fa-solid fa-location-dot"></i> ICT1102/1</span>
+              </div>
+            </div>
+            <a href="#" class="btn-detail">
+              <span>ดูรายละเอียด</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="item-card">
+          <div class="item-image-wrapper">
+            <img src="images/wallet.jpeg" alt="กระเป๋าสตางค์">
+          </div>
+          <div class="item-body">
+            <div class="item-info">
+              <div class="item-title">กระเป๋าสตางค์</div>
+              <div class="item-meta">
+                <span><i class="fa-regular fa-calendar"></i> 31 ส.ค. 2026</span>
+                <span><i class="fa-solid fa-location-dot"></i> โรงอาหาร</span>
+              </div>
+            </div>
+            <a href="#" class="btn-detail">
+              <span>ดูรายละเอียด</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="item-card">
+          <div class="item-image-wrapper">
+            <img src="images/umbrella.jpeg" alt="ร่ม">
+          </div>
+          <div class="item-body">
+            <div class="item-info">
+              <div class="item-title">ร่ม</div>
+              <div class="item-meta">
+                <span><i class="fa-regular fa-calendar"></i> 30 ส.ค. 2026</span>
+                <span><i class="fa-solid fa-location-dot"></i> ห้องสาขาวิศวกรรมซอฟต์แวร์</span>
+              </div>
+            </div>
+            <a href="#" class="btn-detail">
+              <span>ดูรายละเอียด</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="item-card">
+          <div class="item-image-wrapper">
+            <img src="images/phone.jpeg" alt="โทรศัพท์มือถือ">
+          </div>
+          <div class="item-body">
+            <div class="item-info">
+              <div class="item-title">โทรศัพท์มือถือ</div>
+              <div class="item-meta">
+                <span><i class="fa-regular fa-calendar"></i> 30 ส.ค. 2026</span>
+                <span><i class="fa-solid fa-location-dot"></i> ICT1111</span>
+              </div>
+            </div>
+            <a href="#" class="btn-detail">
+              <span>ดูรายละเอียด</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -830,7 +886,7 @@
   </main>
 
   <footer class="footer">
-    <div class="footer-inner">
+    <div class="container-fluid footer-inner">
       <div>
         <strong>Lost & Found ICT</strong> &copy; 2026 Lost & Found System. All rights reserved.
       </div>
@@ -844,153 +900,16 @@
   </footer>
 
   <script>
-    const defaultDatabaseItems = [
-      {
-        id: 'key1',
-        title: 'กุญแจรถ',
-        category: 'กระเป๋า/กุญแจ',
-        location: 'ICT1102/1',
-        image: 'images/key.jpeg',
-        fallbackImage: 'https://images.unsplash.com/photo-1582139329536-e7284fece509?q=80&w=600&auto=format&fit=crop',
-        timestamp: new Date().toISOString(), // วันนี้
-        status: 'open'
-      },
-      {
-        id: 'phone1',
-        title: 'โทรศัพท์มือถือ',
-        category: 'อุปกรณ์อิเล็กทรอนิกส์',
-        location: 'ICT1111',
-        image: 'images/phone.jpeg',
-        fallbackImage: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=600&auto=format&fit=crop',
-        timestamp: new Date().toISOString(), // วันนี้
-        status: 'open'
-      },
-      {
-        id: 'bottle1',
-        title: 'กระบอกน้ำเก็บความเย็น',
-        category: 'ของใช้ส่วนตัว',
-        location: 'โรงอาหาร ICT',
-        image: 'images/bottle.jpeg',
-        fallbackImage: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?q=80&w=600&auto=format&fit=crop',
-        timestamp: new Date(Date.now() - (48 * 60 * 60 * 1000)).toISOString(), // อดีต
-        status: 'open'
-      }
-    ];
+    function handleSearch(event) {
+      event.preventDefault();
+      const query = document.getElementById('searchInput').value;
+      console.log('Search Query:', query);
 
-    function getSystemItems() {
-      let stored = localStorage.getItem('systemFoundItems');
-      if (!stored) {
-        localStorage.setItem('systemFoundItems', JSON.stringify(defaultDatabaseItems));
-        return defaultDatabaseItems;
+      const target = document.getElementById('recent-items-section');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
       }
-      return JSON.parse(stored);
     }
-
-    function formatThaiDate(isoDateString) {
-      const d = new Date(isoDateString);
-      const monthsThai = [
-        "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
-        "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."
-      ];
-      return `${d.getDate()} ${monthsThai[d.getMonth()]} ${d.getFullYear() + 543}`;
-    }
-
-    function renderHomePage() {
-      const items = getSystemItems();
-      const now = new Date();
-      now.setHours(0, 0, 0, 0);
-
-      let todayFoundCount = 0;
-      let openItemsCount = 0;
-
-      let userActData = JSON.parse(localStorage.getItem('userActivitiesData') || '{}');
-      let returnedCount = 0;
-      if (userActData.claimRequests) {
-        returnedCount = userActData.claimRequests.filter(c => c.status === 'Completed').length;
-      }
-      returnedCount += 8;
-
-      const todayItems = [];
-
-      items.forEach(item => {
-        const itemDateNormalized = new Date(item.timestamp);
-        itemDateNormalized.setHours(0, 0, 0, 0);
-
-        const isToday = (itemDateNormalized.getTime() === now.getTime());
-
-        if (isToday) {
-          todayFoundCount++;
-          todayItems.push(item);
-        }
-
-        // นับรวมทุกรายการที่เป็นสถานะเปิด หรืออยู่ที่จุดรับฝาก หรือไม่ได้กำหนดสถานะ
-        const s = item.status;
-        if (!s || s === 'open' || s === 'pending' || s === 'พบใหม่' || s === 'อยู่ที่จุดรับฝาก') {
-          openItemsCount++;
-        }
-      });
-
-      const container = document.getElementById('recentItemsContainer');
-      container.innerHTML = '';
-
-      if (todayItems.length === 0) {
-        container.innerHTML = `
-          <div class="empty-today-box">
-            <i class="fa-regular fa-calendar-xmark"></i>
-            <h3>ยังไม่มีรายการแจ้งพบสิ่งของในวันนี้</h3>
-            <p>รายการที่พบในอดีตสามารถค้นหาและตรวจสอบได้ในหน้าค้นหาและฟิลเตอร์</p>
-            <a href="browse.html" class="btn-browse-history">
-              <span>ไปที่หน้าค้นหาและฟิลเตอร์</span>
-              <i class="fa-solid fa-arrow-right"></i>
-            </a>
-          </div>
-        `;
-      } else {
-        todayItems.forEach(item => {
-          const itemDateNormalized = new Date(item.timestamp);
-          itemDateNormalized.setHours(0, 0, 0, 0);
-
-          const isCurrentDay = (itemDateNormalized.getTime() === now.getTime());
-
-          let badgeHtml = '';
-          if (isCurrentDay) {
-            badgeHtml = `<span class="item-badge-new"><i class="fa-solid fa-sparkles"></i> พบใหม่</span>`;
-          } else {
-            badgeHtml = `<span class="item-badge-found"><i class="fa-solid fa-check"></i> พบแล้ว</span>`;
-          }
-
-          const card = document.createElement('div');
-          card.className = 'item-card';
-          card.innerHTML = `
-            <div class="item-image-wrapper">
-              <img src="${item.image}" alt="${item.title}" onerror="this.src='${item.fallbackImage || 'https://images.unsplash.com/photo-1582139329536-e7284fece509?q=80&w=600&auto=format&fit=crop'}">
-              ${badgeHtml}
-            </div>
-            <div class="item-body">
-              <div class="item-info">
-                <h3 class="item-title">${item.title}</h3>
-                <div class="item-category">${item.category}</div>
-                <div class="item-meta">
-                  <span><i class="fa-regular fa-calendar"></i> ${formatThaiDate(item.timestamp)}</span>
-                  <span><i class="fa-solid fa-location-dot"></i> ${item.location}</span>
-                </div>
-              </div>
-              <a href="detail.html?id=${item.id}" class="btn-detail">
-                <span>ดูรายละเอียด</span>
-                <i class="fa-solid fa-arrow-right"></i>
-              </a>
-            </div>
-          `;
-          container.appendChild(card);
-        });
-      }
-
-      document.getElementById('statTodayFound').textContent = todayFoundCount;
-      document.getElementById('statReturnedSuccess').textContent = returnedCount;
-      document.getElementById('statOpenItems').textContent = openItemsCount;
-    }
-
-    document.addEventListener('DOMContentLoaded', renderHomePage);
   </script>
 
 </body>

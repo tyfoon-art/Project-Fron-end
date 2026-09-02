@@ -251,7 +251,7 @@
       width: 100%;
     }
 
-    /* Progress & Steps Tracker (ขั้นตอนที่ 2) */
+    /* Progress & Steps Tracker (เหลือ 3 ขั้นตอน) */
     .steps-tracker-top {
       display: flex;
       flex-direction: column;
@@ -278,7 +278,7 @@
     }
 
     .progress-bar-fill {
-      width: 50%; /* ขั้นตอนที่ 2 จาก 4 */
+      width: 66.66%; /* ขั้นตอนที่ 2 จาก 3 */
       height: 100%;
       background: #003b7a;
       border-radius: 50px;
@@ -287,7 +287,7 @@
 
     .steps-circles-row {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 16px;
       text-align: center;
     }
@@ -371,6 +371,18 @@
     .form-input:focus, .form-select:focus {
       border-color: #003b7a;
       box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.12);
+    }
+
+    .form-input.error, .form-select.error {
+      border-color: #dc2626;
+    }
+
+    .error-text {
+      color: #dc2626;
+      font-size: 15px;
+      font-weight: 600;
+      margin-top: -4px;
+      display: none;
     }
 
     .select-box-wrapper {
@@ -510,7 +522,7 @@
 
         <ul class="nav-menu">
           <li><a href="home.html" class="nav-link">Home</a></li>
-          <li><a href="browse.html" class="nav-link">Browse</a></li>
+          <li><a href="browse.html" class="nav-link">My Activity</a></li>
         </ul>
       </div>
 
@@ -546,10 +558,10 @@
     <!-- Multi-Step Card -->
     <div class="form-card">
       
-      <!-- Progress Bar Tracker -->
+      <!-- Progress Bar Tracker (3 ขั้นตอน) -->
       <div class="steps-tracker-top">
         <div class="steps-top-info">
-          <span>ขั้นตอน 2 จาก 4</span>
+          <span>ขั้นตอน 2 จาก 3</span>
           <span style="color: #003b7a;">สถานที่และเวลา</span>
         </div>
         <div class="progress-bar-track">
@@ -569,10 +581,6 @@
             <div class="step-circle">3</div>
             <div class="step-label">รูปภาพ</div>
           </div>
-          <div class="step-node">
-            <div class="step-circle">4</div>
-            <div class="step-label">ข้อมูลติดต่อ</div>
-          </div>
         </div>
       </div>
 
@@ -583,40 +591,44 @@
           <select class="form-select" id="locationSelect" onchange="handleLocationChange()">
             <option value="" disabled selected>เลือกสถานที่</option>
             <option value="classroom">ห้องเรียน</option>
-            <option value="canteen">โรงอาหารกลาง</option>
+            <option value="canteen">โรงอาหาร</option>
             <option value="department">ห้องสาขา</option>
-            <option value="parking">ลานจอดรถคณะ ICT</option>
-            <option value="library">หอสมุดกลาง</option>
+            <option value="parking">ลานจอดรถ</option>
           </select>
           <i class="fa-solid fa-chevron-down"></i>
         </div>
+        <div class="error-text" id="locationError">กรุณาเลือกสถานที่เกิดเหตุ / พบสิ่งของ</div>
       </div>
 
       <!-- ช่องกรอกห้องเรียน (จะแสดงเมื่อเลือก "ห้องเรียน") -->
       <div class="form-group" id="customClassroomGroup" style="display: none;">
         <label class="form-label">ระบุห้องเรียน <span>*</span></label>
-        <input type="text" class="form-input" id="customClassroomInput" placeholder="เช่น ICT1102/1, 1111...">
+        <input type="text" class="form-input" id="customClassroomInput" placeholder="เช่น ICT1102/1" oninput="clearError('customClassroomInput', 'classroomError')">
+        <div class="error-text" id="classroomError">กรุณาระบุห้องเรียน</div>
       </div>
 
       <!-- ช่องกรอกชื่อสาขา (จะแสดงเมื่อเลือก "ห้องสาขา") -->
       <div class="form-group" id="customDepartmentGroup" style="display: none;">
         <label class="form-label">ระบุชื่อสาขา <span>*</span></label>
-        <input type="text" class="form-input" id="customDepartmentInput" placeholder="เช่น วิศวกรรมซอฟต์แวร์, วิทยาการคอมฯ...">
+        <input type="text" class="form-input" id="customDepartmentInput" placeholder="เช่น วิศวกรรมซอฟต์แวร์" oninput="clearError('customDepartmentInput', 'departmentError')">
+        <div class="error-text" id="departmentError">กรุณาระบุชื่อสาขา</div>
       </div>
 
-      <!-- วันที่เกิดเหตุ / พบ (จำกัดให้เลือกได้เฉพาะวันปัจจุบันหรือในอดีตเท่านั้น ห้ามเลือกวันพรุ่งนี้หรืออนาคต) -->
+      <!-- วันที่เกิดเหตุ / พบ -->
       <div class="form-group">
         <label class="form-label">วันที่ <span>*</span></label>
-        <input type="date" class="form-input" id="dateInput">
+        <input type="date" class="form-input" id="dateInput" onchange="clearError('dateInput', 'dateError')">
+        <div class="error-text" id="dateError">กรุณาเลือกวันที่ถูกต้อง (ห้ามเลือกวันในอนาคต)</div>
       </div>
 
       <!-- เวลาโดยประมาณ -->
       <div class="form-group">
-        <label class="form-label">เวลาโดยประมาณ</label>
-        <input type="time" class="form-input" id="timeInput">
+        <label class="form-label">เวลาโดยประมาณ <span>*</span></label>
+        <input type="time" class="form-input" id="timeInput" onchange="clearError('timeInput', 'timeError')">
+        <div class="error-text" id="timeError">กรุณากรอกเวลาให้ถูกต้อง (ห้ามเลือกเวลาในอนาคตสำหรับวันนี้)</div>
       </div>
 
-      <!-- ปุ่มย้อนกลับและถัดไป -->
+      <!-- ปุ่มย้อนกลับและไปสู่ขั้นตอนที่ 3 (รูปภาพ) -->
       <div class="form-actions-row">
         <button type="button" class="btn-back" onclick="location.href='report.html'">
           <i class="fa-solid fa-arrow-left"></i>
@@ -647,14 +659,25 @@
     </div>
   </footer>
 
-  <!-- Script สำหรับล็อกวันที่ไม่ให้เลือกอนาคต และแสดงฟิลด์ย่อย -->
+  <!-- Script สำหรับจัดการฟอร์มและตรวจสอบข้อมูล -->
   <script>
+    let maxDateStr = '';
+    let maxTimeStr = '';
+
     document.addEventListener('DOMContentLoaded', () => {
-      // วันที่ปัจจุบัน (1 ก.ย. 2026)
-      const todayStr = '2026-09-01';
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      maxDateStr = `${year}-${month}-${day}`;
+
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      maxTimeStr = `${hours}:${minutes}`;
+
       const dateInput = document.getElementById('dateInput');
-      dateInput.value = todayStr;
-      dateInput.max = todayStr; // ล็อกไม่ให้เลือกวันที่เกินกว่าวันปัจจุบัน (ห้ามเลือกวันพรุ่งนี้หรืออนาคต)
+      dateInput.value = maxDateStr;
+      dateInput.max = maxDateStr; // ล็อกไม่ให้เลือกวันที่เกินกว่าวันปัจจุบัน
     });
 
     function handleLocationChange() {
@@ -665,6 +688,8 @@
       classroomGroup.style.display = 'none';
       deptGroup.style.display = 'none';
 
+      clearError('locationSelect', 'locationError');
+
       if (locVal === 'classroom') {
         classroomGroup.style.display = 'flex';
       } else if (locVal === 'department') {
@@ -672,16 +697,104 @@
       }
     }
 
-    function validateAndNext() {
-      const dateInput = document.getElementById('dateInput').value;
-      const maxDate = '2026-09-01';
+    function clearError(inputId, errorId) {
+      document.getElementById(inputId).classList.remove('error');
+      document.getElementById(errorId).style.display = 'none';
+    }
 
-      if (dateInput > maxDate) {
-        alert('ไม่อนุญาตให้เลือกวันที่ในอนาคต กรุณาเลือกวันปัจจุบันหรือวันที่ในอดีต');
-        return;
+    function validateAndNext() {
+      let isValid = true;
+      const locationSelect = document.getElementById('locationSelect');
+      const locVal = locationSelect.value;
+      const locationError = document.getElementById('locationError');
+
+      const classroomInput = document.getElementById('customClassroomInput');
+      const classroomError = document.getElementById('classroomError');
+
+      const departmentInput = document.getElementById('customDepartmentInput');
+      const departmentError = document.getElementById('departmentError');
+
+      const dateInput = document.getElementById('dateInput');
+      const dateError = document.getElementById('dateError');
+
+      const timeInput = document.getElementById('timeInput');
+      const timeError = document.getElementById('timeError');
+
+      // 1. ตรวจสอบการเลือกสถานที่
+      if (!locVal) {
+        locationSelect.classList.add('error');
+        locationError.style.display = 'block';
+        isValid = false;
+      } else {
+        locationSelect.classList.remove('error');
+        locationError.style.display = 'none';
       }
 
-      alert('ไปสู่ขั้นตอนที่ 3: รูปภาพ');
+      // 2. ตรวจสอบกรณีเลือกห้องเรียน
+      if (locVal === 'classroom' && !classroomInput.value.trim()) {
+        classroomInput.classList.add('error');
+        classroomError.style.display = 'block';
+        isValid = false;
+      } else {
+        classroomInput.classList.remove('error');
+        classroomError.style.display = 'none';
+      }
+
+      // 3. ตรวจสอบกรณีเลือกห้องสาขา
+      if (locVal === 'department' && !departmentInput.value.trim()) {
+        departmentInput.classList.add('error');
+        departmentError.style.display = 'block';
+        isValid = false;
+      } else {
+        departmentInput.classList.remove('error');
+        departmentError.style.display = 'none';
+      }
+
+      // 4. ตรวจสอบวันที่ห้ามเกินอนาคต
+      if (!dateInput.value || dateInput.value > maxDateStr) {
+        dateInput.classList.add('error');
+        dateError.style.display = 'block';
+        isValid = false;
+      } else {
+        dateInput.classList.remove('error');
+        dateError.style.display = 'none';
+      }
+
+      // 5. ตรวจสอบเวลา (ถ้าเลือกวันปัจจุบัน ห้ามเลือกเวลาในอนาคต)
+      if (!timeInput.value) {
+        timeInput.classList.add('error');
+        timeError.textContent = 'กรุณากรอกเวลาโดยประมาณ';
+        timeError.style.display = 'block';
+        isValid = false;
+      } else if (dateInput.value === maxDateStr && timeInput.value > maxTimeStr) {
+        timeInput.classList.add('error');
+        timeError.textContent = 'ไม่อนุญาตให้เลือกเวลาในอนาคตสำหรับวันนี้';
+        timeError.style.display = 'block';
+        isValid = false;
+      } else {
+        timeInput.classList.remove('error');
+        timeError.style.display = 'none';
+      }
+
+      if (!isValid) return;
+
+      // บันทึกข้อมูลลง sessionStorage
+      let finalLocation = locVal;
+      if (locVal === 'classroom') {
+        finalLocation = classroomInput.value.trim();
+      } else if (locVal === 'department') {
+        finalLocation = departmentInput.value.trim();
+      } else if (locVal === 'canteen') {
+        finalLocation = 'โรงอาหาร';
+      } else if (locVal === 'parking') {
+        finalLocation = 'ลานจอดรถ';
+      }
+
+      sessionStorage.setItem('report_location', finalLocation);
+      sessionStorage.setItem('report_date', dateInput.value);
+      sessionStorage.setItem('report_time', timeInput.value);
+
+      window.location.href = 'report-step3.html';
     }
   </script>
 

@@ -19,6 +19,12 @@
       font-family: 'Prompt', sans-serif;
     }
 
+    /* ปิดลูกตาเริ่มต้นของ Browser ไม่ให้ขึ้นมาซ้ำซ้อน */
+    input::-ms-reveal,
+    input::-ms-clear {
+      display: none;
+    }
+
     body {
       min-height: 100vh;
       display: flex;
@@ -28,7 +34,7 @@
       padding: 40px 24px;
     }
 
-    /* กล่องการ์ดหลัก - ปรับขยายขนาดใหญ่พิเศษ (XL) */
+    /* กล่องการ์ดหลัก */
     .login-card {
       display: flex;
       width: 100%;
@@ -114,6 +120,7 @@
       position: relative;
       padding-bottom: 16px;
       transition: all 0.2s ease;
+      cursor: pointer;
     }
 
     .nav-tab:hover {
@@ -202,6 +209,11 @@
       transition: all 0.2s ease-in-out;
     }
 
+    .input-wrapper input.input-error {
+      border-color: #ef4444 !important;
+      background-color: #fffaf0;
+    }
+
     .input-wrapper input::placeholder {
       color: #94a3b8;
       font-weight: 400;
@@ -211,6 +223,39 @@
       background-color: #ffffff;
       border-color: #003b7a;
       box-shadow: 0 0 0 4px rgba(0, 59, 122, 0.12);
+    }
+
+    /* ข้อความแจ้งเตือน Error */
+    .error-hint {
+      display: none;
+      color: #ef4444;
+      font-size: 14.5px;
+      font-weight: 500;
+      margin-top: 6px;
+      padding-left: 4px;
+    }
+
+    .error-hint.show {
+      display: block;
+    }
+
+    /* กล่องแจ้งเตือนรวมด้านบนฟอร์ม */
+    .alert-login-error {
+      display: none;
+      background: #fef2f2;
+      border: 1.5px solid #fecdd3;
+      color: #be123c;
+      padding: 14px 18px;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 20px;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .alert-login-error.show {
+      display: flex;
     }
 
     /* ปุ่มเปิด/ปิดตาดูรหัสผ่าน */
@@ -245,6 +290,7 @@
       text-decoration: none;
       font-weight: 500;
       transition: color 0.2s ease;
+      cursor: pointer;
     }
 
     .forgot-link:hover {
@@ -252,7 +298,7 @@
       text-decoration: underline;
     }
 
-    /* ปุ่ม Submit ทรงรี */
+    /* ปุ่ม Submit */
     .btn-login {
       width: 100%;
       padding: 20px;
@@ -288,39 +334,31 @@
       transform: scale(0.99);
     }
 
-    /* Responsive */
     @media (max-width: 1100px) {
       .login-card {
         flex-direction: column;
         max-width: 640px;
         min-height: auto;
       }
-
       .banner-side {
         min-height: 320px;
         padding: 48px 40px;
       }
-
       .banner-logo {
         font-size: 38px;
       }
-
       .banner-logo i {
         font-size: 40px;
       }
-
       .form-side {
         padding: 44px 36px;
       }
-
       .nav-tabs {
         gap: 80px;
       }
-
       .banner-content h2 {
         font-size: 34px;
       }
-
       .form-title-group h2 {
         font-size: 34px;
       }
@@ -346,7 +384,7 @@
     <div class="form-side">
       <!-- แท็บเมนูด้านบน -->
       <div class="nav-tabs">
-        <a href="#" class="nav-tab active">เข้าสู่ระบบ</a>
+        <a href="login.html" class="nav-tab active">เข้าสู่ระบบ</a>
         <a href="register.html" class="nav-tab">ลงทะเบียน</a>
       </div>
 
@@ -357,7 +395,13 @@
           <p>ระบบแจ้งของหายและตามหาของภายในตึกคณะ ICT</p>
         </div>
 
-        <form action="#" method="POST">
+        <!-- กล่องแจ้งเตือนกรณีไม่พบบัญชีหรือรหัสผ่านผิด -->
+        <div class="alert-login-error" id="loginAlertError">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          <span id="loginAlertText">ไม่พบบัญชีผู้ใช้นี้ กรุณาลงทะเบียนก่อนเข้าสู่ระบบ</span>
+        </div>
+
+        <form id="loginForm" onsubmit="handleLogin(event)" novalidate>
           <!-- ช่องกรอกอีเมล -->
           <div class="form-group">
             <label for="email">อีเมล</label>
@@ -367,9 +411,13 @@
                 type="email" 
                 id="email" 
                 name="email" 
-                placeholder="xxxx@gmail.com" 
+                placeholder="xxxx@gmail.com หรือ xxxx@up.ac.th" 
+                oninput="clearError('email', 'emailError')"
                 required
               >
+            </div>
+            <div class="error-hint" id="emailError">
+              <i class="fa-solid fa-circle-exclamation"></i> กรุณากรอกอีเมล
             </div>
           </div>
 
@@ -383,14 +431,20 @@
                 id="password" 
                 name="password" 
                 placeholder="กรอกรหัสผ่าน" 
+                oninput="clearError('password', 'passwordError')"
                 required
               >
               <button type="button" class="btn-toggle-password" id="togglePassword" aria-label="Toggle password visibility">
                 <i class="fa-regular fa-eye" id="togglePasswordIcon"></i>
               </button>
             </div>
+            <div class="error-hint" id="passwordError">
+              <i class="fa-solid fa-circle-exclamation"></i> กรุณากรอกรหัสผ่าน
+            </div>
+
+            <!-- ลิงก์ไปยังหน้าลืมรหัสผ่าน เชื่อมต่อโดยตรง -->
             <div class="forgot-link-wrapper">
-              <a href="forgot-password.html" class="forgot-link">ลืมรหัสผ่าน?</a>
+              <a href="forgot-password.html" class="forgot-link" onclick="goToForgotPassword(event)">ลืมรหัสผ่าน?</a>
             </div>
           </div>
 
@@ -405,6 +459,13 @@
   </div>
 
   <script>
+    // ฟังก์ชันเชื่อมต่อไปยังหน้าลืมรหัสผ่านโดยตรง
+    function goToForgotPassword(event) {
+      if (event) event.preventDefault();
+      window.location.href = 'forgotpassword.html';
+    }
+
+    // สลับดูรหัสผ่าน
     const togglePassword = document.getElementById('togglePassword');
     const passwordInput = document.getElementById('password');
     const toggleIcon = document.getElementById('togglePasswordIcon');
@@ -421,6 +482,104 @@
         toggleIcon.classList.add('fa-eye');
       }
     });
+
+    function showError(inputId, errorId, msg) {
+      const input = document.getElementById(inputId);
+      const error = document.getElementById(errorId);
+      if (input) input.classList.add('input-error');
+      if (error) {
+        if (msg) error.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${msg}`;
+        error.classList.add('show');
+      }
+    }
+
+    function clearError(inputId, errorId) {
+      const input = document.getElementById(inputId);
+      const error = document.getElementById(errorId);
+      if (input) input.classList.remove('input-error');
+      if (error) error.classList.remove('show');
+      document.getElementById('loginAlertError').classList.remove('show');
+    }
+
+    // ฟังก์ชันตรวจสอบการมีอยู่ของบัญชีในระบบ
+    function handleLogin(event) {
+      event.preventDefault();
+
+      const emailInput = document.getElementById('email');
+      const passwordInput = document.getElementById('password');
+      const email = emailInput.value.trim().toLowerCase();
+      const password = passwordInput.value;
+      const alertBox = document.getElementById('loginAlertError');
+      const alertText = document.getElementById('loginAlertText');
+
+      let isValid = true;
+
+      // 1. ตรวจสอบว่ากรอกข้อมูลครบหรือไม่
+      if (!email) {
+        showError('email', 'emailError', 'กรุณากรอกอีเมล');
+        isValid = false;
+      }
+      if (!password) {
+        showError('password', 'passwordError', 'กรุณากรอกรหัสผ่าน');
+        isValid = false;
+      }
+
+      if (!isValid) return;
+
+      // 2. ดึงรายการบัญชีผู้ใช้ทั้งหมดจาก localStorage
+      let usersList = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+
+      // ตรวจสอบข้อมูลบัญชีเดี่ยวที่อาจเคยลงทะเบียนไว้
+      const singleEmail = localStorage.getItem('userEmail');
+      const singlePass = localStorage.getItem('userPassword');
+      const singleName = localStorage.getItem('userName');
+
+      if (singleEmail && !usersList.some(u => u.email.toLowerCase() === singleEmail.toLowerCase())) {
+        usersList.push({
+          email: singleEmail,
+          password: singlePass || 'Pass1234',
+          name: singleName || 'นพวรรณ คงพันธประเสริฐ'
+        });
+      }
+
+      // เพิ่มบัญชีเริ่มต้นสำหรับการทดสอบระบบ
+      const defaultUser = {
+        email: '67020001@up.ac.th',
+        password: 'Password123',
+        name: 'นพวรรณ คงพันธประเสริฐ'
+      };
+      if (!usersList.some(u => u.email.toLowerCase() === defaultUser.email.toLowerCase())) {
+        usersList.push(defaultUser);
+      }
+
+      // 3. ตรวจสอบว่าอีเมลนี้เคยลงทะเบียนไว้หรือไม่
+      const accountFound = usersList.find(u => u.email.toLowerCase() === email);
+
+      if (!accountFound) {
+        emailInput.classList.add('input-error');
+        alertText.innerHTML = 'ยังไม่มีบัญชีนี้ในระบบ กรุณากด <strong>"ลงทะเบียน"</strong> ก่อนเข้าสู่ระบบ';
+        alertBox.classList.add('show');
+        emailInput.focus();
+        return;
+      }
+
+      // 4. ตรวจสอบรหัสผ่านของบัญชีดังกล่าว
+      if (accountFound.password && accountFound.password !== password) {
+        passwordInput.classList.add('input-error');
+        alertText.innerHTML = 'รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง หรือกด "ลืมรหัสผ่าน?"';
+        alertBox.classList.add('show');
+        passwordInput.focus();
+        return;
+      }
+
+      // 5. ผ่านการตรวจสอบ เข้าสู่ระบบสำเร็จ
+      localStorage.setItem('currentUser', JSON.stringify(accountFound));
+      localStorage.setItem('userEmail', accountFound.email);
+      localStorage.setItem('userName', accountFound.name || 'ผู้ใช้งาน');
+
+      // พาไปยังหน้าหลัก
+      window.location.href = 'home.html';
+    }
   </script>
 
 </body>

@@ -18,6 +18,12 @@
       font-family: 'Prompt', sans-serif;
     }
 
+    /* ปิดไอคอนลูกตาเริ่มต้นของ Browser ไม่ให้ขึ้นมาซ้อนกับปุ่มของเว็บ */
+    input::-ms-reveal,
+    input::-ms-clear {
+      display: none;
+    }
+
     body {
       min-height: 100vh;
       display: flex;
@@ -32,7 +38,7 @@
       display: flex;
       width: 100%;
       max-width: 1420px;
-      height: 840px;
+      height: 860px;
       background: #ffffff;
       border-radius: 36px;
       overflow: hidden;
@@ -89,7 +95,7 @@
     .form-side {
       flex: 1;
       height: 100%;
-      padding: 56px 72px 48px 72px;
+      padding: 50px 72px 40px 72px;
       display: flex;
       flex-direction: column;
       background: #ffffff;
@@ -114,6 +120,7 @@
       position: relative;
       padding-bottom: 16px;
       transition: all 0.2s ease;
+      cursor: pointer;
     }
 
     .nav-tab:hover {
@@ -139,18 +146,18 @@
 
     /* กล่องฟอร์ม */
     .form-content {
-      margin-top: 28px;
+      margin-top: 24px;
       width: 100%;
     }
 
     /* หัวข้อฟอร์ม */
     .form-title-group {
       text-align: center;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .form-title-group h2 {
-      font-size: 40px;
+      font-size: 38px;
       font-weight: 700;
       color: #003b7a;
       margin-bottom: 4px;
@@ -164,7 +171,7 @@
 
     /* ฟอร์มและช่องกรอก */
     .form-group {
-      margin-bottom: 9px;
+      margin-bottom: 8px;
     }
 
     .form-group-gender {
@@ -176,7 +183,7 @@
       font-size: 14.5px;
       font-weight: 600;
       color: #1e293b;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
 
     .input-wrapper {
@@ -195,7 +202,7 @@
 
     .input-wrapper input {
       width: 100%;
-      padding: 10.5px 54px 10.5px 52px;
+      padding: 10px 54px 10px 52px;
       font-size: 15px;
       background-color: #f8faff;
       border: 1.5px solid #d9e2ec;
@@ -203,6 +210,11 @@
       outline: none;
       color: #1e293b;
       transition: all 0.2s ease-in-out;
+    }
+
+    .input-wrapper input.input-error {
+      border-color: #ef4444 !important;
+      background-color: #fffaf0;
     }
 
     .input-wrapper input::placeholder {
@@ -216,12 +228,26 @@
       box-shadow: 0 0 0 4px rgba(0, 59, 122, 0.12);
     }
 
+    /* ข้อความแจ้งเตือน Error */
+    .error-hint {
+      display: none;
+      color: #ef4444;
+      font-size: 12.5px;
+      font-weight: 500;
+      margin-top: 3px;
+      padding-left: 4px;
+    }
+
+    .error-hint.show {
+      display: block;
+    }
+
     /* สไตล์ตัวเลือกเพศ */
     .gender-options {
       display: flex;
       gap: 48px;
       align-items: center;
-      padding: 2px 0 2px 0;
+      padding: 2px 0;
     }
 
     .gender-radio {
@@ -302,11 +328,11 @@
       color: #003b7a;
     }
 
-    /* ปุ่ม Submit - ขยับระยะห่างลงไปด้านล่างอีกนิด */
+    /* ปุ่ม Submit */
     .btn-login {
       width: 100%;
-      padding: 14px;
-      margin-top: 24px;
+      padding: 13.5px;
+      margin-top: 20px;
       background: #003b7a;
       color: #ffffff;
       font-size: 18px;
@@ -338,43 +364,34 @@
       transform: scale(0.99);
     }
 
-    /* Responsive */
     @media (max-width: 1100px) {
       .login-card {
         flex-direction: column;
         max-width: 640px;
         height: auto;
       }
-
       .banner-side {
         min-height: 320px;
         padding: 48px 40px;
       }
-
       .banner-logo {
         font-size: 38px;
       }
-
       .banner-logo i {
         font-size: 40px;
       }
-
       .form-side {
         padding: 44px 36px;
       }
-
       .nav-tabs {
         gap: 80px;
       }
-
       .gender-options {
         gap: 32px;
       }
-
       .banner-content h2 {
         font-size: 34px;
       }
-
       .form-title-group h2 {
         font-size: 34px;
       }
@@ -397,7 +414,7 @@
 
     <div class="form-side">
       <div class="nav-tabs">
-        <a href="index.html" class="nav-tab">เข้าสู่ระบบ</a>
+        <a href="login.html" class="nav-tab">เข้าสู่ระบบ</a>
         <a href="register.html" class="nav-tab active">ลงทะเบียน</a>
       </div>
 
@@ -407,7 +424,8 @@
           <p>ร่วมเป็นส่วนหนึ่งของสังคมแห่งการแบ่งปันและช่วยเหลือกัน</p>
         </div>
 
-        <form action="#" method="POST">
+        <form id="registerForm" onsubmit="handleRegister(event)" novalidate>
+          
           <div class="form-group">
             <label for="fullname">ชื่อ-นามสกุล</label>
             <div class="input-wrapper">
@@ -417,8 +435,11 @@
                 id="fullname" 
                 name="fullname" 
                 placeholder="John Doe" 
-                required
+                oninput="clearError('fullname', 'fullnameError')"
               >
+            </div>
+            <div class="error-hint" id="fullnameError">
+              <i class="fa-solid fa-circle-exclamation"></i> กรุณากรอกชื่อ-นามสกุล
             </div>
           </div>
 
@@ -447,8 +468,11 @@
                   id="other_gender_text" 
                   name="other_gender" 
                   placeholder="ระบุเพศของคุณ" 
-                  oninput="this.value = this.value.replace(/[^a-zA-Zก-๙\s]/g, '')"
+                  oninput="this.value = this.value.replace(/[^a-zA-Zก-๙\s]/g, ''); clearError('other_gender_text', 'otherGenderError')"
                 >
+              </div>
+              <div class="error-hint" id="otherGenderError">
+                <i class="fa-solid fa-circle-exclamation"></i> กรุณาระบุเพศของคุณ
               </div>
             </div>
           </div>
@@ -461,9 +485,12 @@
                 type="email" 
                 id="email" 
                 name="email" 
-                placeholder="xxxx@gmail.com" 
-                required
+                placeholder="xxxx@gmail.com หรือ xxxx@up.ac.th" 
+                oninput="clearError('email', 'emailError')"
               >
+            </div>
+            <div class="error-hint" id="emailError">
+              <i class="fa-solid fa-circle-exclamation"></i> กรุณากรอกอีเมลให้ถูกต้อง
             </div>
           </div>
 
@@ -475,12 +502,15 @@
                 type="password" 
                 id="password" 
                 name="password" 
-                placeholder="กรอกรหัสผ่าน" 
-                required
+                placeholder="อย่างน้อย 8 ตัวอักษร (A-Z, a-z, 0-9)" 
+                oninput="clearError('password', 'passwordError')"
               >
               <button type="button" class="btn-toggle-password" onclick="togglePass('password', 'togglePassIcon1')" aria-label="Toggle password visibility">
                 <i class="fa-regular fa-eye" id="togglePassIcon1"></i>
               </button>
+            </div>
+            <div class="error-hint" id="passwordError">
+              <i class="fa-solid fa-circle-exclamation"></i> รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร ประกอบด้วยตัวพิมพ์ใหญ่ ตัวพิมพ์เล็ก และตัวเลข
             </div>
           </div>
 
@@ -493,11 +523,14 @@
                 id="confirm-password" 
                 name="confirm_password" 
                 placeholder="กรอกยืนยันรหัสผ่าน" 
-                required
+                oninput="clearError('confirm-password', 'confirmPasswordError')"
               >
               <button type="button" class="btn-toggle-password" onclick="togglePass('confirm-password', 'togglePassIcon2')" aria-label="Toggle confirm password visibility">
                 <i class="fa-regular fa-eye" id="togglePassIcon2"></i>
               </button>
+            </div>
+            <div class="error-hint" id="confirmPasswordError">
+              <i class="fa-solid fa-circle-exclamation"></i> รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน
             </div>
           </div>
 
@@ -532,13 +565,138 @@
       
       if (radio.value === 'other') {
         otherWrapper.classList.add('active');
-        otherInput.required = true;
         otherInput.focus();
       } else {
         otherWrapper.classList.remove('active');
-        otherInput.required = false;
+        clearError('other_gender_text', 'otherGenderError');
         otherInput.value = '';
       }
+    }
+
+    function showError(inputId, errorId, msg) {
+      const input = document.getElementById(inputId);
+      const error = document.getElementById(errorId);
+      if (input) input.classList.add('input-error');
+      if (error) {
+        if (msg) error.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${msg}`;
+        error.classList.add('show');
+      }
+    }
+
+    function clearError(inputId, errorId) {
+      const input = document.getElementById(inputId);
+      const error = document.getElementById(errorId);
+      if (input) input.classList.remove('input-error');
+      if (error) error.classList.remove('show');
+    }
+
+    function handleRegister(event) {
+      event.preventDefault();
+
+      const fullname = document.getElementById('fullname').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
+      const gender = document.querySelector('input[name="gender"]:checked').value;
+      const otherGender = document.getElementById('other_gender_text').value.trim();
+
+      let isValid = true;
+      let firstInvalidInput = null;
+
+      // 1. ตรวจสอบชื่อ-นามสกุล
+      if (!fullname) {
+        showError('fullname', 'fullnameError', 'กรุณากรอกชื่อ-นามสกุล');
+        isValid = false;
+        if (!firstInvalidInput) firstInvalidInput = document.getElementById('fullname');
+      }
+
+      // 2. ตรวจสอบเพศกรณีเลือกอื่นๆ
+      if (gender === 'other' && !otherGender) {
+        showError('other_gender_text', 'otherGenderError', 'กรุณาระบุเพศของคุณ');
+        isValid = false;
+        if (!firstInvalidInput) firstInvalidInput = document.getElementById('other_gender_text');
+      }
+
+      // 3. ตรวจสอบรูปแบบอีเมล
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!email) {
+        showError('email', 'emailError', 'กรุณากรอกอีเมล');
+        isValid = false;
+        if (!firstInvalidInput) firstInvalidInput = document.getElementById('email');
+      } else if (!emailPattern.test(email)) {
+        showError('email', 'emailError', 'รูปแบบอีเมลไม่ถูกต้อง');
+        isValid = false;
+        if (!firstInvalidInput) firstInvalidInput = document.getElementById('email');
+      } else {
+        // ตรวจสอบการลงทะเบียนอีเมลซ้ำในระบบ
+        let usersList = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+        
+        // ตรวจสอบบัญชีเริ่มต้นในระบบ
+        if (!usersList.some(u => u.email.toLowerCase() === '67020001@up.ac.th')) {
+          usersList.push({ email: '67020001@up.ac.th' });
+        }
+        const singleEmail = localStorage.getItem('userEmail');
+        if (singleEmail && !usersList.some(u => u.email.toLowerCase() === singleEmail.toLowerCase())) {
+          usersList.push({ email: singleEmail });
+        }
+
+        const isDuplicate = usersList.some(user => user.email.toLowerCase() === email.toLowerCase());
+        if (isDuplicate) {
+          showError('email', 'emailError', 'อีเมลนี้ถูกใช้งานแล้ว กรุณาใช้อีเมลอื่นหรือเข้าสู่ระบบ');
+          isValid = false;
+          if (!firstInvalidInput) firstInvalidInput = document.getElementById('email');
+        }
+      }
+
+      // 4. ตรวจสอบเงื่อนไขรหัสผ่าน
+      const hasUpperCase = /[A-Z]/.test(password);
+      const hasLowerCase = /[a-z]/.test(password);
+      const hasNumbers = /[0-9]/.test(password);
+      const hasMinLength = password.length >= 8;
+
+      if (!password) {
+        showError('password', 'passwordError', 'กรุณากรอกรหัสผ่าน');
+        isValid = false;
+        if (!firstInvalidInput) firstInvalidInput = document.getElementById('password');
+      } else if (!hasMinLength || !hasUpperCase || !hasLowerCase || !hasNumbers) {
+        showError('password', 'passwordError', 'รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร ประกอบด้วยตัวพิมพ์ใหญ่ ตัวพิมพ์เล็ก และตัวเลข');
+        isValid = false;
+        if (!firstInvalidInput) firstInvalidInput = document.getElementById('password');
+      }
+
+      // 5. ตรวจสอบยืนยันรหัสผ่าน
+      if (!confirmPassword) {
+        showError('confirm-password', 'confirmPasswordError', 'กรุณากรอกยืนยันรหัสผ่าน');
+        isValid = false;
+        if (!firstInvalidInput) firstInvalidInput = document.getElementById('confirm-password');
+      } else if (password !== confirmPassword) {
+        showError('confirm-password', 'confirmPasswordError', 'รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน');
+        isValid = false;
+        if (!firstInvalidInput) firstInvalidInput = document.getElementById('confirm-password');
+      }
+
+      if (!isValid) {
+        if (firstInvalidInput) firstInvalidInput.focus();
+        return;
+      }
+
+      // บันทึกบัญชีใหม่ลงใน registeredUsers
+      let usersList = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+      const newUser = {
+        name: fullname,
+        email: email,
+        password: password,
+        gender: gender === 'other' ? otherGender : gender
+      };
+      usersList.push(newUser);
+      localStorage.setItem('registeredUsers', JSON.stringify(usersList));
+
+      // บันทึกสถานะผู้ใช้งานปัจจุบัน
+      localStorage.setItem('currentUser', JSON.stringify(newUser));
+      localStorage.setItem('userName', fullname);
+      localStorage.setItem('userEmail', email);
+
+      window.location.href = 'home.html';
     }
   </script>
 

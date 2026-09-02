@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ข้อมูลส่วนตัว - Lost & Found ICT</title>
+  
+  <!-- Google Fonts: Prompt -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Prompt', sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scrollbar-gutter: stable;
+      overflow-y: scroll;
+    }
+
+    body {
+      background-color: #f8fafc;
+      color: #1e293b;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    /* ---------------- 1. Navbar ---------------- */
+    .navbar {
+      background: #ffffff;
+      border-bottom: 2px solid #edf2f7;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+      width: 100%;
+    }
+
+    .navbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 94px;
+      padding: 0 48px;
+      gap: 32px;
+      width: 100%;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 48px;
+      flex-shrink: 0;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #003b7a;
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      flex-shrink: 0;
+    }
+
+    .nav-brand i {
+      font-size: 38px;
+      color: #003b7a;
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+      flex-shrink: 0;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      font-size: 21px;
+      font-weight: 500;
+      color: #64748b;
+      transition: color 0.2s;
+      position: relative;
+      padding-bottom: 6px;
+      white-space: nowrap;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: #003b7a;
+      font-weight: 700;
+    }
+
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: #003b7a;
+      border-radius: 3px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-shrink: 0;
+    }
+
+    .nav-search-form {
+      position: relative;
+      width: 400px;
+      flex-shrink: 0;
+    }
+
+    .nav-search-box {
+      display: flex;
+      align-items: center;
+      background: #f1f5f9;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 50px;
+      padding: 11px 22px;
+      transition: all 0.2s ease;
+      width: 100%;
+    }
+
+    .nav-search-box:focus-within {
+      background: #ffffff;
+      border-color: #003b7a;
+      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.12);
+    }
+
+    .nav-search-box i {
+      color: #64748b;
+      font-size: 18px;
+      margin-right: 12px;
+      flex-shrink: 0;
+    }
+
+    .nav-search-box input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 17.5px;
+      color: #1e293b;
+      font-weight: 400;
+      width: 100%;
+    }
+
+    .btn-post {
+      background: #003b7a;
+      color: #ffffff;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-size: 17.5px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(0, 59, 122, 0.2);
+      flex-shrink: 0;
+    }
+
+    .btn-post:hover {
+      background: #002d5e;
+      transform: translateY(-1px);
+    }
+
+    .nav-profile {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: #003b7a;
+      font-size: 18.5px;
+      font-weight: 700;
+      padding: 8px 12px;
+      border-radius: 10px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .nav-profile i {
+      font-size: 22px;
+      color: #003b7a;
+    }
+
+    .nav-profile:hover {
+      background: #f1f5f9;
+    }
+
+    /* ---------------- 2. Main Profile Layout ---------------- */
+    .profile-main {
+      flex: 1;
+      padding: 40px 48px 72px 48px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .profile-header {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .profile-header h1 {
+      font-size: 38px;
+      font-weight: 900;
+      color: #0f172a;
+      letter-spacing: -0.5px;
+    }
+
+    .profile-header p {
+      font-size: 20px;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 40px;
+      align-items: flex-start;
+      margin-top: 8px;
+    }
+
+    .profile-left-column {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .profile-card {
+      background: #ffffff;
+      border: 1.5px solid #edf2f7;
+      border-radius: 24px;
+      padding: 40px 44px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .user-intro-row {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      padding-bottom: 28px;
+      border-bottom: 1.5px solid #f1f5f9;
+    }
+
+    .user-avatar-wrap {
+      position: relative;
+      width: 116px;
+      height: 116px;
+      flex-shrink: 0;
+    }
+
+    .user-avatar-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #e2e8f0;
+      background: #f8fafc;
+    }
+
+    .avatar-upload-label {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      width: 38px;
+      height: 38px;
+      background: #003b7a;
+      color: #ffffff;
+      border: 2.5px solid #ffffff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+      transition: all 0.2s ease;
+    }
+
+    .avatar-upload-label:hover {
+      background: #002d5e;
+      transform: scale(1.1);
+    }
+
+    #avatarFileInput {
+      display: none;
+    }
+
+    .user-intro-info {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .user-name-display {
+      font-size: 28px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .error-text {
+      color: #dc2626;
+      font-size: 14px;
+      font-weight: 600;
+      display: none;
+      margin-top: 4px;
+    }
+
+    .success-text {
+      color: #16a34a;
+      font-size: 15px;
+      font-weight: 700;
+      display: none;
+    }
+
+    .profile-form-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 22px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .form-label {
+      font-size: 18px;
+      font-weight: 700;
+      color: #334155;
+    }
+
+    /* ปรับช่องกรอกข้อมูลให้ใหญ่ขึ้นทั้งความสูงและขนาดตัวหนังสือ */
+    .form-input {
+      width: 100%;
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 16px;
+      padding: 20px 24px;
+      font-size: 20px;
+      font-weight: 500;
+      color: #1e293b;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .form-input:focus {
+      background: #ffffff;
+      border-color: #003b7a;
+      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.12);
+    }
+
+    .form-input.error {
+      border-color: #dc2626;
+    }
+
+    .form-actions-end {
+      display: flex;
+      justify-content: flex-end;
+      padding-top: 8px;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .btn-save-profile {
+      background: #003b7a;
+      color: #ffffff;
+      border: none;
+      border-radius: 14px;
+      padding: 16px 36px;
+      font-size: 18.5px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 16px rgba(0, 59, 122, 0.25);
+    }
+
+    .btn-save-profile:hover {
+      background: #002d5e;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 59, 122, 0.35);
+    }
+
+    .outside-actions-row {
+      display: flex;
+      justify-content: flex-end;
+      width: 100%;
+      padding-right: 44px;
+    }
+
+    .btn-logout-red {
+      background: #dc2626;
+      color: #ffffff;
+      border: none;
+      border-radius: 14px;
+      padding: 16px 36px;
+      font-size: 18.5px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 16px rgba(220, 38, 38, 0.25);
+    }
+
+    .btn-logout-red:hover {
+      background: #b91c1c;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(220, 38, 38, 0.35);
+    }
+
+    /* ---------------- ฝั่งขวา: สถิติการใช้งาน ---------------- */
+    .stats-card {
+      background: #ffffff;
+      border: 1.5px solid #edf2f7;
+      border-radius: 24px;
+      padding: 32px 28px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .stats-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+
+    .stats-title i {
+      color: #003b7a;
+      font-size: 24px;
+    }
+
+    .stats-item-box {
+      border: 1.5px solid #edf2f7;
+      border-radius: 18px;
+      padding: 18px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f8fafc;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .stats-item-box:hover {
+      transform: translateY(-2px);
+      border-color: #cbd5e1;
+      background: #ffffff;
+    }
+
+    .stats-item-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .stats-icon-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .stats-icon-circle.lost-icon {
+      background: #fee2e2;
+      color: #ef4444;
+    }
+
+    .stats-icon-circle.found-icon {
+      background: #dcfce7;
+      color: #22c55e;
+    }
+
+    .stats-icon-circle.claim-icon {
+      background: #e0f2fe;
+      color: #0284c7;
+    }
+
+    .stats-item-label {
+      font-size: 18px;
+      font-weight: 700;
+      color: #334155;
+    }
+
+    .stats-item-count {
+      font-size: 26px;
+      font-weight: 900;
+      color: #0f172a;
+    }
+
+    /* ---------------- 3. Footer ---------------- */
+    .footer {
+      background: #ffffff;
+      border-top: 1.5px solid #edf2f7;
+      margin-top: auto;
+      padding: 28px 0;
+      width: 100%;
+    }
+
+    .footer-inner {
+      padding: 0 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 16px;
+      color: #64748b;
+      width: 100%;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      color: #64748b;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: #003b7a;
+    }
+
+    @media (max-width: 1200px) {
+      .profile-grid {
+        grid-template-columns: 1fr;
+      }
+      .navbar-inner, .profile-main, .footer-inner {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .profile-card {
+        padding: 28px 20px;
+      }
+      .outside-actions-row {
+        padding-right: 0;
+      }
+      .btn-logout-red, .btn-save-profile {
+        width: 100%;
+        justify-content: center;
+      }
+      .user-intro-row {
+        flex-direction: column;
+        text-align: center;
+      }
+      .footer-inner {
+        flex-direction: column;
+        gap: 14px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. Navbar มาตรฐาน -->
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="nav-left">
+        <a href="home.html" class="nav-brand">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Lost & Found ICT</span>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="home.html" class="nav-link">Home</a></li>
+          <li><a href="activity.html" class="nav-link">My Activity</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-actions">
+        <form class="nav-search-form" action="browse.html" method="GET">
+          <div class="nav-search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" name="search" placeholder="ค้นหารายการ...">
+          </div>
+        </form>
+
+        <a href="report.html" class="btn-post">
+          <i class="fa-solid fa-plus"></i>
+          <span>โพสต์</span>
+        </a>
+
+        <a href="profile.html" class="nav-profile">
+          <i class="fa-regular fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. Main Profile Content -->
+  <main class="profile-main">
+    
+    <div class="profile-header">
+      <h1>ข้อมูลส่วนตัว</h1>
+      <p>จัดการรายละเอียดบัญชีและการตั้งค่าของคุณ</p>
+    </div>
+
+    <div class="profile-grid">
+      
+      <!-- คอลัมน์ซ้าย: กล่องฟอร์ม + ปุ่มออกจากระบบกล่องแดงด้านนอก -->
+      <div class="profile-left-column">
+        <section class="profile-card">
+          <div class="user-intro-row">
+            
+            <!-- กล่องรูปโปรไฟล์พร้อมปุ่มเปลี่ยนรูป (Camera Button) -->
+            <div class="user-avatar-wrap">
+              <img id="avatarPreview" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=250&auto=format&fit=crop" alt="User Profile" class="user-avatar-img">
+              
+              <!-- ปุ่มสำหรับกดเลือกไฟล์รูปภาพ -->
+              <label for="avatarFileInput" class="avatar-upload-label" title="เปลี่ยนรูปโปรไฟล์">
+                <i class="fa-solid fa-camera"></i>
+              </label>
+              <input type="file" id="avatarFileInput" accept="image/*" onchange="previewAvatar(event)">
+            </div>
+            <div class="error-text" id="avatarError" style="display: none;">ขนาดไฟล์ภาพต้องไม่เกิน 5 MB</div>
+
+            <div class="user-intro-info">
+              <h2 class="user-name-display" id="displayName">สมชาย</h2>
+            </div>
+          </div>
+
+          <form id="profileForm" onsubmit="handleSave(event)">
+            <div class="profile-form-grid">
+              
+              <!-- ชื่อ - นามสกุล -->
+              <div class="form-group">
+                <label class="form-label">ชื่อ - นามสกุล</label>
+                <input type="text" class="form-input" id="nameInput" value="สมชาย" oninput="clearError('nameInput', 'nameError')">
+                <div class="error-text" id="nameError">กรุณากรอกชื่อ - นามสกุล</div>
+              </div>
+
+              <!-- อีเมล -->
+              <div class="form-group">
+                <label class="form-label">อีเมล</label>
+                <input type="email" class="form-input" id="emailInput" value="wawasundae@gmail.com" oninput="clearError('emailInput', 'emailError')">
+                <div class="error-text" id="emailError">กรุณากรอกอีเมลให้ถูกต้อง</div>
+              </div>
+
+              <!-- เบอร์โทรศัพท์ -->
+              <div class="form-group">
+                <label class="form-label">เบอร์โทรศัพท์</label>
+                <input type="tel" class="form-input" id="phoneInput" value="081-234-5678" oninput="clearError('phoneInput', 'phoneError')">
+                <div class="error-text" id="phoneError">กรุณากรอกเบอร์โทรศัพท์</div>
+              </div>
+
+            </div>
+
+            <!-- ปุ่มบันทึกข้อมูล (ในกรอบขาว) -->
+            <div class="form-actions-end" style="margin-top: 28px;">
+              <span class="success-text" id="saveSuccessText">บันทึกข้อมูลเรียบร้อยแล้ว!</span>
+              <button type="submit" class="btn-save-profile">
+                <i class="fa-solid fa-floppy-disk"></i>
+                <span>บันทึกข้อมูล</span>
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <!-- ปุ่มออกจากระบบ (กล่องสีแดง อยู่นอกกรอบสีขาว) -->
+        <div class="outside-actions-row">
+          <button type="button" class="btn-logout-red" onclick="handleLogout()">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <span>ออกจากระบบ</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- คอลัมน์ขวา: สถิติการใช้งาน -->
+      <aside class="stats-card">
+        <div class="stats-title">
+          <i class="fa-solid fa-chart-simple"></i>
+          <span>สถิติการใช้งาน</span>
+        </div>
+
+        <div class="stats-item-box">
+          <div class="stats-item-left">
+            <div class="stats-icon-circle lost-icon">
+              <i class="fa-solid fa-bullhorn"></i>
+            </div>
+            <span class="stats-item-label">แจ้งของหาย</span>
+          </div>
+          <span class="stats-item-count" id="statLostCount">0</span>
+        </div>
+
+        <div class="stats-item-box">
+          <div class="stats-item-left">
+            <div class="stats-icon-circle found-icon">
+              <i class="fa-solid fa-hand-holding-heart"></i>
+            </div>
+            <span class="stats-item-label">แจ้งพบของ</span>
+          </div>
+          <span class="stats-item-count" id="statFoundCount">0</span>
+        </div>
+
+        <div class="stats-item-box">
+          <div class="stats-item-left">
+            <div class="stats-icon-circle claim-icon">
+              <i class="fa-solid fa-handshake-angle"></i>
+            </div>
+            <span class="stats-item-label">รับคืนสำเร็จ</span>
+          </div>
+          <span class="stats-item-count" id="statCompletedCount">0</span>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- 3. Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <strong>Lost & Found ICT</strong> &copy; 2026 Lost & Found System. All rights reserved.
+      </div>
+      <div class="footer-links">
+        <a href="#">Contact Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Script การทำงาน -->
+  <script>
+    let currentAvatarDataUrl = null;
+
+    function previewAvatar(event) {
+      const file = event.target.files[0];
+      const errorEl = document.getElementById('avatarError');
+      if (file) {
+        if (file.size > 5 * 1024 * 1024) {
+          errorEl.style.display = 'block';
+          return;
+        }
+        errorEl.style.display = 'none';
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const previewImg = document.getElementById('avatarPreview');
+          previewImg.src = e.target.result;
+          currentAvatarDataUrl = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    const userActivities = {
+      reportedItems: [
+        { id: 'wallet', title: 'กระเป๋าเงินหนังสีน้ำตาล', type: 'lost', status: 'Pending' },
+        { id: 'airpods', title: 'หูฟังไร้สาย สีขาว', type: 'found', status: 'Success' }
+      ],
+      claimRequests: [
+        { id: 'umbrella', title: 'ร่มพับลายตาราง', status: 'Under Review' },
+        { id: 'laptop', title: 'แล็ปท็อปสีเงิน', status: 'Completed' }
+      ]
+    };
+
+    function updateStatsFromActivities() {
+      const lostCount = userActivities.reportedItems.filter(item => item.type === 'lost').length;
+      const foundCount = userActivities.reportedItems.filter(item => item.type === 'found').length;
+      const completedCount = userActivities.claimRequests.filter(item => item.status === 'Completed').length;
+
+      document.getElementById('statLostCount').textContent = lostCount;
+      document.getElementById('statFoundCount').textContent = foundCount;
+      document.getElementById('statCompletedCount').textContent = completedCount;
+    }
+
+    function loadUserData() {
+      const savedName = localStorage.getItem('userName') || localStorage.getItem('currentUserName');
+      const savedEmail = localStorage.getItem('userEmail');
+      const savedPhone = localStorage.getItem('userPhone');
+      const savedAvatar = localStorage.getItem('userAvatar');
+
+      if (savedName) {
+        document.getElementById('displayName').textContent = savedName;
+        document.getElementById('nameInput').value = savedName;
+      }
+      if (savedEmail) {
+        document.getElementById('emailInput').value = savedEmail;
+      }
+      if (savedPhone) {
+        document.getElementById('phoneInput').value = savedPhone;
+      }
+      if (savedAvatar) {
+        document.getElementById('avatarPreview').src = savedAvatar;
+      }
+    }
+
+    function clearError(inputId, errorId) {
+      document.getElementById(inputId).classList.remove('error');
+      document.getElementById(errorId).style.display = 'none';
+    }
+
+    function handleSave(event) {
+      event.preventDefault();
+
+      let isValid = true;
+      const nameInput = document.getElementById('nameInput');
+      const emailInput = document.getElementById('emailInput');
+      const phoneInput = document.getElementById('phoneInput');
+
+      if (!nameInput.value.trim()) {
+        document.getElementById('nameError').style.display = 'block';
+        nameInput.classList.add('error');
+        isValid = false;
+      }
+
+      if (!emailInput.value.trim() || !emailInput.value.includes('@')) {
+        document.getElementById('emailError').style.display = 'block';
+        emailInput.classList.add('error');
+        isValid = false;
+      }
+
+      if (!phoneInput.value.trim()) {
+        document.getElementById('phoneError').style.display = 'block';
+        phoneInput.classList.add('error');
+        isValid = false;
+      }
+
+      if (!isValid) return;
+
+      localStorage.setItem('userName', nameInput.value.trim());
+      localStorage.setItem('currentUserName', nameInput.value.trim());
+      localStorage.setItem('userEmail', emailInput.value.trim());
+      localStorage.setItem('userPhone', phoneInput.value.trim());
+
+      if (currentAvatarDataUrl) {
+        localStorage.setItem('userAvatar', currentAvatarDataUrl);
+      }
+
+      document.getElementById('displayName').textContent = nameInput.value.trim();
+
+      const successText = document.getElementById('saveSuccessText');
+      successText.style.display = 'block';
+      setTimeout(() => {
+        successText.style.display = 'none';
+      }, 3000);
+    }
+
+    function handleLogout() {
+      localStorage.removeItem('userAvatar');
+      localStorage.removeItem('userName');
+      localStorage.removeItem('currentUserName');
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userPhone');
+      window.location.href = 'home.html';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadUserData();
+      updateStatsFromActivities();
+    });
+  </script>
+
+</body>
+</html>

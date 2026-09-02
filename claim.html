@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>แบบฟอร์มขอรับคืนสิ่งของ - Lost & Found ICT</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Prompt', sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: #f8fafc;
+      color: #1e293b;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    /* ---------------- 1. Navbar (มาตรฐานเดียวกับทุกหน้า) ---------------- */
+    .navbar {
+      background: #ffffff;
+      border-bottom: 2px solid #edf2f7;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+      width: 100%;
+    }
+
+    .navbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 94px;
+      padding: 0 48px;
+      gap: 32px;
+      width: 100%;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 48px;
+      flex-shrink: 0;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #003b7a;
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      flex-shrink: 0;
+    }
+
+    .nav-brand i {
+      font-size: 38px;
+      color: #003b7a;
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+      flex-shrink: 0;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      font-size: 21px;
+      font-weight: 500;
+      color: #64748b;
+      transition: color 0.2s;
+      position: relative;
+      padding-bottom: 6px;
+      white-space: nowrap;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: #003b7a;
+      font-weight: 700;
+    }
+
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: #003b7a;
+      border-radius: 3px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-shrink: 0;
+    }
+
+    .nav-search-form {
+      position: relative;
+      width: 400px;
+      flex-shrink: 0;
+    }
+
+    .nav-search-box {
+      display: flex;
+      align-items: center;
+      background: #f1f5f9;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 50px;
+      padding: 11px 22px;
+      transition: all 0.2s ease;
+      width: 100%;
+    }
+
+    .nav-search-box:focus-within {
+      background: #ffffff;
+      border-color: #003b7a;
+      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.12);
+    }
+
+    .nav-search-box i {
+      color: #64748b;
+      font-size: 18px;
+      margin-right: 12px;
+      flex-shrink: 0;
+    }
+
+    .nav-search-box input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 17.5px;
+      color: #1e293b;
+      font-weight: 400;
+      width: 100%;
+    }
+
+    .btn-post {
+      background: #003b7a;
+      color: #ffffff;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-size: 17.5px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(0, 59, 122, 0.2);
+      flex-shrink: 0;
+    }
+
+    .btn-post:hover {
+      background: #002d5e;
+      transform: translateY(-1px);
+    }
+
+    .nav-profile {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: #334155;
+      font-size: 18.5px;
+      font-weight: 600;
+      padding: 8px 12px;
+      border-radius: 10px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .nav-profile i {
+      font-size: 22px;
+      color: #64748b;
+    }
+
+    .nav-profile:hover {
+      background: #f1f5f9;
+      color: #003b7a;
+    }
+
+    /* ---------------- 2. Breadcrumb Navigation ---------------- */
+    .breadcrumb-container {
+      width: 100%;
+      padding: 32px 48px 0 48px;
+      display: flex;
+      align-items: center;
+    }
+
+    .breadcrumb-list {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      list-style: none;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .breadcrumb-list a {
+      text-decoration: none;
+      color: #64748b;
+      transition: color 0.2s ease;
+    }
+
+    .breadcrumb-list a:hover {
+      color: #003b7a;
+      text-decoration: underline;
+    }
+
+    .breadcrumb-list .separator {
+      color: #94a3b8;
+      font-size: 14px;
+    }
+
+    .breadcrumb-list .current {
+      color: #0f172a;
+      font-weight: 800;
+    }
+
+    /* ---------------- 3. Main Claim Layout (Full-Width) ---------------- */
+    .claim-main {
+      flex: 1;
+      padding: 24px 48px 64px 48px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .claim-card-container {
+      background: #ffffff;
+      border-radius: 24px;
+      border: 1.5px solid #edf2f7;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+      padding: 40px 48px;
+      display: grid;
+      grid-template-columns: 440px 1fr;
+      gap: 48px;
+      align-items: flex-start;
+      width: 100%;
+    }
+
+    /* ฝั่งซ้าย: ข้อมูลสิ่งของ */
+    .left-item-box {
+      border: 1.5px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      background: #f8fafc;
+    }
+
+    .left-section-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .left-item-img {
+      width: 100%;
+      height: 260px;
+      border-radius: 14px;
+      object-fit: cover;
+      background: #e2e8f0;
+    }
+
+    .left-item-info {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .left-item-name {
+      font-size: 24px;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.3;
+    }
+
+    .left-item-meta {
+      font-size: 17.5px;
+      color: #475569;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .left-item-meta i {
+      color: #003b7a;
+      width: 20px;
+      text-align: center;
+      font-size: 19px;
+    }
+
+    .badge-claimable {
+      display: inline-flex;
+      align-items: center;
+      background: #e0f2fe;
+      color: #0369a1;
+      font-size: 16px;
+      font-weight: 700;
+      padding: 8px 20px;
+      border-radius: 50px;
+      width: fit-content;
+      margin-top: 6px;
+    }
+
+    /* ฝั่งขวา: แบบฟอร์มขอรับคืนสิ่งของ */
+    .right-form-box {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      width: 100%;
+    }
+
+    .form-main-title {
+      font-size: 32px;
+      font-weight: 900;
+      color: #0f172a;
+      margin-bottom: 6px;
+    }
+
+    .form-main-subtitle {
+      font-size: 18px;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .form-label {
+      font-size: 18.5px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .form-label span {
+      color: #dc2626;
+    }
+
+    .form-textarea {
+      width: 100%;
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 14px;
+      padding: 18px 22px;
+      font-size: 17.5px;
+      font-weight: 500;
+      color: #1e293b;
+      outline: none;
+      resize: vertical;
+      min-height: 140px;
+      transition: all 0.2s ease;
+    }
+
+    .form-textarea:focus {
+      border-color: #003b7a;
+      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.12);
+    }
+
+    /* อัปโหลด 2 ช่องคู่กัน */
+    .upload-dual-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .upload-box {
+      border: 2px dashed #cbd5e1;
+      border-radius: 16px;
+      background: #f8fafc;
+      padding: 36px 20px;
+      text-align: center;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.2s ease;
+    }
+
+    .upload-box:hover {
+      border-color: #003b7a;
+      background: #f0f7ff;
+    }
+
+    .upload-box i {
+      font-size: 32px;
+      color: #003b7a;
+      margin-bottom: 4px;
+    }
+
+    .upload-box-title {
+      font-size: 17.5px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .upload-box-desc {
+      font-size: 15px;
+      color: #64748b;
+      font-weight: 500;
+      line-height: 1.5;
+    }
+
+    /* กล่องนโยบายความเป็นส่วนตัว */
+    .privacy-box {
+      background: #f0f9ff;
+      border: 1.5px solid #bae6fd;
+      border-radius: 16px;
+      padding: 22px 24px;
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+    }
+
+    .privacy-box i {
+      font-size: 24px;
+      color: #0284c7;
+      margin-top: 2px;
+    }
+
+    .privacy-text {
+      font-size: 15.5px;
+      color: #0369a1;
+      line-height: 1.65;
+      font-weight: 500;
+    }
+
+    /* ปุ่มกดด้านล่าง */
+    .form-actions-row {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 18px;
+      padding-top: 12px;
+    }
+
+    .btn-cancel {
+      background: #ffffff;
+      color: #334155;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 14px;
+      padding: 18px 36px;
+      font-size: 19px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-cancel:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    .btn-submit-claim {
+      background: #0056b3;
+      color: #ffffff;
+      border: none;
+      border-radius: 14px;
+      padding: 18px 40px;
+      font-size: 19px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 4px 16px rgba(0, 86, 179, 0.3);
+      transition: all 0.2s ease;
+    }
+
+    .btn-submit-claim:hover {
+      background: #003b7a;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 86, 179, 0.4);
+    }
+
+    /* ---------------- 4. Footer ---------------- */
+    .footer {
+      background: #ffffff;
+      border-top: 1.5px solid #edf2f7;
+      margin-top: auto;
+      padding: 24px 0;
+      width: 100%;
+    }
+
+    .footer-inner {
+      padding: 0 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 15px;
+      color: #64748b;
+      width: 100%;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-links a {
+      color: #64748b;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: #003b7a;
+    }
+
+    /* ---------------- Responsive ---------------- */
+    @media (max-width: 1024px) {
+      .claim-card-container {
+        grid-template-columns: 1fr;
+        padding: 24px;
+      }
+      .navbar-inner, .breadcrumb-container, .claim-main, .footer-inner {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+      .upload-dual-grid {
+        grid-template-columns: 1fr;
+      }
+      .footer-inner {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="nav-left">
+        <a href="home.html" class="nav-brand">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Lost & Found ICT</span>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="home.html" class="nav-link active">Home</a></li>
+          <li><a href="browse.html" class="nav-link">My Activity</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-actions">
+        <form class="nav-search-form" action="browse.html" method="GET">
+          <div class="nav-search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" name="search" placeholder="ค้นหารายการ...">
+          </div>
+        </form>
+
+        <a href="report.html" class="btn-post">
+          <i class="fa-solid fa-plus"></i>
+          <span>โพสต์</span>
+        </a>
+
+        <a href="#" class="nav-profile">
+          <i class="fa-regular fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="breadcrumb-container">
+    <ul class="breadcrumb-list">
+      <li><a href="home.html">หน้าหลัก</a></li>
+      <li class="separator"><i class="fa-solid fa-chevron-right"></i></li>
+      <li><a href="browse.html">ค้นหาสิ่งของ</a></li>
+      <li class="separator"><i class="fa-solid fa-chevron-right"></i></li>
+      <li><a href="#" id="breadcrumbDetailLink">รายละเอียด</a></li>
+      <li class="separator"><i class="fa-solid fa-chevron-right"></i></li>
+      <li class="current">ขอรับคืนสิ่งของ</li>
+    </ul>
+  </div>
+
+  <main class="claim-main">
+    <div class="claim-card-container">
+      
+      <div class="left-item-box">
+        <h3 class="left-section-title">ข้อมูลสิ่งของ</h3>
+        <img id="claimItemImg" src="" alt="ภาพสิ่งของ" class="left-item-img">
+        <div class="left-item-info">
+          <h4 class="left-item-name" id="claimItemTitle">ชื่อสิ่งของ</h4>
+          <div class="left-item-meta">
+            <i class="fa-regular fa-calendar"></i>
+            <span id="claimItemDate">พบเมื่อ: -</span>
+          </div>
+          <div class="left-item-meta">
+            <i class="fa-solid fa-location-dot"></i>
+            <span id="claimItemLocation">สถานที่: -</span>
+          </div>
+          <span class="badge-claimable" id="claimItemStatus">สถานะ: อยู่ที่จุดรับฝาก</span>
+        </div>
+      </div>
+
+      <div class="right-form-box">
+        <div>
+          <h1 class="form-main-title">แบบฟอร์มขอรับคืนสิ่งของ</h1>
+          <p class="form-main-subtitle">กรุณากรอกข้อมูลและอัปโหลดเอกสารเพื่อยืนยันความเป็นเจ้าของ</p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">อธิบายลักษณะเฉพาะ (Proof of Ownership) <span>*</span></label>
+          <textarea class="form-textarea" placeholder="เช่น มีรอยขีดข่วนด้านหลัง, มีรูปถ่ายซ่อนอยู่ด้านใน, รหัสปลดล็อคหน้าจอ..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">หลักฐานยืนยันตัวตนและสิ่งของ <span>*</span></label>
+          <div class="upload-dual-grid">
+            
+            <div class="upload-box" onclick="document.getElementById('proofImgInput').click()">
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+              <div class="upload-box-title">คลิกเพื่ออัปโหลด</div>
+              <div class="upload-box-desc">รูปภาพยืนยัน (ใบเสร็จ/รูปคู่สิ่งของ)<br>JPG, PNG สูงสุด 5MB</div>
+              <input type="file" id="proofImgInput" accept="image/*" style="display: none;">
+            </div>
+
+            <div class="upload-box" onclick="document.getElementById('idCardInput').click()">
+              <i class="fa-solid fa-id-card"></i>
+              <div class="upload-box-title">คลิกเพื่ออัปโหลด</div>
+              <div class="upload-box-desc">เอกสารยืนยันตัวตน (บัตรนิสิต/บัตรปชช.)<br>JPG, PNG, PDF สูงสุด 5MB</div>
+              <input type="file" id="idCardInput" accept=".pdf,image/*" style="display: none;">
+            </div>
+
+          </div>
+        </div>
+
+        <div class="privacy-box">
+          <i class="fa-solid fa-shield-halved"></i>
+          <div class="privacy-text">
+            <strong>การรักษาความปลอดภัยและนโยบายความเป็นส่วนตัว</strong><br>
+            ข้อมูลและเอกสารของคุณจะถูกเก็บรักษาอย่างปลอดภัยและใช้เพื่อการยืนยันตัวตนสำหรับกระบวนการคืนสิ่งของนี้เท่านั้น ระบบจะลบข้อมูลส่วนบุคคลของคุณหลังจากดำเนินการเสร็จสิ้นตามนโยบายความเป็นส่วนตัว
+          </div>
+        </div>
+
+        <div class="form-actions-row">
+          <button type="button" class="btn-cancel" onclick="history.back()">ยกเลิก</button>
+          <button type="button" class="btn-submit-claim" onclick="submitClaim()">
+            <span>ส่งคำร้องขอรับคืน</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <strong>Lost & Found ICT</strong> &copy; 2026 Lost & Found System. All rights reserved.
+      </div>
+      <div class="footer-links">
+        <a href="#">Contact Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const itemsDB = {
+      key: { 
+        title: "กุญแจรถ", 
+        date: "พบเมื่อ: 1 ก.ย. 2026", 
+        location: "สถานที่: ห้องปฏิบัติการ ICT1102/1", 
+        image: "images/key.jpeg",
+        status: "พบใหม่",
+        type: "found"
+      },
+      phone: { 
+        title: "โทรศัพท์มือถือ", 
+        date: "พบเมื่อ: 1 ก.ย. 2026", 
+        location: "สถานที่: ห้องเรียน ICT1111", 
+        image: "images/phone.jpeg",
+        status: "พบใหม่",
+        type: "found"
+      },
+      wallet: { 
+        title: "กระเป๋าสตางค์", 
+        date: "พบเมื่อ: 31 ส.ค. 2026", 
+        location: "สถานที่: โรงอาหารกลาง", 
+        image: "images/wallet.jpeg",
+        status: "แจ้งหาย",
+        type: "lost"
+      },
+      airpods: { 
+        title: "หูฟังไร้สายเคสสีขาว", 
+        date: "พบเมื่อ: 29 ส.ค. 2026", 
+        location: "สถานที่: โรงอาหารกลาง", 
+        image: "images/airpods.jpeg",
+        status: "อยู่ที่จุดรับฝาก",
+        type: "found"
+      },
+      glasses: { 
+        title: "แว่นตา", 
+        date: "พบเมื่อ: 28 ส.ค. 2026", 
+        location: "สถานที่: ห้องสาขา CG", 
+        image: "images/glasses.jpeg",
+        status: "แจ้งหาย",
+        type: "lost"
+      },
+      umbrella: { 
+        title: "ร่มพับลายตาราง", 
+        date: "พบเมื่อ: 27 ส.ค. 2026", 
+        location: "สถานที่: ห้องสาขา SE", 
+        image: "images/umbrella.jpeg",
+        status: "กำลังยื่นคำร้องขอรับคืน",
+        type: "found"
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      // ถ้าไม่มี ID ใน URL ให้ใช้ 'airpods' เป็นค่าเริ่มต้น
+      const itemId = urlParams.get('id') || 'airpods';
+
+      if (!itemsDB[itemId]) {
+        alert('ไม่พบข้อมูลรายการสิ่งของที่ต้องการขอรับคืน');
+        window.location.href = 'browse.html';
+        return;
+      }
+
+      const item = itemsDB[itemId];
+
+      // เงื่อนไข: ถ้าเป็น "พบใหม่" หรือ "แจ้งหาย" จะไม่อนุญาตให้เปิดฟอร์ม
+      if (item.type === 'lost' || item.status === 'พบใหม่') {
+        alert(`รายการนี้มีสถานะเป็น "${item.status}" จึงไม่สามารถดำเนินการยื่นคำร้องขอรับคืนได้ในขณะนี้`);
+        window.location.href = `detail.html?id=${itemId}`;
+        return;
+      }
+
+      // แสดงผลข้อมูลสิ่งของ
+      document.getElementById('claimItemTitle').textContent = item.title;
+      document.getElementById('claimItemDate').textContent = item.date;
+      document.getElementById('claimItemLocation').textContent = item.location;
+      document.getElementById('claimItemStatus').textContent = `สถานะ: ${item.status}`;
+      document.getElementById('claimItemImg').src = item.image;
+      document.getElementById('breadcrumbDetailLink').href = `detail.html?id=${itemId}`;
+    });
+
+    function submitClaim() {
+      alert('ส่งคำร้องขอรับคืนสิ่งของสำเร็จเรียบร้อยแล้ว! เจ้าหน้าที่กำลังตรวจสอบข้อมูล');
+      window.location.href = 'home.html';
+    }
+  </script>
+
+</body>
+</html>
