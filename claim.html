@@ -7,7 +7,7 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -21,6 +21,7 @@
 
     html {
       scroll-behavior: smooth;
+      scrollbar-gutter: stable;
     }
 
     body {
@@ -33,14 +34,14 @@
       overflow-x: hidden;
     }
 
-    /* ---------------- 1. Navbar (มาตรฐานเดียวกับทุกหน้า) ---------------- */
+    /* Navbar */
     .navbar {
       background: #ffffff;
-      border-bottom: 2px solid #edf2f7;
+      border-bottom: 1px solid #e2e8f0;
       position: sticky;
       top: 0;
       z-index: 1000;
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
       width: 100%;
     }
 
@@ -48,107 +49,102 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 94px;
-      padding: 0 48px;
-      gap: 32px;
-      width: 100%;
+      height: 72px;
+      padding: 0 32px;
+      max-width: 1400px;
+      margin: 0 auto;
+      gap: 24px;
     }
 
     .nav-left {
       display: flex;
       align-items: center;
-      gap: 48px;
-      flex-shrink: 0;
+      gap: 36px;
     }
 
     .nav-brand {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       text-decoration: none;
       color: #003b7a;
-      font-size: 34px;
-      font-weight: 800;
+      font-size: 24px;
+      font-weight: 700;
       letter-spacing: -0.5px;
       flex-shrink: 0;
     }
 
     .nav-brand i {
-      font-size: 38px;
+      font-size: 26px;
       color: #003b7a;
     }
 
     .nav-menu {
       display: flex;
       align-items: center;
-      gap: 36px;
+      gap: 24px;
       list-style: none;
-      flex-shrink: 0;
     }
 
     .nav-link {
       text-decoration: none;
-      font-size: 21px;
+      font-size: 15px;
       font-weight: 500;
       color: #64748b;
       transition: color 0.2s;
       position: relative;
-      padding-bottom: 6px;
+      padding-bottom: 4px;
       white-space: nowrap;
     }
 
     .nav-link:hover,
     .nav-link.active {
       color: #003b7a;
-      font-weight: 700;
+      font-weight: 600;
     }
 
     .nav-link.active::after {
       content: '';
       position: absolute;
-      bottom: -6px;
+      bottom: -4px;
       left: 0;
       width: 100%;
-      height: 4px;
+      height: 3px;
       background: #003b7a;
-      border-radius: 3px;
+      border-radius: 2px;
     }
 
     .nav-actions {
       display: flex;
       align-items: center;
-      gap: 20px;
-      flex-shrink: 0;
+      gap: 16px;
     }
 
     .nav-search-form {
       position: relative;
-      width: 400px;
-      flex-shrink: 0;
+      width: 280px;
     }
 
     .nav-search-box {
       display: flex;
       align-items: center;
       background: #f1f5f9;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 50px;
-      padding: 11px 22px;
+      border: 1px solid #cbd5e1;
+      border-radius: 30px;
+      padding: 8px 16px;
       transition: all 0.2s ease;
-      width: 100%;
     }
 
     .nav-search-box:focus-within {
       background: #ffffff;
       border-color: #003b7a;
-      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.12);
+      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.1);
     }
 
     .nav-search-box i {
       color: #64748b;
-      font-size: 18px;
-      margin-right: 12px;
-      flex-shrink: 0;
+      font-size: 14px;
+      margin-right: 8px;
     }
 
     .nav-search-box input {
@@ -156,29 +152,26 @@
       border: none;
       outline: none;
       background: transparent;
-      font-size: 17.5px;
+      font-size: 14px;
       color: #1e293b;
-      font-weight: 400;
-      width: 100%;
     }
 
     .btn-post {
       background: #003b7a;
       color: #ffffff;
       border: none;
-      padding: 12px 28px;
-      border-radius: 50px;
-      font-size: 17.5px;
+      padding: 8px 20px;
+      border-radius: 30px;
+      font-size: 14px;
       font-weight: 600;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       cursor: pointer;
       white-space: nowrap;
       transition: all 0.2s ease;
-      box-shadow: 0 4px 14px rgba(0, 59, 122, 0.2);
-      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0, 59, 122, 0.15);
     }
 
     .btn-post:hover {
@@ -189,20 +182,19 @@
     .nav-profile {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       text-decoration: none;
       color: #334155;
-      font-size: 18.5px;
+      font-size: 14px;
       font-weight: 600;
-      padding: 8px 12px;
-      border-radius: 10px;
+      padding: 6px 10px;
+      border-radius: 8px;
       transition: all 0.2s ease;
       white-space: nowrap;
-      flex-shrink: 0;
     }
 
     .nav-profile i {
-      font-size: 22px;
+      font-size: 16px;
       color: #64748b;
     }
 
@@ -211,10 +203,12 @@
       color: #003b7a;
     }
 
-    /* ---------------- 2. Breadcrumb Navigation ---------------- */
+    /* Breadcrumb */
     .breadcrumb-container {
       width: 100%;
-      padding: 32px 48px 0 48px;
+      padding: 24px 32px 0 32px;
+      max-width: 1400px;
+      margin: 0 auto;
       display: flex;
       align-items: center;
     }
@@ -222,10 +216,10 @@
     .breadcrumb-list {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
       list-style: none;
-      font-size: 18px;
-      font-weight: 600;
+      font-size: 14px;
+      font-weight: 500;
     }
 
     .breadcrumb-list a {
@@ -241,57 +235,59 @@
 
     .breadcrumb-list .separator {
       color: #94a3b8;
-      font-size: 14px;
+      font-size: 11px;
     }
 
     .breadcrumb-list .current {
       color: #0f172a;
-      font-weight: 800;
+      font-weight: 600;
     }
 
-    /* ---------------- 3. Main Claim Layout (Full-Width) ---------------- */
+    /* Main Claim Layout */
     .claim-main {
       flex: 1;
-      padding: 24px 48px 64px 48px;
+      padding: 20px 32px 48px 32px;
       width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
       display: flex;
       flex-direction: column;
     }
 
     .claim-card-container {
       background: #ffffff;
-      border-radius: 24px;
-      border: 1.5px solid #edf2f7;
-      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
-      padding: 40px 48px;
+      border-radius: 16px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+      padding: 32px;
       display: grid;
-      grid-template-columns: 440px 1fr;
-      gap: 48px;
+      grid-template-columns: 360px 1fr;
+      gap: 32px;
       align-items: flex-start;
       width: 100%;
     }
 
-    /* ฝั่งซ้าย: ข้อมูลสิ่งของ */
+    /* Left: Item Info */
     .left-item-box {
-      border: 1.5px solid #e2e8f0;
-      border-radius: 18px;
-      padding: 28px;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      gap: 22px;
+      gap: 16px;
       background: #f8fafc;
     }
 
     .left-section-title {
-      font-size: 24px;
-      font-weight: 800;
+      font-size: 17px;
+      font-weight: 700;
       color: #0f172a;
     }
 
     .left-item-img {
       width: 100%;
-      height: 260px;
-      border-radius: 14px;
+      height: 200px;
+      border-radius: 10px;
       object-fit: cover;
       background: #e2e8f0;
     }
@@ -299,30 +295,30 @@
     .left-item-info {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 10px;
     }
 
     .left-item-name {
-      font-size: 24px;
-      font-weight: 800;
+      font-size: 17px;
+      font-weight: 700;
       color: #0f172a;
       line-height: 1.3;
     }
 
     .left-item-meta {
-      font-size: 17.5px;
+      font-size: 13px;
       color: #475569;
-      font-weight: 500;
+      font-weight: 400;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
     }
 
     .left-item-meta i {
       color: #003b7a;
-      width: 20px;
+      width: 16px;
       text-align: center;
-      font-size: 19px;
+      font-size: 13px;
     }
 
     .badge-claimable {
@@ -330,43 +326,43 @@
       align-items: center;
       background: #e0f2fe;
       color: #0369a1;
-      font-size: 16px;
-      font-weight: 700;
-      padding: 8px 20px;
-      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 20px;
       width: fit-content;
-      margin-top: 6px;
+      margin-top: 2px;
     }
 
-    /* ฝั่งขวา: แบบฟอร์มขอรับคืนสิ่งของ */
+    /* Right: Form */
     .right-form-box {
       display: flex;
       flex-direction: column;
-      gap: 28px;
+      gap: 20px;
       width: 100%;
     }
 
     .form-main-title {
-      font-size: 32px;
-      font-weight: 900;
+      font-size: 22px;
+      font-weight: 700;
       color: #0f172a;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
     .form-main-subtitle {
-      font-size: 18px;
+      font-size: 13px;
       color: #64748b;
-      font-weight: 500;
+      font-weight: 400;
     }
 
     .form-group {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 8px;
     }
 
     .form-label {
-      font-size: 18.5px;
+      font-size: 14px;
       font-weight: 700;
       color: #1e293b;
     }
@@ -378,41 +374,40 @@
     .form-textarea {
       width: 100%;
       background: #ffffff;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 14px;
-      padding: 18px 22px;
-      font-size: 17.5px;
-      font-weight: 500;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 13.5px;
+      font-weight: 400;
       color: #1e293b;
       outline: none;
       resize: vertical;
-      min-height: 140px;
+      min-height: 100px;
       transition: all 0.2s ease;
     }
 
     .form-textarea:focus {
       border-color: #003b7a;
-      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.12);
+      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.1);
     }
 
-    /* อัปโหลด 2 ช่องคู่กัน */
     .upload-dual-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 24px;
+      gap: 16px;
     }
 
     .upload-box {
-      border: 2px dashed #cbd5e1;
-      border-radius: 16px;
+      border: 1.5px dashed #cbd5e1;
+      border-radius: 12px;
       background: #f8fafc;
-      padding: 36px 20px;
+      padding: 24px 16px;
       text-align: center;
       cursor: pointer;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
       transition: all 0.2s ease;
     }
 
@@ -422,65 +417,63 @@
     }
 
     .upload-box i {
-      font-size: 32px;
+      font-size: 24px;
       color: #003b7a;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
 
     .upload-box-title {
-      font-size: 17.5px;
-      font-weight: 700;
+      font-size: 13.5px;
+      font-weight: 600;
       color: #0f172a;
     }
 
     .upload-box-desc {
-      font-size: 15px;
+      font-size: 12px;
       color: #64748b;
-      font-weight: 500;
-      line-height: 1.5;
+      font-weight: 400;
+      line-height: 1.4;
     }
 
-    /* กล่องนโยบายความเป็นส่วนตัว */
     .privacy-box {
       background: #f0f9ff;
-      border: 1.5px solid #bae6fd;
-      border-radius: 16px;
-      padding: 22px 24px;
+      border: 1px solid #bae6fd;
+      border-radius: 12px;
+      padding: 16px 18px;
       display: flex;
-      gap: 18px;
+      gap: 12px;
       align-items: flex-start;
     }
 
     .privacy-box i {
-      font-size: 24px;
+      font-size: 18px;
       color: #0284c7;
       margin-top: 2px;
     }
 
     .privacy-text {
-      font-size: 15.5px;
+      font-size: 13px;
       color: #0369a1;
-      line-height: 1.65;
-      font-weight: 500;
+      line-height: 1.5;
+      font-weight: 400;
     }
 
-    /* ปุ่มกดด้านล่าง */
     .form-actions-row {
       display: flex;
       justify-content: flex-end;
       align-items: center;
-      gap: 18px;
-      padding-top: 12px;
+      gap: 12px;
+      padding-top: 8px;
     }
 
     .btn-cancel {
       background: #ffffff;
       color: #334155;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 14px;
-      padding: 18px 36px;
-      font-size: 19px;
-      font-weight: 700;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 10px 24px;
+      font-size: 14px;
+      font-weight: 600;
       cursor: pointer;
       transition: all 0.2s ease;
     }
@@ -491,49 +484,50 @@
     }
 
     .btn-submit-claim {
-      background: #0056b3;
+      background: #003b7a;
       color: #ffffff;
       border: none;
-      border-radius: 14px;
-      padding: 18px 40px;
-      font-size: 19px;
-      font-weight: 800;
+      border-radius: 10px;
+      padding: 10px 28px;
+      font-size: 14px;
+      font-weight: 700;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 12px;
-      box-shadow: 0 4px 16px rgba(0, 86, 179, 0.3);
+      gap: 8px;
+      box-shadow: 0 2px 8px rgba(0, 59, 122, 0.15);
       transition: all 0.2s ease;
     }
 
     .btn-submit-claim:hover {
-      background: #003b7a;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0, 86, 179, 0.4);
+      background: #002d5e;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 59, 122, 0.25);
     }
 
-    /* ---------------- 4. Footer ---------------- */
+    /* Footer */
     .footer {
       background: #ffffff;
-      border-top: 1.5px solid #edf2f7;
+      border-top: 1px solid #e2e8f0;
       margin-top: auto;
-      padding: 24px 0;
+      padding: 20px 0;
       width: 100%;
     }
 
     .footer-inner {
-      padding: 0 48px;
+      padding: 0 32px;
+      max-width: 1400px;
+      margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: 15px;
+      font-size: 13px;
       color: #64748b;
-      width: 100%;
     }
 
     .footer-links {
       display: flex;
-      gap: 20px;
+      gap: 16px;
     }
 
     .footer-links a {
@@ -546,23 +540,25 @@
       color: #003b7a;
     }
 
-    /* ---------------- Responsive ---------------- */
-    @media (max-width: 1024px) {
+    @media (max-width: 900px) {
       .claim-card-container {
         grid-template-columns: 1fr;
-        padding: 24px;
+        padding: 20px;
       }
       .navbar-inner, .breadcrumb-container, .claim-main, .footer-inner {
-        padding-left: 20px;
-        padding-right: 20px;
+        padding-left: 16px;
+        padding-right: 16px;
       }
       .upload-dual-grid {
         grid-template-columns: 1fr;
       }
       .footer-inner {
         flex-direction: column;
-        gap: 12px;
+        gap: 10px;
         text-align: center;
+      }
+      .nav-search-form {
+        display: none;
       }
     }
   </style>
@@ -579,7 +575,7 @@
 
         <ul class="nav-menu">
           <li><a href="home.html" class="nav-link active">Home</a></li>
-          <li><a href="browse.html" class="nav-link">My Activity</a></li>
+          <li><a href="activity.html" class="nav-link">My Activity</a></li>
         </ul>
       </div>
 
@@ -596,7 +592,7 @@
           <span>โพสต์</span>
         </a>
 
-        <a href="#" class="nav-profile">
+        <a href="profile.html" class="nav-profile">
           <i class="fa-regular fa-user"></i>
           <span>Profile</span>
         </a>
@@ -757,7 +753,6 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
-      // ถ้าไม่มี ID ใน URL ให้ใช้ 'airpods' เป็นค่าเริ่มต้น
       const itemId = urlParams.get('id') || 'airpods';
 
       if (!itemsDB[itemId]) {
@@ -768,14 +763,12 @@
 
       const item = itemsDB[itemId];
 
-      // เงื่อนไข: ถ้าเป็น "พบใหม่" หรือ "แจ้งหาย" จะไม่อนุญาตให้เปิดฟอร์ม
       if (item.type === 'lost' || item.status === 'พบใหม่') {
         alert(`รายการนี้มีสถานะเป็น "${item.status}" จึงไม่สามารถดำเนินการยื่นคำร้องขอรับคืนได้ในขณะนี้`);
         window.location.href = `detail.html?id=${itemId}`;
         return;
       }
 
-      // แสดงผลข้อมูลสิ่งของ
       document.getElementById('claimItemTitle').textContent = item.title;
       document.getElementById('claimItemDate').textContent = item.date;
       document.getElementById('claimItemLocation').textContent = item.location;

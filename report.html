@@ -5,12 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>แจ้งของหาย / พบของ - Lost & Found ICT</title>
   
-  <!-- Google Fonts: Prompt -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   
-  <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
@@ -23,6 +21,7 @@
 
     html {
       scroll-behavior: smooth;
+      scrollbar-gutter: stable;
     }
 
     body {
@@ -35,14 +34,14 @@
       overflow-x: hidden;
     }
 
-    /* ---------------- 1. Navbar ---------------- */
+    /* Navbar */
     .navbar {
       background: #ffffff;
-      border-bottom: 2px solid #edf2f7;
+      border-bottom: 1px solid #e2e8f0;
       position: sticky;
       top: 0;
       z-index: 1000;
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
       width: 100%;
     }
 
@@ -50,107 +49,102 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 94px;
-      padding: 0 48px;
-      gap: 32px;
-      width: 100%;
+      height: 72px;
+      padding: 0 32px;
+      max-width: 1400px;
+      margin: 0 auto;
+      gap: 24px;
     }
 
     .nav-left {
       display: flex;
       align-items: center;
-      gap: 48px;
-      flex-shrink: 0;
+      gap: 36px;
     }
 
     .nav-brand {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       text-decoration: none;
       color: #003b7a;
-      font-size: 34px;
-      font-weight: 800;
+      font-size: 24px;
+      font-weight: 700;
       letter-spacing: -0.5px;
       flex-shrink: 0;
     }
 
     .nav-brand i {
-      font-size: 38px;
+      font-size: 26px;
       color: #003b7a;
     }
 
     .nav-menu {
       display: flex;
       align-items: center;
-      gap: 36px;
+      gap: 24px;
       list-style: none;
-      flex-shrink: 0;
     }
 
     .nav-link {
       text-decoration: none;
-      font-size: 21px;
+      font-size: 15px;
       font-weight: 500;
       color: #64748b;
       transition: color 0.2s;
       position: relative;
-      padding-bottom: 6px;
+      padding-bottom: 4px;
       white-space: nowrap;
     }
 
     .nav-link:hover,
     .nav-link.active {
       color: #003b7a;
-      font-weight: 700;
+      font-weight: 600;
     }
 
     .nav-link.active::after {
       content: '';
       position: absolute;
-      bottom: -6px;
+      bottom: -4px;
       left: 0;
       width: 100%;
-      height: 4px;
+      height: 3px;
       background: #003b7a;
-      border-radius: 3px;
+      border-radius: 2px;
     }
 
     .nav-actions {
       display: flex;
       align-items: center;
-      gap: 20px;
-      flex-shrink: 0;
+      gap: 16px;
     }
 
     .nav-search-form {
       position: relative;
-      width: 400px;
-      flex-shrink: 0;
+      width: 280px;
     }
 
     .nav-search-box {
       display: flex;
       align-items: center;
       background: #f1f5f9;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 50px;
-      padding: 11px 22px;
+      border: 1px solid #cbd5e1;
+      border-radius: 30px;
+      padding: 8px 16px;
       transition: all 0.2s ease;
-      width: 100%;
     }
 
     .nav-search-box:focus-within {
       background: #ffffff;
       border-color: #003b7a;
-      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.12);
+      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.1);
     }
 
     .nav-search-box i {
       color: #64748b;
-      font-size: 18px;
-      margin-right: 12px;
-      flex-shrink: 0;
+      font-size: 14px;
+      margin-right: 8px;
     }
 
     .nav-search-box input {
@@ -158,29 +152,26 @@
       border: none;
       outline: none;
       background: transparent;
-      font-size: 17.5px;
+      font-size: 14px;
       color: #1e293b;
-      font-weight: 400;
-      width: 100%;
     }
 
     .btn-post {
       background: #003b7a;
       color: #ffffff;
       border: none;
-      padding: 12px 28px;
-      border-radius: 50px;
-      font-size: 17.5px;
+      padding: 8px 20px;
+      border-radius: 30px;
+      font-size: 14px;
       font-weight: 600;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       cursor: pointer;
       white-space: nowrap;
       transition: all 0.2s ease;
-      box-shadow: 0 4px 14px rgba(0, 59, 122, 0.2);
-      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0, 59, 122, 0.15);
     }
 
     .btn-post:hover {
@@ -191,20 +182,19 @@
     .nav-profile {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       text-decoration: none;
       color: #334155;
-      font-size: 18.5px;
+      font-size: 14px;
       font-weight: 600;
-      padding: 8px 12px;
-      border-radius: 10px;
+      padding: 6px 10px;
+      border-radius: 8px;
       transition: all 0.2s ease;
       white-space: nowrap;
-      flex-shrink: 0;
     }
 
     .nav-profile i {
-      font-size: 22px;
+      font-size: 16px;
       color: #64748b;
     }
 
@@ -213,77 +203,79 @@
       color: #003b7a;
     }
 
-    /* ---------------- 2. Main Report Container (Full-Width) ---------------- */
+    /* Main Report Container */
     .report-main {
       flex: 1;
-      padding: 32px 48px 64px 48px;
+      padding: 20px 32px 48px 32px;
       width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 28px;
+      gap: 20px;
     }
 
     .report-header {
-      padding: 0 12px;
+      padding: 0 4px;
     }
 
     .report-header h1 {
-      font-size: 34px;
-      font-weight: 900;
+      font-size: 22px;
+      font-weight: 700;
       color: #0f172a;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
     .report-header p {
-      font-size: 18px;
+      font-size: 13.5px;
       color: #64748b;
-      font-weight: 500;
+      font-weight: 400;
     }
 
-    /* ---------------- 3. Form Card เต็มหน้าจอ ---------------- */
+    /* Form Card */
     .form-card {
       background: #ffffff;
-      border-radius: 24px;
-      border: 1.5px solid #edf2f7;
-      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
-      padding: 40px 48px;
+      border-radius: 16px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+      padding: 32px;
       display: flex;
       flex-direction: column;
-      gap: 36px;
+      gap: 24px;
       width: 100%;
     }
 
-    /* Progress & Steps Tracker (เหลือ 3 ขั้นตอน) */
+    /* Progress & Steps Tracker */
     .steps-tracker-top {
       display: flex;
       flex-direction: column;
-      gap: 16px;
-      border-bottom: 1.5px solid #f1f5f9;
-      padding-bottom: 24px;
+      gap: 12px;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 16px;
     }
 
     .steps-top-info {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 16.5px;
-      font-weight: 700;
+      font-size: 13.5px;
+      font-weight: 600;
       color: #475569;
     }
 
     .progress-bar-track {
       width: 100%;
-      height: 8px;
+      height: 6px;
       background: #e2e8f0;
-      border-radius: 50px;
+      border-radius: 30px;
       overflow: hidden;
     }
 
     .progress-bar-fill {
-      width: 33.33%; /* ขั้นตอนที่ 1 จาก 3 */
+      width: 33.33%;
       height: 100%;
       background: #003b7a;
-      border-radius: 50px;
+      border-radius: 30px;
       transition: width 0.3s ease;
     }
 
@@ -298,21 +290,21 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
     .step-circle {
-      width: 44px;
-      height: 44px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       background: #f1f5f9;
       color: #64748b;
-      font-size: 17px;
-      font-weight: 800;
+      font-size: 13px;
+      font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 2px solid #cbd5e1;
+      border: 1.5px solid #cbd5e1;
       transition: all 0.2s ease;
     }
 
@@ -320,59 +312,59 @@
       background: #003b7a;
       color: #ffffff;
       border-color: #003b7a;
-      box-shadow: 0 0 0 4px rgba(0, 59, 122, 0.15);
+      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.12);
     }
 
     .step-label {
-      font-size: 16px;
-      font-weight: 600;
+      font-size: 12.5px;
+      font-weight: 500;
       color: #64748b;
     }
 
     .step-node.active .step-label {
       color: #003b7a;
-      font-weight: 800;
+      font-weight: 700;
     }
 
-    /* ---------------- 4. ประเภทการแจ้ง ---------------- */
+    /* Report Type Grid */
     .report-type-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 28px;
+      gap: 16px;
     }
 
     .report-type-card {
       background: #ffffff;
-      border: 2px solid #cbd5e1;
-      border-radius: 20px;
-      padding: 26px 30px;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 16px 20px;
       display: flex;
       align-items: center;
-      gap: 22px;
+      gap: 14px;
       cursor: pointer;
       transition: all 0.2s ease;
     }
 
     .report-type-card:hover {
       border-color: #003b7a;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0, 59, 122, 0.08);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 59, 122, 0.06);
     }
 
     .report-type-card.selected {
       border-color: #003b7a;
       background: #f0f7ff;
-      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.12);
+      box-shadow: 0 0 0 2px rgba(0, 59, 122, 0.1);
     }
 
     .type-icon-circle {
-      width: 64px;
-      height: 64px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 26px;
+      font-size: 18px;
       flex-shrink: 0;
     }
 
@@ -389,30 +381,30 @@
     .type-text-info {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 2px;
     }
 
     .type-title {
-      font-size: 22px;
-      font-weight: 800;
+      font-size: 15px;
+      font-weight: 700;
       color: #0f172a;
     }
 
     .type-desc {
-      font-size: 16px;
+      font-size: 12.5px;
       color: #64748b;
-      font-weight: 500;
+      font-weight: 400;
     }
 
     /* Form Fields */
     .form-group {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 8px;
     }
 
     .form-label {
-      font-size: 18.5px;
+      font-size: 14px;
       font-weight: 700;
       color: #1e293b;
     }
@@ -424,11 +416,11 @@
     .form-input, .form-select, .form-textarea {
       width: 100%;
       background: #ffffff;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 14px;
-      padding: 16px 20px;
-      font-size: 18px;
-      font-weight: 500;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 13.5px;
+      font-weight: 400;
       color: #1e293b;
       outline: none;
       transition: all 0.2s ease;
@@ -436,7 +428,7 @@
 
     .form-input:focus, .form-select:focus, .form-textarea:focus {
       border-color: #003b7a;
-      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.12);
+      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.1);
     }
 
     .form-input.error, .form-select.error {
@@ -445,15 +437,15 @@
 
     .error-text {
       color: #dc2626;
-      font-size: 15px;
-      font-weight: 600;
-      margin-top: -4px;
+      font-size: 12px;
+      font-weight: 500;
+      margin-top: 2px;
       display: none;
     }
 
     .form-textarea {
       resize: vertical;
-      min-height: 150px;
+      min-height: 100px;
     }
 
     .select-box-wrapper {
@@ -466,14 +458,14 @@
       appearance: none;
       -webkit-appearance: none;
       cursor: pointer;
-      padding-right: 48px;
+      padding-right: 36px;
     }
 
     .select-box-wrapper i {
       position: absolute;
-      right: 20px;
+      right: 14px;
       color: #64748b;
-      font-size: 16px;
+      font-size: 12px;
       pointer-events: none;
     }
 
@@ -481,53 +473,55 @@
     .form-actions-row {
       display: flex;
       justify-content: flex-end;
-      padding-top: 16px;
-      border-top: 1.5px solid #f1f5f9;
+      padding-top: 12px;
+      border-top: 1px solid #f1f5f9;
     }
 
     .btn-next {
       background: #003b7a;
       color: #ffffff;
       border: none;
-      border-radius: 14px;
-      padding: 18px 40px;
-      font-size: 19px;
-      font-weight: 800;
+      border-radius: 10px;
+      padding: 10px 28px;
+      font-size: 14px;
+      font-weight: 700;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      box-shadow: 0 4px 16px rgba(0, 59, 122, 0.25);
+      gap: 8px;
+      box-shadow: 0 2px 8px rgba(0, 59, 122, 0.15);
       transition: all 0.2s ease;
     }
 
     .btn-next:hover {
       background: #002d5e;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0, 59, 122, 0.35);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 59, 122, 0.25);
     }
 
-    /* ---------------- 5. Footer ---------------- */
+    /* Footer */
     .footer {
       background: #ffffff;
-      border-top: 1.5px solid #edf2f7;
+      border-top: 1px solid #e2e8f0;
       margin-top: auto;
-      padding: 24px 0;
+      padding: 20px 0;
       width: 100%;
     }
 
     .footer-inner {
-      padding: 0 48px;
+      padding: 0 32px;
+      max-width: 1400px;
+      margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: 15px;
+      font-size: 13px;
       color: #64748b;
     }
 
     .footer-links {
       display: flex;
-      gap: 20px;
+      gap: 16px;
     }
 
     .footer-links a {
@@ -540,11 +534,10 @@
       color: #003b7a;
     }
 
-    /* ---------------- Responsive ---------------- */
-    @media (max-width: 992px) {
+    @media (max-width: 900px) {
       .navbar-inner, .report-main, .footer-inner {
-        padding-left: 20px;
-        padding-right: 20px;
+        padding-left: 16px;
+        padding-right: 16px;
       }
       .report-type-grid {
         grid-template-columns: 1fr;
@@ -553,19 +546,21 @@
         display: none;
       }
       .form-card {
-        padding: 24px 20px;
+        padding: 20px;
       }
       .footer-inner {
         flex-direction: column;
-        gap: 12px;
+        gap: 10px;
         text-align: center;
+      }
+      .nav-search-form {
+        display: none;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- 1. Header / Navbar เหมือนหน้าอื่นๆ -->
   <header class="navbar">
     <div class="navbar-inner">
       <div class="nav-left">
@@ -576,7 +571,7 @@
 
         <ul class="nav-menu">
           <li><a href="home.html" class="nav-link">Home</a></li>
-          <li><a href="browse.html" class="nav-link">My Activity</a></li>
+          <li><a href="activity.html" class="nav-link">My Activity</a></li>
         </ul>
       </div>
 
@@ -593,7 +588,7 @@
           <span>โพสต์</span>
         </a>
 
-        <a href="#" class="nav-profile">
+        <a href="profile.html" class="nav-profile">
           <i class="fa-regular fa-user"></i>
           <span>Profile</span>
         </a>
@@ -601,7 +596,6 @@
     </div>
   </header>
 
-  <!-- 2. Main Report Form Layout -->
   <main class="report-main">
     
     <div class="report-header">
@@ -609,10 +603,8 @@
       <p>กรุณากรอกข้อมูลให้ครบถ้วนเพื่อให้เราช่วยเหลือคุณได้ดีที่สุด</p>
     </div>
 
-    <!-- Multi-Step Card -->
     <div class="form-card">
       
-      <!-- Progress Bar Tracker (3 ขั้นตอน) -->
       <div class="steps-tracker-top">
         <div class="steps-top-info">
           <span>ขั้นตอน 1 จาก 3</span>
@@ -622,7 +614,7 @@
           <div class="progress-bar-fill"></div>
         </div>
 
-        <div class="steps-circles-row" style="margin-top: 12px;">
+        <div class="steps-circles-row" style="margin-top: 8px;">
           <div class="step-node active">
             <div class="step-circle">1</div>
             <div class="step-label">รายละเอียด</div>
@@ -638,12 +630,10 @@
         </div>
       </div>
 
-      <!-- ประเภทการแจ้ง -->
       <div class="form-group">
         <label class="form-label">ประเภทการแจ้ง <span>*</span></label>
         
         <div class="report-type-grid">
-          <!-- การ์ด 1: แจ้งของหาย -->
           <div class="report-type-card" id="cardLost" onclick="selectReportType('lost')">
             <div class="type-icon-circle lost">
               <i class="fa-solid fa-magnifying-glass-location"></i>
@@ -654,7 +644,6 @@
             </div>
           </div>
 
-          <!-- การ์ด 2: แจ้งพบของ -->
           <div class="report-type-card selected" id="cardFound" onclick="selectReportType('found')">
             <div class="type-icon-circle found">
               <i class="fa-solid fa-hand-holding-heart"></i>
@@ -668,14 +657,12 @@
         <input type="hidden" id="reportTypeInput" value="found">
       </div>
 
-      <!-- ชื่อสิ่งของ -->
       <div class="form-group">
         <label class="form-label">ชื่อสิ่งของ <span>*</span></label>
         <input type="text" id="itemTitleInput" class="form-input" placeholder="เช่น กระเป๋าสตางค์สีดำ, โทรศัพท์ iPhone 13" oninput="clearError('itemTitleInput', 'titleError')">
         <div class="error-text" id="titleError">กรุณากรอกชื่อสิ่งของ</div>
       </div>
 
-      <!-- หมวดหมู่ -->
       <div class="form-group">
         <label class="form-label">หมวดหมู่ <span>*</span></label>
         <div class="select-box-wrapper">
@@ -692,13 +679,11 @@
         <div class="error-text" id="categoryError">กรุณาเลือกหมวดหมู่สิ่งของ</div>
       </div>
 
-      <!-- รายละเอียดเพิ่มเติม -->
       <div class="form-group">
         <label class="form-label">รายละเอียดเพิ่มเติม</label>
         <textarea id="itemDescInput" class="form-textarea" placeholder="ระบุตำหนิ, สี, แบรนด์, หรือจุดสังเกตอื่นๆ..."></textarea>
       </div>
 
-      <!-- ปุ่มถัดไป -->
       <div class="form-actions-row">
         <button type="button" class="btn-next" onclick="validateAndNext()">
           <span>ถัดไป</span>
@@ -710,7 +695,6 @@
 
   </main>
 
-  <!-- 4. Footer -->
   <footer class="footer">
     <div class="footer-inner">
       <div>
@@ -725,7 +709,6 @@
     </div>
   </footer>
 
-  <!-- Script เลือกประเภทการแจ้ง และตรวจสอบข้อมูลแบบแสดงข้อความสีแดง -->
   <script>
     function selectReportType(type) {
       const cardLost = document.getElementById('cardLost');
@@ -757,7 +740,6 @@
       const titleError = document.getElementById('titleError');
       const categoryError = document.getElementById('categoryError');
 
-      // ตรวจสอบชื่อสิ่งของ
       if (!titleInput.value.trim()) {
         titleInput.classList.add('error');
         titleError.style.display = 'block';
@@ -767,7 +749,6 @@
         titleError.style.display = 'none';
       }
 
-      // ตรวจสอบหมวดหมู่
       if (!categorySelect.value) {
         categorySelect.classList.add('error');
         categoryError.style.display = 'block';
@@ -779,13 +760,11 @@
 
       if (!isValid) return;
 
-      // บันทึกข้อมูลชั่วคราวลงใน sessionStorage เพื่อส่งต่อไปหน้าถัดไป
       sessionStorage.setItem('report_type', reportType);
       sessionStorage.setItem('report_title', titleInput.value.trim());
       sessionStorage.setItem('report_category', categorySelect.value);
       sessionStorage.setItem('report_desc', document.getElementById('itemDescInput').value.trim());
 
-      // ไปยังหน้าถัดไป
       window.location.href = 'report-step2.html';
     }
   </script>

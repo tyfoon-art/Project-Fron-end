@@ -7,7 +7,7 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -21,6 +21,7 @@
 
     html {
       scroll-behavior: smooth;
+      scrollbar-gutter: stable;
     }
 
     body {
@@ -33,14 +34,14 @@
       overflow-x: hidden;
     }
 
-    /* ---------------- 1. Navbar ---------------- */
+    /* Navbar */
     .navbar {
       background: #ffffff;
-      border-bottom: 2px solid #edf2f7;
+      border-bottom: 1px solid #e2e8f0;
       position: sticky;
       top: 0;
       z-index: 1000;
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
       width: 100%;
     }
 
@@ -48,100 +49,102 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 94px;
-      padding: 0 48px;
-      gap: 32px;
+      height: 72px;
+      padding: 0 32px;
+      max-width: 1400px;
+      margin: 0 auto;
+      gap: 24px;
     }
 
     .nav-left {
       display: flex;
       align-items: center;
-      gap: 48px;
+      gap: 36px;
     }
 
     .nav-brand {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       text-decoration: none;
       color: #003b7a;
-      font-size: 34px;
-      font-weight: 800;
+      font-size: 24px;
+      font-weight: 700;
       letter-spacing: -0.5px;
       flex-shrink: 0;
     }
 
     .nav-brand i {
-      font-size: 38px;
+      font-size: 26px;
       color: #003b7a;
     }
 
     .nav-menu {
       display: flex;
       align-items: center;
-      gap: 36px;
+      gap: 24px;
       list-style: none;
     }
 
     .nav-link {
       text-decoration: none;
-      font-size: 21px;
+      font-size: 15px;
       font-weight: 500;
       color: #64748b;
       transition: color 0.2s;
       position: relative;
-      padding-bottom: 6px;
+      padding-bottom: 4px;
       white-space: nowrap;
     }
 
     .nav-link:hover,
     .nav-link.active {
       color: #003b7a;
-      font-weight: 700;
+      font-weight: 600;
     }
 
     .nav-link.active::after {
       content: '';
       position: absolute;
-      bottom: -6px;
+      bottom: -4px;
       left: 0;
       width: 100%;
-      height: 4px;
+      height: 3px;
       background: #003b7a;
-      border-radius: 3px;
+      border-radius: 2px;
     }
 
     .nav-actions {
       display: flex;
       align-items: center;
-      gap: 20px;
+      gap: 16px;
     }
 
     .nav-search-form {
       position: relative;
-      width: 400px;
+      width: 280px;
     }
 
     .nav-search-box {
       display: flex;
       align-items: center;
       background: #f1f5f9;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 50px;
-      padding: 11px 22px;
+      border: 1px solid #cbd5e1;
+      border-radius: 30px;
+      padding: 8px 16px;
       transition: all 0.2s ease;
     }
 
     .nav-search-box:focus-within {
       background: #ffffff;
       border-color: #003b7a;
-      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.12);
+      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.1);
     }
 
     .nav-search-box i {
       color: #64748b;
-      font-size: 18px;
-      margin-right: 12px;
+      font-size: 14px;
+      margin-right: 8px;
     }
 
     .nav-search-box input {
@@ -149,27 +152,26 @@
       border: none;
       outline: none;
       background: transparent;
-      font-size: 17.5px;
+      font-size: 14px;
       color: #1e293b;
-      font-weight: 400;
     }
 
     .btn-post {
       background: #003b7a;
       color: #ffffff;
       border: none;
-      padding: 12px 28px;
-      border-radius: 50px;
-      font-size: 17.5px;
+      padding: 8px 20px;
+      border-radius: 30px;
+      font-size: 14px;
       font-weight: 600;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       cursor: pointer;
       white-space: nowrap;
       transition: all 0.2s ease;
-      box-shadow: 0 4px 14px rgba(0, 59, 122, 0.2);
+      box-shadow: 0 2px 8px rgba(0, 59, 122, 0.15);
     }
 
     .btn-post:hover {
@@ -180,19 +182,19 @@
     .nav-profile {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       text-decoration: none;
       color: #334155;
-      font-size: 18.5px;
+      font-size: 14px;
       font-weight: 600;
-      padding: 8px 12px;
-      border-radius: 10px;
+      padding: 6px 10px;
+      border-radius: 8px;
       transition: all 0.2s ease;
       white-space: nowrap;
     }
 
     .nav-profile i {
-      font-size: 22px;
+      font-size: 16px;
       color: #64748b;
     }
 
@@ -201,10 +203,12 @@
       color: #003b7a;
     }
 
-    /* ---------------- 2. Breadcrumb Navigation ---------------- */
+    /* Breadcrumb */
     .breadcrumb-container {
       width: 100%;
-      padding: 32px 48px 0 48px;
+      padding: 24px 32px 0 32px;
+      max-width: 1400px;
+      margin: 0 auto;
       display: flex;
       align-items: center;
     }
@@ -212,10 +216,10 @@
     .breadcrumb-list {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
       list-style: none;
-      font-size: 18px;
-      font-weight: 600;
+      font-size: 14px;
+      font-weight: 500;
     }
 
     .breadcrumb-list a {
@@ -231,73 +235,75 @@
 
     .breadcrumb-list .separator {
       color: #94a3b8;
-      font-size: 14px;
+      font-size: 11px;
     }
 
     .breadcrumb-list .current {
       color: #0f172a;
-      font-weight: 800;
+      font-weight: 600;
     }
 
-    /* ---------------- 3. Main Layout ---------------- */
+    /* Main Layout */
     .browse-main {
       flex: 1;
-      padding: 24px 48px 64px 48px;
+      padding: 20px 32px 48px 32px;
       width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
       display: flex;
-      gap: 36px;
+      gap: 28px;
       align-items: flex-start;
     }
 
-    /* ---------------- Sidebar Filter ---------------- */
+    /* Sidebar Filter */
     .sidebar-filter {
-      width: 380px !important;
+      width: 300px;
       flex-shrink: 0;
       background: #ffffff;
-      padding: 32px 28px;
-      border-radius: 24px;
-      border: 1.5px solid #edf2f7;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+      padding: 22px 20px;
+      border-radius: 16px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
       display: flex;
       flex-direction: column;
-      gap: 26px;
+      gap: 18px;
       position: sticky;
-      top: 114px;
+      top: 92px;
     }
 
     .filter-title {
-      font-size: 30px !important;
-      font-weight: 900;
+      font-size: 18px;
+      font-weight: 700;
       color: #0f172a;
-      letter-spacing: -0.5px;
+      letter-spacing: -0.3px;
       padding-bottom: 8px;
-      border-bottom: 2px solid #f1f5f9;
+      border-bottom: 1px solid #f1f5f9;
     }
 
     .filter-group {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 10px;
     }
 
     .filter-label {
-      font-size: 21px !important;
-      font-weight: 800;
+      font-size: 14px;
+      font-weight: 700;
       color: #0f172a;
     }
 
     .checkbox-list {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 9px;
     }
 
     .checkbox-item {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 10px;
       cursor: pointer;
-      font-size: 18px !important;
+      font-size: 13.5px;
       font-weight: 500;
       color: #334155;
       user-select: none;
@@ -311,10 +317,10 @@
     .checkbox-item input[type="checkbox"] {
       appearance: none;
       -webkit-appearance: none;
-      width: 24px !important;
-      height: 24px !important;
-      border: 2px solid #94a3b8;
-      border-radius: 7px;
+      width: 18px;
+      height: 18px;
+      border: 1.5px solid #94a3b8;
+      border-radius: 5px;
       outline: none;
       cursor: pointer;
       display: grid;
@@ -331,7 +337,7 @@
       content: "\f00c";
       font-family: "Font Awesome 6 Free";
       font-weight: 900;
-      font-size: 14px;
+      font-size: 10px;
       color: #ffffff;
     }
 
@@ -345,10 +351,10 @@
     .select-wrapper select {
       width: 100%;
       background: #ffffff;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 14px;
-      padding: 14px 44px 14px 18px;
-      font-size: 17.5px !important;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 9px 36px 9px 12px;
+      font-size: 13.5px;
       font-weight: 500;
       color: #1e293b;
       cursor: pointer;
@@ -363,8 +369,8 @@
 
     .select-wrapper i {
       position: absolute;
-      right: 18px;
-      font-size: 16px;
+      right: 12px;
+      font-size: 12px;
       color: #64748b;
       pointer-events: none;
     }
@@ -376,11 +382,11 @@
     .input-custom-wrapper input {
       width: 100%;
       background: #ffffff;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 14px;
-      padding: 13px 18px;
-      font-size: 17px;
-      font-weight: 500;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 9px 12px;
+      font-size: 13.5px;
+      font-weight: 400;
       color: #1e293b;
       outline: none;
       transition: all 0.2s ease;
@@ -388,73 +394,73 @@
 
     .input-custom-wrapper input:focus {
       border-color: #003b7a;
-      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.12);
+      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.1);
     }
 
     .input-custom-wrapper input::placeholder {
       color: #94a3b8;
-      font-size: 15.5px;
+      font-size: 13px;
     }
 
     .btn-apply-filter {
       background: #003b7a;
       color: #ffffff;
       border: none;
-      border-radius: 14px;
-      padding: 15px;
-      font-size: 19px !important;
-      font-weight: 800;
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 14px;
+      font-weight: 600;
       cursor: pointer;
       width: 100%;
-      margin-top: 6px;
+      margin-top: 4px;
       transition: all 0.2s ease;
-      box-shadow: 0 4px 14px rgba(0, 59, 122, 0.25);
+      box-shadow: 0 2px 8px rgba(0, 59, 122, 0.15);
     }
 
     .btn-apply-filter:hover {
       background: #002d5e;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(0, 59, 122, 0.35);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 59, 122, 0.25);
     }
 
-    /* ---------------- Right Content Area ---------------- */
+    /* Right Content Area */
     .content-area {
       flex: 1;
       width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 28px;
+      gap: 20px;
     }
 
     .results-summary-bar {
       width: 100%;
       background: #ffffff;
-      border: 1.5px solid #edf2f7;
-      border-radius: 18px;
-      padding: 20px 30px;
-      font-size: 23px !important;
-      font-weight: 800;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 12px 20px;
+      font-size: 15px;
+      font-weight: 700;
       color: #0f172a;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    /* ---------------- Grid 3 คอลัมน์ ---------------- */
+    /* Grid 3 คอลัมน์ */
     .items-grid {
       width: 100%;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 30px;
+      gap: 24px;
     }
 
     .item-card {
       background: #ffffff;
-      border-radius: 22px;
+      border-radius: 16px;
       overflow: hidden;
-      border: 1.5px solid #edf2f7;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
       display: flex;
       flex-direction: column;
@@ -467,27 +473,27 @@
     }
 
     .item-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.09);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.07);
     }
 
     .item-image-wrapper {
       position: relative;
       width: 100%;
-      height: 360px !important;
-      background: #ffffff;
+      height: 200px;
+      background: #f8fafc;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      padding: 8px;
+      padding: 4px;
     }
 
     .item-image-wrapper img {
-      width: 100% !important;
-      height: 100% !important;
-      object-fit: contain !important;
-      border-radius: 16px;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
       transition: transform 0.3s ease;
     }
 
@@ -495,89 +501,86 @@
       transform: scale(1.03);
     }
 
-    /* ---------------- สไตล์ป้ายสถานะ (Badges) ---------------- */
+    /* Badges */
     .item-badge {
       position: absolute;
-      top: 14px;
-      right: 14px;
-      font-size: 14.5px;
-      font-weight: 700;
-      padding: 6px 16px;
-      border-radius: 50px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+      top: 10px;
+      right: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
       z-index: 2;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      letter-spacing: 0.2px;
+      gap: 4px;
+      color: #ffffff;
     }
 
     .item-badge.badge-new {
       background: #22c55e;
-      color: #ffffff;
     }
 
     .item-badge.badge-storage {
       background: #0284c7;
-      color: #ffffff;
     }
 
     .item-badge.badge-lost {
       background: #fee2e2;
-      color: #b91c1c;
+      color: #dc2626;
       border: 1px solid #fecaca;
     }
 
     .item-body {
-      padding: 24px 26px;
+      padding: 18px 20px;
       flex: 1;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 18px;
+      gap: 14px;
       background: #ffffff;
-      border-top: 1.5px solid #f1f5f9;
     }
 
     .item-info {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 4px;
     }
 
     .item-title {
-      font-size: 25px !important;
-      font-weight: 800;
+      font-size: 17px;
+      font-weight: 700;
       color: #0f172a;
-      line-height: 1.25;
+      line-height: 1.3;
     }
 
     .item-category {
-      font-size: 16.5px;
+      font-size: 13px;
       color: #64748b;
       font-weight: 500;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
 
     .item-meta {
-      font-size: 17.5px !important;
-      color: #334155;
-      font-weight: 500;
+      font-size: 13px;
+      color: #475569;
+      font-weight: 400;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
     }
 
     .item-meta span {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
     }
 
     .item-meta span i {
-      font-size: 19px;
+      font-size: 13px;
       color: #003b7a;
-      width: 22px;
+      width: 16px;
       text-align: center;
     }
 
@@ -585,15 +588,15 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 6px;
       width: 100%;
       background: #f8fafc;
       color: #003b7a;
-      border: 1.5px solid #cbd5e1;
-      padding: 12px 20px;
-      border-radius: 12px;
-      font-size: 17px !important;
-      font-weight: 700;
+      border: 1px solid #cbd5e1;
+      padding: 9px 16px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
       text-decoration: none;
       transition: all 0.2s ease;
     }
@@ -602,58 +605,61 @@
       background: #003b7a;
       color: #ffffff;
       border-color: #003b7a;
-      box-shadow: 0 4px 14px rgba(0, 59, 122, 0.2);
+      box-shadow: 0 2px 8px rgba(0, 59, 122, 0.15);
     }
 
     .btn-detail i {
-      font-size: 15px;
+      font-size: 12px;
       transition: transform 0.2s ease;
     }
 
     .btn-detail:hover i {
-      transform: translateX(4px);
+      transform: translateX(3px);
     }
 
     .no-results {
       grid-column: 1 / -1;
       background: #ffffff;
-      border: 1.5px dashed #cbd5e1;
-      border-radius: 20px;
-      padding: 60px 20px;
+      border: 1px dashed #cbd5e1;
+      border-radius: 16px;
+      padding: 40px 20px;
       text-align: center;
       color: #64748b;
-      font-size: 20px;
+      font-size: 15px;
       font-weight: 600;
       display: none;
     }
 
     .no-results i {
-      font-size: 48px;
+      font-size: 36px;
       color: #94a3b8;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
       display: block;
     }
 
+    /* Footer */
     .footer {
       background: #ffffff;
-      border-top: 1.5px solid #edf2f7;
+      border-top: 1px solid #e2e8f0;
       margin-top: auto;
-      padding: 24px 0;
+      padding: 20px 0;
       width: 100%;
     }
 
     .footer-inner {
-      padding: 0 48px;
+      padding: 0 32px;
+      max-width: 1400px;
+      margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: 15px;
+      font-size: 13px;
       color: #64748b;
     }
 
     .footer-links {
       display: flex;
-      gap: 20px;
+      gap: 16px;
     }
 
     .footer-links a {
@@ -666,23 +672,23 @@
       color: #003b7a;
     }
 
-    @media (max-width: 1400px) {
+    @media (max-width: 1200px) {
       .items-grid {
         grid-template-columns: repeat(2, 1fr);
       }
     }
 
-    @media (max-width: 992px) {
+    @media (max-width: 900px) {
       .navbar-inner, .breadcrumb-container, .browse-main, .footer-inner {
-        padding-left: 20px;
-        padding-right: 20px;
+        padding-left: 16px;
+        padding-right: 16px;
       }
       .browse-main {
         flex-direction: column;
-        padding-top: 16px;
+        gap: 20px;
       }
       .sidebar-filter {
-        width: 100% !important;
+        width: 100%;
         position: static;
       }
       .items-grid {
@@ -690,8 +696,11 @@
       }
       .footer-inner {
         flex-direction: column;
-        gap: 12px;
+        gap: 10px;
         text-align: center;
+      }
+      .nav-search-form {
+        display: none;
       }
     }
   </style>
@@ -875,7 +884,6 @@
   </footer>
 
   <script>
-    // ชุดรายชื่อบัญชีผู้ใช้อื่นๆ สำหรับสุ่มคละกัน
     const otherUsers = ['ณัฐพล ศรีสุข', 'กัญญา ใจดี', 'แสนดี ใจงาม', 'อารยา สายใจ'];
 
     const defaultDatabaseItems = [
@@ -936,7 +944,6 @@
         return defaultDatabaseItems;
       }
       let items = JSON.parse(stored);
-      // ตรวจสอบและสุ่มใส่ชื่อให้โพสต์ที่ยังไม่มีชื่อผู้โพสต์ หรือบังคับอัปเดตชื่อให้คละกัน
       items = items.map(item => {
         if (!item.poster || item.poster === 'สมชาย' || item.poster === 'ผู้ใช้งานอื่น') {
           const randomIndex = Math.floor(Math.random() * otherUsers.length);
@@ -1018,7 +1025,7 @@
               <div class="item-meta">
                 <span><i class="fa-regular fa-calendar"></i> ${formatThaiDate(item.timestamp)}</span>
                 <span><i class="fa-solid fa-location-dot"></i> ${item.location}</span>
-                <span style="font-size: 15px; color: #64748b; margin-top: 4px;"><i class="fa-regular fa-user" style="color: #64748b;"></i> ผู้โพสต์: ${item.poster}</span>
+                <span style="font-size: 12px; color: #64748b; margin-top: 2px;"><i class="fa-regular fa-user" style="color: #64748b;"></i> ผู้โพสต์: ${item.poster}</span>
               </div>
             </div>
             <a href="detail.html?id=${item.id}" class="btn-detail">
@@ -1141,7 +1148,7 @@
 
         const matchSearch = searchQuery === '' || 
                             cardTitle.includes(searchQuery) || 
-                            cardLocationLower.includes(searchQuery) ||
+                            cardLocationLower.includes(searchQuery) || 
                             (cardStatus && cardStatus.toLowerCase().includes(searchQuery));
 
         if (matchType && matchCategory && matchStatus && matchDate && matchLocation && matchSearch) {

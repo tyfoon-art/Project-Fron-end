@@ -19,7 +19,6 @@
       font-family: 'Prompt', sans-serif;
     }
 
-    /* ปิดลูกตาเริ่มต้นของ Browser ไม่ให้ขึ้นมาซ้ำซ้อน */
     input::-ms-reveal,
     input::-ms-clear {
       display: none;
@@ -31,30 +30,31 @@
       align-items: center;
       justify-content: center;
       background: radial-gradient(circle at 10% 20%, #eef4fc 0%, #dbe7f6 40%, #e6f0fa 90%);
-      padding: 40px 24px;
+      padding: 32px 24px;
     }
 
-    /* กล่องการ์ดหลัก */
+    /* กล่องการ์ดหลัก ปรับขนาดให้กะทัดรัดและสมดุล */
     .login-card {
       display: flex;
       width: 100%;
-      max-width: 1420px;
-      min-height: 840px;
+      max-width: 1080px;
+      min-height: 620px;
       background: #ffffff;
-      border-radius: 36px;
+      border-radius: 24px;
       overflow: hidden;
-      box-shadow: 0 30px 70px -15px rgba(0, 45, 100, 0.22);
+      box-shadow: 0 15px 40px rgba(0, 45, 100, 0.12);
+      border: 1px solid #e2e8f0;
     }
 
     /* ฝั่งซ้าย: Banner */
     .banner-side {
-      flex: 1.15;
+      flex: 1.1;
       background: linear-gradient(135deg, rgba(30, 79, 138, 0.9) 0%, rgba(12, 59, 112, 0.94) 60%, rgba(5, 38, 76, 0.98) 100%),
                   url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1400&auto=format&fit=crop');
       background-size: cover;
       background-position: center;
       position: relative;
-      padding: 72px 64px;
+      padding: 48px 40px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -64,37 +64,37 @@
     .banner-logo {
       display: flex;
       align-items: center;
-      gap: 20px;
-      font-size: 50px;
-      font-weight: 800;
-      letter-spacing: 0.8px;
-      text-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
+      gap: 12px;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
 
     .banner-logo i {
-      font-size: 52px;
+      font-size: 30px;
     }
 
     .banner-content h2 {
-      font-size: 46px;
-      font-weight: 600;
-      line-height: 1.35;
-      margin-bottom: 24px;
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 12px;
       color: #ffffff;
     }
 
     .banner-content p {
-      font-size: 21px;
+      font-size: 14px;
       font-weight: 400;
       color: #f1f5f9;
-      line-height: 1.8;
-      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+      line-height: 1.6;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     }
 
     /* ฝั่งขวา: ฟอร์ม */
     .form-side {
       flex: 1;
-      padding: 56px 72px;
+      padding: 40px 44px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -105,20 +105,20 @@
     .nav-tabs {
       display: flex;
       justify-content: center;
-      gap: 140px;
-      border-bottom: 2px solid #edf2f7;
+      gap: 64px;
+      border-bottom: 1px solid #e2e8f0;
       position: relative;
       width: 100%;
       flex-shrink: 0;
     }
 
     .nav-tab {
-      font-size: 22px;
-      color: #718096;
+      font-size: 16px;
+      color: #64748b;
       text-decoration: none;
       font-weight: 500;
       position: relative;
-      padding-bottom: 16px;
+      padding-bottom: 12px;
       transition: all 0.2s ease;
       cursor: pointer;
     }
@@ -132,55 +132,52 @@
       font-weight: 600;
     }
 
-    /* เส้นใต้ Active Tab */
     .nav-tab.active::after {
       content: '';
       position: absolute;
-      bottom: -2px;
-      left: -12px;
-      width: calc(100% + 24px);
-      height: 4px;
+      bottom: -1px;
+      left: -8px;
+      width: calc(100% + 16px);
+      height: 3px;
       background: #003b7a;
-      border-radius: 4px 4px 0 0;
+      border-radius: 2px 2px 0 0;
     }
 
     /* กล่องฟอร์ม */
     .form-content {
       margin: auto 0;
       width: 100%;
-      padding: 10px 0;
+      padding: 12px 0;
     }
 
-    /* หัวข้อฟอร์ม */
     .form-title-group {
       text-align: center;
-      margin-bottom: 36px;
+      margin-bottom: 24px;
     }
 
     .form-title-group h2 {
-      font-size: 44px;
+      font-size: 24px;
       font-weight: 700;
       color: #003b7a;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .form-title-group p {
-      font-size: 18px;
+      font-size: 13.5px;
       color: #64748b;
       font-weight: 400;
     }
 
-    /* ฟอร์มและช่องกรอก */
     .form-group {
-      margin-bottom: 24px;
+      margin-bottom: 16px;
     }
 
     .form-group label {
       display: block;
-      font-size: 18px;
+      font-size: 13.5px;
       font-weight: 600;
       color: #1e293b;
-      margin-bottom: 10px;
+      margin-bottom: 6px;
     }
 
     .input-wrapper {
@@ -191,19 +188,19 @@
 
     .input-wrapper .input-icon-left {
       position: absolute;
-      left: 20px;
-      font-size: 20px;
+      left: 14px;
+      font-size: 14px;
       color: #94a3b8;
       pointer-events: none;
     }
 
     .input-wrapper input {
       width: 100%;
-      padding: 18px 58px 18px 58px;
-      font-size: 18px;
+      padding: 10px 40px 10px 40px;
+      font-size: 13.5px;
       background-color: #f8faff;
-      border: 1.5px solid #d9e2ec;
-      border-radius: 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
       outline: none;
       color: #1e293b;
       transition: all 0.2s ease-in-out;
@@ -217,57 +214,55 @@
     .input-wrapper input::placeholder {
       color: #94a3b8;
       font-weight: 400;
+      font-size: 13px;
     }
 
     .input-wrapper input:focus {
       background-color: #ffffff;
       border-color: #003b7a;
-      box-shadow: 0 0 0 4px rgba(0, 59, 122, 0.12);
+      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.1);
     }
 
-    /* ข้อความแจ้งเตือน Error */
     .error-hint {
       display: none;
       color: #ef4444;
-      font-size: 14.5px;
+      font-size: 12px;
       font-weight: 500;
-      margin-top: 6px;
-      padding-left: 4px;
+      margin-top: 4px;
+      padding-left: 2px;
     }
 
     .error-hint.show {
       display: block;
     }
 
-    /* กล่องแจ้งเตือนรวมด้านบนฟอร์ม */
     .alert-login-error {
       display: none;
       background: #fef2f2;
-      border: 1.5px solid #fecdd3;
+      border: 1px solid #fecdd3;
       color: #be123c;
-      padding: 14px 18px;
-      border-radius: 14px;
-      font-size: 16px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 13px;
       font-weight: 500;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
     .alert-login-error.show {
       display: flex;
     }
 
-    /* ปุ่มเปิด/ปิดตาดูรหัสผ่าน */
     .btn-toggle-password {
       position: absolute;
-      right: 18px;
+      right: 14px;
       background: none;
       border: none;
       color: #94a3b8;
-      font-size: 20px;
+      font-size: 15px;
       cursor: pointer;
-      padding: 4px;
+      padding: 2px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -278,14 +273,13 @@
       color: #003b7a;
     }
 
-    /* ลิงก์ลืมรหัสผ่าน */
     .forgot-link-wrapper {
       text-align: right;
-      margin-top: 10px;
+      margin-top: 6px;
     }
 
     .forgot-link {
-      font-size: 16px;
+      font-size: 13px;
       color: #0056b3;
       text-decoration: none;
       font-weight: 500;
@@ -298,27 +292,27 @@
       text-decoration: underline;
     }
 
-    /* ปุ่ม Submit */
     .btn-login {
       width: 100%;
-      padding: 20px;
-      margin-top: 28px;
+      padding: 11px;
+      margin-top: 20px;
       background: #003b7a;
       color: #ffffff;
-      font-size: 20px;
+      font-size: 14px;
       font-weight: 600;
       border: none;
-      border-radius: 50px;
+      border-radius: 10px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
+      gap: 8px;
       transition: background 0.2s, transform 0.1s;
+      box-shadow: 0 2px 8px rgba(0, 59, 122, 0.15);
     }
 
     .btn-login i {
-      font-size: 18px;
+      font-size: 13px;
       transition: transform 0.2s ease;
     }
 
@@ -327,40 +321,37 @@
     }
 
     .btn-login:hover i {
-      transform: translateX(4px);
+      transform: translateX(3px);
     }
 
     .btn-login:active {
       transform: scale(0.99);
     }
 
-    @media (max-width: 1100px) {
+    @media (max-width: 900px) {
       .login-card {
         flex-direction: column;
-        max-width: 640px;
+        max-width: 520px;
         min-height: auto;
       }
       .banner-side {
-        min-height: 320px;
-        padding: 48px 40px;
+        min-height: 220px;
+        padding: 32px 24px;
       }
       .banner-logo {
-        font-size: 38px;
+        font-size: 22px;
       }
       .banner-logo i {
-        font-size: 40px;
+        font-size: 24px;
       }
       .form-side {
-        padding: 44px 36px;
+        padding: 32px 24px;
       }
       .nav-tabs {
-        gap: 80px;
+        gap: 40px;
       }
       .banner-content h2 {
-        font-size: 34px;
-      }
-      .form-title-group h2 {
-        font-size: 34px;
+        font-size: 20px;
       }
     }
   </style>
@@ -368,7 +359,6 @@
 <body>
 
   <div class="login-card">
-    <!-- ฝั่งซ้าย: Banner -->
     <div class="banner-side">
       <div class="banner-logo">
         <i class="fa-solid fa-graduation-cap"></i>
@@ -380,29 +370,24 @@
       </div>
     </div>
 
-    <!-- ฝั่งขวา: ฟอร์มเข้าสู่ระบบ -->
     <div class="form-side">
-      <!-- แท็บเมนูด้านบน -->
       <div class="nav-tabs">
         <a href="login.html" class="nav-tab active">เข้าสู่ระบบ</a>
         <a href="register.html" class="nav-tab">ลงทะเบียน</a>
       </div>
 
-      <!-- เนื้อหาฟอร์ม -->
       <div class="form-content">
         <div class="form-title-group">
           <h2>ยินดีต้อนรับ</h2>
           <p>ระบบแจ้งของหายและตามหาของภายในตึกคณะ ICT</p>
         </div>
 
-        <!-- กล่องแจ้งเตือนกรณีไม่พบบัญชีหรือรหัสผ่านผิด -->
         <div class="alert-login-error" id="loginAlertError">
           <i class="fa-solid fa-circle-exclamation"></i>
           <span id="loginAlertText">ไม่พบบัญชีผู้ใช้นี้ กรุณาลงทะเบียนก่อนเข้าสู่ระบบ</span>
         </div>
 
         <form id="loginForm" onsubmit="handleLogin(event)" novalidate>
-          <!-- ช่องกรอกอีเมล -->
           <div class="form-group">
             <label for="email">อีเมล</label>
             <div class="input-wrapper">
@@ -421,7 +406,6 @@
             </div>
           </div>
 
-          <!-- ช่องกรอกรหัสผ่าน -->
           <div class="form-group">
             <label for="password">รหัสผ่าน</label>
             <div class="input-wrapper">
@@ -442,13 +426,11 @@
               <i class="fa-solid fa-circle-exclamation"></i> กรุณากรอกรหัสผ่าน
             </div>
 
-            <!-- ลิงก์ไปยังหน้าลืมรหัสผ่าน เชื่อมต่อโดยตรง -->
             <div class="forgot-link-wrapper">
               <a href="forgot-password.html" class="forgot-link" onclick="goToForgotPassword(event)">ลืมรหัสผ่าน?</a>
             </div>
           </div>
 
-          <!-- ปุ่มเข้าสู่ระบบ -->
           <button type="submit" class="btn-login">
             <span>เข้าสู่ระบบ</span>
             <i class="fa-solid fa-arrow-right"></i>
@@ -459,13 +441,11 @@
   </div>
 
   <script>
-    // ฟังก์ชันเชื่อมต่อไปยังหน้าลืมรหัสผ่านโดยตรง
     function goToForgotPassword(event) {
       if (event) event.preventDefault();
       window.location.href = 'forgotpassword.html';
     }
 
-    // สลับดูรหัสผ่าน
     const togglePassword = document.getElementById('togglePassword');
     const passwordInput = document.getElementById('password');
     const toggleIcon = document.getElementById('togglePasswordIcon');
@@ -501,7 +481,6 @@
       document.getElementById('loginAlertError').classList.remove('show');
     }
 
-    // ฟังก์ชันตรวจสอบการมีอยู่ของบัญชีในระบบ
     function handleLogin(event) {
       event.preventDefault();
 
@@ -514,7 +493,6 @@
 
       let isValid = true;
 
-      // 1. ตรวจสอบว่ากรอกข้อมูลครบหรือไม่
       if (!email) {
         showError('email', 'emailError', 'กรุณากรอกอีเมล');
         isValid = false;
@@ -526,10 +504,8 @@
 
       if (!isValid) return;
 
-      // 2. ดึงรายการบัญชีผู้ใช้ทั้งหมดจาก localStorage
       let usersList = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
 
-      // ตรวจสอบข้อมูลบัญชีเดี่ยวที่อาจเคยลงทะเบียนไว้
       const singleEmail = localStorage.getItem('userEmail');
       const singlePass = localStorage.getItem('userPassword');
       const singleName = localStorage.getItem('userName');
@@ -542,7 +518,6 @@
         });
       }
 
-      // เพิ่มบัญชีเริ่มต้นสำหรับการทดสอบระบบ
       const defaultUser = {
         email: '67020001@up.ac.th',
         password: 'Password123',
@@ -552,7 +527,6 @@
         usersList.push(defaultUser);
       }
 
-      // 3. ตรวจสอบว่าอีเมลนี้เคยลงทะเบียนไว้หรือไม่
       const accountFound = usersList.find(u => u.email.toLowerCase() === email);
 
       if (!accountFound) {
@@ -563,7 +537,6 @@
         return;
       }
 
-      // 4. ตรวจสอบรหัสผ่านของบัญชีดังกล่าว
       if (accountFound.password && accountFound.password !== password) {
         passwordInput.classList.add('input-error');
         alertText.innerHTML = 'รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง หรือกด "ลืมรหัสผ่าน?"';
@@ -572,12 +545,10 @@
         return;
       }
 
-      // 5. ผ่านการตรวจสอบ เข้าสู่ระบบสำเร็จ
       localStorage.setItem('currentUser', JSON.stringify(accountFound));
       localStorage.setItem('userEmail', accountFound.email);
       localStorage.setItem('userName', accountFound.name || 'ผู้ใช้งาน');
 
-      // พาไปยังหน้าหลัก
       window.location.href = 'home.html';
     }
   </script>

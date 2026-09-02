@@ -5,12 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>กิจกรรมส่วนตัว (My Activity) - Lost & Found ICT</title>
   
-  <!-- Google Fonts: Prompt -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   
-  <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
@@ -23,6 +21,7 @@
 
     html {
       scroll-behavior: smooth;
+      scrollbar-gutter: stable;
     }
 
     body {
@@ -35,14 +34,21 @@
       overflow-x: hidden;
     }
 
-    /* ---------------- 1. Navbar ---------------- */
+    .container-fluid {
+      width: 100%;
+      padding: 0 32px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* Navbar */
     .navbar {
       background: #ffffff;
-      border-bottom: 2px solid #edf2f7;
+      border-bottom: 1px solid #e2e8f0;
       position: sticky;
       top: 0;
       z-index: 1000;
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
       width: 100%;
     }
 
@@ -50,107 +56,102 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 94px;
-      padding: 0 48px;
-      gap: 32px;
-      width: 100%;
+      height: 72px;
+      padding: 0 32px;
+      max-width: 1400px;
+      margin: 0 auto;
+      gap: 24px;
     }
 
     .nav-left {
       display: flex;
       align-items: center;
-      gap: 48px;
-      flex-shrink: 0;
+      gap: 36px;
     }
 
     .nav-brand {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       text-decoration: none;
       color: #003b7a;
-      font-size: 34px;
-      font-weight: 800;
+      font-size: 24px;
+      font-weight: 700;
       letter-spacing: -0.5px;
       flex-shrink: 0;
     }
 
     .nav-brand i {
-      font-size: 38px;
+      font-size: 26px;
       color: #003b7a;
     }
 
     .nav-menu {
       display: flex;
       align-items: center;
-      gap: 36px;
+      gap: 24px;
       list-style: none;
-      flex-shrink: 0;
     }
 
     .nav-link {
       text-decoration: none;
-      font-size: 21px;
+      font-size: 15px;
       font-weight: 500;
       color: #64748b;
       transition: color 0.2s;
       position: relative;
-      padding-bottom: 6px;
+      padding-bottom: 4px;
       white-space: nowrap;
     }
 
     .nav-link:hover,
     .nav-link.active {
       color: #003b7a;
-      font-weight: 700;
+      font-weight: 600;
     }
 
     .nav-link.active::after {
       content: '';
       position: absolute;
-      bottom: -6px;
+      bottom: -4px;
       left: 0;
       width: 100%;
-      height: 4px;
+      height: 3px;
       background: #003b7a;
-      border-radius: 3px;
+      border-radius: 2px;
     }
 
     .nav-actions {
       display: flex;
       align-items: center;
-      gap: 20px;
-      flex-shrink: 0;
+      gap: 16px;
     }
 
     .nav-search-form {
       position: relative;
-      width: 400px;
-      flex-shrink: 0;
+      width: 280px;
     }
 
     .nav-search-box {
       display: flex;
       align-items: center;
       background: #f1f5f9;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 50px;
-      padding: 11px 22px;
+      border: 1px solid #cbd5e1;
+      border-radius: 30px;
+      padding: 8px 16px;
       transition: all 0.2s ease;
-      width: 100%;
     }
 
     .nav-search-box:focus-within {
       background: #ffffff;
       border-color: #003b7a;
-      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.12);
+      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.1);
     }
 
     .nav-search-box i {
       color: #64748b;
-      font-size: 18px;
-      margin-right: 12px;
-      flex-shrink: 0;
+      font-size: 14px;
+      margin-right: 8px;
     }
 
     .nav-search-box input {
@@ -158,29 +159,26 @@
       border: none;
       outline: none;
       background: transparent;
-      font-size: 17.5px;
+      font-size: 14px;
       color: #1e293b;
-      font-weight: 400;
-      width: 100%;
     }
 
     .btn-post {
       background: #003b7a;
       color: #ffffff;
       border: none;
-      padding: 12px 28px;
-      border-radius: 50px;
-      font-size: 17.5px;
+      padding: 8px 20px;
+      border-radius: 30px;
+      font-size: 14px;
       font-weight: 600;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       cursor: pointer;
       white-space: nowrap;
       transition: all 0.2s ease;
-      box-shadow: 0 4px 14px rgba(0, 59, 122, 0.2);
-      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0, 59, 122, 0.15);
     }
 
     .btn-post:hover {
@@ -191,20 +189,19 @@
     .nav-profile {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       text-decoration: none;
       color: #334155;
-      font-size: 18.5px;
+      font-size: 14px;
       font-weight: 600;
-      padding: 8px 12px;
-      border-radius: 10px;
+      padding: 6px 10px;
+      border-radius: 8px;
       transition: all 0.2s ease;
       white-space: nowrap;
-      flex-shrink: 0;
     }
 
     .nav-profile i {
-      font-size: 22px;
+      font-size: 16px;
       color: #64748b;
     }
 
@@ -213,50 +210,52 @@
       color: #003b7a;
     }
 
-    /* ---------------- 2. Main Content Container ---------------- */
+    /* Main Content */
     .activity-main {
       flex: 1;
-      padding: 40px 48px 72px 48px;
+      padding: 32px 32px 48px 32px;
       width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 32px;
+      gap: 24px;
     }
 
     .activity-header {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 4px;
     }
 
     .activity-header h1 {
-      font-size: 38px;
-      font-weight: 900;
+      font-size: 26px;
+      font-weight: 700;
       color: #0f172a;
       letter-spacing: -0.5px;
     }
 
     .activity-header p {
-      font-size: 20px;
+      font-size: 14px;
       color: #64748b;
-      font-weight: 500;
+      font-weight: 400;
     }
 
     /* Tabs Bar */
     .activity-tabs {
       display: flex;
-      gap: 48px;
-      border-bottom: 2px solid #e2e8f0;
-      margin-top: 10px;
+      gap: 32px;
+      border-bottom: 1px solid #e2e8f0;
+      margin-top: 4px;
     }
 
     .tab-btn {
       background: transparent;
       border: none;
-      font-size: 22px;
-      font-weight: 700;
+      font-size: 16px;
+      font-weight: 600;
       color: #64748b;
-      padding-bottom: 16px;
+      padding-bottom: 12px;
       cursor: pointer;
       position: relative;
       transition: all 0.2s ease;
@@ -268,75 +267,75 @@
 
     .tab-btn.active {
       color: #003b7a;
-      font-weight: 800;
+      font-weight: 700;
     }
 
     .tab-btn.active::after {
       content: '';
       position: absolute;
-      bottom: -2px;
+      bottom: -1px;
       left: 0;
       width: 100%;
-      height: 4px;
+      height: 3px;
       background: #003b7a;
-      border-radius: 4px 4px 0 0;
+      border-radius: 2px 2px 0 0;
     }
 
-    /* ---------------- 3. Content Grid Layout ---------------- */
+    /* Content Grid Layout */
     .activity-grid {
       display: grid;
-      grid-template-columns: 420px 1fr;
-      gap: 40px;
+      grid-template-columns: 320px 1fr;
+      gap: 28px;
       align-items: flex-start;
-      margin-top: 12px;
+      margin-top: 8px;
     }
 
     /* ฝั่งซ้าย: การแจ้งเตือนล่าสุด */
     .notif-section {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 16px;
     }
 
     .notif-title {
-      font-size: 22px;
-      font-weight: 800;
+      font-size: 17px;
+      font-weight: 700;
       color: #0f172a;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
     }
 
     .notif-title i {
       color: #003b7a;
-      font-size: 24px;
+      font-size: 18px;
     }
 
     .notif-card {
       background: #ffffff;
-      border: 1.5px solid #edf2f7;
-      border-radius: 22px;
-      padding: 24px 26px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 18px 20px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
       display: flex;
-      gap: 20px;
+      gap: 14px;
       align-items: flex-start;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
     .notif-card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
     }
 
     .notif-icon-circle {
-      width: 52px;
-      height: 52px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
+      font-size: 18px;
       flex-shrink: 0;
     }
 
@@ -353,66 +352,66 @@
     .notif-content {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 4px;
     }
 
     .notif-head {
-      font-size: 18.5px;
-      font-weight: 800;
+      font-size: 14px;
+      font-weight: 700;
       color: #0f172a;
-      line-height: 1.35;
+      line-height: 1.3;
     }
 
     .notif-desc {
-      font-size: 16px;
+      font-size: 13px;
       color: #475569;
-      font-weight: 500;
-      line-height: 1.5;
+      font-weight: 400;
+      line-height: 1.4;
     }
 
     .notif-time {
-      font-size: 14.5px;
+      font-size: 11px;
       color: #94a3b8;
-      font-weight: 500;
-      margin-top: 4px;
+      font-weight: 400;
+      margin-top: 2px;
     }
 
     /* ฝั่งขวา: รายการสิ่งของ Activity Cards */
     .items-section {
       display: flex;
       flex-direction: column;
-      gap: 24px;
+      gap: 16px;
     }
 
     .activity-card {
       background: #ffffff;
-      border: 1.5px solid #edf2f7;
-      border-radius: 24px;
-      padding: 28px 32px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
       display: flex;
       flex-direction: column;
-      gap: 24px;
+      gap: 16px;
       transition: all 0.2s ease;
     }
 
     .activity-card:hover {
       border-color: #cbd5e1;
       transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.07);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
     }
 
     .card-main-row {
       display: flex;
-      gap: 28px;
+      gap: 20px;
       align-items: center;
       width: 100%;
     }
 
     .card-img-box {
-      width: 190px;
-      height: 150px;
-      border-radius: 18px;
+      width: 130px;
+      height: 100px;
+      border-radius: 12px;
       overflow: hidden;
       background: #f1f5f9;
       display: flex;
@@ -432,27 +431,27 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 8px;
     }
 
     .card-top-row {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      gap: 16px;
+      gap: 12px;
     }
 
     .card-title {
-      font-size: 25px;
-      font-weight: 800;
+      font-size: 17px;
+      font-weight: 700;
       color: #0f172a;
     }
 
     .badge-type {
-      font-size: 15.5px;
-      font-weight: 700;
-      padding: 6px 18px;
-      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
       white-space: nowrap;
     }
 
@@ -467,40 +466,41 @@
     }
 
     .card-desc {
-      font-size: 18px;
+      font-size: 13px;
       color: #475569;
-      font-weight: 500;
-      line-height: 1.6;
+      font-weight: 400;
+      line-height: 1.4;
     }
 
     .card-bottom-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 6px;
-      padding-top: 10px;
+      margin-top: 2px;
+      padding-top: 8px;
+      border-top: 1px solid #f1f5f9;
     }
 
     .card-date {
-      font-size: 16.5px;
+      font-size: 13px;
       color: #64748b;
-      font-weight: 500;
+      font-weight: 400;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 6px;
     }
 
     .card-date i {
       color: #94a3b8;
-      font-size: 18px;
+      font-size: 13px;
     }
 
     .status-indicator {
-      font-size: 17px;
-      font-weight: 700;
+      font-size: 13px;
+      font-weight: 600;
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
     .status-indicator.pending {
@@ -512,60 +512,61 @@
     }
 
     .status-indicator i {
-      font-size: 19px;
+      font-size: 14px;
     }
 
     .empty-box {
       background: #ffffff;
-      border: 1.5px dashed #cbd5e1;
-      border-radius: 24px;
-      padding: 64px 24px;
+      border: 1px dashed #cbd5e1;
+      border-radius: 16px;
+      padding: 40px 20px;
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 16px;
+      gap: 12px;
     }
 
     .empty-box i {
-      font-size: 48px;
+      font-size: 36px;
       color: #94a3b8;
     }
 
     .empty-box h3 {
-      font-size: 22px;
+      font-size: 18px;
       color: #334155;
-      font-weight: 700;
+      font-weight: 600;
     }
 
     .empty-box p {
-      font-size: 17px;
+      font-size: 14px;
       color: #64748b;
     }
 
-    /* ---------------- 4. Footer ---------------- */
+    /* Footer */
     .footer {
       background: #ffffff;
-      border-top: 1.5px solid #edf2f7;
+      border-top: 1px solid #e2e8f0;
       margin-top: auto;
-      padding: 28px 0;
+      padding: 20px 0;
       width: 100%;
     }
 
     .footer-inner {
-      padding: 0 48px;
+      padding: 0 32px;
+      max-width: 1400px;
+      margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: 16px;
+      font-size: 13px;
       color: #64748b;
-      width: 100%;
     }
 
     .footer-links {
       display: flex;
-      gap: 24px;
+      gap: 16px;
     }
 
     .footer-links a {
@@ -578,20 +579,27 @@
       color: #003b7a;
     }
 
-    @media (max-width: 1200px) {
+    @media (max-width: 900px) {
       .activity-grid {
         grid-template-columns: 1fr;
       }
       .navbar-inner, .activity-main, .footer-inner {
-        padding-left: 24px;
-        padding-right: 24px;
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+      .footer-inner {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+      }
+      .nav-search-form {
+        display: none;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- 1. Navbar มาตรฐาน -->
   <header class="navbar">
     <div class="navbar-inner">
       <div class="nav-left">
@@ -627,7 +635,6 @@
     </div>
   </header>
 
-  <!-- 2. Main Content -->
   <main class="activity-main">
     
     <div class="activity-header">
@@ -635,16 +642,13 @@
       <p>ติดตามสถานะสิ่งของที่คุณแจ้งหายหรือพบ และตรวจสอบคำร้องขอคืนของ</p>
     </div>
 
-    <!-- แท็บสลับหน้า -->
     <div class="activity-tabs">
       <button type="button" class="tab-btn active" id="tabReported" onclick="switchTab('reported')">ของที่ฉันแจ้งหาย/พบ</button>
       <button type="button" class="tab-btn" id="tabClaimed" onclick="switchTab('claimed')">คำร้องขอคืนของฉัน</button>
     </div>
 
-    <!-- Layout 2 คอลัมน์ -->
     <div class="activity-grid">
       
-      <!-- ฝั่งซ้าย: การแจ้งเตือนล่าสุด -->
       <aside class="notif-section">
         <div class="notif-title">
           <i class="fa-regular fa-bell"></i>
@@ -663,7 +667,6 @@
         </div>
       </aside>
 
-      <!-- ฝั่งขวา: รายการสิ่งของ Activity Cards (ดึงข้อมูลจริงจาก localStorage) -->
       <section class="items-section" id="activityList">
         <!-- เรนเดอร์รายการด้วย JavaScript -->
       </section>
@@ -672,7 +675,6 @@
 
   </main>
 
-  <!-- 5. Footer -->
   <footer class="footer">
     <div class="footer-inner">
       <div>
@@ -687,7 +689,6 @@
     </div>
   </footer>
 
-  <!-- Script จัดการแสดงผลข้อมูลจริง -->
   <script>
     function formatThaiDate(isoDateString) {
       if (!isoDateString) return '2 ก.ย. 2569';
@@ -707,7 +708,6 @@
       const allItems = JSON.parse(localStorage.getItem('systemFoundItems') || '[]');
 
       if (tabType === 'reported') {
-        // กรองเฉพาะโพสต์ที่เป็นของเจ้าของบัญชีปัจจุบัน
         const myPosts = allItems.filter(item => (item.poster || 'นพวรรณ คงพันธประเสริฐ') === currentUser);
 
         if (myPosts.length === 0) {
@@ -759,7 +759,6 @@
         });
 
       } else {
-        // แท็บคำร้องขอคืนของฉัน
         listContainer.innerHTML = `
           <div class="empty-box">
             <i class="fa-regular fa-clipboard"></i>

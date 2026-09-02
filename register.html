@@ -18,7 +18,6 @@
       font-family: 'Prompt', sans-serif;
     }
 
-    /* ปิดไอคอนลูกตาเริ่มต้นของ Browser ไม่ให้ขึ้นมาซ้อนกับปุ่มของเว็บ */
     input::-ms-reveal,
     input::-ms-clear {
       display: none;
@@ -30,31 +29,31 @@
       align-items: center;
       justify-content: center;
       background: radial-gradient(circle at 10% 20%, #eef4fc 0%, #dbe7f6 40%, #e6f0fa 90%);
-      padding: 40px 24px;
+      padding: 32px 24px;
     }
 
-    /* กล่องการ์ดหลัก */
+    /* กล่องการ์ดหลัก ปรับขนาดให้กะทัดรัดและสมดุล */
     .login-card {
       display: flex;
       width: 100%;
-      max-width: 1420px;
-      height: 860px;
+      max-width: 1080px;
+      min-height: 620px;
       background: #ffffff;
-      border-radius: 36px;
+      border-radius: 24px;
       overflow: hidden;
-      box-shadow: 0 30px 70px -15px rgba(0, 45, 100, 0.22);
+      box-shadow: 0 15px 40px rgba(0, 45, 100, 0.12);
+      border: 1px solid #e2e8f0;
     }
 
     /* ฝั่งซ้าย: Banner */
     .banner-side {
-      flex: 1.15;
-      height: 100%;
+      flex: 1.1;
       background: linear-gradient(135deg, rgba(30, 79, 138, 0.9) 0%, rgba(12, 59, 112, 0.94) 60%, rgba(5, 38, 76, 0.98) 100%),
                   url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1400&auto=format&fit=crop');
       background-size: cover;
       background-position: center;
       position: relative;
-      padding: 72px 64px;
+      padding: 48px 40px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -64,40 +63,40 @@
     .banner-logo {
       display: flex;
       align-items: center;
-      gap: 20px;
-      font-size: 50px;
-      font-weight: 800;
-      letter-spacing: 0.8px;
-      text-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
+      gap: 12px;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
 
     .banner-logo i {
-      font-size: 52px;
+      font-size: 30px;
     }
 
     .banner-content h2 {
-      font-size: 46px;
-      font-weight: 600;
-      line-height: 1.35;
-      margin-bottom: 24px;
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 12px;
       color: #ffffff;
     }
 
     .banner-content p {
-      font-size: 21px;
+      font-size: 14px;
       font-weight: 400;
       color: #f1f5f9;
-      line-height: 1.8;
-      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+      line-height: 1.6;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     }
 
     /* ฝั่งขวา: ฟอร์ม */
     .form-side {
       flex: 1;
-      height: 100%;
-      padding: 50px 72px 40px 72px;
+      padding: 36px 44px;
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
       background: #ffffff;
     }
 
@@ -105,20 +104,20 @@
     .nav-tabs {
       display: flex;
       justify-content: center;
-      gap: 140px;
-      border-bottom: 2px solid #edf2f7;
+      gap: 64px;
+      border-bottom: 1px solid #e2e8f0;
       position: relative;
       width: 100%;
       flex-shrink: 0;
     }
 
     .nav-tab {
-      font-size: 22px;
-      color: #718096;
+      font-size: 16px;
+      color: #64748b;
       text-decoration: none;
       font-weight: 500;
       position: relative;
-      padding-bottom: 16px;
+      padding-bottom: 12px;
       transition: all 0.2s ease;
       cursor: pointer;
     }
@@ -132,58 +131,55 @@
       font-weight: 600;
     }
 
-    /* เส้นใต้ Active Tab */
     .nav-tab.active::after {
       content: '';
       position: absolute;
-      bottom: -2px;
-      left: -12px;
-      width: calc(100% + 24px);
-      height: 4px;
+      bottom: -1px;
+      left: -8px;
+      width: calc(100% + 16px);
+      height: 3px;
       background: #003b7a;
-      border-radius: 4px 4px 0 0;
+      border-radius: 2px 2px 0 0;
     }
 
     /* กล่องฟอร์ม */
     .form-content {
-      margin-top: 24px;
+      margin-top: 16px;
       width: 100%;
     }
 
-    /* หัวข้อฟอร์ม */
     .form-title-group {
       text-align: center;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
 
     .form-title-group h2 {
-      font-size: 38px;
+      font-size: 22px;
       font-weight: 700;
       color: #003b7a;
       margin-bottom: 4px;
     }
 
     .form-title-group p {
-      font-size: 16px;
+      font-size: 13px;
       color: #64748b;
       font-weight: 400;
     }
 
-    /* ฟอร์มและช่องกรอก */
     .form-group {
-      margin-bottom: 8px;
+      margin-bottom: 12px;
     }
 
     .form-group-gender {
-      margin-bottom: 6px;
+      margin-bottom: 10px;
     }
 
     .form-group label {
       display: block;
-      font-size: 14.5px;
+      font-size: 13px;
       font-weight: 600;
       color: #1e293b;
-      margin-bottom: 3px;
+      margin-bottom: 4px;
     }
 
     .input-wrapper {
@@ -194,19 +190,19 @@
 
     .input-wrapper .input-icon-left {
       position: absolute;
-      left: 18px;
-      font-size: 17px;
+      left: 14px;
+      font-size: 14px;
       color: #94a3b8;
       pointer-events: none;
     }
 
     .input-wrapper input {
       width: 100%;
-      padding: 10px 54px 10px 52px;
-      font-size: 15px;
+      padding: 9px 36px 9px 38px;
+      font-size: 13.5px;
       background-color: #f8faff;
-      border: 1.5px solid #d9e2ec;
-      border-radius: 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
       outline: none;
       color: #1e293b;
       transition: all 0.2s ease-in-out;
@@ -220,32 +216,32 @@
     .input-wrapper input::placeholder {
       color: #94a3b8;
       font-weight: 400;
+      font-size: 12.5px;
     }
 
     .input-wrapper input:focus {
       background-color: #ffffff;
       border-color: #003b7a;
-      box-shadow: 0 0 0 4px rgba(0, 59, 122, 0.12);
+      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.1);
     }
 
-    /* ข้อความแจ้งเตือน Error */
     .error-hint {
       display: none;
       color: #ef4444;
-      font-size: 12.5px;
+      font-size: 11.5px;
       font-weight: 500;
-      margin-top: 3px;
-      padding-left: 4px;
+      margin-top: 2px;
+      padding-left: 2px;
     }
 
     .error-hint.show {
       display: block;
     }
 
-    /* สไตล์ตัวเลือกเพศ */
+    /* Gender Options */
     .gender-options {
       display: flex;
-      gap: 48px;
+      gap: 32px;
       align-items: center;
       padding: 2px 0;
     }
@@ -253,25 +249,18 @@
     .gender-radio {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       cursor: pointer;
-      font-size: 15.5px;
+      font-size: 13.5px;
       color: #334155;
       font-weight: 500;
-      padding: 3px 6px;
-      border-radius: 8px;
       user-select: none;
-      transition: background 0.15s ease;
-    }
-
-    .gender-radio:hover {
-      background: #f1f5f9;
     }
 
     .gender-radio input[type="radio"] {
       appearance: none;
-      width: 19px;
-      height: 19px;
+      width: 16px;
+      height: 16px;
       border: 1.5px solid #94a3b8;
       border-radius: 50%;
       outline: none;
@@ -283,8 +272,8 @@
 
     .gender-radio input[type="radio"]::before {
       content: "";
-      width: 9px;
-      height: 9px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       transform: scale(0);
       transition: 0.15s transform ease-in-out;
@@ -302,7 +291,6 @@
     .other-gender-wrapper {
       display: none;
       margin-top: 6px;
-      margin-bottom: 2px;
     }
 
     .other-gender-wrapper.active {
@@ -311,13 +299,13 @@
 
     .btn-toggle-password {
       position: absolute;
-      right: 16px;
+      right: 14px;
       background: none;
       border: none;
       color: #94a3b8;
-      font-size: 18px;
+      font-size: 15px;
       cursor: pointer;
-      padding: 4px;
+      padding: 2px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -331,24 +319,25 @@
     /* ปุ่ม Submit */
     .btn-login {
       width: 100%;
-      padding: 13.5px;
-      margin-top: 20px;
+      padding: 11px;
+      margin-top: 16px;
       background: #003b7a;
       color: #ffffff;
-      font-size: 18px;
+      font-size: 14px;
       font-weight: 600;
       border: none;
-      border-radius: 50px;
+      border-radius: 10px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
+      gap: 8px;
       transition: background 0.2s, transform 0.1s;
+      box-shadow: 0 2px 8px rgba(0, 59, 122, 0.15);
     }
 
     .btn-login i {
-      font-size: 16px;
+      font-size: 13px;
       transition: transform 0.2s ease;
     }
 
@@ -357,43 +346,37 @@
     }
 
     .btn-login:hover i {
-      transform: translateX(4px);
+      transform: translateX(3px);
     }
 
     .btn-login:active {
       transform: scale(0.99);
     }
 
-    @media (max-width: 1100px) {
+    @media (max-width: 900px) {
       .login-card {
         flex-direction: column;
-        max-width: 640px;
-        height: auto;
+        max-width: 520px;
+        min-height: auto;
       }
       .banner-side {
-        min-height: 320px;
-        padding: 48px 40px;
+        min-height: 220px;
+        padding: 32px 24px;
       }
       .banner-logo {
-        font-size: 38px;
+        font-size: 22px;
       }
       .banner-logo i {
-        font-size: 40px;
+        font-size: 24px;
       }
       .form-side {
-        padding: 44px 36px;
+        padding: 28px 24px;
       }
       .nav-tabs {
-        gap: 80px;
-      }
-      .gender-options {
-        gap: 32px;
+        gap: 40px;
       }
       .banner-content h2 {
-        font-size: 34px;
-      }
-      .form-title-group h2 {
-        font-size: 34px;
+        font-size: 20px;
       }
     }
   </style>
@@ -461,7 +444,7 @@
             </div>
 
             <div class="other-gender-wrapper" id="otherGenderWrapper">
-              <div class="input-wrapper">
+              <div class="input-wrapper" style="margin-top: 4px;">
                 <i class="fa-solid fa-pen input-icon-left"></i>
                 <input 
                   type="text" 
@@ -603,21 +586,18 @@
       let isValid = true;
       let firstInvalidInput = null;
 
-      // 1. ตรวจสอบชื่อ-นามสกุล
       if (!fullname) {
         showError('fullname', 'fullnameError', 'กรุณากรอกชื่อ-นามสกุล');
         isValid = false;
         if (!firstInvalidInput) firstInvalidInput = document.getElementById('fullname');
       }
 
-      // 2. ตรวจสอบเพศกรณีเลือกอื่นๆ
       if (gender === 'other' && !otherGender) {
         showError('other_gender_text', 'otherGenderError', 'กรุณาระบุเพศของคุณ');
         isValid = false;
         if (!firstInvalidInput) firstInvalidInput = document.getElementById('other_gender_text');
       }
 
-      // 3. ตรวจสอบรูปแบบอีเมล
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!email) {
         showError('email', 'emailError', 'กรุณากรอกอีเมล');
@@ -628,10 +608,8 @@
         isValid = false;
         if (!firstInvalidInput) firstInvalidInput = document.getElementById('email');
       } else {
-        // ตรวจสอบการลงทะเบียนอีเมลซ้ำในระบบ
         let usersList = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
         
-        // ตรวจสอบบัญชีเริ่มต้นในระบบ
         if (!usersList.some(u => u.email.toLowerCase() === '67020001@up.ac.th')) {
           usersList.push({ email: '67020001@up.ac.th' });
         }
@@ -648,7 +626,6 @@
         }
       }
 
-      // 4. ตรวจสอบเงื่อนไขรหัสผ่าน
       const hasUpperCase = /[A-Z]/.test(password);
       const hasLowerCase = /[a-z]/.test(password);
       const hasNumbers = /[0-9]/.test(password);
@@ -664,7 +641,6 @@
         if (!firstInvalidInput) firstInvalidInput = document.getElementById('password');
       }
 
-      // 5. ตรวจสอบยืนยันรหัสผ่าน
       if (!confirmPassword) {
         showError('confirm-password', 'confirmPasswordError', 'กรุณากรอกยืนยันรหัสผ่าน');
         isValid = false;
@@ -680,7 +656,6 @@
         return;
       }
 
-      // บันทึกบัญชีใหม่ลงใน registeredUsers
       let usersList = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
       const newUser = {
         name: fullname,
@@ -691,7 +666,6 @@
       usersList.push(newUser);
       localStorage.setItem('registeredUsers', JSON.stringify(usersList));
 
-      // บันทึกสถานะผู้ใช้งานปัจจุบัน
       localStorage.setItem('currentUser', JSON.stringify(newUser));
       localStorage.setItem('userName', fullname);
       localStorage.setItem('userEmail', email);
