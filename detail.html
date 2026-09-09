@@ -683,6 +683,37 @@
       color: #334155;
     }
 
+    /* Owner Action Buttons */
+    .owner-actions-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .btn-edit-post {
+      background: #e0f2fe;
+      color: #0284c7;
+      border: 1px solid #7dd3fc;
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-edit-post:hover {
+      background: #bae6fd;
+      border-color: #38bdf8;
+      transform: translateY(-1px);
+    }
+
     .btn-delete-post {
       background: #fee2e2;
       color: #b91c1c;
@@ -692,13 +723,12 @@
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
-      width: 100%;
+      flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
       transition: all 0.2s ease;
-      margin-top: 6px;
     }
 
     .btn-delete-post:hover {
@@ -942,9 +972,15 @@
           รายละเอียดสิ่งของ
         </div>
         
-        <button type="button" class="btn-delete-post" id="btnDeletePost" onclick="deleteCurrentItem()" style="display: none;">
-          <i class="fa-solid fa-trash"></i> ลบโพสต์นี้
-        </button>
+        <!-- แถวปุ่มจัดการสำหรับเจ้าของโพสต์ (แก้ไข และ ลบ) -->
+        <div class="owner-actions-row" id="ownerActionsBox" style="display: none;">
+          <a href="#" id="btnEditPost" class="btn-edit-post">
+            <i class="fa-solid fa-pen-to-square"></i> แก้ไขโพสต์
+          </a>
+          <button type="button" class="btn-delete-post" id="btnDeletePost" onclick="deleteCurrentItem()">
+            <i class="fa-solid fa-trash"></i> ลบโพสต์นี้
+          </button>
+        </div>
       </div>
 
       <div class="claim-action-box" id="claimActionBox" style="display: none;">
@@ -1118,7 +1154,7 @@
       document.getElementById('detailLocation').textContent = item.location;
       document.getElementById('detailDescription').textContent = item.description || 'ไม่มีรายละเอียดเพิ่มเติม';
 
-      const posterName = item.poster || 'ณัฐพล ศรีสุข';
+      const posterName = item.poster || 'นพวรรณ คงพันธประเสริฐ';
       document.getElementById('posterName').textContent = posterName;
       document.getElementById('posterTimeAgo').textContent = getTimeAgo(item.timestamp);
 
@@ -1153,15 +1189,18 @@
         thumbContainer.appendChild(thumb);
       });
 
-      const currentUserName = localStorage.getItem('userName') || localStorage.getItem('currentUserName') || 'สมชาย';
+      const currentUserName = localStorage.getItem('currentUserName') || localStorage.getItem('userName') || localStorage.getItem('user_name') || 'นพวรรณ คงพันธประเสริฐ';
       const isOwner = (item.poster && item.poster.trim() === currentUserName.trim());
 
       const btnSecretBadge = document.getElementById('btnSecretBadge');
-      const btnDeletePost = document.getElementById('btnDeletePost');
+      const ownerActionsBox = document.getElementById('ownerActionsBox');
+      const btnEditPost = document.getElementById('btnEditPost');
       const claimBox = document.getElementById('claimActionBox');
 
       if (isOwner) {
-        btnDeletePost.style.display = 'flex';
+        ownerActionsBox.style.display = 'flex';
+        btnEditPost.href = `report.html?edit=${item.id}`; // ลิงก์ไปยังหน้าฟอร์มโพสต์เพื่อแก้ไข
+
         if (item.secretImage) {
           currentSecretImageUrl = item.secretImage;
           btnSecretBadge.style.display = 'flex';
@@ -1175,7 +1214,7 @@
           claimBox.style.display = 'flex';
         }
       } else {
-        btnDeletePost.style.display = 'none';
+        ownerActionsBox.style.display = 'none';
         btnSecretBadge.style.display = 'none';
 
         if (item.type === 'found' && statusText === 'อยู่ที่จุดรับฝาก') {

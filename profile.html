@@ -410,7 +410,6 @@
       display: flex;
       justify-content: flex-end;
       width: 100%;
-      padding-right: 0;
     }
 
     .btn-logout-red {
@@ -523,6 +522,124 @@
       color: #0f172a;
     }
 
+    /* Modal ป๊อปอัปยืนยันออกจากระบบสุดสวย */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-card {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 32px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 20px;
+      transform: scale(0.95);
+      transition: transform 0.3s ease;
+    }
+
+    .modal-overlay.active .modal-card {
+      transform: scale(1);
+    }
+
+    .modal-icon-box {
+      width: 64px;
+      height: 64px;
+      background: #fee2e2;
+      color: #dc2626;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15);
+    }
+
+    .modal-content-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .modal-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .modal-desc {
+      font-size: 14.5px;
+      color: #64748b;
+      line-height: 1.5;
+    }
+
+    .modal-actions-row {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+      margin-top: 8px;
+    }
+
+    .btn-modal-cancel {
+      flex: 1;
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-modal-cancel:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .btn-modal-confirm {
+      flex: 1;
+      background: #dc2626;
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+      transition: all 0.2s ease;
+    }
+
+    .btn-modal-confirm:hover {
+      background: #b91c1c;
+      transform: translateY(-1px);
+    }
+
     /* Footer */
     .footer {
       background: #ffffff;
@@ -606,7 +723,7 @@
           <span>โพสต์</span>
         </a>
 
-        <a href="profile.html" class="nav-profile">
+        <a href="profile.html" class="nav-profile active">
           <i class="fa-regular fa-user"></i>
           <span>Profile</span>
         </a>
@@ -638,7 +755,7 @@
             <div class="error-text" id="avatarError" style="display: none;">ขนาดไฟล์ภาพต้องไม่เกิน 5 MB</div>
 
             <div class="user-intro-info">
-              <h2 class="user-name-display" id="displayName">สมชาย</h2>
+              <h2 class="user-name-display" id="displayName">นพวรรณ คงพันธประเสริฐ</h2>
             </div>
           </div>
 
@@ -647,19 +764,19 @@
               
               <div class="form-group">
                 <label class="form-label">ชื่อ - นามสกุล</label>
-                <input type="text" class="form-input" id="nameInput" value="สมชาย" oninput="clearError('nameInput', 'nameError')">
+                <input type="text" class="form-input" id="nameInput" placeholder="กรอกชื่อ - นามสกุล" oninput="clearError('nameInput', 'nameError')">
                 <div class="error-text" id="nameError">กรุณากรอกชื่อ - นามสกุล</div>
               </div>
 
               <div class="form-group">
                 <label class="form-label">อีเมล</label>
-                <input type="email" class="form-input" id="emailInput" value="wawasundae@gmail.com" oninput="clearError('emailInput', 'emailError')">
+                <input type="email" class="form-input" id="emailInput" placeholder="กรอกอีเมล" oninput="clearError('emailInput', 'emailError')">
                 <div class="error-text" id="emailError">กรุณากรอกอีเมลให้ถูกต้อง</div>
               </div>
 
               <div class="form-group">
                 <label class="form-label">เบอร์โทรศัพท์</label>
-                <input type="tel" class="form-input" id="phoneInput" value="081-234-5678" oninput="clearError('phoneInput', 'phoneError')">
+                <input type="tel" class="form-input" id="phoneInput" placeholder="กรอกเบอร์โทรศัพท์" oninput="clearError('phoneInput', 'phoneError')">
                 <div class="error-text" id="phoneError">กรุณากรอกเบอร์โทรศัพท์</div>
               </div>
 
@@ -676,7 +793,7 @@
         </section>
 
         <div class="outside-actions-row">
-          <button type="button" class="btn-logout-red" onclick="handleLogout()">
+          <button type="button" class="btn-logout-red" onclick="openLogoutModal()">
             <i class="fa-solid fa-right-from-bracket"></i>
             <span>ออกจากระบบ</span>
           </button>
@@ -723,6 +840,23 @@
     </div>
   </main>
 
+  <!-- Modal กล่องยืนยันออกจากระบบ -->
+  <div class="modal-overlay" id="logoutModal">
+    <div class="modal-card">
+      <div class="modal-icon-box">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+      </div>
+      <div class="modal-content-group">
+        <div class="modal-title">ยืนยันการออกจากระบบ</div>
+        <div class="modal-desc">คุณต้องการออกจากระบบใช่หรือไม่?</div>
+      </div>
+      <div class="modal-actions-row">
+        <button type="button" class="btn-modal-cancel" onclick="closeLogoutModal()">ยกเลิก</button>
+        <button type="button" class="btn-modal-confirm" onclick="confirmLogout()">ออกจากระบบ</button>
+      </div>
+    </div>
+  </div>
+
   <footer class="footer">
     <div class="footer-inner">
       <div>
@@ -760,21 +894,29 @@
       }
     }
 
-    const userActivities = {
-      reportedItems: [
-        { id: 'wallet', title: 'กระเป๋าเงินหนังสีน้ำตาล', type: 'lost', status: 'Pending' },
-        { id: 'airpods', title: 'หูฟังไร้สาย สีขาว', type: 'found', status: 'Success' }
-      ],
-      claimRequests: [
-        { id: 'umbrella', title: 'ร่มพับลายตาราง', status: 'Under Review' },
-        { id: 'laptop', title: 'แล็ปท็อปสีเงิน', status: 'Completed' }
-      ]
-    };
-
     function updateStatsFromActivities() {
-      const lostCount = userActivities.reportedItems.filter(item => item.type === 'lost').length;
-      const foundCount = userActivities.reportedItems.filter(item => item.type === 'found').length;
-      const completedCount = userActivities.claimRequests.filter(item => item.status === 'Completed').length;
+      const storedItems = JSON.parse(localStorage.getItem('systemFoundItems') || '[]');
+      const currentUserName = localStorage.getItem('currentUserName') || localStorage.getItem('userName') || 'นพวรรณ คงพันธประเสริฐ';
+
+      let lostCount = 0;
+      let foundCount = 0;
+      let completedCount = 0;
+
+      storedItems.forEach(item => {
+        const isUserItem = !item.poster || item.poster === currentUserName;
+
+        if (isUserItem) {
+          if (item.type === 'lost') {
+            lostCount++;
+          } else if (item.type === 'found') {
+            foundCount++;
+          }
+        }
+
+        if (item.status === 'completed' || item.status === 'closed' || item.isResolved) {
+          completedCount++;
+        }
+      });
 
       document.getElementById('statLostCount').textContent = lostCount;
       document.getElementById('statFoundCount').textContent = foundCount;
@@ -782,21 +924,16 @@
     }
 
     function loadUserData() {
-      const savedName = localStorage.getItem('userName') || localStorage.getItem('currentUserName');
-      const savedEmail = localStorage.getItem('userEmail');
-      const savedPhone = localStorage.getItem('userPhone');
-      const savedAvatar = localStorage.getItem('userAvatar');
+      const savedName = localStorage.getItem('userName') || localStorage.getItem('currentUserName') || localStorage.getItem('user_name') || 'นพวรรณ คงพันธประเสริฐ';
+      const savedEmail = localStorage.getItem('userEmail') || localStorage.getItem('user_email') || '';
+      const savedPhone = localStorage.getItem('userPhone') || localStorage.getItem('user_phone') || '';
+      const savedAvatar = localStorage.getItem('userAvatar') || localStorage.getItem('user_avatar') || '';
 
-      if (savedName) {
-        document.getElementById('displayName').textContent = savedName;
-        document.getElementById('nameInput').value = savedName;
-      }
-      if (savedEmail) {
-        document.getElementById('emailInput').value = savedEmail;
-      }
-      if (savedPhone) {
-        document.getElementById('phoneInput').value = savedPhone;
-      }
+      document.getElementById('displayName').textContent = savedName;
+      document.getElementById('nameInput').value = savedName;
+      document.getElementById('emailInput').value = savedEmail;
+      document.getElementById('phoneInput').value = savedPhone;
+
       if (savedAvatar) {
         document.getElementById('avatarPreview').src = savedAvatar;
       }
@@ -816,18 +953,21 @@
       const phoneInput = document.getElementById('phoneInput');
 
       if (!nameInput.value.trim()) {
+        document.getElementById('nameError').textContent = 'กรุณากรอกชื่อ - นามสกุล';
         document.getElementById('nameError').style.display = 'block';
         nameInput.classList.add('error');
         isValid = false;
       }
 
       if (!emailInput.value.trim() || !emailInput.value.includes('@')) {
+        document.getElementById('emailError').textContent = 'กรุณากรอกอีเมลให้ถูกต้อง';
         document.getElementById('emailError').style.display = 'block';
         emailInput.classList.add('error');
         isValid = false;
       }
 
       if (!phoneInput.value.trim()) {
+        document.getElementById('phoneError').textContent = 'กรุณากรอกเบอร์โทรศัพท์';
         document.getElementById('phoneError').style.display = 'block';
         phoneInput.classList.add('error');
         isValid = false;
@@ -851,15 +991,27 @@
       setTimeout(() => {
         successText.style.display = 'none';
       }, 3000);
+
+      updateStatsFromActivities();
     }
 
-    function handleLogout() {
+    // ฟังก์ชันจัดการเปิด-ปิด Modal ยืนยันออกจากระบบ
+    function openLogoutModal() {
+      document.getElementById('logoutModal').classList.add('active');
+    }
+
+    function closeLogoutModal() {
+      document.getElementById('logoutModal').classList.remove('active');
+    }
+
+    function confirmLogout() {
       localStorage.removeItem('userAvatar');
       localStorage.removeItem('userName');
       localStorage.removeItem('currentUserName');
       localStorage.removeItem('userEmail');
       localStorage.removeItem('userPhone');
-      window.location.href = 'home.html';
+      localStorage.removeItem('isStaff');
+      window.location.href = 'login.html';
     }
 
     document.addEventListener('DOMContentLoaded', () => {
