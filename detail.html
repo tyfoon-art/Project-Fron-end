@@ -846,7 +846,7 @@
 
         <ul class="nav-menu">
           <li><a href="home.html" class="nav-link">Home</a></li>
-          <li><a href="browse.html" class="nav-link">ค้นหาสิ่งของ</a></li>
+          <li><a href="activity.html" class="nav-link">My Activity</a></li>
         </ul>
       </div>
 
@@ -875,7 +875,7 @@
     <ul class="breadcrumb-list">
       <li><a href="home.html">หน้าหลัก</a></li>
       <li class="separator"><i class="fa-solid fa-chevron-right"></i></li>
-      <li><a href="browse.html">ค้นหาสิ่งของ</a></li>
+      <li><a href="activity.html">My Activity</a></li>
       <li class="separator"><i class="fa-solid fa-chevron-right"></i></li>
       <li class="current">รายละเอียด</li>
     </ul>
@@ -1104,7 +1104,7 @@
 
       if (!item) {
         alert('ไม่พบข้อมูลรายการนี้ในระบบ');
-        window.location.href = 'browse.html';
+        window.location.href = 'activity.html';
         return;
       }
 
@@ -1287,7 +1287,7 @@
         storedItems = storedItems.filter(i => i.id !== itemId);
         localStorage.setItem('systemFoundItems', JSON.stringify(storedItems));
         
-        window.location.href = 'home.html';
+        window.location.href = 'activity.html';
       }
     }
 

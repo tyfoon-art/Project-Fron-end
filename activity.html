@@ -700,12 +700,10 @@
       const listContainer = document.getElementById('activityList');
       listContainer.innerHTML = '';
 
-      // ดึงชื่อบัญชีปัจจุบันที่กำลังล็อกอินอยู่จริง ๆ
       const currentUser = localStorage.getItem('currentUserName') || localStorage.getItem('userName') || localStorage.getItem('user_name') || '';
       const allItems = JSON.parse(localStorage.getItem('systemFoundItems') || '[]');
 
       if (tabType === 'reported') {
-        // กรองเฉพาะโพสต์ที่ผู้โพสต์ตรงกับชื่อบัญชีปัจจุบันแบบแม่นยำ
         const myPosts = allItems.filter(item => item.poster === currentUser);
 
         if (myPosts.length === 0) {
