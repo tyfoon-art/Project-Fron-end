@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lost & Found ICT - ลงทะเบียน</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Prompt', sans-serif;
+    }
+
+    input::-ms-reveal,
+    input::-ms-clear {
+      display: none;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 10% 20%, #eef4fc 0%, #dbe7f6 40%, #e6f0fa 90%);
+      padding: 32px 24px;
+    }
+
+    /* กล่องการ์ดหลัก ปรับขนาดให้กะทัดรัดและสมดุล */
+    .login-card {
+      display: flex;
+      width: 100%;
+      max-width: 1080px;
+      min-height: 620px;
+      background: #ffffff;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 15px 40px rgba(0, 45, 100, 0.12);
+      border: 1px solid #e2e8f0;
+    }
+
+    /* ฝั่งซ้าย: Banner */
+    .banner-side {
+      flex: 1.1;
+      background: linear-gradient(135deg, rgba(30, 79, 138, 0.9) 0%, rgba(12, 59, 112, 0.94) 60%, rgba(5, 38, 76, 0.98) 100%),
+                  url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1400&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      padding: 48px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: #ffffff;
+    }
+
+    .banner-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .banner-logo i {
+      font-size: 30px;
+    }
+
+    .banner-content h2 {
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 12px;
+      color: #ffffff;
+    }
+
+    .banner-content p {
+      font-size: 14px;
+      font-weight: 400;
+      color: #f1f5f9;
+      line-height: 1.6;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    /* ฝั่งขวา: ฟอร์ม */
+    .form-side {
+      flex: 1;
+      padding: 36px 44px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: #ffffff;
+    }
+
+    /* แถบแท็บด้านบน */
+    .nav-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 64px;
+      border-bottom: 1px solid #e2e8f0;
+      position: relative;
+      width: 100%;
+      flex-shrink: 0;
+    }
+
+    .nav-tab {
+      font-size: 16px;
+      color: #64748b;
+      text-decoration: none;
+      font-weight: 500;
+      position: relative;
+      padding-bottom: 12px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .nav-tab:hover {
+      color: #003b7a;
+    }
+
+    .nav-tab.active {
+      color: #003b7a;
+      font-weight: 600;
+    }
+
+    .nav-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: -8px;
+      width: calc(100% + 16px);
+      height: 3px;
+      background: #003b7a;
+      border-radius: 2px 2px 0 0;
+    }
+
+    /* กล่องฟอร์ม */
+    .form-content {
+      margin-top: 16px;
+      width: 100%;
+    }
+
+    .form-title-group {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .form-title-group h2 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #003b7a;
+      margin-bottom: 4px;
+    }
+
+    .form-title-group p {
+      font-size: 13px;
+      color: #64748b;
+      font-weight: 400;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-group-gender {
+      margin-bottom: 10px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 4px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-wrapper .input-icon-left {
+      position: absolute;
+      left: 14px;
+      font-size: 14px;
+      color: #94a3b8;
+      pointer-events: none;
+    }
+
+    .input-wrapper input {
+      width: 100%;
+      padding: 9px 36px 9px 38px;
+      font-size: 13.5px;
+      background-color: #f8faff;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      outline: none;
+      color: #1e293b;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .input-wrapper input.input-error {
+      border-color: #ef4444 !important;
+      background-color: #fffaf0;
+    }
+
+    .input-wrapper input::placeholder {
+      color: #94a3b8;
+      font-weight: 400;
+      font-size: 12.5px;
+    }
+
+    .input-wrapper input:focus {
+      background-color: #ffffff;
+      border-color: #003b7a;
+      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.1);
+    }
+
+    .error-hint {
+      display: none;
+      color: #ef4444;
+      font-size: 11.5px;
+      font-weight: 500;
+      margin-top: 2px;
+      padding-left: 2px;
+    }
+
+    .error-hint.show {
+      display: block;
+    }
+
+    /* Gender Options */
+    .gender-options {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+      padding: 2px 0;
+    }
+
+    .gender-radio {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 13.5px;
+      color: #334155;
+      font-weight: 500;
+      user-select: none;
+    }
+
+    .gender-radio input[type="radio"] {
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border: 1.5px solid #94a3b8;
+      border-radius: 50%;
+      outline: none;
+      cursor: pointer;
+      display: grid;
+      place-content: center;
+      transition: all 0.2s;
+    }
+
+    .gender-radio input[type="radio"]::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      transform: scale(0);
+      transition: 0.15s transform ease-in-out;
+      box-shadow: inset 1em 1em #003b7a;
+    }
+
+    .gender-radio input[type="radio"]:checked {
+      border-color: #003b7a;
+    }
+
+    .gender-radio input[type="radio"]:checked::before {
+      transform: scale(1);
+    }
+
+    .other-gender-wrapper {
+      display: none;
+      margin-top: 6px;
+    }
+
+    .other-gender-wrapper.active {
+      display: block;
+    }
+
+    .btn-toggle-password {
+      position: absolute;
+      right: 14px;
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 15px;
+      cursor: pointer;
+      padding: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.2s ease;
+    }
+
+    .btn-toggle-password:hover {
+      color: #003b7a;
+    }
+
+    /* ปุ่ม Submit */
+    .btn-login {
+      width: 100%;
+      padding: 11px;
+      margin-top: 16px;
+      background: #003b7a;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s, transform 0.1s;
+      box-shadow: 0 2px 8px rgba(0, 59, 122, 0.15);
+    }
+
+    .btn-login i {
+      font-size: 13px;
+      transition: transform 0.2s ease;
+    }
+
+    .btn-login:hover {
+      background: #002d5e;
+    }
+
+    .btn-login:hover i {
+      transform: translateX(3px);
+    }
+
+    .btn-login:active {
+      transform: scale(0.99);
+    }
+
+    @media (max-width: 900px) {
+      .login-card {
+        flex-direction: column;
+        max-width: 520px;
+        min-height: auto;
+      }
+      .banner-side {
+        min-height: 220px;
+        padding: 32px 24px;
+      }
+      .banner-logo {
+        font-size: 22px;
+      }
+      .banner-logo i {
+        font-size: 24px;
+      }
+      .form-side {
+        padding: 28px 24px;
+      }
+      .nav-tabs {
+        gap: 40px;
+      }
+      .banner-content h2 {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-card">
+    <div class="banner-side">
+      <div class="banner-logo">
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>Lost & Found ICT</span>
+      </div>
+      <div class="banner-content">
+        <h2>ค้นพบสิ่งที่หายไป<br>อย่างปลอดภัยและรวดเร็ว</h2>
+        <p>ระบบจัดการทรัพย์สินสูญหาย ICT พร้อมให้บริการช่วยเหลือและติดตามทรัพย์สินตลอดเวลา</p>
+      </div>
+    </div>
+
+    <div class="form-side">
+      <div class="nav-tabs">
+        <a href="login.html" class="nav-tab">เข้าสู่ระบบ</a>
+        <a href="register.html" class="nav-tab active">ลงทะเบียน</a>
+      </div>
+
+      <div class="form-content">
+        <div class="form-title-group">
+          <h2>สร้างบัญชีผู้ใช้</h2>
+          <p>ร่วมเป็นส่วนหนึ่งของสังคมแห่งการแบ่งปันและช่วยเหลือกัน</p>
+        </div>
+
+        <form id="registerForm" onsubmit="handleRegister(event)" novalidate>
+          
+          <div class="form-group">
+            <label for="fullname">ชื่อ-นามสกุล</label>
+            <div class="input-wrapper">
+              <i class="fa-regular fa-user input-icon-left"></i>
+              <input 
+                type="text" 
+                id="fullname" 
+                name="fullname" 
+                placeholder="John Doe" 
+                oninput="clearError('fullname', 'fullnameError')"
+              >
+            </div>
+            <div class="error-hint" id="fullnameError">
+              <i class="fa-solid fa-circle-exclamation"></i> กรุณากรอกชื่อ-นามสกุล
+            </div>
+          </div>
+
+          <div class="form-group form-group-gender">
+            <label>เพศ</label>
+            <div class="gender-options">
+              <label class="gender-radio">
+                <input type="radio" name="gender" value="male" checked onclick="handleGenderChange(this)">
+                <span>ชาย</span>
+              </label>
+              <label class="gender-radio">
+                <input type="radio" name="gender" value="female" onclick="handleGenderChange(this)">
+                <span>หญิง</span>
+              </label>
+              <label class="gender-radio">
+                <input type="radio" name="gender" value="other" id="genderOtherRadio" onclick="handleGenderChange(this)">
+                <span>อื่นๆ</span>
+              </label>
+            </div>
+
+            <div class="other-gender-wrapper" id="otherGenderWrapper">
+              <div class="input-wrapper" style="margin-top: 4px;">
+                <i class="fa-solid fa-pen input-icon-left"></i>
+                <input 
+                  type="text" 
+                  id="other_gender_text" 
+                  name="other_gender" 
+                  placeholder="ระบุเพศของคุณ" 
+                  oninput="this.value = this.value.replace(/[^a-zA-Zก-๙\s]/g, ''); clearError('other_gender_text', 'otherGenderError')"
+                >
+              </div>
+              <div class="error-hint" id="otherGenderError">
+                <i class="fa-solid fa-circle-exclamation"></i> กรุณาระบุเพศของคุณ
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">อีเมล</label>
+            <div class="input-wrapper">
+              <i class="fa-regular fa-envelope input-icon-left"></i>
+              <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                placeholder="xxxx@gmail.com หรือ xxxx@up.ac.th" 
+                oninput="clearError('email', 'emailError')"
+              >
+            </div>
+            <div class="error-hint" id="emailError">
+              <i class="fa-solid fa-circle-exclamation"></i> กรุณากรอกอีเมลให้ถูกต้อง
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">รหัสผ่าน</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-lock input-icon-left"></i>
+              <input 
+                type="password" 
+                id="password" 
+                name="password" 
+                placeholder="อย่างน้อย 8 ตัวอักษร (A-Z, a-z, 0-9)" 
+                oninput="clearError('password', 'passwordError')"
+              >
+              <button type="button" class="btn-toggle-password" onclick="togglePass('password', 'togglePassIcon1')" aria-label="Toggle password visibility">
+                <i class="fa-regular fa-eye" id="togglePassIcon1"></i>
+              </button>
+            </div>
+            <div class="error-hint" id="passwordError">
+              <i class="fa-solid fa-circle-exclamation"></i> รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร ประกอบด้วยตัวพิมพ์ใหญ่ ตัวพิมพ์เล็ก และตัวเลข
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="confirm-password">ยืนยันรหัสผ่าน</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-lock input-icon-left"></i>
+              <input 
+                type="password" 
+                id="confirm-password" 
+                name="confirm_password" 
+                placeholder="กรอกยืนยันรหัสผ่าน" 
+                oninput="clearError('confirm-password', 'confirmPasswordError')"
+              >
+              <button type="button" class="btn-toggle-password" onclick="togglePass('confirm-password', 'togglePassIcon2')" aria-label="Toggle confirm password visibility">
+                <i class="fa-regular fa-eye" id="togglePassIcon2"></i>
+              </button>
+            </div>
+            <div class="error-hint" id="confirmPasswordError">
+              <i class="fa-solid fa-circle-exclamation"></i> รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน
+            </div>
+          </div>
+
+          <button type="submit" class="btn-login">
+            <span>ลงทะเบียน</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function togglePass(inputId, iconId) {
+      const input = document.getElementById(inputId);
+      const icon = document.getElementById(iconId);
+      
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    }
+
+    function handleGenderChange(radio) {
+      const otherWrapper = document.getElementById('otherGenderWrapper');
+      const otherInput = document.getElementById('other_gender_text');
+      
+      if (radio.value === 'other') {
+        otherWrapper.classList.add('active');
+        otherInput.focus();
+      } else {
+        otherWrapper.classList.remove('active');
+        clearError('other_gender_text', 'otherGenderError');
+        otherInput.value = '';
+      }
+    }
+
+    function showError(inputId, errorId, msg) {
+      const input = document.getElementById(inputId);
+      const error = document.getElementById(errorId);
+      if (input) input.classList.add('input-error');
+      if (error) {
+        if (msg) error.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${msg}`;
+        error.classList.add('show');
+      }
+    }
+
+    function clearError(inputId, errorId) {
+      const input = document.getElementById(inputId);
+      const error = document.getElementById(errorId);
+      if (input) input.classList.remove('input-error');
+      if (error) error.classList.remove('show');
+    }
+
+    function handleRegister(event) {
+      event.preventDefault();
+
+      const fullname = document.getElementById('fullname').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
+      const gender = document.querySelector('input[name="gender"]:checked').value;
+      const otherGender = document.getElementById('other_gender_text').value.trim();
+
+      let isValid = true;
+      let firstInvalidInput = null;
+
+      if (!fullname) {
+        showError('fullname', 'fullnameError', 'กรุณากรอกชื่อ-นามสกุล');
+        isValid = false;
+        if (!firstInvalidInput) firstInvalidInput = document.getElementById('fullname');
+      }
+
+      if (gender === 'other' && !otherGender) {
+        showError('other_gender_text', 'otherGenderError', 'กรุณาระบุเพศของคุณ');
+        isValid = false;
+        if (!firstInvalidInput) firstInvalidInput = document.getElementById('other_gender_text');
+      }
+
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!email) {
+        showError('email', 'emailError', 'กรุณากรอกอีเมล');
+        isValid = false;
+        if (!firstInvalidInput) firstInvalidInput = document.getElementById('email');
+      } else if (!emailPattern.test(email)) {
+        showError('email', 'emailError', 'รูปแบบอีเมลไม่ถูกต้อง');
+        isValid = false;
+        if (!firstInvalidInput) firstInvalidInput = document.getElementById('email');
+      } else {
+        let usersList = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+        
+        if (!usersList.some(u => u.email.toLowerCase() === '67020001@up.ac.th')) {
+          usersList.push({ email: '67020001@up.ac.th' });
+        }
+        const singleEmail = localStorage.getItem('userEmail');
+        if (singleEmail && !usersList.some(u => u.email.toLowerCase() === singleEmail.toLowerCase())) {
+          usersList.push({ email: singleEmail });
+        }
+
+        const isDuplicate = usersList.some(user => user.email.toLowerCase() === email.toLowerCase());
+        if (isDuplicate) {
+          showError('email', 'emailError', 'อีเมลนี้ถูกใช้งานแล้ว กรุณาใช้อีเมลอื่นหรือเข้าสู่ระบบ');
+          isValid = false;
+          if (!firstInvalidInput) firstInvalidInput = document.getElementById('email');
+        }
+      }
+
+      const hasUpperCase = /[A-Z]/.test(password);
+      const hasLowerCase = /[a-z]/.test(password);
+      const hasNumbers = /[0-9]/.test(password);
+      const hasMinLength = password.length >= 8;
+
+      if (!password) {
+        showError('password', 'passwordError', 'กรุณากรอกรหัสผ่าน');
+        isValid = false;
+        if (!firstInvalidInput) firstInvalidInput = document.getElementById('password');
+      } else if (!hasMinLength || !hasUpperCase || !hasLowerCase || !hasNumbers) {
+        showError('password', 'passwordError', 'รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร ประกอบด้วยตัวพิมพ์ใหญ่ ตัวพิมพ์เล็ก และตัวเลข');
+        isValid = false;
+        if (!firstInvalidInput) firstInvalidInput = document.getElementById('password');
+      }
+
+      if (!confirmPassword) {
+        showError('confirm-password', 'confirmPasswordError', 'กรุณากรอกยืนยันรหัสผ่าน');
+        isValid = false;
+        if (!firstInvalidInput) firstInvalidInput = document.getElementById('confirm-password');
+      } else if (password !== confirmPassword) {
+        showError('confirm-password', 'confirmPasswordError', 'รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน');
+        isValid = false;
+        if (!firstInvalidInput) firstInvalidInput = document.getElementById('confirm-password');
+      }
+
+      if (!isValid) {
+        if (firstInvalidInput) firstInvalidInput.focus();
+        return;
+      }
+
+      let usersList = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+      const newUser = {
+        name: fullname,
+        email: email,
+        password: password,
+        gender: gender === 'other' ? otherGender : gender
+      };
+      usersList.push(newUser);
+      localStorage.setItem('registeredUsers', JSON.stringify(usersList));
+
+      localStorage.setItem('currentUser', JSON.stringify(newUser));
+      localStorage.setItem('userName', fullname);
+      localStorage.setItem('userEmail', email);
+
+      window.location.href = 'home.html';
+    }
+  </script>
+
+</body>
+</html>

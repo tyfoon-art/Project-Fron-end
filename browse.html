@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ค้นหารายการ - Lost & Found ICT</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Prompt', sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scrollbar-gutter: stable;
+    }
+
+    body {
+      background-color: #f8fafc;
+      color: #1e293b;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+      width: 100%;
+    }
+
+    .navbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+      padding: 0 32px;
+      max-width: 1400px;
+      margin: 0 auto;
+      gap: 24px;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #003b7a;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      flex-shrink: 0;
+    }
+
+    .nav-brand i {
+      font-size: 26px;
+      color: #003b7a;
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      color: #64748b;
+      transition: color 0.2s;
+      position: relative;
+      padding-bottom: 4px;
+      white-space: nowrap;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: #003b7a;
+      font-weight: 600;
+    }
+
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: #003b7a;
+      border-radius: 2px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .nav-search-form {
+      position: relative;
+      width: 280px;
+    }
+
+    .nav-search-box {
+      display: flex;
+      align-items: center;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 30px;
+      padding: 8px 16px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-search-box:focus-within {
+      background: #ffffff;
+      border-color: #003b7a;
+      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.1);
+    }
+
+    .nav-search-box i {
+      color: #64748b;
+      font-size: 14px;
+      margin-right: 8px;
+    }
+
+    .nav-search-box input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 14px;
+      color: #1e293b;
+    }
+
+    .btn-post {
+      background: #003b7a;
+      color: #ffffff;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0, 59, 122, 0.15);
+    }
+
+    .btn-post:hover {
+      background: #002d5e;
+      transform: translateY(-1px);
+    }
+
+    .nav-profile {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      color: #334155;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 6px 10px;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .nav-profile i {
+      font-size: 16px;
+      color: #64748b;
+    }
+
+    .nav-profile:hover {
+      background: #f1f5f9;
+      color: #003b7a;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb-container {
+      width: 100%;
+      padding: 24px 32px 0 32px;
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+    }
+
+    .breadcrumb-list {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      list-style: none;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .breadcrumb-list a {
+      text-decoration: none;
+      color: #64748b;
+      transition: color 0.2s ease;
+    }
+
+    .breadcrumb-list a:hover {
+      color: #003b7a;
+      text-decoration: underline;
+    }
+
+    .breadcrumb-list .separator {
+      color: #94a3b8;
+      font-size: 11px;
+    }
+
+    .breadcrumb-list .current {
+      color: #0f172a;
+      font-weight: 600;
+    }
+
+    /* Main Layout */
+    .browse-main {
+      flex: 1;
+      padding: 20px 32px 48px 32px;
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      gap: 28px;
+      align-items: flex-start;
+    }
+
+    /* Sidebar Filter */
+    .sidebar-filter {
+      width: 300px;
+      flex-shrink: 0;
+      background: #ffffff;
+      padding: 22px 20px;
+      border-radius: 16px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      position: sticky;
+      top: 92px;
+    }
+
+    .filter-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #0f172a;
+      letter-spacing: -0.3px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .filter-label {
+      font-size: 14px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .checkbox-list {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: #334155;
+      user-select: none;
+      transition: color 0.15s;
+    }
+
+    .checkbox-item:hover {
+      color: #003b7a;
+    }
+
+    .checkbox-item input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border: 1.5px solid #94a3b8;
+      border-radius: 5px;
+      outline: none;
+      cursor: pointer;
+      display: grid;
+      place-content: center;
+      transition: all 0.15s;
+    }
+
+    .checkbox-item input[type="checkbox"]:checked {
+      background-color: #003b7a;
+      border-color: #003b7a;
+    }
+
+    .checkbox-item input[type="checkbox"]:checked::before {
+      content: "\f00c";
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      font-size: 10px;
+      color: #ffffff;
+    }
+
+    .select-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+
+    .select-wrapper select {
+      width: 100%;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 9px 36px 9px 12px;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: #1e293b;
+      cursor: pointer;
+      outline: none;
+      appearance: none;
+      transition: border-color 0.2s;
+    }
+
+    .select-wrapper select:focus {
+      border-color: #003b7a;
+    }
+
+    .select-wrapper i {
+      position: absolute;
+      right: 12px;
+      font-size: 12px;
+      color: #64748b;
+      pointer-events: none;
+    }
+
+    .input-custom-wrapper {
+      width: 100%;
+    }
+
+    .input-custom-wrapper input {
+      width: 100%;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 9px 12px;
+      font-size: 13.5px;
+      font-weight: 400;
+      color: #1e293b;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .input-custom-wrapper input:focus {
+      border-color: #003b7a;
+      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.1);
+    }
+
+    .input-custom-wrapper input::placeholder {
+      color: #94a3b8;
+      font-size: 13px;
+    }
+
+    .btn-apply-filter {
+      background: #003b7a;
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 4px;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0, 59, 122, 0.15);
+    }
+
+    .btn-apply-filter:hover {
+      background: #002d5e;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 59, 122, 0.25);
+    }
+
+    /* Right Content Area */
+    .content-area {
+      flex: 1;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .results-summary-bar {
+      width: 100%;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 12px 20px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #0f172a;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Grid 3 คอลัมน์ */
+    .items-grid {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .item-card {
+      background: #ffffff;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      width: 100%;
+    }
+
+    .item-card.hidden {
+      display: none !important;
+    }
+
+    .item-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.07);
+    }
+
+    .item-image-wrapper {
+      position: relative;
+      width: 100%;
+      height: 200px;
+      background: #f8fafc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 4px;
+    }
+
+    .item-image-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+      transition: transform 0.3s ease;
+    }
+
+    .item-card:hover .item-image-wrapper img {
+      transform: scale(1.03);
+    }
+
+    /* Badges */
+    .item-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: #ffffff;
+    }
+
+    .item-badge.badge-new {
+      background: #22c55e;
+    }
+
+    .item-badge.badge-storage {
+      background: #0284c7;
+    }
+
+    .item-badge.badge-lost {
+      background: #fee2e2;
+      color: #dc2626;
+      border: 1px solid #fecaca;
+    }
+
+    .item-body {
+      padding: 18px 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+      background: #ffffff;
+    }
+
+    .item-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .item-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.3;
+    }
+
+    .item-category {
+      font-size: 13px;
+      color: #64748b;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    .item-meta {
+      font-size: 13px;
+      color: #475569;
+      font-weight: 400;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .item-meta span {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .item-meta span i {
+      font-size: 13px;
+      color: #003b7a;
+      width: 16px;
+      text-align: center;
+    }
+
+    .btn-detail {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      background: #f8fafc;
+      color: #003b7a;
+      border: 1px solid #cbd5e1;
+      padding: 9px 16px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-detail:hover {
+      background: #003b7a;
+      color: #ffffff;
+      border-color: #003b7a;
+      box-shadow: 0 2px 8px rgba(0, 59, 122, 0.15);
+    }
+
+    .btn-detail i {
+      font-size: 12px;
+      transition: transform 0.2s ease;
+    }
+
+    .btn-detail:hover i {
+      transform: translateX(3px);
+    }
+
+    .no-results {
+      grid-column: 1 / -1;
+      background: #ffffff;
+      border: 1px dashed #cbd5e1;
+      border-radius: 16px;
+      padding: 40px 20px;
+      text-align: center;
+      color: #64748b;
+      font-size: 15px;
+      font-weight: 600;
+      display: none;
+    }
+
+    .no-results i {
+      font-size: 36px;
+      color: #94a3b8;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    /* Footer */
+    .footer {
+      background: #ffffff;
+      border-top: 1px solid #e2e8f0;
+      margin-top: auto;
+      padding: 20px 0;
+      width: 100%;
+    }
+
+    .footer-inner {
+      padding: 0 32px;
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      color: #64748b;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 16px;
+    }
+
+    .footer-links a {
+      color: #64748b;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: #003b7a;
+    }
+
+    @media (max-width: 1200px) {
+      .items-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .navbar-inner, .breadcrumb-container, .browse-main, .footer-inner {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+      .browse-main {
+        flex-direction: column;
+        gap: 20px;
+      }
+      .sidebar-filter {
+        width: 100%;
+        position: static;
+      }
+      .items-grid {
+        grid-template-columns: 1fr;
+      }
+      .footer-inner {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+      }
+      .nav-search-form {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="nav-left">
+        <a href="home.html" class="nav-brand">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Lost & Found ICT</span>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="home.html" class="nav-link">Home</a></li>
+          <li><a href="activity.html" class="nav-link">My Activity</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-actions">
+        <form class="nav-search-form" onsubmit="event.preventDefault(); applyFilter();">
+          <div class="nav-search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="ค้นหารายการ...">
+          </div>
+        </form>
+
+        <a href="report.html" class="btn-post">
+          <i class="fa-solid fa-plus"></i>
+          <span>โพสต์</span>
+        </a>
+
+        <a href="profile.html" class="nav-profile">
+          <i class="fa-regular fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="breadcrumb-container">
+    <ul class="breadcrumb-list">
+      <li><a href="home.html">หน้าหลัก</a></li>
+      <li class="separator"><i class="fa-solid fa-chevron-right"></i></li>
+      <li class="current">ค้นหาสิ่งของ</li>
+    </ul>
+  </div>
+
+  <main class="browse-main">
+    
+    <aside class="sidebar-filter">
+      <h2 class="filter-title">ตัวกรองการค้นหา</h2>
+
+      <div class="filter-group">
+        <label class="filter-label">สถานะ</label>
+        <div class="checkbox-list">
+          <label class="checkbox-item">
+            <input type="checkbox" name="type_status" value="found" checked>
+            <span>ตามหาเจ้าของ</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="type_status" value="lost" checked>
+            <span>แจ้งหาย</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">หมวดหมู่</label>
+        <div class="checkbox-list">
+          <label class="checkbox-item">
+            <input type="checkbox" name="category" value="electronics">
+            <span>อุปกรณ์อิเล็กทรอนิกส์</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="category" value="Study Equipment">
+            <span>อุปกรณ์การเรียน</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="category" value="Bags & Keys">
+            <span>กระเป๋า/สัมภาระ/กุญแจ</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="category" value="Personal Items">
+            <span>ของใช้ส่วนตัว</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="category" value="Other">
+            <span>เอกสาร/บัตร/อื่นๆ</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">สถานะรายการ</label>
+        <div class="select-wrapper">
+          <select name="status_filter" id="statusFilter">
+            <option value="all">ทั้งหมดทุกสถานะ</option>
+            <option value="พบใหม่">พบใหม่</option>
+            <option value="อยู่ที่จุดรับฝาก">อยู่ที่จุดรับฝาก</option>
+            <option value="แจ้งหาย">แจ้งหาย</option>
+          </select>
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">วันที่</label>
+        <div class="select-wrapper">
+          <select name="date_filter" id="dateFilter">
+            <option value="all">ทั้งหมด</option>
+            <option value="today">วันนี้</option>
+            <option value="yesterday">เมื่อวานนี้</option>
+            <option value="7days">7 วันที่ผ่านมา</option>
+            <option value="30days">30 วันที่ผ่านมา</option>
+          </select>
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">สถานที่พบ</label>
+        <div class="select-wrapper">
+          <select name="location_filter" id="locationFilter" onchange="handleMainLocationChange()">
+            <option value="all">ทั้งหมด</option>
+            <option value="ห้องเรียน">ห้องเรียน</option>
+            <option value="โรงอาหาร">โรงอาหาร</option>
+            <option value="ห้องสาขา">ห้องสาขา</option>
+            <option value="ลานจอดรถ">ลานจอดรถ</option>
+          </select>
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+      </div>
+
+      <div class="filter-group" id="customClassroomGroup" style="display: none;">
+        <label class="filter-label">ระบุห้องเรียน</label>
+        <div class="input-custom-wrapper">
+          <input type="text" id="customClassroomInput" placeholder="เช่น ICT1102/1">
+        </div>
+      </div>
+
+      <div class="filter-group" id="customDepartmentGroup" style="display: none;">
+        <label class="filter-label">ระบุชื่อสาขา</label>
+        <div class="input-custom-wrapper">
+          <input type="text" id="customDepartmentInput" placeholder="เช่น วิศวกรรมซอฟต์แวร์">
+        </div>
+      </div>
+
+      <button type="button" class="btn-apply-filter" onclick="applyFilter()">นำไปใช้</button>
+    </aside>
+
+    <section class="content-area">
+      <div class="results-summary-bar">
+        <span id="resultCountText">พบ 0 รายการ</span>
+      </div>
+
+      <div class="items-grid" id="itemsGrid">
+        <!-- JavaScript เรนเดอร์รายการแบบ Real-time -->
+      </div>
+
+      <div class="no-results" id="noResults" style="display: none;">
+        <i class="fa-solid fa-box-open"></i>
+        <div>ไม่พบรายการที่ตรงกับเงื่อนไขการค้นหา</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <strong>Lost & Found ICT</strong> &copy; 2026 Lost & Found System. All rights reserved.
+      </div>
+      <div class="footer-links">
+        <a href="#">Contact Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const otherUsers = ['ณัฐพล ศรีสุข', 'กัญญา ใจดี', 'แสนดี ใจงาม', 'อารยา สายใจ'];
+
+    const defaultDatabaseItems = [
+      {
+        id: 'key1',
+        title: 'กุญแจรถ',
+        category: 'Bags & Keys',
+        location: 'ICT1102/1',
+        image: 'images/key.jpeg',
+        fallbackImage: 'https://images.unsplash.com/photo-1582139329536-e7284fece509?q=80&w=600&auto=format&fit=crop',
+        timestamp: new Date().toISOString(),
+        type: 'found',
+        status: 'พบใหม่',
+        poster: 'ณัฐพล ศรีสุข'
+      },
+      {
+        id: 'phone1',
+        title: 'โทรศัพท์มือถือ',
+        category: 'electronics',
+        location: 'ICT1111',
+        image: 'images/phone.jpeg',
+        fallbackImage: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=600&auto=format&fit=crop',
+        timestamp: new Date().toISOString(),
+        type: 'found',
+        status: 'พบใหม่',
+        poster: 'กัญญา ใจดี'
+      },
+      {
+        id: 'bottle1',
+        title: 'กระบอกน้ำเก็บความเย็น',
+        category: 'Personal Items',
+        location: 'โรงอาหาร ICT',
+        image: 'images/water-bottle.jpeg',
+        fallbackImage: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?q=80&w=600&auto=format&fit=crop',
+        timestamp: new Date(Date.now() - (48 * 60 * 60 * 1000)).toISOString(),
+        type: 'found',
+        status: 'อยู่ที่จุดรับฝาก',
+        poster: 'แสนดี ใจงาม'
+      },
+      {
+        id: 'glasses1',
+        title: 'แว่นตา',
+        category: 'Personal Items',
+        location: 'ห้องสาขาคอมพิวเตอร์กราฟิก',
+        image: 'images/glasses.jpeg',
+        fallbackImage: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?q=80&w=600&auto=format&fit=crop',
+        timestamp: new Date(Date.now() - (72 * 60 * 60 * 1000)).toISOString(),
+        type: 'lost',
+        status: 'แจ้งหาย',
+        poster: 'อารยา สายใจ'
+      }
+    ];
+
+    function getSystemItems() {
+      let stored = localStorage.getItem('systemFoundItems');
+      if (!stored) {
+        localStorage.setItem('systemFoundItems', JSON.stringify(defaultDatabaseItems));
+        return defaultDatabaseItems;
+      }
+      let items = JSON.parse(stored);
+      items = items.map(item => {
+        if (!item.poster || item.poster === 'สมชาย' || item.poster === 'ผู้ใช้งานอื่น') {
+          const randomIndex = Math.floor(Math.random() * otherUsers.length);
+          item.poster = otherUsers[randomIndex];
+        }
+        return item;
+      });
+      localStorage.setItem('systemFoundItems', JSON.stringify(items));
+      return items;
+    }
+
+    function formatThaiDate(isoDateString) {
+      const d = new Date(isoDateString);
+      const monthsThai = [
+        "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
+        "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."
+      ];
+      return `${d.getDate()} ${monthsThai[d.getMonth()]} ${d.getFullYear() + 543}`;
+    }
+
+    function renderBrowseItems() {
+      const items = getSystemItems();
+      const grid = document.getElementById('itemsGrid');
+      grid.innerHTML = '';
+
+      const now = new Date();
+      now.setHours(0, 0, 0, 0);
+
+      items.forEach(item => {
+        if (item.type === 'lost' && (item.status === 'completed' || item.status === 'closed' || item.isResolved)) {
+          return;
+        }
+
+        const itemDateNormalized = new Date(item.timestamp);
+        itemDateNormalized.setHours(0, 0, 0, 0);
+
+        const isToday = (itemDateNormalized.getTime() === now.getTime());
+
+        let statusText = '';
+        let badgeClass = '';
+        let badgeIcon = '';
+
+        if (item.type === 'lost') {
+          statusText = 'แจ้งหาย';
+          badgeClass = 'badge-lost';
+          badgeIcon = 'fa-regular fa-circle-xmark';
+        } else {
+          if (isToday && item.status !== 'อยู่ที่จุดรับฝาก') {
+            statusText = 'พบใหม่';
+            badgeClass = 'badge-new';
+            badgeIcon = 'fa-solid fa-sparkles';
+          } else {
+            statusText = 'อยู่ที่จุดรับฝาก';
+            badgeClass = 'badge-storage';
+            badgeIcon = 'fa-solid fa-box-archive';
+          }
+        }
+
+        const card = document.createElement('div');
+        card.className = 'item-card';
+        card.setAttribute('data-type', item.type || 'found');
+        card.setAttribute('data-category', item.category);
+        card.setAttribute('data-location', item.location);
+        card.setAttribute('data-date', item.timestamp.split('T')[0]);
+        card.setAttribute('data-status', statusText);
+        card.setAttribute('data-title', item.title);
+
+        card.innerHTML = `
+          <div class="item-image-wrapper">
+            <img src="${item.image}" alt="${item.title}" onerror="this.src='${item.fallbackImage || 'https://images.unsplash.com/photo-1582139329536-e7284fece509?q=80&w=600&auto=format&fit=crop'}">
+            <span class="item-badge ${badgeClass}">
+              <i class="${badgeIcon}"></i> ${statusText}
+            </span>
+          </div>
+          <div class="item-body">
+            <div class="item-info">
+              <h3 class="item-title">${item.title}</h3>
+              <div class="item-category">${getCategoryNameThai(item.category)}</div>
+              <div class="item-meta">
+                <span><i class="fa-regular fa-calendar"></i> ${formatThaiDate(item.timestamp)}</span>
+                <span><i class="fa-solid fa-location-dot"></i> ${item.location}</span>
+                <span style="font-size: 12px; color: #64748b; margin-top: 2px;"><i class="fa-regular fa-user" style="color: #64748b;"></i> ผู้โพสต์: ${item.poster}</span>
+              </div>
+            </div>
+            <a href="detail.html?id=${item.id}" class="btn-detail">
+              <span>ดูรายละเอียด</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function getCategoryNameThai(catKey) {
+      const map = {
+        'Bags & Keys': 'กระเป๋า/สัมภาระ/กุญแจ',
+        'electronics': 'อุปกรณ์อิเล็กทรอนิกส์',
+        'Study Equipment': 'อุปกรณ์การเรียน',
+        'Personal Items': 'ของใช้ส่วนตัว',
+        'Other': 'เอกสาร/บัตร/อื่นๆ'
+      };
+      return map[catKey] || catKey;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderBrowseItems();
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const searchQuery = urlParams.get('search');
+      if (searchQuery) {
+        document.getElementById('searchInput').value = searchQuery;
+      }
+      applyFilter();
+    });
+
+    function handleMainLocationChange() {
+      const mainLoc = document.getElementById('locationFilter').value;
+      const customClassroomGroup = document.getElementById('customClassroomGroup');
+      const customDepartmentGroup = document.getElementById('customDepartmentGroup');
+      const customClassroomInput = document.getElementById('customClassroomInput');
+      const customDepartmentInput = document.getElementById('customDepartmentInput');
+
+      customClassroomGroup.style.display = 'none';
+      customDepartmentGroup.style.display = 'none';
+      customClassroomInput.value = '';
+      customDepartmentInput.value = '';
+
+      if (mainLoc === 'ห้องเรียน') {
+        customClassroomGroup.style.display = 'flex';
+      } else if (mainLoc === 'ห้องสาขา') {
+        customDepartmentGroup.style.display = 'flex';
+      }
+    }
+
+    function applyFilter() {
+      const selectedTypes = Array.from(document.querySelectorAll('input[name="type_status"]:checked'))
+                                       .map(cb => cb.value);
+
+      const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked'))
+                                        .map(cb => cb.value);
+
+      const selectedStatus = document.getElementById('statusFilter').value;
+      const selectedDate = document.getElementById('dateFilter').value;
+      const mainLocation = document.getElementById('locationFilter').value;
+      const customClassroomText = document.getElementById('customClassroomInput').value.trim().toLowerCase();
+      const customDepartmentText = document.getElementById('customDepartmentInput').value.trim().toLowerCase();
+      const searchQuery = document.getElementById('searchInput').value.trim().toLowerCase();
+
+      const currentDate = new Date();
+      currentDate.setHours(0, 0, 0, 0);
+
+      const cards = document.querySelectorAll('.item-card');
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const cardType = card.getAttribute('data-type');
+        const cardCategory = card.getAttribute('data-category');
+        const cardLocation = card.getAttribute('data-location');
+        const cardLocationLower = cardLocation.toLowerCase();
+        const cardDateStr = card.getAttribute('data-date');
+        const cardStatus = card.getAttribute('data-status');
+        const cardTitle = card.getAttribute('data-title').toLowerCase();
+        
+        const cardDate = new Date(cardDateStr);
+        cardDate.setHours(0, 0, 0, 0);
+
+        const diffTime = currentDate - cardDate;
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+        const matchType = selectedTypes.length === 0 || selectedTypes.includes(cardType);
+        const matchCategory = selectedCategories.length === 0 || selectedCategories.includes(cardCategory);
+        const matchStatus = (selectedStatus === 'all') || (cardStatus === selectedStatus);
+
+        let matchDate = true;
+        if (selectedDate === 'today') {
+          matchDate = (diffDays === 0);
+        } else if (selectedDate === 'yesterday') {
+          matchDate = (diffDays === 1);
+        } else if (selectedDate === '7days') {
+          matchDate = (diffDays >= 0 && diffDays <= 7);
+        } else if (selectedDate === '30days') {
+          matchDate = (diffDays >= 0 && diffDays <= 30);
+        }
+
+        let matchLocation = true;
+        if (mainLocation === 'ห้องเรียน') {
+          if (customClassroomText !== '') {
+            matchLocation = cardLocationLower.includes(customClassroomText);
+          } else {
+            matchLocation = cardLocation.startsWith('ICT') || cardLocationLower.includes('ห้องเรียน');
+          }
+        } else if (mainLocation === 'ห้องสาขา') {
+          if (customDepartmentText !== '') {
+            matchLocation = cardLocationLower.includes(customDepartmentText);
+          } else {
+            matchLocation = cardLocationLower.includes('สาขา');
+          }
+        } else if (mainLocation !== 'all') {
+          matchLocation = cardLocationLower.includes(mainLocation.toLowerCase());
+        }
+
+        const matchSearch = searchQuery === '' || 
+                            cardTitle.includes(searchQuery) || 
+                            cardLocationLower.includes(searchQuery) || 
+                            (cardStatus && cardStatus.toLowerCase().includes(searchQuery));
+
+        if (matchType && matchCategory && matchStatus && matchDate && matchLocation && matchSearch) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      document.getElementById('resultCountText').textContent = `พบ ${visibleCount} รายการ`;
+
+      const noResultsBox = document.getElementById('noResults');
+      if (noResultsBox) {
+        noResultsBox.style.display = (visibleCount === 0) ? 'block' : 'none';
+      }
+    }
+  </script>
+
+</body>
+</html>

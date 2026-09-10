@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>โปรไฟล์เจ้าหน้าที่ - Lost & Found ICT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Prompt"', 'sans-serif'],
+                        brand: ['"Prompt"', 'sans-serif'],
+                    },
+                    colors: {
+                        ict: {
+                            blue: '#034383',
+                            hover: '#022e5b',
+                            lightBg: '#F8F9FC',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Prompt', sans-serif; }
+    </style>
+</head>
+<body class="bg-ict-lightBg text-gray-800 flex min-h-screen text-xs font-sans">
+
+    <!-- ============================================= -->
+    <!-- Sidebar ด้านซ้าย (ตรงตามโครงสร้างวิดีโอ) -->
+    <!-- ============================================= -->
+    <aside class="w-64 bg-white border-r border-gray-200 flex flex-col justify-between p-5 flex-shrink-0 min-h-screen shadow-sm">
+        <div class="space-y-6">
+            
+            <!-- โลโก้ระบบ -->
+            <a href="staff-dashboard.html" class="flex items-center gap-3 px-2 hover:opacity-80 transition">
+                <svg class="w-8 h-8 text-ict-blue flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
+                    <path d="M3.8 12.8v3.7c0 2.2 3.7 4 8.2 4s8.2-1.8 8.2-4v-3.7l-8.2 4.5-8.2-4.5z"/>
+                </svg>
+                <div>
+                    <h1 class="text-lg font-extrabold text-ict-blue leading-tight">Lost &amp; Found ICT</h1>
+                    <p class="text-[11px] text-gray-400 font-medium">ระบบเจ้าหน้าที่ (Staff)</p>
+                </div>
+            </a>
+
+            <!-- รายการเมนู Navigation -->
+            <nav class="space-y-1 font-semibold text-xs">
+                <a href="staff-dashboard.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-ict-blue transition">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+                    </svg>
+                    <span>แดชบอร์ดภาพรวม</span>
+                </a>
+
+                <a href="staff-inventory-add.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-ict-blue transition">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                    </svg>
+                    <span>รายการสิ่งของทั้งหมด</span>
+                </a>
+
+                <a href="staff-verify-claims.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-ict-blue transition">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span>ตรวจสอบคำร้อง</span>
+                </a>
+
+                <a href="staff-handover.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-ict-blue transition">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                    </svg>
+                    <span>ส่งคืนเจ้าของ</span>
+                </a>
+
+                <a href="staff-overdue-list.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-ict-blue transition">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    </svg>
+                    <span>รายการสิ่งของตกค้าง</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- ปุ่มด้านล่าง Sidebar -->
+        <div class="space-y-3 pt-4 border-t border-gray-100">
+            <a href="staff-inventory-add.html" class="w-full bg-ict-blue hover:bg-ict-hover text-white font-semibold text-xs py-3 px-4 rounded-full flex items-center justify-center gap-2 shadow-sm transition">
+                <span class="text-base font-bold">+</span>
+                <span>แจ้งพบสิ่งของ</span>
+            </a>
+
+            <!-- โปรไฟล์เจ้าหน้าที่ (Active) -->
+            <a href="staff-profile.html" class="flex items-center gap-3 px-4 py-2.5 text-xs text-ict-blue bg-blue-50/80 font-bold rounded-xl transition">
+                <svg class="w-4 h-4 text-ict-blue" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                </svg>
+                <span>โปรไฟล์</span>
+            </a>
+
+            <a href="login.html" onclick="return confirm('คุณต้องการออกจากระบบหรือไม่?')" class="flex items-center gap-3 px-4 py-2 text-xs text-red-500 hover:text-red-600 font-semibold transition">
+                <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                </svg>
+                <span>ออกจากระบบ</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- ============================================= -->
+    <!-- Content หลัก (ข้อมูลส่วนตัวเจ้าหน้าที่) -->
+    <!-- ============================================= -->
+    <main class="flex-1 p-8 overflow-y-auto">
+        <div class="max-w-4xl mx-auto space-y-6">
+
+            <!-- ส่วนหัวข้อหลัก -->
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900 tracking-tight">ข้อมูลส่วนตัวเจ้าหน้าที่</h1>
+                <p class="text-xs text-gray-500 font-medium mt-0.5">จัดการรายละเอียดบัญชีและการตั้งค่าของคุณ</p>
+            </div>
+
+            <!-- การ์ดฟอร์มข้อมูลส่วนตัว -->
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-6">
+                
+                <!-- รูปโปรไฟล์ + ชื่อ -->
+                <div class="flex items-center gap-4">
+                    <div class="relative">
+                        <div class="w-16 h-16 rounded-full overflow-hidden ring-4 ring-gray-100">
+                            <img id="main-avatar" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80" alt="รูปโปรไฟล์" class="w-full h-full object-cover">
+                        </div>
+                        
+                        <input type="file" id="profile-image-input" accept="image/*" class="hidden">
+                        
+                        <button id="change-photo-btn" type="button" title="เปลี่ยนรูปโปรไฟล์" class="absolute bottom-0 right-0 bg-ict-blue text-white p-1.5 rounded-full shadow-md hover:bg-ict-hover transition cursor-pointer border-2 border-white">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div>
+                        <h2 class="text-lg font-bold text-gray-900 leading-tight">somying</h2>
+                        <span class="inline-block mt-1 text-[11px] font-semibold text-ict-blue bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-100">
+                            เจ้าหน้าที่ (Staff)
+                        </span>
+                    </div>
+                </div>
+
+                <!-- ฟอร์มกรอกข้อมูล -->
+                <form class="space-y-4 text-xs" onsubmit="event.preventDefault();">
+                    <div>
+                        <label class="block font-semibold text-gray-700 mb-1">ชื่อ - นามสกุล</label>
+                        <input type="text" value="somying" class="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-3.5 py-2.5 text-gray-800 focus:outline-none focus:ring-2 focus:ring-ict-blue/20 focus:bg-white transition">
+                    </div>
+
+                    <div>
+                        <label class="block font-semibold text-gray-700 mb-1">อีเมล</label>
+                        <input type="email" value="somying@gmail.ac.th" class="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-3.5 py-2.5 text-gray-800 focus:outline-none focus:ring-2 focus:ring-ict-blue/20 focus:bg-white transition">
+                    </div>
+
+                    <div>
+                        <label class="block font-semibold text-gray-700 mb-1">เบอร์โทรศัพท์</label>
+                        <input type="text" value="081-234-5678" class="w-full bg-gray-50/50 border border-gray-200 rounded-xl px-3.5 py-2.5 text-gray-800 focus:outline-none focus:ring-2 focus:ring-ict-blue/20 focus:bg-white transition">
+                    </div>
+
+                    <div class="flex justify-end pt-2">
+                        <button type="submit" class="bg-ict-blue hover:bg-ict-hover text-white font-semibold text-xs px-5 py-2.5 rounded-xl shadow-sm transition flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l7-7a1 1 0 00-1.414-1.414L10 12.586l-2.293-2.293z"/>
+                                <path d="M3 5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5z"/>
+                            </svg>
+                            บันทึกข้อมูล
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- ปุ่มออกจากระบบด้านล่าง -->
+            <div class="flex justify-end">
+                <a href="login.html" onclick="return confirm('คุณต้องการออกจากระบบหรือไม่?')" class="bg-red-600 hover:bg-red-700 text-white font-semibold text-xs px-5 py-2.5 rounded-xl shadow-sm transition flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                    </svg>
+                    ออกจากระบบ
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- สคริปต์สำหรับเปลี่ยนรูปโปรไฟล์ -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const changeBtn = document.getElementById('change-photo-btn');
+            const fileInput = document.getElementById('profile-image-input');
+            const mainAvatar = document.getElementById('main-avatar');
+
+            // โหลดรูปจาก localStorage (ถ้ามี)
+            const savedAvatar = localStorage.getItem('staffProfileAvatar');
+            if (savedAvatar) {
+                mainAvatar.src = savedAvatar;
+            }
+
+            changeBtn.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const newImageDataUrl = event.target.result;
+                        mainAvatar.src = newImageDataUrl;
+                        localStorage.setItem('staffProfileAvatar', newImageDataUrl);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

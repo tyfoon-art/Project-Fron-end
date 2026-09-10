@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รายละเอียดการตรวจสอบคำร้อง - Lost & Found ICT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        brand: ['"Prompt"', 'sans-serif'],
+                        body: ['"Prompt"', 'sans-serif'],
+                        sans: ['"Prompt"', 'sans-serif'],
+                    },
+                    colors: {
+                        ict: {
+                            blue: '#034383',
+                            hover: '#022e5b',
+                            lightBg: '#F4F7F9',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Prompt', sans-serif; }
+        .font-brand { font-family: 'Prompt', sans-serif; letter-spacing: -0.02em; }
+    </style>
+</head>
+<body class="bg-ict-lightBg text-gray-800 flex h-screen overflow-hidden font-sans text-xs">
+
+    <!-- Sidebar ด้านซ้าย -->
+    <aside class="w-64 bg-white border-r border-gray-100 flex flex-col justify-between p-5 flex-shrink-0 shadow-sm">
+        <div class="space-y-6">
+            <a href="staff-dashboard.html" class="border-b border-gray-100 pb-4 block hover:opacity-80 transition">
+                <div class="flex items-center gap-2.5">
+                    <svg class="w-7 h-7 text-ict-blue flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
+                        <path d="M3.8 12.8v3.7c0 2.2 3.7 4 8.2 4s8.2-1.8 8.2-4v-3.7l-8.2 4.5-8.2-4.5z"/>
+                    </svg>
+                    <div class="font-brand font-extrabold text-ict-blue text-lg leading-tight tracking-tight">
+                        Lost <span class="font-extrabold">&amp;</span> Found ICT
+                    </div>
+                </div>
+                <p class="text-[10px] text-gray-400 font-normal mt-1 pl-9">Staff Management Console</p>
+            </a>
+
+            <a href="staff-inventory-add.html" class="w-full bg-ict-blue hover:bg-ict-hover text-white font-semibold text-xs py-3 px-4 rounded-xl flex items-center justify-center gap-2 shadow-sm transition">
+                <span class="text-base leading-none">+</span> บันทึกพบของใหม่
+            </a>
+
+            <nav class="space-y-1 text-xs">
+                <a href="staff-dashboard.html" class="flex items-center gap-3 px-3.5 py-2.5 font-medium text-gray-600 hover:bg-gray-50 rounded-xl transition">
+                    <svg class="w-5 h-5 opacity-70" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v14a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4z"/>
+                    </svg>
+                    แดชบอร์ด
+                </a>
+
+                <a href="staff-inventory-add.html" class="flex items-center gap-3 px-3.5 py-2.5 font-medium text-gray-600 hover:bg-gray-50 rounded-xl transition">
+                    <svg class="w-5 h-5 opacity-70" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                    </svg>
+                    รายการสิ่งของ
+                </a>
+
+                <a href="staff-verify-claims.html" class="flex items-center gap-3 px-3.5 py-2.5 font-bold text-ict-blue bg-blue-50/80 rounded-xl transition">
+                    <svg class="w-5 h-5 text-ict-blue" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                    </svg>
+                    ตรวจสอบคำร้อง
+                </a>
+
+                <a href="staff-handover.html" class="flex items-center gap-3 px-3.5 py-2.5 font-medium text-gray-600 hover:bg-gray-50 rounded-xl transition">
+                    <svg class="w-5 h-5 opacity-70" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5a1.5 1.5 0 013 0v6.5m0-6.5a1.5 1.5 0 013 0V11"/>
+                    </svg>
+                    ส่งคืนเจ้าของ
+                </a>
+
+                <a href="staff-overdue-list.html" class="flex items-center gap-3 px-3.5 py-2.5 font-medium text-gray-600 hover:bg-gray-50 rounded-xl transition">
+                    <svg class="w-5 h-5 opacity-70" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    </svg>
+                    รายการสิ่งของตกค้าง
+                </a>
+            </nav>
+        </div>
+
+        <div class="pt-2 border-t border-gray-100 space-y-1">
+            <a href="staff-profile.html" class="flex items-center gap-2.5 px-3.5 py-2 text-xs font-medium text-gray-600 hover:bg-gray-50 rounded-xl transition">
+                <svg class="w-4 h-4 opacity-80 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                </svg>
+                <span>โปรไฟล์</span>
+            </a>
+
+            <a href="login.html" onclick="return confirm('คุณต้องการออกจากระบบหรือไม่?')" class="flex items-center gap-2.5 px-3.5 py-2 text-xs font-medium text-red-500 hover:bg-red-50 rounded-xl transition">
+                <svg class="w-4 h-4 opacity-80 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                </svg>
+                <span>ออกจากระบบ</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content ด้านขวา -->
+    <main class="flex-1 overflow-y-auto p-8 flex flex-col justify-between">
+        <div class="max-w-7xl mx-auto space-y-6 w-full pb-10">
+
+            <!-- Back Button & Page Header -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <a href="staff-verify-claims.html" class="text-ict-blue font-semibold hover:underline inline-flex items-center gap-1 text-xs mb-1 transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                        ย้อนกลับไปรายการคำร้อง
+                    </a>
+                    <h1 class="text-2xl font-bold text-gray-900 flex items-center gap-3">
+                        รายละเอียดการตรวจสอบคำร้อง 
+                        <span class="font-mono text-base font-semibold text-gray-500">#CLM-24-0891</span>
+                    </h1>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium bg-amber-50 text-amber-700 rounded-full border border-amber-200">
+                        <span class="w-2 h-2 bg-amber-500 rounded-full"></span>
+                        รอการตรวจสอบ
+                    </span>
+                </div>
+            </div>
+
+            <!-- Content Grid 3 Columns (2:1 Layout) -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+                <!-- Left Column (2/3 Width) -->
+                <div class="lg:col-span-2 space-y-6">
+
+                    <!-- Card 1: ข้อมูลสิ่งของที่พบ VS ข้อมูลผู้ขอรับคืน -->
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-5">
+                        <h2 class="font-bold text-sm text-gray-900 border-b border-gray-100 pb-3 flex items-center gap-2">
+                            <svg class="w-4 h-4 text-ict-blue" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            เปรียบเทียบข้อมูลคำร้อง
+                        </h2>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <!-- สิ่งของในระบบ -->
+                            <div class="bg-gray-50 p-4 rounded-xl border border-gray-100 space-y-2">
+                                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">ข้อมูลสิ่งของในระบบ (Inventory)</span>
+                                <p class="font-bold text-gray-900 text-sm pb-1 border-b border-gray-200/60">MacBook Pro 16" (Silver)</p>
+                                <div class="space-y-1 text-gray-600 pt-1">
+                                    <p><span class="text-gray-400">หมวดหมู่:</span> อุปกรณ์อิเล็กทรอนิกส์</p>
+                                    <p><span class="text-gray-400">สถานที่พบ:</span> ห้องปฏิบัติการคอมพิวเตอร์ 402</p>
+                                    <p><span class="text-gray-400">วันที่พบ:</span> 20 ต.ค. 2024 (14:30 น.)</p>
+                                    <p><span class="text-gray-400">ผู้บันทึก:</span> เจ้าหน้าที่ สมศักดิ์ (Staff)</p>
+                                </div>
+                            </div>
+
+                            <!-- ผู้ขอรับคืน -->
+                            <div class="bg-blue-50/40 p-4 rounded-xl border border-blue-100/60 space-y-2">
+                                <span class="text-[10px] font-bold text-ict-blue uppercase tracking-wider block mb-1">ข้อมูลผู้ยื่นคำร้อง (Claimant)</span>
+                                <p class="font-bold text-gray-900 text-sm pb-1 border-b border-blue-100">นายสมชาย ใจดี</p>
+                                <div class="space-y-1 text-gray-600 pt-1">
+                                    <p><span class="text-gray-400">รหัสนิสิต:</span> 6501091223</p>
+                                    <p><span class="text-gray-400">คณะ/สาขา:</span> เทคโนโลยีสารสนเทศและการสื่อสาร</p>
+                                    <p><span class="text-gray-400">เบอร์โทรศัพท์:</span> 081-234-5678</p>
+                                    <p><span class="text-gray-400">อีเมล:</span> somchai.j@up.ac.th</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- รายละเอียดคำอธิบายของผู้ขอรับคืน -->
+                        <div class="space-y-2 pt-2">
+                            <p class="font-semibold text-gray-800">รายละเอียดคำอธิบายยืนยันตัวตนจากผู้ยื่นคำร้อง:</p>
+                            <div class="bg-gray-50 p-4 rounded-xl border border-gray-100 text-gray-700 leading-relaxed">
+                                "ทำเครื่องหายไว้ช่วงบารมีคาเฟ่/แล็บ 402 ครับ ตัวเครื่องเป็น MacBook Pro 16 นิ้ว สีเงิน ติดสติ๊กเกอร์ React สีฟ้าที่มุมขวาบนของฝาหลัง รหัสผ่านปลดล็อกหน้าจอขึ้นต้นด้วยเลข 95xx ครับ มีรอยถลอกเล็กน้อยที่มุมเครื่องด้านซ้าย"
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: หลักฐานที่แนบมา (Proof Documents) -->
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
+                        <h2 class="font-bold text-sm text-gray-900 border-b border-gray-100 pb-3 flex items-center gap-2">
+                            <svg class="w-4 h-4 text-ict-blue" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                            หลักฐานแนบยืนยัน (Uploaded Proof Files)
+                        </h2>
+
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                            <div class="group relative aspect-video bg-gray-50 rounded-xl overflow-hidden border border-gray-200 flex items-center justify-center cursor-pointer hover:border-ict-blue transition">
+                                <div class="text-center p-2">
+                                    <p class="text-xl mb-1">📷</p>
+                                    <p class="text-[11px] text-gray-600 font-medium">รูปภาพใบเสร็จ/กล่อง.jpg</p>
+                                </div>
+                                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-medium text-xs">
+                                    คลิกเพื่อดูรูปใหญ่
+                                </div>
+                            </div>
+
+                            <div class="group relative aspect-video bg-gray-50 rounded-xl overflow-hidden border border-gray-200 flex items-center justify-center cursor-pointer hover:border-ict-blue transition">
+                                <div class="text-center p-2">
+                                    <p class="text-xl mb-1">📱</p>
+                                    <p class="text-[11px] text-gray-600 font-medium">ภาพหน้าจอ_FindMy.png</p>
+                                </div>
+                                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-medium text-xs">
+                                    คลิกเพื่อดูรูปใหญ่
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Right Column (1/3 Width) -->
+                <div class="space-y-6">
+
+                    <!-- Card 3: แบบฟอร์มการพิจารณาและจัดการคำร้อง (Actions) -->
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
+                        <h2 class="font-bold text-sm text-gray-900 border-b border-gray-100 pb-3 flex items-center gap-2">
+                            <svg class="w-4 h-4 text-ict-blue" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            ผลการพิจารณาคำร้อง
+                        </h2>
+
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-gray-600 font-semibold mb-1 text-[11px]">เจ้าหน้าที่ผู้ตรวจสอบ:</label>
+                                <input type="text" value="เจ้าหน้าที่ ณัฐพล (ผู้ดูแลระบบ)" disabled class="w-full bg-gray-100 border border-gray-200 rounded-xl px-3 py-2 text-xs text-gray-500 cursor-not-allowed">
+                            </div>
+
+                            <div>
+                                <label class="block text-gray-600 font-semibold mb-1 text-[11px]">หมายเหตุ / ข้อความถึงผู้ยื่นคำร้อง:</label>
+                                <textarea rows="4" placeholder="ระบุเหตุผลในการอนุมัติ ปฏิเสธ หรือขอข้อมูลเพิ่มเติม..." class="w-full border border-gray-200 rounded-xl p-3 text-xs outline-none focus:ring-2 focus:ring-ict-blue transition resize-none"></textarea>
+                            </div>
+
+                            <div class="pt-2 space-y-2">
+                                <button onclick="alert('อนุมัติคำร้องเรียบร้อยแล้ว ระบบได้ส่งการแจ้งเตือนไปยังผู้รับคืน'); location.href='staff-handover.html';" class="w-full bg-ict-blue hover:bg-ict-hover text-white font-semibold py-2.5 px-4 rounded-xl shadow-sm transition flex items-center justify-center gap-2 text-xs">
+                                    <span>✓</span> อนุมัติคำร้อง (Approve)
+                                </button>
+
+                                <button onclick="alert('ส่งคำขอข้อมูลเพิ่มเติมไปยังผู้ยื่นคำร้องแล้ว');" class="w-full bg-amber-50 hover:bg-amber-100 text-amber-700 font-semibold py-2.5 px-4 rounded-xl border border-amber-200 transition text-xs">
+                                    ขอข้อมูลเพิ่มเติม (Request Info)
+                                </button>
+
+                                <button onclick="if(confirm('ยืนยันที่จะปฏิเสธคำร้องนี้หรือไม่?')) { alert('ปฏิเสธคำร้องเรียบร้อยแล้ว'); location.href='staff-verify-claims.html'; }" class="w-full text-red-500 hover:bg-red-50 font-semibold py-2.5 px-4 rounded-xl border border-red-100 transition text-xs">
+                                    ปฏิเสธคำร้อง (Reject)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: ประวัติการดำเนินการ (Audit Logs) -->
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-3">
+                        <h2 class="font-bold text-xs text-gray-900 border-b border-gray-100 pb-2">ประวัติกิจกรรม (Activity Log)</h2>
+                        <div class="space-y-3 text-[11px]">
+                            <div class="flex gap-2.5">
+                                <span class="w-2 h-2 rounded-full bg-ict-blue mt-1 flex-shrink-0"></span>
+                                <div>
+                                    <p class="font-semibold text-gray-800">ยื่นคำร้องขอรับคืนสำเร็จ</p>
+                                    <p class="text-[10px] text-gray-400">24 ต.ค. 2024 - 09:15 น.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-2.5 opacity-60">
+                                <span class="w-2 h-2 rounded-full bg-gray-300 mt-1 flex-shrink-0"></span>
+                                <div>
+                                    <p class="font-semibold text-gray-800">บันทึกของพบเข้าสู่ระบบ</p>
+                                    <p class="text-[10px] text-gray-400">20 ต.ค. 2024 - 14:30 น.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+</body>
+</html>

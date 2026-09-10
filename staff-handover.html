@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>บันทึกการส่งมอบ (Handover Record) - Lost & Found ICT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Prompt"', 'sans-serif'],
+                        brand: ['"Prompt"', 'sans-serif'],
+                    },
+                    colors: {
+                        ict: {
+                            blue: '#034383',
+                            btnBlue: '#0062cc',
+                            hover: '#022e5b',
+                            lightBg: '#F4F7F9',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Prompt', sans-serif; }
+    </style>
+</head>
+<body class="bg-ict-lightBg text-gray-800 flex min-h-screen font-sans">
+
+    
+    <aside class="w-64 bg-white border-r border-gray-200 flex flex-col justify-between p-5 flex-shrink-0 min-h-screen shadow-sm">
+        <div class="space-y-6">
+            
+            <!-- โลโก้ระบบ -->
+            <a href="staff-dashboard.html" class="flex items-center gap-3 px-2 hover:opacity-80 transition">
+                <svg class="w-8 h-8 text-ict-blue flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
+                    <path d="M3.8 12.8v3.7c0 2.2 3.7 4 8.2 4s8.2-1.8 8.2-4v-3.7l-8.2 4.5-8.2-4.5z"/>
+                </svg>
+                <div>
+                    <h1 class="text-lg font-extrabold text-ict-blue leading-tight">Lost &amp; Found ICT</h1>
+                    <p class="text-[11px] text-gray-400 font-medium">ระบบเจ้าหน้าที่ (Staff)</p>
+                </div>
+            </a>
+
+            <!-- รายการเมนู Navigation -->
+            <nav class="space-y-1 font-semibold text-xs">
+                <a href="staff-dashboard.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-ict-blue transition">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+                    </svg>
+                    <span>แดชบอร์ดภาพรวม</span>
+                </a>
+
+                <a href="staff-inventory-add.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-ict-blue transition">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                    </svg>
+                    <span>รายการสิ่งของทั้งหมด</span>
+                </a>
+
+                <a href="staff-verify-claims.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-ict-blue transition">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span>ตรวจสอบคำร้อง</span>
+                </a>
+
+                <!-- แท็บส่งคืนเจ้าของ (Active) -->
+                <a href="staff-handover.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-blue-50 text-ict-blue font-bold transition shadow-sm">
+                    <svg class="w-4 h-4 text-ict-blue" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                    </svg>
+                    <span>ส่งคืนเจ้าของ</span>
+                </a>
+
+                <a href="staff-overdue-list.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-ict-blue transition">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    </svg>
+                    <span>รายการสิ่งของตกค้าง</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- ปุ่มด้านล่าง Sidebar -->
+        <div class="space-y-3 pt-4 border-t border-gray-100">
+            <a href="staff-inventory-add.html" class="w-full bg-ict-blue hover:bg-ict-hover text-white font-semibold text-xs py-3 px-4 rounded-full flex items-center justify-center gap-2 shadow-sm transition">
+                <span class="text-base font-bold">+</span>
+                <span>แจ้งพบของหาย</span>
+            </a>
+
+            <a href="staff-profile.html" class="flex items-center gap-3 px-4 py-2.5 text-xs text-gray-600 hover:text-ict-blue font-semibold rounded-xl hover:bg-gray-50 transition">
+                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                </svg>
+                <span>โปรไฟล์</span>
+            </a>
+
+            <a href="login.html" onclick="return confirm('คุณต้องการออกจากระบบหรือไม่?')" class="flex items-center gap-3 px-4 py-2 text-xs text-red-500 hover:text-red-600 font-semibold transition">
+                <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                </svg>
+                <span>ออกจากระบบ</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- ============================================= -->
+    <!-- Content หลัก (ส่งคืนเจ้าของ) -->
+    <!-- ============================================= -->
+    <main class="flex-1 p-8 overflow-y-auto">
+        <div class="max-w-6xl mx-auto space-y-6">
+
+            <!-- Header หน้า -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900 tracking-tight">บันทึกการส่งมอบ (Handover Record)</h1>
+                    <p class="text-xs text-gray-500 font-medium mt-0.5">ส่งคืนสิ่งของให้เจ้าของและบันทึกหลักฐานการรับคืนในระบบ</p>
+                </div>
+
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400 text-xs">🔍</span>
+                    <input type="text" placeholder="ค้นหารายการที่อนุมัติแล้ว..." class="w-72 bg-white border border-gray-200 rounded-xl pl-9 pr-4 py-2 text-xs text-gray-700 focus:outline-none focus:ring-2 focus:ring-ict-blue/20 transition shadow-sm">
+                </div>
+            </div>
+
+            <!-- ฟอร์มการส่งมอบ 2 คอลัมน์ -->
+            <form id="handoverForm" onsubmit="handleFormSubmit(event)" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+                <!-- คอลัมน์ซ้าย: รายละเอียดสิ่งของ & ผู้รับคืน -->
+                <div class="lg:col-span-5 space-y-4">
+                    
+                    <!-- การ์ดรายละเอียดสิ่งของ -->
+                    <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm space-y-3">
+                        <div class="flex items-center gap-2 border-b border-gray-100 pb-3">
+                            <svg class="w-4 h-4 text-ict-blue" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                            </svg>
+                            <h2 class="font-bold text-xs text-gray-900">รายละเอียดสิ่งของ</h2>
+                        </div>
+
+                        <div onclick="openImageModal(this.querySelector('img').src)" class="relative rounded-xl overflow-hidden border border-gray-100 bg-gray-900 h-44 cursor-pointer group shadow-sm">
+                            <img id="itemImage" src="images.staff/นาฬิกาข้อมือชายสีเงิน.jpg" class="w-full h-full object-cover group-hover:scale-105 group-hover:opacity-85 transition duration-500" alt="สิ่งของที่พบ">
+                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center gap-2 text-white font-medium text-xs">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"/>
+                                </svg>
+                                <span>คลิกเพื่อดูรูปขยาย</span>
+                            </div>
+                            <span class="absolute top-2.5 right-2.5 bg-emerald-500 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-md flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
+                                อนุมัติแล้ว
+                            </span>
+                        </div>
+
+                        <div class="space-y-2 text-xs pt-1">
+                            <div>
+                                <p class="text-gray-400 text-[10px] font-medium">รหัสการเคลม</p>
+                                <p id="claimIdText" class="font-bold text-gray-900 font-mono">CLM-2024-0891</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-400 text-[10px] font-medium">ชื่อสิ่งของ</p>
+                                <p id="itemNameText" class="font-bold text-gray-900">นาฬิกาข้อมือผู้ชาย สีเงิน</p>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 pt-1 border-t border-gray-50">
+                                <div>
+                                    <p class="text-gray-400 text-[10px] font-medium">วันที่พบ</p>
+                                    <p id="foundDateText" class="font-semibold text-gray-700">12 ต.ค. 2567</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-400 text-[10px] font-medium">สถานที่พบ</p>
+                                    <p id="locationText" class="font-semibold text-gray-700">ใต้ตึกคณะ ICT</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- การ์ดข้อมูลผู้รับคืน (แสดงข้อมูลเต็มเพื่อติดต่อกลับ) -->
+                    <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm space-y-3">
+                        <div class="flex items-center gap-2 border-b border-gray-100 pb-3">
+                            <svg class="w-4 h-4 text-ict-blue" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                            </svg>
+                            <h2 class="font-bold text-xs text-gray-900">ข้อมูลผู้รับคืน</h2>
+                        </div>
+
+                        <div class="space-y-2 text-xs">
+                            <div>
+                                <p class="text-gray-400 text-[10px] font-medium">ชื่อ-นามสกุล</p>
+                                <p id="recipientNameText" class="font-bold text-gray-900">สมชาย ใจดี</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-400 text-[10px] font-medium">เบอร์โทรศัพท์</p>
+                                <p id="recipientPhoneText" class="font-semibold text-gray-700">081-234-5678</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-400 text-[10px] font-medium">อีเมล (ที่ลงทะเบียนไว้)</p>
+                                <p id="recipientEmailText" class="font-semibold text-gray-700 font-mono">somchai.jai@gmail.com</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- คอลัมน์ขวา: แบบฟอร์มยืนยัน ลายเซ็น และอัปโหลดไฟล์ -->
+                <div class="lg:col-span-7">
+                    <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm space-y-5">
+                        <h2 class="font-bold text-sm text-gray-900 border-b border-gray-100 pb-3">แบบฟอร์มยืนยันการส่งมอบ</h2>
+
+                        <!-- กล่อง Checkbox ยืนยัน -->
+                        <div class="bg-blue-50/50 border border-blue-100 rounded-xl p-3.5 flex items-start gap-3">
+                            <input type="checkbox" id="verifyCheck" required class="mt-0.5 rounded border-gray-300 text-ict-btnBlue focus:ring-ict-blue w-4 h-4 cursor-pointer">
+                            <label for="verifyCheck" class="cursor-pointer">
+                                <p class="font-bold text-gray-900 text-xs">ยืนยันตัวตนผู้รับคืน (Verification Check)</p>
+                                <p class="text-gray-500 text-[10px] mt-0.5 font-medium">ตรวจสอบข้อมูลและยืนยันการส่งมอบเรียบร้อยแล้ว</p>
+                            </label>
+                        </div>
+
+                        <!-- อัปโหลดภาพหลักฐาน -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center text-xs">
+                                <label class="font-bold text-gray-700">
+                                    ภาพถ่าย/วิดีโอ ขณะส่งมอบ (หลักฐาน)
+                                    <span id="fileCountText" class="text-ict-blue font-semibold ml-1">(0/5)</span>
+                                </label>
+                                <button type="button" id="clearAllBtn" onclick="clearAllFiles()" class="text-[10px] text-red-500 hover:underline hidden font-semibold">ยกเลิกทั้งหมด</button>
+                            </div>
+
+                            <input type="file" id="photoInput" accept="image/*,video/*" multiple class="hidden" onchange="previewFiles(event)">
+
+                            <label id="uploadLabel" for="photoInput" class="border-2 border-dashed border-gray-200 rounded-xl p-4 text-center hover:border-ict-blue transition cursor-pointer bg-gray-50/50 flex flex-col items-center justify-center space-y-1 block">
+                                <div class="w-8 h-8 bg-blue-50 text-ict-blue rounded-full flex items-center justify-center mx-auto">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-gray-800 text-xs">คลิกเพื่อถ่ายภาพ หรือ อัปโหลดวิดีโอ</p>
+                                    <p class="text-gray-400 text-[10px] mt-0.5">รองรับ JPG, PNG, MP4 (สูงสุด 5 ไฟล์)</p>
+                                </div>
+                            </label>
+
+                            <div id="previewContainer" class="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-1">
+                                <div class="h-20 border border-gray-200 rounded-xl bg-gray-50 flex items-center justify-center text-gray-300">
+                                    <svg class="w-5 h-5 opacity-40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                </div>
+                                <div class="h-20 border border-gray-200 rounded-xl bg-gray-50 flex items-center justify-center text-gray-300">
+                                    <svg class="w-5 h-5 opacity-40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Canvas ลายเซ็น -->
+                        <div class="space-y-1.5 text-xs">
+                            <label class="font-bold text-gray-700">ลายเซ็นผู้รับคืน (Digital Signature)</label>
+                            <div class="border border-gray-200 rounded-xl bg-gray-50/40 h-32 relative overflow-hidden flex items-center justify-center">
+                                <canvas id="signaturePad" class="w-full h-full cursor-crosshair touch-none"></canvas>
+                                <button type="button" onclick="clearSignature()" class="absolute bottom-2 right-2 text-ict-btnBlue hover:text-ict-hover font-bold text-[10px] bg-white px-2 py-1 rounded-md border border-gray-200 shadow-sm transition">
+                                    ล้างลายเซ็น
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- เจ้าหน้าที่ผู้ส่งมอบ -->
+                        <div class="space-y-1 text-xs">
+                            <label class="font-bold text-gray-700">ชื่อเจ้าหน้าที่ผู้ส่งมอบ</label>
+                            <input type="text" id="staffNameInput" value="somying (Staff)" readonly class="w-full bg-gray-100 border border-gray-200 rounded-xl px-3.5 py-2 text-gray-600 font-semibold cursor-not-allowed">
+                        </div>
+
+                        <!-- ปุ่มกด ยืนยัน/ยกเลิก -->
+                        <div class="pt-3 flex items-center justify-end gap-3 border-t border-gray-100 text-xs">
+                            <a href="staff-verify-claims.html" class="px-5 py-2.5 text-gray-600 hover:bg-gray-50 border border-gray-200 rounded-full font-semibold transition inline-block text-center">
+                                ยกเลิก
+                            </a>
+                            <button type="submit" class="px-6 py-2.5 bg-ict-blue hover:bg-ict-hover text-white font-semibold rounded-full shadow-sm transition flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                <span>ยืนยันการส่งมอบ</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </main>
+
+    <!-- Modal ดูรูปภาพขนาดเต็ม -->
+    <div id="imageModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4 transition-all duration-200">
+        <div class="bg-white w-full max-w-3xl rounded-2xl shadow-2xl overflow-hidden flex flex-col p-5 space-y-4">
+            <div class="flex items-center justify-between pb-2 border-b border-gray-100">
+                <h3 class="font-bold text-gray-800 text-sm">
+                    รูปภาพขนาดเต็ม <span id="imageCounter" class="font-medium text-gray-500 text-xs">(1/1)</span>
+                </h3>
+                <button type="button" onclick="closeImageModal()" class="w-7 h-7 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 flex items-center justify-center transition">
+                    ✕
+                </button>
+            </div>
+
+            <div class="relative bg-[#0f172a] rounded-xl overflow-hidden min-h-[300px] max-h-[65vh] flex items-center justify-center">
+                <img id="modalImage" src="" class="max-h-[60vh] max-w-full object-contain" alt="รูปภาพขนาดเต็ม">
+            </div>
+        </div>
+    </div>
+
+    
+    <script>
+        // Digital Signature Canvas
+        const canvas = document.getElementById('signaturePad');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        let hasSignature = false;
+
+        function resizeCanvas() {
+            const rect = canvas.parentElement.getBoundingClientRect();
+            if (canvas.width !== rect.width || canvas.height !== rect.height) {
+                canvas.width = rect.width;
+                canvas.height = rect.height;
+                resetCanvasStyle();
+            }
+        }
+
+        function resetCanvasStyle() {
+            ctx.lineWidth = 2.5;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.strokeStyle = '#034383';
+        }
+
+        function getPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            let clientX = e.clientX;
+            let clientY = e.clientY;
+
+            if (e.touches && e.touches.length > 0) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            }
+
+            return {
+                x: clientX - rect.left,
+                y: clientY - rect.top
+            };
+        }
+
+        function startDrawing(e) {
+            isDrawing = true;
+            hasSignature = true;
+            resetCanvasStyle();
+            const pos = getPos(e);
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            if (e.type === 'touchmove') e.preventDefault();
+            const pos = getPos(e);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+        }
+
+        function stopDrawing() {
+            if (isDrawing) {
+                ctx.closePath();
+                isDrawing = false;
+            }
+        }
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseleave', stopDrawing);
+
+        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDrawing(e); }, { passive: false });
+        canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e); }, { passive: false });
+        canvas.addEventListener('touchend', stopDrawing);
+
+        function clearSignature() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            hasSignature = false;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        document.addEventListener('DOMContentLoaded', () => { setTimeout(resizeCanvas, 150); });
+
+        // Multi-File Upload & Preview Handler
+        let selectedFiles = [];
+        const MAX_FILES = 5;
+
+        function previewFiles(event) {
+            const newFiles = Array.from(event.target.files);
+
+            if (selectedFiles.length + newFiles.length > MAX_FILES) {
+                alert(`สามารถแนบไฟล์ได้สูงสุดไม่เกิน ${MAX_FILES} ไฟล์เท่านั้น`);
+            }
+
+            const availableSlots = MAX_FILES - selectedFiles.length;
+            if (availableSlots > 0) {
+                selectedFiles = selectedFiles.concat(newFiles.slice(0, availableSlots));
+            }
+
+            updateFileInput();
+            renderPreviews();
+        }
+
+        function updateFileInput() {
+            const dataTransfer = new DataTransfer();
+            selectedFiles.forEach(file => dataTransfer.items.add(file));
+            document.getElementById('photoInput').files = dataTransfer.files;
+
+            document.getElementById('fileCountText').textContent = `(${selectedFiles.length}/${MAX_FILES})`;
+
+            const uploadLabel = document.getElementById('uploadLabel');
+            if (selectedFiles.length >= MAX_FILES) {
+                uploadLabel.classList.add('opacity-50', 'pointer-events-none');
+            } else {
+                uploadLabel.classList.remove('opacity-50', 'pointer-events-none');
+            }
+        }
+
+        function renderPreviews() {
+            const container = document.getElementById('previewContainer');
+            const clearBtn = document.getElementById('clearAllBtn');
+
+            if (selectedFiles.length === 0) {
+                clearBtn.classList.add('hidden');
+                container.innerHTML = `
+                <div class="h-20 border border-gray-200 rounded-xl bg-gray-50 flex items-center justify-center text-gray-300">
+                    <svg class="w-5 h-5 opacity-40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                </div>
+                <div class="h-20 border border-gray-200 rounded-xl bg-gray-50 flex items-center justify-center text-gray-300">
+                    <svg class="w-5 h-5 opacity-40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                </div>`;
+                return;
+            }
+
+            clearBtn.classList.remove('hidden');
+            container.innerHTML = '';
+
+            selectedFiles.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const isVideo = file.type.startsWith('video/');
+                    const div = document.createElement('div');
+                    div.className = 'relative h-20 border border-gray-200 rounded-xl overflow-hidden bg-black group shadow-sm';
+
+                    if (isVideo) {
+                        div.innerHTML = `
+                        <video src="${e.target.result}" class="w-full h-full object-cover opacity-80" muted></video>
+                        <span class="absolute bottom-1 left-1 bg-black/70 text-white text-[8px] px-1 rounded font-mono">VIDEO</span>
+                        <button type="button" onclick="removeFile(${index})" class="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 shadow-md transition" title="ลบไฟล์">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </button>`;
+                    } else {
+                        div.innerHTML = `
+                        <img src="${e.target.result}" class="w-full h-full object-cover cursor-pointer hover:scale-105 transition duration-300" onclick="openImageModal('${e.target.result}')" alt="Preview">
+                        <button type="button" onclick="removeFile(${index})" class="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 shadow-md transition" title="ลบไฟล์">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </button>`;
+                    }
+                    container.appendChild(div);
+                }
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            updateFileInput();
+            renderPreviews();
+        }
+
+        function clearAllFiles() {
+            selectedFiles = [];
+            updateFileInput();
+            renderPreviews();
+        }
+
+        // Image Modal Controls
+        function openImageModal(src) {
+            document.getElementById('modalImage').src = src;
+            document.getElementById('imageModal').classList.remove('hidden');
+            document.getElementById('imageModal').classList.add('flex');
+        }
+
+        function closeImageModal() {
+            document.getElementById('imageModal').classList.add('hidden');
+            document.getElementById('imageModal').classList.remove('flex');
+        }
+
+        // ฟังก์ชัน Submit Form
+        function handleFormSubmit(event) {
+            event.preventDefault();
+
+            if (!hasSignature) {
+                alert('กรุณาเซ็นลายเซ็นผู้รับคืนก่อนยืนยันการส่งมอบ');
+                return;
+            }
+
+            if (confirm('คุณต้องการยืนยันการส่งมอบสิ่งของรายการนี้หรือไม่?')) {
+                alert('บันทึกการส่งมอบเรียบร้อยแล้ว');
+                window.location.href = 'staff-verify-claims.html';
+            }
+        }
+    </script>
+</body>
+</html>

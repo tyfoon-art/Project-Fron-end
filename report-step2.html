@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>สถานที่และเวลา - Lost & Found ICT</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Prompt', sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scrollbar-gutter: stable;
+    }
+
+    body {
+      background-color: #f8fafc;
+      color: #1e293b;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+      width: 100%;
+    }
+
+    .navbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+      padding: 0 32px;
+      max-width: 1400px;
+      margin: 0 auto;
+      gap: 24px;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #003b7a;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      flex-shrink: 0;
+    }
+
+    .nav-brand i {
+      font-size: 26px;
+      color: #003b7a;
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      color: #64748b;
+      transition: color 0.2s;
+      position: relative;
+      padding-bottom: 4px;
+      white-space: nowrap;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: #003b7a;
+      font-weight: 600;
+    }
+
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: #003b7a;
+      border-radius: 2px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .nav-search-form {
+      position: relative;
+      width: 280px;
+    }
+
+    .nav-search-box {
+      display: flex;
+      align-items: center;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 30px;
+      padding: 8px 16px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-search-box:focus-within {
+      background: #ffffff;
+      border-color: #003b7a;
+      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.1);
+    }
+
+    .nav-search-box i {
+      color: #64748b;
+      font-size: 14px;
+      margin-right: 8px;
+    }
+
+    .nav-search-box input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 14px;
+      color: #1e293b;
+    }
+
+    .btn-post {
+      background: #003b7a;
+      color: #ffffff;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0, 59, 122, 0.15);
+    }
+
+    .btn-post:hover {
+      background: #002d5e;
+      transform: translateY(-1px);
+    }
+
+    .nav-profile {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      color: #334155;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 6px 10px;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .nav-profile i {
+      font-size: 16px;
+      color: #64748b;
+    }
+
+    .nav-profile:hover {
+      background: #f1f5f9;
+      color: #003b7a;
+    }
+
+    /* Main Report Container */
+    .report-main {
+      flex: 1;
+      padding: 20px 32px 48px 32px;
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .report-header {
+      padding: 0 4px;
+    }
+
+    .report-header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .report-header p {
+      font-size: 13.5px;
+      color: #64748b;
+      font-weight: 400;
+    }
+
+    /* Form Card */
+    .form-card {
+      background: #ffffff;
+      border-radius: 16px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      width: 100%;
+    }
+
+    /* Progress & Steps Tracker */
+    .steps-tracker-top {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 16px;
+    }
+
+    .steps-top-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #475569;
+    }
+
+    .progress-bar-track {
+      width: 100%;
+      height: 6px;
+      background: #e2e8f0;
+      border-radius: 30px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      width: 66.66%;
+      height: 100%;
+      background: #003b7a;
+      border-radius: 30px;
+      transition: width 0.3s ease;
+    }
+
+    .steps-circles-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      text-align: center;
+    }
+
+    .step-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .step-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      color: #64748b;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1.5px solid #cbd5e1;
+      transition: all 0.2s ease;
+    }
+
+    .step-node.completed .step-circle {
+      background: #22c55e;
+      color: #ffffff;
+      border-color: #22c55e;
+    }
+
+    .step-node.active .step-circle {
+      background: #003b7a;
+      color: #ffffff;
+      border-color: #003b7a;
+      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.12);
+    }
+
+    .step-label {
+      font-size: 12.5px;
+      font-weight: 500;
+      color: #64748b;
+    }
+
+    .step-node.active .step-label {
+      color: #003b7a;
+      font-weight: 700;
+    }
+
+    /* Form Fields */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-label {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .form-label span {
+      color: #dc2626;
+    }
+
+    .form-input, .form-select {
+      width: 100%;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 13.5px;
+      font-weight: 400;
+      color: #1e293b;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .form-input:focus, .form-select:focus {
+      border-color: #003b7a;
+      box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.1);
+    }
+
+    .form-input.error, .form-select.error {
+      border-color: #dc2626;
+    }
+
+    .error-text {
+      color: #dc2626;
+      font-size: 12px;
+      font-weight: 500;
+      margin-top: 2px;
+      display: none;
+    }
+
+    .select-box-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .select-box-wrapper select {
+      appearance: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+      padding-right: 36px;
+    }
+
+    .select-box-wrapper i {
+      position: absolute;
+      right: 14px;
+      color: #64748b;
+      font-size: 12px;
+      pointer-events: none;
+    }
+
+    /* Form Actions Button */
+    .form-actions-row {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 12px;
+      border-top: 1px solid #f1f5f9;
+    }
+
+    .btn-back {
+      background: #ffffff;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 10px 24px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-back:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    .btn-next {
+      background: #003b7a;
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 28px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 2px 8px rgba(0, 59, 122, 0.15);
+      transition: all 0.2s ease;
+    }
+
+    .btn-next:hover {
+      background: #002d5e;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 59, 122, 0.25);
+    }
+
+    /* Footer */
+    .footer {
+      background: #ffffff;
+      border-top: 1px solid #e2e8f0;
+      margin-top: auto;
+      padding: 20px 0;
+      width: 100%;
+    }
+
+    .footer-inner {
+      padding: 0 32px;
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      color: #64748b;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 16px;
+    }
+
+    .footer-links a {
+      color: #64748b;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: #003b7a;
+    }
+
+    @media (max-width: 900px) {
+      .navbar-inner, .report-main, .footer-inner {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+      .steps-circles-row {
+        display: none;
+      }
+      .form-card {
+        padding: 20px;
+      }
+      .footer-inner {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+      }
+      .nav-search-form {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="nav-left">
+        <a href="home.html" class="nav-brand">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Lost & Found ICT</span>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="home.html" class="nav-link">Home</a></li>
+          <li><a href="activity.html" class="nav-link">My Activity</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-actions">
+        <form class="nav-search-form" action="browse.html" method="GET">
+          <div class="nav-search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" name="search" placeholder="ค้นหารายการ...">
+          </div>
+        </form>
+
+        <a href="report.html" class="btn-post">
+          <i class="fa-solid fa-plus"></i>
+          <span>โพสต์</span>
+        </a>
+
+        <a href="profile.html" class="nav-profile">
+          <i class="fa-regular fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="report-main">
+    
+    <div class="report-header">
+      <h1>แจ้งของหาย / พบของ</h1>
+      <p>ระบุสถานที่และเวลาที่เกิดเหตุเพื่อให้ผู้เกี่ยวข้องตรวจสอบได้แม่นยำยิ่งขึ้น</p>
+    </div>
+
+    <div class="form-card">
+      
+      <div class="steps-tracker-top">
+        <div class="steps-top-info">
+          <span>ขั้นตอน 2 จาก 3</span>
+          <span style="color: #003b7a;">สถานที่และเวลา</span>
+        </div>
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill"></div>
+        </div>
+
+        <div class="steps-circles-row" style="margin-top: 8px;">
+          <div class="step-node completed">
+            <div class="step-circle"><i class="fa-solid fa-check"></i></div>
+            <div class="step-label">รายละเอียด</div>
+          </div>
+          <div class="step-node active">
+            <div class="step-circle">2</div>
+            <div class="step-label">สถานที่และเวลา</div>
+          </div>
+          <div class="step-node">
+            <div class="step-circle">3</div>
+            <div class="step-label">รูปภาพ</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">สถานที่เกิดเหตุ / พบสิ่งของ <span>*</span></label>
+        <div class="select-box-wrapper">
+          <select class="form-select" id="locationSelect" onchange="handleLocationChange()">
+            <option value="" disabled selected>เลือกสถานที่</option>
+            <option value="classroom">ห้องเรียน</option>
+            <option value="canteen">โรงอาหาร</option>
+            <option value="department">ห้องสาขา</option>
+            <option value="parking">ลานจอดรถ</option>
+          </select>
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+        <div class="error-text" id="locationError">กรุณาเลือกสถานที่เกิดเหตุ / พบสิ่งของ</div>
+      </div>
+
+      <div class="form-group" id="customClassroomGroup" style="display: none;">
+        <label class="form-label">ระบุห้องเรียน <span>*</span></label>
+        <input type="text" class="form-input" id="customClassroomInput" placeholder="เช่น ICT1102/1" oninput="clearError('customClassroomInput', 'classroomError')">
+        <div class="error-text" id="classroomError">กรุณาระบุห้องเรียน</div>
+      </div>
+
+      <div class="form-group" id="customDepartmentGroup" style="display: none;">
+        <label class="form-label">ระบุชื่อสาขา <span>*</span></label>
+        <input type="text" class="form-input" id="customDepartmentInput" placeholder="เช่น วิศวกรรมซอฟต์แวร์" oninput="clearError('customDepartmentInput', 'departmentError')">
+        <div class="error-text" id="departmentError">กรุณาระบุชื่อสาขา</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">วันที่ <span>*</span></label>
+        <input type="date" class="form-input" id="dateInput" onchange="clearError('dateInput', 'dateError')">
+        <div class="error-text" id="dateError">กรุณาเลือกวันที่ถูกต้อง (ห้ามเลือกวันในอนาคต)</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">เวลาโดยประมาณ <span>*</span></label>
+        <input type="time" class="form-input" id="timeInput" onchange="clearError('timeInput', 'timeError')">
+        <div class="error-text" id="timeError">กรุณากรอกเวลาให้ถูกต้อง (ห้ามเลือกเวลาในอนาคตสำหรับวันนี้)</div>
+      </div>
+
+      <div class="form-actions-row">
+        <button type="button" class="btn-back" onclick="location.href='report.html'">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span>ย้อนกลับ</span>
+        </button>
+        <button type="button" class="btn-next" onclick="validateAndNext()">
+          <span>ถัดไป</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <strong>Lost & Found ICT</strong> &copy; 2026 Lost & Found System. All rights reserved.
+      </div>
+      <div class="footer-links">
+        <a href="#">Contact Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    let maxDateStr = '';
+    let maxTimeStr = '';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      maxDateStr = `${year}-${month}-${day}`;
+
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      maxTimeStr = `${hours}:${minutes}`;
+
+      const dateInput = document.getElementById('dateInput');
+      dateInput.value = maxDateStr;
+      dateInput.max = maxDateStr;
+    });
+
+    function handleLocationChange() {
+      const locVal = document.getElementById('locationSelect').value;
+      const classroomGroup = document.getElementById('customClassroomGroup');
+      const deptGroup = document.getElementById('customDepartmentGroup');
+
+      classroomGroup.style.display = 'none';
+      deptGroup.style.display = 'none';
+
+      clearError('locationSelect', 'locationError');
+
+      if (locVal === 'classroom') {
+        classroomGroup.style.display = 'flex';
+      } else if (locVal === 'department') {
+        deptGroup.style.display = 'flex';
+      }
+    }
+
+    function clearError(inputId, errorId) {
+      document.getElementById(inputId).classList.remove('error');
+      document.getElementById(errorId).style.display = 'none';
+    }
+
+    function validateAndNext() {
+      let isValid = true;
+      const locationSelect = document.getElementById('locationSelect');
+      const locVal = locationSelect.value;
+      const locationError = document.getElementById('locationError');
+
+      const classroomInput = document.getElementById('customClassroomInput');
+      const classroomError = document.getElementById('classroomError');
+
+      const departmentInput = document.getElementById('customDepartmentInput');
+      const departmentError = document.getElementById('departmentError');
+
+      const dateInput = document.getElementById('dateInput');
+      const dateError = document.getElementById('dateError');
+
+      const timeInput = document.getElementById('timeInput');
+      const timeError = document.getElementById('timeError');
+
+      if (!locVal) {
+        locationSelect.classList.add('error');
+        locationError.style.display = 'block';
+        isValid = false;
+      } else {
+        locationSelect.classList.remove('error');
+        locationError.style.display = 'none';
+      }
+
+      if (locVal === 'classroom' && !classroomInput.value.trim()) {
+        classroomInput.classList.add('error');
+        classroomError.style.display = 'block';
+        isValid = false;
+      } else {
+        classroomInput.classList.remove('error');
+        classroomError.style.display = 'none';
+      }
+
+      if (locVal === 'department' && !departmentInput.value.trim()) {
+        departmentInput.classList.add('error');
+        departmentError.style.display = 'block';
+        isValid = false;
+      } else {
+        departmentInput.classList.remove('error');
+        departmentError.style.display = 'none';
+      }
+
+      if (!dateInput.value || dateInput.value > maxDateStr) {
+        dateInput.classList.add('error');
+        dateError.style.display = 'block';
+        isValid = false;
+      } else {
+        dateInput.classList.remove('error');
+        dateError.style.display = 'none';
+      }
+
+      if (!timeInput.value) {
+        timeInput.classList.add('error');
+        timeError.textContent = 'กรุณากรอกเวลาโดยประมาณ';
+        timeError.style.display = 'block';
+        isValid = false;
+      } else if (dateInput.value === maxDateStr && timeInput.value > maxTimeStr) {
+        timeInput.classList.add('error');
+        timeError.textContent = 'ไม่อนุญาตให้เลือกเวลาในอนาคตสำหรับวันนี้';
+        timeError.style.display = 'block';
+        isValid = false;
+      } else {
+        timeInput.classList.remove('error');
+        timeError.style.display = 'none';
+      }
+
+      if (!isValid) return;
+
+      let finalLocation = locVal;
+      if (locVal === 'classroom') {
+        finalLocation = classroomInput.value.trim();
+      } else if (locVal === 'department') {
+        finalLocation = departmentInput.value.trim();
+      } else if (locVal === 'canteen') {
+        finalLocation = 'โรงอาหาร';
+      } else if (locVal === 'parking') {
+        finalLocation = 'ลานจอดรถ';
+      }
+
+      sessionStorage.setItem('report_location', finalLocation);
+      sessionStorage.setItem('report_date', dateInput.value);
+      sessionStorage.setItem('report_time', timeInput.value);
+
+      window.location.href = 'report-step3.html';
+    }
+  </script>
+
+</body>
+</html>
