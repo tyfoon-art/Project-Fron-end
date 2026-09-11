@@ -33,11 +33,11 @@
 </head>
 <body class="bg-ict-lightBg text-gray-800 flex flex-col min-h-screen font-sans relative">
 
-    <!-- Top Navigation Bar (ปรับโครงสร้างตามรูปภาพตัวอย่าง) -->
+    <!-- Top Navigation Bar -->
     <header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
             
-            <!-- 1. โลโก้ระบบ -->
+            <!-- โลโก้ระบบ -->
             <a href="staff-dashboard.html" class="flex items-center gap-2.5 flex-shrink-0 hover:opacity-80 transition pr-2">
                 <svg class="w-7 h-7 text-ict-blue flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
@@ -46,9 +46,8 @@
                 <span class="text-xl font-extrabold text-ict-blue tracking-tight whitespace-nowrap">Lost &amp; Found ICT</span>
             </a>
 
-            <!-- 2. รายการเมนู Navigation แบบแนวนอน -->
+            <!-- รายการเมนู Navigation แนวนอน -->
             <nav class="hidden md:flex items-center space-x-1 lg:space-x-5 text-sm font-semibold text-gray-600 h-full">
-                <!-- Active State ที่หน้า แดชบอร์ดภาพรวม -->
                 <a href="staff-dashboard.html" class="h-full flex items-center border-b-4 border-ict-blue text-ict-blue font-bold transition whitespace-nowrap px-1">แดชบอร์ดภาพรวม</a>
                 <a href="staff-inventory-add.html" class="h-full flex items-center border-b-4 border-transparent hover:text-ict-blue transition whitespace-nowrap px-1">รายการสิ่งของทั้งหมด</a>
                 <a href="staff-verify-claims.html" class="h-full flex items-center border-b-4 border-transparent hover:text-ict-blue transition whitespace-nowrap px-1">ตรวจสอบคำร้อง</a>
@@ -56,9 +55,8 @@
                 <a href="staff-overdue-list.html" class="h-full flex items-center border-b-4 border-transparent hover:text-ict-blue transition whitespace-nowrap px-1">รายการสิ่งของตกค้าง</a>
             </nav>
 
-            <!-- 3. ส่วนฝั่งขวา: ช่องค้นหา -> ปุ่มโพสต์ -> Profile -->
+            <!-- ช่องค้นหา -> ปุ่มโพสต์ -> Profile -->
             <div class="flex items-center gap-3 ml-auto md:ml-0">
-                <!-- ช่องค้นหา Search Box -->
                 <div class="relative hidden sm:block w-44 lg:w-56">
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-gray-400">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -68,13 +66,11 @@
                     <input type="text" id="search-input" onkeyup="filterCompletedTable()" placeholder="ค้นหารายการ..." class="w-full bg-slate-50 border border-slate-200 text-xs rounded-full pl-9 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-ict-blue/20 transition">
                 </div>
 
-                <!-- ปุ่ม + โพสต์ -->
                 <a href="staff-inventory-add.html" class="bg-ict-blue hover:bg-ict-hover text-white text-xs font-bold px-4 py-2 rounded-full flex items-center gap-1.5 shadow-sm transition whitespace-nowrap">
                     <span class="text-sm font-bold">+</span>
                     <span>โพสต์</span>
                 </a>
 
-                <!-- โปรไฟล์ Profile -->
                 <a href="staff-profile.html" class="h-16 flex items-center gap-1.5 text-sm text-gray-700 hover:text-ict-blue font-bold px-2 border-b-4 border-transparent transition whitespace-nowrap">
                     <svg class="w-5 h-5 text-gray-600 hover:text-ict-blue transition" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
@@ -258,35 +254,35 @@
     </div>
 
     <script>
-        // API Base URL สำหรับดึงข้อมูลจริง
-        const API_BASE_URL = 'https://api.your-domain.com/v1';
-
-        // ดึงข้อมูลจริงสำหรับแสดงแดชบอร์ด
-        async function fetchRealtimeDashboardData() {
+        // ดึงข้อมูลจริงจาก LocalStorage มาแสดงในแดชบอร์ด
+        function fetchRealtimeDashboardData() {
             const tbody = document.getElementById('completed-table-body');
-            tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-gray-400 font-medium">🔄 กำลังโหลดข้อมูลปัจจุบันจากระบบ...</td></tr>`;
 
             try {
-                // พยายามดึงข้อมูลจาก API จริง หรือ LocalStorage
+                // ดึงรายการที่กดบันทึกส่งมอบแล้ว
                 const realCompletedList = JSON.parse(localStorage.getItem('completedHandovers') || '[]');
+                
+                // ดึงรายการฐานข้อมูลหลัก (ถ้ามี)
                 const realMasterDb = JSON.parse(localStorage.getItem('lost_and_found_db') || '[]');
 
-                // คำนวณสถิติสด
-                const totalCount = realMasterDb.length;
-                const pendingCount = realMasterDb.filter(i => i.status === 'pending').length;
+                // คำนวณตัวเลขสำหรับ Stat Cards
                 const handoverSuccessCount = realCompletedList.length;
+                const totalCount = realMasterDb.length > 0 ? realMasterDb.length : handoverSuccessCount;
+                const pendingCount = realMasterDb.filter(i => i.status === 'pending').length;
                 const overdueCount = realMasterDb.filter(i => i.status === 'overdue').length;
 
+                // อัปเดตตัวเลขการ์ดสถิติ
                 document.getElementById('stat-total').textContent = totalCount.toLocaleString('th-TH');
                 document.getElementById('stat-pending').textContent = pendingCount.toLocaleString('th-TH');
                 document.getElementById('stat-handover-success').textContent = handoverSuccessCount.toLocaleString('th-TH');
                 document.getElementById('stat-overdue').textContent = overdueCount.toLocaleString('th-TH');
 
+                // เรนเดอร์ลงตาราง
                 renderCompletedTable(realCompletedList);
 
             } catch (error) {
                 console.error("Fetch Data Error:", error);
-                tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-red-500 font-medium">❌ เกิดข้อผิดพลาดในการโหลดข้อมูลจริง</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-red-500 font-medium">❌ เกิดข้อผิดพลาดในการดึงข้อมูล</td></tr>`;
             }
         }
 
@@ -300,9 +296,18 @@
                 return;
             }
 
-            list.forEach((item) => {
+            list.forEach((item, index) => {
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-emerald-50/30 transition completed-row';
+                
+                // แปลงและเตรียมค่ารูปภาพ/หลักฐานสำหรับส่งเข้า Modal
+                const proofUrl = item.proofImageUrl || '';
+                const safeClaimId = (item.claimId || item.id || '-').replace(/'/g, "\\'");
+                const safeItemName = (item.itemName || item.name || '-').replace(/'/g, "\\'");
+                const safeRecipient = (item.recipientName || item.recipient || '-').replace(/'/g, "\\'");
+                const safeDate = (item.handoverDate || item.date || '-').replace(/'/g, "\\'");
+                const safeNote = (item.note || '').replace(/'/g, "\\'");
+
                 tr.innerHTML = `
                     <td class="py-3.5 px-3 font-mono font-bold text-gray-900">${item.claimId || item.id || '-'}</td>
                     <td class="py-3.5 px-3 font-semibold text-gray-800">${item.itemName || item.name || '-'}</td>
@@ -315,7 +320,7 @@
                         </span>
                     </td>
                     <td class="py-3.5 px-3 text-right">
-                        <button onclick="openProofModal('${item.claimId || item.id}', '${item.itemName || item.name}', '${item.recipientName || item.recipient}', '${item.handoverDate || item.date}', '${item.proofImageUrl || ''}', '${item.note || ''}')" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-[11px] font-semibold px-3 py-1.5 rounded-lg inline-flex items-center gap-1.5 transition">
+                        <button onclick="openProofModal('${safeClaimId}', '${safeItemName}', '${safeRecipient}', '${safeDate}', '${proofUrl}', '${safeNote}')" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-[11px] font-semibold px-3 py-1.5 rounded-lg inline-flex items-center gap-1.5 transition">
                             <span>📷</span> ดูหลักฐาน
                         </button>
                     </td>
@@ -324,7 +329,7 @@
             });
         }
 
-        // ระบบเปลี่ยนสถานะรับแจ้งความ
+        // สลับสถานะระบบเปิด/ปิดรับแจ้ง
         function toggleSystemStatus() {
             const currentStatus = localStorage.getItem('system_accepting_reports') !== 'false';
             const newStatus = !currentStatus;
@@ -347,9 +352,9 @@
             }
         }
 
-        // เปิด/ปิด Modal แสดงหลักฐาน
+        // เปิด/ปิด Modal หลักฐาน
         function openProofModal(id, name, recipient, date, proofUrl, note) {
-            document.getElementById('modal-item-id').innerText = `#${id}`;
+            document.getElementById('modal-item-id').innerText = id.startsWith('#') ? id : `#${id}`;
             document.getElementById('modal-item-name').innerText = name;
             document.getElementById('modal-recipient').innerText = recipient;
             document.getElementById('modal-date').innerText = date;
