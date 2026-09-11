@@ -8,8 +8,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Supabase JS Library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = 'https://YOUR_PROJECT_ID.supabase.co';
+    const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  </script>
 
   <style>
     * {
@@ -683,6 +690,37 @@
       color: #334155;
     }
 
+    /* Owner Action Buttons */
+    .owner-actions-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .btn-edit-post {
+      background: #e0f2fe;
+      color: #0284c7;
+      border: 1px solid #7dd3fc;
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-edit-post:hover {
+      background: #bae6fd;
+      border-color: #38bdf8;
+      transform: translateY(-1px);
+    }
+
     .btn-delete-post {
       background: #fee2e2;
       color: #b91c1c;
@@ -692,18 +730,44 @@
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
-      width: 100%;
+      flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
       transition: all 0.2s ease;
-      margin-top: 6px;
     }
 
     .btn-delete-post:hover {
       background: #fecaca;
       border-color: #ef4444;
+      transform: translateY(-1px);
+    }
+
+    .staff-action-box {
+      margin-top: 6px;
+    }
+
+    .btn-staff-storage {
+      background: #034383;
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 20px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 2px 8px rgba(3, 67, 131, 0.15);
+      transition: all 0.2s ease;
+    }
+
+    .btn-staff-storage:hover {
+      background: #022e5b;
       transform: translateY(-1px);
     }
 
@@ -816,18 +880,11 @@
 
         <ul class="nav-menu">
           <li><a href="home.html" class="nav-link">Home</a></li>
-          <li><a href="browse.html" class="nav-link">ค้นหาสิ่งของ</a></li>
+          <li><a href="activity.html" class="nav-link">My Activity</a></li>
         </ul>
       </div>
 
       <div class="nav-actions">
-        <form class="nav-search-form" action="browse.html" method="GET">
-          <div class="nav-search-box">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" name="search" placeholder="ค้นหารายการ...">
-          </div>
-        </form>
-
         <a href="report.html" class="btn-post">
           <i class="fa-solid fa-plus"></i>
           <span>โพสต์</span>
@@ -845,7 +902,7 @@
     <ul class="breadcrumb-list">
       <li><a href="home.html">หน้าหลัก</a></li>
       <li class="separator"><i class="fa-solid fa-chevron-right"></i></li>
-      <li><a href="browse.html">ค้นหาสิ่งของ</a></li>
+      <li><a href="activity.html">My Activity</a></li>
       <li class="separator"><i class="fa-solid fa-chevron-right"></i></li>
       <li class="current">รายละเอียด</li>
     </ul>
@@ -877,11 +934,11 @@
         <div class="poster-info-left">
           <img id="posterAvatarImg" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop" alt="Avatar" class="poster-avatar">
           <div class="poster-text-group">
-            <div class="poster-name" id="posterName">สมชาย</div>
-            <div class="poster-role" id="posterRoleText">ผู้แจ้งประกาศ (คณะ ICT)</div>
+            <div class="poster-name" id="posterName">กำลังโหลด...</div>
+            <div class="poster-role" id="posterRoleText">กำลังโหลด...</div>
           </div>
         </div>
-        <div class="poster-badge-time" id="posterTimeAgo">เมื่อสักครู่นี้</div>
+        <div class="poster-badge-time" id="posterTimeAgo">กำลังโหลด...</div>
       </div>
 
       <div class="tag-row">
@@ -942,9 +999,23 @@
           รายละเอียดสิ่งของ
         </div>
         
-        <button type="button" class="btn-delete-post" id="btnDeletePost" onclick="deleteCurrentItem()" style="display: none;">
-          <i class="fa-solid fa-trash"></i> ลบโพสต์นี้
-        </button>
+        <!-- แถวปุ่มจัดการสำหรับเจ้าของโพสต์ (แก้ไข และ ลบ) -->
+        <div class="owner-actions-row" id="ownerActionsBox" style="display: none;">
+          <a href="#" id="btnEditPost" class="btn-edit-post">
+            <i class="fa-solid fa-pen-to-square"></i> แก้ไขโพสต์
+          </a>
+          <button type="button" class="btn-delete-post" id="btnDeletePost" onclick="deleteCurrentItem()">
+            <i class="fa-solid fa-trash"></i> ลบโพสต์นี้
+          </button>
+        </div>
+
+        <!-- ปุ่มบันทึกเข้าคลังสำหรับเจ้าหน้าที่ (admin@staff.com) -->
+        <div class="staff-action-box" id="staffStorageActionBox" style="display: none;">
+          <button type="button" class="btn-staff-storage" onclick="saveItemToStaffStorage()">
+            <i class="fa-solid fa-box-archive"></i>
+            <span>บันทึกสิ่งของเข้าคลัง (Staff Storage)</span>
+          </button>
+        </div>
       </div>
 
       <div class="claim-action-box" id="claimActionBox" style="display: none;">
@@ -995,7 +1066,7 @@
         </button>
       </div>
       <p style="font-size: 13.5px; color: #78350f; line-height: 1.4;">
-        ภาพนี้แสดงให้เห็นเฉพาะคุณในฐานะเจ้าของโพสต์ เพื่อใช้ตรวจสอบและยืนยันความเป็นเจ้าของ
+        ภาพนี้แสดงให้เห็นเฉพาะคุณในฐานะเจ้าของโพสต์ หรือเจ้าหน้าที่ เพื่อใช้ตรวจสอบและยืนยันความเป็นเจ้าของ
       </p>
       <div class="modal-img-wrapper" style="height: 380px;">
         <img id="modalSecretImg" src="" alt="รูปตำหนิลับขนาดเต็ม">
@@ -1021,6 +1092,7 @@
     let currentSecretImageUrl = '';
     let currentImagesList = [];
     let currentModalIndex = 0;
+    let currentLoadedItem = null;
 
     function formatThaiDate(isoDateString) {
       if (!isoDateString) return '2 ก.ย. 2569';
@@ -1059,44 +1131,34 @@
       return map[catKey] || catKey;
     }
 
-    function loadItemDetail() {
+    async function loadItemDetail() {
       const urlParams = new URLSearchParams(window.location.search);
       const itemId = urlParams.get('id');
 
-      let storedItems = JSON.parse(localStorage.getItem('systemFoundItems') || '[]');
-      const item = storedItems.find(i => i.id === itemId) || storedItems[0];
-
-      if (!item) {
-        alert('ไม่พบข้อมูลรายการนี้ในระบบ');
-        window.location.href = 'browse.html';
+      if (!itemId) {
+        alert('ไม่พบรหัสรายการ');
+        window.location.href = 'activity.html';
         return;
       }
 
-      const now = new Date();
-      now.setHours(0, 0, 0, 0);
-      const itemDateNormalized = new Date(item.timestamp || Date.now());
-      itemDateNormalized.setHours(0, 0, 0, 0);
-      const isToday = (itemDateNormalized.getTime() === now.getTime());
+      // ดึงข้อมูลจาก Supabase Table 'items'
+      let { data: item, error } = await supabaseClient
+        .from('items')
+        .select('*')
+        .eq('id', itemId)
+        .single();
 
-      let statusText = '';
-      let statusClass = '';
-      let badgeIcon = '';
-
-      if (item.type === 'lost') {
-        statusText = 'แจ้งหาย';
-        statusClass = 'badge-lost';
-        badgeIcon = 'fa-regular fa-circle-xmark';
-      } else {
-        if (isToday && item.status !== 'อยู่ที่จุดรับฝาก') {
-          statusText = 'พบใหม่';
-          statusClass = 'badge-new';
-          badgeIcon = 'fa-solid fa-sparkles';
-        } else {
-          statusText = 'อยู่ที่จุดรับฝาก';
-          statusClass = 'badge-storage';
-          badgeIcon = 'fa-solid fa-box-archive';
-        }
+      if (error || !item) {
+        alert('ไม่พบข้อมูลรายการนี้ในระบบฐานข้อมูล');
+        window.location.href = 'activity.html';
+        return;
       }
+
+      currentLoadedItem = item;
+
+      let statusText = item.status || 'พบใหม่';
+      let statusClass = item.type === 'lost' ? 'badge-lost' : 'badge-new';
+      let badgeIcon = item.type === 'lost' ? 'fa-regular fa-circle-xmark' : 'fa-solid fa-sparkles';
 
       if (item.type === 'lost') {
         document.getElementById('dateLabelText').textContent = 'วันที่หาย';
@@ -1107,20 +1169,26 @@
         document.getElementById('dateLabelText').textContent = 'วันที่พบ';
         document.getElementById('timeLabelText').textContent = 'เวลาที่พบโดยประมาณ';
         document.getElementById('locationLabelText').textContent = 'สถานที่พบ';
-        document.getElementById('posterRoleText').textContent = 'ผู้แจ้งประกาศ (คณะ ICT)';
+        document.getElementById('posterRoleText').textContent = item.posterRole || 'ผู้แจ้งประกาศ (คณะ ICT)';
       }
 
       document.getElementById('detailTitle').textContent = item.title;
-      document.getElementById('detailRef').textContent = item.ref || ('REF-' + (item.id || '202609-001'));
+      document.getElementById('detailRef').textContent = item.ref || ('REF-' + item.id);
       document.getElementById('detailCategory').innerHTML = `<span>หมวดหมู่: ${getCategoryNameThai(item.category)}</span>`;
       document.getElementById('detailDate').textContent = formatThaiDate(item.timestamp);
       document.getElementById('detailTime').textContent = item.time || '10:30 น.';
       document.getElementById('detailLocation').textContent = item.location;
       document.getElementById('detailDescription').textContent = item.description || 'ไม่มีรายละเอียดเพิ่มเติม';
 
-      const posterName = item.poster || 'ณัฐพล ศรีสุข';
+      // ดึงข้อมูลส่วนผู้โพสต์ (Poster Name, Avatar, Role, TimeAgo) มาแสดงผล
+      const posterName = item.poster || item.posterName || 'นพวรรณ คงพันธประเสริฐ';
       document.getElementById('posterName').textContent = posterName;
+      document.getElementById('posterRoleText').textContent = item.posterRole || (item.type === 'lost' ? 'นิสิตผู้ทำของหาย (คณะ ICT)' : 'ผู้แจ้งประกาศ (คณะ ICT)');
       document.getElementById('posterTimeAgo').textContent = getTimeAgo(item.timestamp);
+
+      // กำหนดรูป Avatar ผู้โพสต์ (รองรับค่าจากฐานข้อมูล หรือสร้างอัตโนมัติ)
+      const posterAvatarImg = document.getElementById('posterAvatarImg');
+      posterAvatarImg.src = item.posterAvatar || `https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(posterName)}`;
 
       const storageWrapper = document.getElementById('storageWrapper');
       if (item.type === 'lost' || statusText === 'พบใหม่') {
@@ -1134,7 +1202,7 @@
       statusEl.className = `badge-status ${statusClass}`;
       statusEl.innerHTML = `<i class="${badgeIcon}"></i> <span id="statusText">สถานะ: ${statusText}</span>`;
 
-      const imgSrc = item.image || item.fallbackImage || 'https://images.unsplash.com/photo-1582139329536-e7284fece509?q=80&w=600&auto=format&fit=crop';
+      const imgSrc = item.image || 'https://images.unsplash.com/photo-1582139329536-e7284fece509?q=80&w=600&auto=format&fit=crop';
       currentImagesList = item.images && item.images.length > 0 ? item.images : [imgSrc];
       currentModalIndex = 0;
 
@@ -1153,36 +1221,51 @@
         thumbContainer.appendChild(thumb);
       });
 
-      const currentUserName = localStorage.getItem('userName') || localStorage.getItem('currentUserName') || 'สมชาย';
-      const isOwner = (item.poster && item.poster.trim() === currentUserName.trim());
+      // ตรวจสอบสิทธิ์เจ้าของโพสต์ และ สิทธิ์เจ้าหน้าที่ (admin@staff.com)
+      const currentUserName = localStorage.getItem('currentUserName') || localStorage.getItem('userName') || 'นพวรรณ คงพันธประเสริฐ';
+      const currentUserEmail = localStorage.getItem('currentUserEmail') || localStorage.getItem('userEmail') || '';
+      
+      const isOwner = (posterName.trim() === currentUserName.trim());
+      const isStaff = (currentUserEmail.toLowerCase() === 'admin@staff.com' || localStorage.getItem('userRole') === 'staff');
 
       const btnSecretBadge = document.getElementById('btnSecretBadge');
-      const btnDeletePost = document.getElementById('btnDeletePost');
+      const ownerActionsBox = document.getElementById('ownerActionsBox');
+      const btnEditPost = document.getElementById('btnEditPost');
+      const staffStorageBox = document.getElementById('staffStorageActionBox');
       const claimBox = document.getElementById('claimActionBox');
 
+      // หากเป็นเจ้าของโพสต์ แสดงปุ่มแก้ไขและลบ
       if (isOwner) {
-        btnDeletePost.style.display = 'flex';
+        ownerActionsBox.style.display = 'flex';
+        btnEditPost.href = `report.html?edit=${item.id}`;
+      } else {
+        ownerActionsBox.style.display = 'none';
+      }
+
+      // หากเป็นเจ้าหน้าที่ (admin@staff.com) หรือเจ้าของ จะสามารถดูรูปลับ (Secret Image) ได้
+      if (isOwner || isStaff) {
         if (item.secretImage) {
           currentSecretImageUrl = item.secretImage;
           btnSecretBadge.style.display = 'flex';
         } else {
           btnSecretBadge.style.display = 'none';
         }
-
-        if (item.type === 'found') {
-          claimBox.style.display = 'none';
-        } else {
-          claimBox.style.display = 'flex';
-        }
       } else {
-        btnDeletePost.style.display = 'none';
         btnSecretBadge.style.display = 'none';
+      }
 
-        if (item.type === 'found' && statusText === 'อยู่ที่จุดรับฝาก') {
-          claimBox.style.display = 'flex';
-        } else {
-          claimBox.style.display = 'none';
-        }
+      // หากเป็นเจ้าหน้าที่ แสดงปุ่มบันทึกเข้าคลัง
+      if (isStaff) {
+        staffStorageBox.style.display = 'block';
+      } else {
+        staffStorageBox.style.display = 'none';
+      }
+
+      // จัดการปุ่มเคลมของ
+      if (!isOwner && item.type === 'found') {
+        claimBox.style.display = 'flex';
+      } else {
+        claimBox.style.display = 'none';
       }
     }
 
@@ -1239,16 +1322,45 @@
       window.location.href = `claim.html?id=${itemId}`;
     }
 
-    function deleteCurrentItem() {
-      if (confirm('คุณต้องการลบโพสต์นี้ออกจากระบบใช่หรือไม่?')) {
+    // ฟังก์ชันลบโพสต์จาก Supabase
+    async function deleteCurrentItem() {
+      if (confirm('คุณต้องการลบโพสต์นี้ออกจากระบบฐานข้อมูลใช่หรือไม่?')) {
         const urlParams = new URLSearchParams(window.location.search);
         const itemId = urlParams.get('id');
         
-        let storedItems = JSON.parse(localStorage.getItem('systemFoundItems') || '[]');
-        storedItems = storedItems.filter(i => i.id !== itemId);
-        localStorage.setItem('systemFoundItems', JSON.stringify(storedItems));
-        
-        window.location.href = 'home.html';
+        const { error } = await supabaseClient
+          .from('items')
+          .delete()
+          .eq('id', itemId);
+
+        if (error) {
+          alert('เกิดข้อผิดพลาดในการลบ: ' + error.message);
+        } else {
+          alert('ลบโพสต์เรียบร้อยแล้ว');
+          window.location.href = 'activity.html';
+        }
+      }
+    }
+
+    // ฟังก์ชันบันทึกสิ่งของเข้าคลังสำหรับเจ้าหน้าที่ (admin@staff.com)
+    async function saveItemToStaffStorage() {
+      if (!currentLoadedItem) return;
+
+      if (confirm('คุณต้องการบันทึกสิ่งของนี้เข้าสู่จุดรับฝากของเจ้าหน้าที่ใช่หรือไม่?')) {
+        const { error } = await supabaseClient
+          .from('items')
+          .update({
+            status: 'อยู่ที่จุดรับฝาก',
+            storage: 'ศูนย์รับแจ้งของหาย อาคารคณะ ICT (ชั้น 1)'
+          })
+          .eq('id', currentLoadedItem.id);
+
+        if (error) {
+          alert('บันทึกไม่สำเร็จ: ' + error.message);
+        } else {
+          alert('บันทึกสิ่งของเข้าคลังเรียบร้อยแล้ว');
+          location.reload();
+        }
       }
     }
 
