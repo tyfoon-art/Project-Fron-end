@@ -33,86 +33,68 @@
         .font-brand { font-family: 'Prompt', sans-serif; letter-spacing: -0.02em; }
     </style>
 </head>
-<body class="bg-ict-lightBg text-gray-800 flex h-screen overflow-hidden font-sans text-xs">
+<body class="bg-ict-lightBg text-gray-800 min-h-screen flex flex-col font-sans text-xs">
 
-    <!-- Sidebar ด้านซ้าย -->
-    <aside class="w-64 bg-white border-r border-gray-100 flex flex-col justify-between p-5 flex-shrink-0 shadow-sm">
-        <div class="space-y-6">
-            <a href="staff-dashboard.html" class="border-b border-gray-100 pb-4 block hover:opacity-80 transition">
-                <div class="flex items-center gap-2.5">
-                    <svg class="w-7 h-7 text-ict-blue flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
+    <!-- Top Navigation Bar -->
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+            
+            <div class="flex items-center gap-8 overflow-x-auto no-scrollbar py-2">
+                <a href="staff-dashboard.html" class="flex items-center gap-2.5 flex-shrink-0">
+                    <svg class="w-8 h-8 text-ict-blue flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
                         <path d="M3.8 12.8v3.7c0 2.2 3.7 4 8.2 4s8.2-1.8 8.2-4v-3.7l-8.2 4.5-8.2-4.5z"/>
                     </svg>
-                    <div class="font-brand font-extrabold text-ict-blue text-lg leading-tight tracking-tight">
+                    <span class="font-brand font-extrabold text-ict-blue text-xl leading-tight tracking-tight whitespace-nowrap">
                         Lost <span class="font-extrabold">&amp;</span> Found ICT
-                    </div>
+                    </span>
+                </a>
+
+                <nav class="flex items-center gap-6 text-sm font-medium whitespace-nowrap">
+                    <a href="staff-dashboard.html" class="text-gray-600 hover:text-ict-blue transition py-5">
+                        แดชบอร์ดภาพรวม
+                    </a>
+                    <a href="staff-inventory-add.html" class="text-gray-600 hover:text-ict-blue transition py-5">
+                        รายการสิ่งของทั้งหมด
+                    </a>
+                    <a href="staff-verify-claims.html" class="text-ict-blue font-bold border-b-2 border-ict-blue py-5">
+                        ตรวจสอบคำร้อง
+                    </a>
+                    <a href="staff-handover.html" class="text-gray-600 hover:text-ict-blue transition py-5">
+                        ส่งคืนเจ้าของ
+                    </a>
+                    <a href="staff-overdue-list.html" class="text-gray-600 hover:text-ict-blue transition py-5">
+                        รายการสิ่งของตกค้าง
+                    </a>
+                </nav>
+            </div>
+
+            <div class="flex items-center gap-4 flex-shrink-0">
+                <div class="relative hidden md:block">
+                    <svg class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                    <input type="text" placeholder="ค้นหารายการ..." class="bg-gray-50 border border-gray-200 text-gray-700 text-xs rounded-full pl-9 pr-4 py-2 w-48 focus:outline-none focus:ring-2 focus:ring-ict-blue focus:bg-white transition">
                 </div>
-                <p class="text-[10px] text-gray-400 font-normal mt-1 pl-9">Staff Management Console</p>
-            </a>
 
-            <a href="staff-inventory-add.html" class="w-full bg-ict-blue hover:bg-ict-hover text-white font-semibold text-xs py-3 px-4 rounded-xl flex items-center justify-center gap-2 shadow-sm transition">
-                <span class="text-base leading-none">+</span> บันทึกพบของใหม่
-            </a>
-
-            <nav class="space-y-1 text-xs">
-                <a href="staff-dashboard.html" class="flex items-center gap-3 px-3.5 py-2.5 font-medium text-gray-600 hover:bg-gray-50 rounded-xl transition">
-                    <svg class="w-5 h-5 opacity-70" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v14a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4z"/>
-                    </svg>
-                    แดชบอร์ด
+                <a href="staff-inventory-add.html" class="bg-ict-blue hover:bg-ict-hover text-white font-semibold text-xs py-2 px-4 rounded-full flex items-center gap-1.5 shadow-sm transition">
+                    <span class="text-sm font-bold">+</span> โพสต์
                 </a>
 
-                <a href="staff-inventory-add.html" class="flex items-center gap-3 px-3.5 py-2.5 font-medium text-gray-600 hover:bg-gray-50 rounded-xl transition">
-                    <svg class="w-5 h-5 opacity-70" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                <a href="staff-profile.html" class="flex items-center gap-1.5 text-xs font-semibold text-gray-700 hover:text-ict-blue transition py-1 px-2 rounded-lg hover:bg-gray-50">
+                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                     </svg>
-                    รายการสิ่งของ
+                    <span>Profile</span>
                 </a>
+            </div>
 
-                <a href="staff-verify-claims.html" class="flex items-center gap-3 px-3.5 py-2.5 font-bold text-ict-blue bg-blue-50/80 rounded-xl transition">
-                    <svg class="w-5 h-5 text-ict-blue" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
-                    </svg>
-                    ตรวจสอบคำร้อง
-                </a>
-
-                <a href="staff-handover.html" class="flex items-center gap-3 px-3.5 py-2.5 font-medium text-gray-600 hover:bg-gray-50 rounded-xl transition">
-                    <svg class="w-5 h-5 opacity-70" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5a1.5 1.5 0 013 0v6.5m0-6.5a1.5 1.5 0 013 0V11"/>
-                    </svg>
-                    ส่งคืนเจ้าของ
-                </a>
-
-                <a href="staff-overdue-list.html" class="flex items-center gap-3 px-3.5 py-2.5 font-medium text-gray-600 hover:bg-gray-50 rounded-xl transition">
-                    <svg class="w-5 h-5 opacity-70" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                    </svg>
-                    รายการสิ่งของตกค้าง
-                </a>
-            </nav>
         </div>
+    </header>
 
-        <div class="pt-2 border-t border-gray-100 space-y-1">
-            <a href="staff-profile.html" class="flex items-center gap-2.5 px-3.5 py-2 text-xs font-medium text-gray-600 hover:bg-gray-50 rounded-xl transition">
-                <svg class="w-4 h-4 opacity-80 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                </svg>
-                <span>โปรไฟล์</span>
-            </a>
-
-            <a href="login.html" onclick="return confirm('คุณต้องการออกจากระบบหรือไม่?')" class="flex items-center gap-2.5 px-3.5 py-2 text-xs font-medium text-red-500 hover:bg-red-50 rounded-xl transition">
-                <svg class="w-4 h-4 opacity-80 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-                </svg>
-                <span>ออกจากระบบ</span>
-            </a>
-        </div>
-    </aside>
-
-    <!-- Main Content ด้านขวา -->
-    <main class="flex-1 overflow-y-auto p-8 flex flex-col justify-between">
-        <div class="max-w-7xl mx-auto space-y-6 w-full pb-10">
+    <!-- Main Content Container -->
+    <main class="flex-1 p-6 md:p-8">
+        <div class="max-w-7xl mx-auto space-y-6 w-full pb-16">
 
             <!-- Back Button & Page Header -->
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -123,11 +105,11 @@
                     </a>
                     <h1 class="text-2xl font-bold text-gray-900 flex items-center gap-3">
                         รายละเอียดการตรวจสอบคำร้อง 
-                        <span class="font-mono text-base font-semibold text-gray-500">#CLM-24-0891</span>
+                        <span id="displayClaimId" class="font-mono text-base font-semibold text-gray-500">#CLM-24-0891</span>
                     </h1>
                 </div>
 
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2" id="statusBadgeContainer">
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium bg-amber-50 text-amber-700 rounded-full border border-amber-200">
                         <span class="w-2 h-2 bg-amber-500 rounded-full"></span>
                         รอการตรวจสอบ
@@ -135,8 +117,8 @@
                 </div>
             </div>
 
-            <!-- Content Grid 3 Columns (2:1 Layout) -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Content Grid Layout -->
+            <div id="contentGrid" class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
 
                 <!-- Left Column (2/3 Width) -->
                 <div class="lg:col-span-2 space-y-6">
@@ -152,24 +134,24 @@
                             <!-- สิ่งของในระบบ -->
                             <div class="bg-gray-50 p-4 rounded-xl border border-gray-100 space-y-2">
                                 <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">ข้อมูลสิ่งของในระบบ (Inventory)</span>
-                                <p class="font-bold text-gray-900 text-sm pb-1 border-b border-gray-200/60">MacBook Pro 16" (Silver)</p>
+                                <p id="itemTitle" class="font-bold text-gray-900 text-sm pb-1 border-b border-gray-200/60">MacBook Pro 16" (Silver)</p>
                                 <div class="space-y-1 text-gray-600 pt-1">
-                                    <p><span class="text-gray-400">หมวดหมู่:</span> อุปกรณ์อิเล็กทรอนิกส์</p>
-                                    <p><span class="text-gray-400">สถานที่พบ:</span> ห้องปฏิบัติการคอมพิวเตอร์ 402</p>
-                                    <p><span class="text-gray-400">วันที่พบ:</span> 20 ต.ค. 2024 (14:30 น.)</p>
-                                    <p><span class="text-gray-400">ผู้บันทึก:</span> เจ้าหน้าที่ สมศักดิ์ (Staff)</p>
+                                    <p><span class="text-gray-400">หมวดหมู่:</span> <span id="itemCategory">อุปกรณ์อิเล็กทรอนิกส์</span></p>
+                                    <p><span class="text-gray-400">สถานที่พบ:</span> <span id="itemLocation">ห้องปฏิบัติการคอมพิวเตอร์</span></p>
+                                    <p><span class="text-gray-400">วันที่พบ:</span> <span id="itemFoundDate">20 ต.ค. 2024 (14:30 น.)</span></p>
+                                    <p><span class="text-gray-400">ผู้บันทึก:</span> <span id="itemRecorder">เจ้าหน้าที่ somying (Staff)</span></p>
                                 </div>
                             </div>
 
                             <!-- ผู้ขอรับคืน -->
                             <div class="bg-blue-50/40 p-4 rounded-xl border border-blue-100/60 space-y-2">
                                 <span class="text-[10px] font-bold text-ict-blue uppercase tracking-wider block mb-1">ข้อมูลผู้ยื่นคำร้อง (Claimant)</span>
-                                <p class="font-bold text-gray-900 text-sm pb-1 border-b border-blue-100">นายสมชาย ใจดี</p>
+                                <p id="claimantName" class="font-bold text-gray-900 text-sm pb-1 border-b border-blue-100">นายสมชาย ใจดี</p>
                                 <div class="space-y-1 text-gray-600 pt-1">
-                                    <p><span class="text-gray-400">รหัสนิสิต:</span> 6501091223</p>
-                                    <p><span class="text-gray-400">คณะ/สาขา:</span> เทคโนโลยีสารสนเทศและการสื่อสาร</p>
-                                    <p><span class="text-gray-400">เบอร์โทรศัพท์:</span> 081-234-5678</p>
-                                    <p><span class="text-gray-400">อีเมล:</span> somchai.j@up.ac.th</p>
+                                    <p><span class="text-gray-400">รหัสนิสิต:</span> <span id="claimantId">6501091223</span></p>
+                                    <p><span class="text-gray-400">คณะ/สาขา:</span> <span id="claimantFaculty">เทคโนโลยีสารสนเทศและการสื่อสาร</span></p>
+                                    <p><span class="text-gray-400">เบอร์โทรศัพท์:</span> <span id="claimantPhone">081-234-5678</span></p>
+                                    <p><span class="text-gray-400">อีเมล:</span> <span id="claimantEmail">somchai.j@up.ac.th</span></p>
                                 </div>
                             </div>
                         </div>
@@ -177,48 +159,30 @@
                         <!-- รายละเอียดคำอธิบายของผู้ขอรับคืน -->
                         <div class="space-y-2 pt-2">
                             <p class="font-semibold text-gray-800">รายละเอียดคำอธิบายยืนยันตัวตนจากผู้ยื่นคำร้อง:</p>
-                            <div class="bg-gray-50 p-4 rounded-xl border border-gray-100 text-gray-700 leading-relaxed">
-                                "ทำเครื่องหายไว้ช่วงบารมีคาเฟ่/แล็บ 402 ครับ ตัวเครื่องเป็น MacBook Pro 16 นิ้ว สีเงิน ติดสติ๊กเกอร์ React สีฟ้าที่มุมขวาบนของฝาหลัง รหัสผ่านปลดล็อกหน้าจอขึ้นต้นด้วยเลข 95xx ครับ มีรอยถลอกเล็กน้อยที่มุมเครื่องด้านซ้าย"
+                            <div id="claimDescription" class="bg-gray-50 p-4 rounded-xl border border-gray-100 text-gray-700 leading-relaxed">
+                                "ทำเครื่องหายไว้ช่วงบารมีคาเฟ่ ครับ ตัวเครื่องเป็น MacBook Pro 16 นิ้ว สีเงิน ติดสติ๊กเกอร์ React สีฟ้าที่มุมขวาบนของฝาหลัง รหัสผ่านปลดล็อกหน้าจอขึ้นต้นด้วยเลข 95xx ครับ มีรอยถลอกเล็กน้อยที่มุมเครื่องด้านซ้าย"
                             </div>
                         </div>
                     </div>
 
-                    <!-- Card 2: หลักฐานที่แนบมา (Proof Documents) -->
+                    <!-- Card 2: หลักฐานที่แนบมา -->
                     <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
                         <h2 class="font-bold text-sm text-gray-900 border-b border-gray-100 pb-3 flex items-center gap-2">
                             <svg class="w-4 h-4 text-ict-blue" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                             หลักฐานแนบยืนยัน (Uploaded Proof Files)
                         </h2>
 
-                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                            <div class="group relative aspect-video bg-gray-50 rounded-xl overflow-hidden border border-gray-200 flex items-center justify-center cursor-pointer hover:border-ict-blue transition">
-                                <div class="text-center p-2">
-                                    <p class="text-xl mb-1">📷</p>
-                                    <p class="text-[11px] text-gray-600 font-medium">รูปภาพใบเสร็จ/กล่อง.jpg</p>
-                                </div>
-                                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-medium text-xs">
-                                    คลิกเพื่อดูรูปใหญ่
-                                </div>
-                            </div>
-
-                            <div class="group relative aspect-video bg-gray-50 rounded-xl overflow-hidden border border-gray-200 flex items-center justify-center cursor-pointer hover:border-ict-blue transition">
-                                <div class="text-center p-2">
-                                    <p class="text-xl mb-1">📱</p>
-                                    <p class="text-[11px] text-gray-600 font-medium">ภาพหน้าจอ_FindMy.png</p>
-                                </div>
-                                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-medium text-xs">
-                                    คลิกเพื่อดูรูปใหญ่
-                                </div>
-                            </div>
+                        <div id="proofFilesContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                            <!-- จะถูกเพิ่มด้วย JS -->
                         </div>
                     </div>
 
                 </div>
 
-                <!-- Right Column (1/3 Width) -->
-                <div class="space-y-6">
+                <!-- Right Column (1/3 Width - Sticky) -->
+                <div class="space-y-6 lg:sticky lg:top-20">
 
-                    <!-- Card 3: แบบฟอร์มการพิจารณาและจัดการคำร้อง (Actions) -->
+                    <!-- Card 3: แบบฟอร์มการพิจารณาและจัดการคำร้อง -->
                     <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
                         <h2 class="font-bold text-sm text-gray-900 border-b border-gray-100 pb-3 flex items-center gap-2">
                             <svg class="w-4 h-4 text-ict-blue" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -228,20 +192,20 @@
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-gray-600 font-semibold mb-1 text-[11px]">เจ้าหน้าที่ผู้ตรวจสอบ:</label>
-                                <input type="text" value="เจ้าหน้าที่ ณัฐพล (ผู้ดูแลระบบ)" disabled class="w-full bg-gray-100 border border-gray-200 rounded-xl px-3 py-2 text-xs text-gray-500 cursor-not-allowed">
+                                <input type="text" value="เจ้าหน้าที่ somying (ผู้ดูแลระบบ)" disabled class="w-full bg-gray-100 border border-gray-200 rounded-xl px-3 py-2 text-xs text-gray-500 cursor-not-allowed">
                             </div>
 
                             <div>
                                 <label class="block text-gray-600 font-semibold mb-1 text-[11px]">หมายเหตุ / ข้อความถึงผู้ยื่นคำร้อง:</label>
-                                <textarea rows="4" placeholder="ระบุเหตุผลในการอนุมัติ ปฏิเสธ หรือขอข้อมูลเพิ่มเติม..." class="w-full border border-gray-200 rounded-xl p-3 text-xs outline-none focus:ring-2 focus:ring-ict-blue transition resize-none"></textarea>
+                                <textarea id="reviewerNote" rows="4" placeholder="ระบุเหตุผลในการอนุมัติ ปฏิเสธ หรือขอข้อมูลเพิ่มเติม..." class="w-full border border-gray-200 rounded-xl p-3 text-xs outline-none focus:ring-2 focus:ring-ict-blue transition resize-none"></textarea>
                             </div>
 
                             <div class="pt-2 space-y-2">
-                                <button onclick="alert('อนุมัติคำร้องเรียบร้อยแล้ว ระบบได้ส่งการแจ้งเตือนไปยังผู้รับคืน'); location.href='staff-handover.html';" class="w-full bg-ict-blue hover:bg-ict-hover text-white font-semibold py-2.5 px-4 rounded-xl shadow-sm transition flex items-center justify-center gap-2 text-xs">
+                                <button onclick="alert('อนุมัติคำร้องเรียบร้อยแล้ว'); location.href='staff-handover.html';" class="w-full bg-ict-blue hover:bg-ict-hover text-white font-semibold py-2.5 px-4 rounded-xl shadow-sm transition flex items-center justify-center gap-2 text-xs">
                                     <span>✓</span> อนุมัติคำร้อง (Approve)
                                 </button>
 
-                                <button onclick="alert('ส่งคำขอข้อมูลเพิ่มเติมไปยังผู้ยื่นคำร้องแล้ว');" class="w-full bg-amber-50 hover:bg-amber-100 text-amber-700 font-semibold py-2.5 px-4 rounded-xl border border-amber-200 transition text-xs">
+                                <button onclick="alert('ส่งคำขอข้อมูลเพิ่มเติมแล้ว');" class="w-full bg-amber-50 hover:bg-amber-100 text-amber-700 font-semibold py-2.5 px-4 rounded-xl border border-amber-200 transition text-xs">
                                     ขอข้อมูลเพิ่มเติม (Request Info)
                                 </button>
 
@@ -252,24 +216,11 @@
                         </div>
                     </div>
 
-                    <!-- Card 4: ประวัติการดำเนินการ (Audit Logs) -->
+                    <!-- Card 4: ประวัติการดำเนินการ (Activity Log) -->
                     <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-3">
                         <h2 class="font-bold text-xs text-gray-900 border-b border-gray-100 pb-2">ประวัติกิจกรรม (Activity Log)</h2>
-                        <div class="space-y-3 text-[11px]">
-                            <div class="flex gap-2.5">
-                                <span class="w-2 h-2 rounded-full bg-ict-blue mt-1 flex-shrink-0"></span>
-                                <div>
-                                    <p class="font-semibold text-gray-800">ยื่นคำร้องขอรับคืนสำเร็จ</p>
-                                    <p class="text-[10px] text-gray-400">24 ต.ค. 2024 - 09:15 น.</p>
-                                </div>
-                            </div>
-                            <div class="flex gap-2.5 opacity-60">
-                                <span class="w-2 h-2 rounded-full bg-gray-300 mt-1 flex-shrink-0"></span>
-                                <div>
-                                    <p class="font-semibold text-gray-800">บันทึกของพบเข้าสู่ระบบ</p>
-                                    <p class="text-[10px] text-gray-400">20 ต.ค. 2024 - 14:30 น.</p>
-                                </div>
-                            </div>
+                        <div id="activityLogContainer" class="space-y-3 text-[11px]">
+                            <!-- จะถูกเพิ่มด้วย JS -->
                         </div>
                     </div>
 
@@ -277,8 +228,173 @@
 
             </div>
 
+            <!-- ไม่พบข้อมูล Error State Card -->
+            <div id="notFoundState" class="hidden bg-white rounded-2xl border border-gray-100 shadow-sm p-12 text-center space-y-4 max-w-lg mx-auto">
+                <div class="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto text-2xl">
+                    ⚠️
+                </div>
+                <div>
+                    <h3 class="text-base font-bold text-gray-900">ไม่พบข้อมูลคำร้องนี้ในระบบ</h3>
+                    <p class="text-gray-500 text-xs mt-1">รหัสคำร้องที่คุณเรียกดูอาจไม่มีอยู่ หรือถูกลบออกจากระบบแล้ว</p>
+                </div>
+                <a href="staff-verify-claims.html" class="inline-block bg-ict-blue hover:bg-ict-hover text-white font-semibold text-xs px-5 py-2.5 rounded-xl transition">
+                    กลับไปหน้ารายการคำร้อง
+                </a>
+            </div>
+
         </div>
     </main>
+
+    <!-- JavaScript อ่านค่าจาก URL & Render ข้อมูลจริง -->
+    <script>
+        // ฐานข้อมูลจำลอง (Mock Database) - ปรับปรุงหลักฐานให้เหลือเพียงรูปถ่ายของสิ่งของเท่านั้น
+        const mockClaimsData = {
+            'CLM-24-0891': {
+                id: 'CLM-24-0891',
+                status: 'pending',
+                statusText: 'รอการตรวจสอบ',
+                itemTitle: 'MacBook Pro 16" (Silver)',
+                category: 'อุปกรณ์อิเล็กทรอนิกส์',
+                location: 'ห้องปฏิบัติการคอมพิวเตอร์ 402',
+                foundDate: '20 ต.ค. 2024 (14:30 น.)',
+                recorder: 'เจ้าหน้าที่ สมศักดิ์ (Staff)',
+                claimantName: 'นายสมชาย ใจดี',
+                claimantId: '6501091223',
+                faculty: 'เทคโนโลยีสารสนเทศและการสื่อสาร',
+                phone: '081-234-5678',
+                email: 'somchai.j@up.ac.th',
+                description: '"ทำเครื่องหายไว้ช่วงบารมีคาเฟ่/แล็บ 402 ครับ ตัวเครื่องเป็น MacBook Pro 16 นิ้ว สีเงิน ติดสติ๊กเกอร์ React สีฟ้าที่มุมขวาบนของฝาหลัง รหัสผ่านปลดล็อกหน้าจอขึ้นต้นด้วยเลข 95xx ครับ มีรอยถลอกเล็กน้อยที่มุมเครื่องด้านซ้าย"',
+                proofs: [
+                    { icon: '📸', name: 'รูปถ่ายของสิ่งของ.jpg' }
+                ],
+                logs: [
+                    { title: 'ยื่นคำร้องขอรับคืนสำเร็จ', date: '24 ต.ค. 2024 - 09:15 น.', active: true },
+                    { title: 'บันทึกของพบเข้าสู่ระบบ', date: '20 ต.ค. 2024 - 14:30 น.', active: false }
+                ]
+            },
+            'CLM-24-0890': {
+                id: 'CLM-24-0890',
+                status: 'pending',
+                statusText: 'รอการตรวจสอบ',
+                itemTitle: 'กระเป๋าสตางค์หนังสีดำ (Gucci)',
+                category: 'กระเป๋า / กระเป๋าสตางค์',
+                location: 'โรงอาหารคณะ ICT',
+                foundDate: '23 ต.ค. 2024 (12:10 น.)',
+                recorder: 'เจ้าหน้าที่ นภา (Staff)',
+                claimantName: 'นางสาววิไลภรณ์ ศรีสุข',
+                claimantId: '6601054412',
+                faculty: 'เทคโนโลยีสารสนเทศและการสื่อสาร',
+                phone: '089-987-6543',
+                email: 'wilaiporn.s@up.ac.th',
+                description: '"กระเป๋าสตางค์สั้นสีดำยี่ห้อ Gucci ด้านในมีบัตรนิสิต UP ชื่อวิไลภรณ์ พร้อมเงินสดประมาณ 450 บาท และบัตรเครดิตธนาคารกสิกรไทยค่ะ"',
+                proofs: [
+                    { icon: '📸', name: 'รูปถ่ายของสิ่งของ.jpg' }
+                ],
+                logs: [
+                    { title: 'ยื่นคำร้องขอรับคืนสำเร็จ', date: '23 ต.ค. 2024 - 15:40 น.', active: true },
+                    { title: 'บันทึกของพบเข้าสู่ระบบ', date: '23 ต.ค. 2024 - 12:10 น.', active: false }
+                ]
+            },
+            'CLM-24-0885': {
+                id: 'CLM-24-0885',
+                status: 'more_info',
+                statusText: 'ขอข้อมูลเพิ่มเติม',
+                itemTitle: 'iPhone 15 Pro (เคสใส)',
+                category: 'อุปกรณ์อิเล็กทรอนิกส์',
+                location: 'ห้องสมุดชั้น 2',
+                foundDate: '21 ต.ค. 2024 (16:00 น.)',
+                recorder: 'เจ้าหน้าที่ ณัฐพล (Staff)',
+                claimantName: 'Mr. John Doe',
+                claimantId: '6401088921',
+                faculty: 'วิทยาลัยนานาชาติ',
+                phone: '095-111-2233',
+                email: 'john.d@up.ac.th',
+                description: '"iPhone 15 Pro Natural Titanium in a clear MagSafe case. Wallpaper is a picture of a golden retriever."',
+                proofs: [
+                    { icon: '📸', name: 'รูปถ่ายของสิ่งของ.jpg' }
+                ],
+                logs: [
+                    { title: 'เจ้าหน้าที่ส่งคำขอข้อมูลเพิ่มเติม', date: '22 ต.ค. 2024 - 11:20 น.', active: true },
+                    { title: 'ยื่นคำร้องขอรับคืนสำเร็จ', date: '22 ต.ค. 2024 - 08:30 น.', active: false },
+                    { title: 'บันทึกของพบเข้าสู่ระบบ', date: '21 ต.ค. 2024 - 16:00 น.', active: false }
+                ]
+            }
+        };
+
+        // ฟังก์ชันอ่าน Param และ แสดงข้อมูล
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const claimId = urlParams.get('id') || 'CLM-24-0891';
+
+            const data = mockClaimsData[claimId];
+
+            if (!data) {
+                document.getElementById('contentGrid').classList.add('hidden');
+                document.getElementById('statusBadgeContainer').classList.add('hidden');
+                document.getElementById('notFoundState').classList.remove('hidden');
+                document.getElementById('displayClaimId').innerText = `#${claimId}`;
+                return;
+            }
+
+            document.getElementById('displayClaimId').innerText = `#${data.id}`;
+            
+            const statusContainer = document.getElementById('statusBadgeContainer');
+            if (data.status === 'more_info') {
+                statusContainer.innerHTML = `
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full border border-gray-200">
+                        <span class="w-2 h-2 bg-gray-500 rounded-full"></span>
+                        ${data.statusText}
+                    </span>
+                `;
+            } else {
+                statusContainer.innerHTML = `
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium bg-amber-50 text-amber-700 rounded-full border border-amber-200">
+                        <span class="w-2 h-2 bg-amber-500 rounded-full"></span>
+                        ${data.statusText}
+                    </span>
+                `;
+            }
+
+            document.getElementById('itemTitle').innerText = data.itemTitle;
+            document.getElementById('itemCategory').innerText = data.category;
+            document.getElementById('itemLocation').innerText = data.location;
+            document.getElementById('itemFoundDate').innerText = data.foundDate;
+            document.getElementById('itemRecorder').innerText = data.recorder;
+
+            document.getElementById('claimantName').innerText = data.claimantName;
+            document.getElementById('claimantId').innerText = data.claimantId;
+            document.getElementById('claimantFaculty').innerText = data.faculty;
+            document.getElementById('claimantPhone').innerText = data.phone;
+            document.getElementById('claimantEmail').innerText = data.email;
+            document.getElementById('claimDescription').innerText = data.description;
+
+            // Render ไฟล์แนบ (ปรับดีไซน์ให้เหมือนตามรูปภาพ)
+            const proofContainer = document.getElementById('proofFilesContainer');
+            proofContainer.innerHTML = data.proofs.map(proof => `
+                <div class="group relative aspect-[4/3] bg-gray-50/80 rounded-2xl border border-gray-200/80 flex items-center justify-center cursor-pointer hover:border-ict-blue hover:shadow-sm transition p-6 text-center">
+                    <div>
+                        <p class="text-3xl mb-2">${proof.icon}</p>
+                        <p class="text-xs text-gray-700 font-semibold">${proof.name}</p>
+                    </div>
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition rounded-2xl flex items-center justify-center text-white font-medium text-xs">
+                        คลิกเพื่อดูรูปภาพเต็ม
+                    </div>
+                </div>
+            `).join('');
+
+            // Render Activity Log
+            const logContainer = document.getElementById('activityLogContainer');
+            logContainer.innerHTML = data.logs.map(log => `
+                <div class="flex gap-2.5 ${log.active ? '' : 'opacity-60'}">
+                    <span class="w-2 h-2 rounded-full ${log.active ? 'bg-ict-blue' : 'bg-gray-300'} mt-1 flex-shrink-0"></span>
+                    <div>
+                        <p class="font-semibold text-gray-800">${log.title}</p>
+                        <p class="text-[10px] text-gray-400">${log.date}</p>
+                    </div>
+                </div>
+            `).join('');
+        });
+    </script>
 
 </body>
 </html>
