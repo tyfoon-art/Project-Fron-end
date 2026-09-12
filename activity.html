@@ -503,10 +503,6 @@
       gap: 6px;
     }
 
-    .status-indicator.pending {
-      color: #64748b;
-    }
-
     .status-indicator.success {
       color: #16a34a;
     }
@@ -704,18 +700,18 @@
       const listContainer = document.getElementById('activityList');
       listContainer.innerHTML = '';
 
-      const currentUser = localStorage.getItem('currentUserName') || 'นพวรรณ คงพันธประเสริฐ';
+      const currentUser = localStorage.getItem('currentUserName') || localStorage.getItem('userName') || localStorage.getItem('user_name') || '';
       const allItems = JSON.parse(localStorage.getItem('systemFoundItems') || '[]');
 
       if (tabType === 'reported') {
-        const myPosts = allItems.filter(item => (item.poster || 'นพวรรณ คงพันธประเสริฐ') === currentUser);
+        const myPosts = allItems.filter(item => item.poster === currentUser);
 
         if (myPosts.length === 0) {
           listContainer.innerHTML = `
             <div class="empty-box">
               <i class="fa-regular fa-folder-open"></i>
               <h3>ยังไม่มีรายการที่คุณแจ้งประกาศ</h3>
-              <p>คุณยังไม่ได้สร้างประกาศแจ้งหายหรือแจ้งพบสิ่งของในระบบ</p>
+              <p>คุณยังไม่ได้สร้างประกาศแจ้งหายหรือแจ้งพบสิ่งของในระบบด้วยบัญชีนี้</p>
             </div>
           `;
           return;

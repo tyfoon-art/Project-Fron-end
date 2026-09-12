@@ -681,12 +681,12 @@
           <div class="upload-icon-box">
             <i class="fa-solid fa-cloud-arrow-up"></i>
           </div>
-          <div class="upload-title">คลิกเพื่ออัปโหลด หรือลากไฟล์มาวางที่นี่</div>
-          <div class="upload-desc">รองรับไฟล์ PNG, JPG หรือ JPEG (สูงสุด 5 รูป)</div>
-          <div class="upload-btn-fake">เลือกไฟล์รูปภาพ</div>
-          <input type="file" id="fileInput" accept="image/*" multiple style="display: none;" onchange="handleFiles(this.files)">
+          <div class="upload-title">คลิกเพื่ออัปโหลด หรือลากไฟล์รูปภาพมาวางที่นี่</div>
+          <div class="upload-desc">รองรับเฉพาะไฟล์รูปถ่าย (PNG, JPG, JPEG, WEBP) สูงสุด 5 รูป</div>
+          <div class="upload-btn-fake">เลือกไฟล์รูปถ่าย</div>
+          <input type="file" id="fileInput" accept="image/png, image/jpeg, image/webp" multiple style="display: none;" onchange="handleFiles(this.files)">
         </div>
-        <div class="error-text" id="imageError">กรุณาอัปโหลดรูปภาพสิ่งของอย่างน้อย 1 รูป</div>
+        <div class="error-text" id="imageError">กรุณาอัปโหลดไฟล์รูปภาพสิ่งของ (ภาพถ่าย) อย่างน้อย 1 รูป</div>
       </div>
 
       <div class="form-group" id="previewGroup" style="display: none;">
@@ -709,7 +709,7 @@
           </div>
           <div class="upload-title" style="color: #b45309; font-size: 13.5px;">คลิกอัปโหลดรูปตำหนิลับ (1 รูป)</div>
           <div class="upload-btn-fake" style="background: #d97706; padding: 5px 14px; font-size: 12px;">เลือกรูปลับตำหนิ</div>
-          <input type="file" id="secretFileInput" accept="image/*" style="display: none;" onchange="handleSecretFile(this.files)">
+          <input type="file" id="secretFileInput" accept="image/png, image/jpeg, image/webp" style="display: none;" onchange="handleSecretFile(this.files)">
         </div>
 
         <div id="secretPreviewContainer" style="display: none; position: relative; width: 100px; height: 100px; border-radius: 10px; overflow: hidden; border: 1px solid #f59e0b;">
@@ -758,6 +758,12 @@
           break;
         }
         const file = files[i];
+
+        if (!file.type.startsWith('image/')) {
+          alert('กรุณาเลือกไฟล์รูปภาพ (เช่น .jpg, .png, .webp) เท่านั้นครับ');
+          continue;
+        }
+
         const reader = new FileReader();
         reader.onload = function(e) {
           selectedImagesBase64.push(e.target.result);
@@ -807,6 +813,12 @@
     function handleSecretFile(files) {
       if (files.length > 0) {
         const file = files[0];
+        
+        if (!file.type.startsWith('image/')) {
+          alert('กรุณาเลือกไฟล์รูปลับที่เป็นรูปภาพเท่านั้นครับ');
+          return;
+        }
+
         const reader = new FileReader();
         reader.onload = function(e) {
           secretImageBase64 = e.target.result;
@@ -840,6 +852,9 @@
       const newPostId = 'item_' + Date.now();
       const primaryImage = selectedImagesBase64[0];
 
+      // ดึงชื่อบัญชีจริงจาก localStorage เพื่อให้โพสต์ถูกบันทึกเป็นชื่อของคุณและมีสิทธิ์จัดการโพสต์ได้
+      const loggedInUserName = localStorage.getItem('currentUserName') || localStorage.getItem('userName') || localStorage.getItem('user_name') || 'นพวรรณ คงพันธประเสริฐ';
+
       const newPostObject = {
         id: newPostId,
         title: tempTitle,
@@ -853,7 +868,7 @@
         type: tempType,
         status: tempType === 'lost' ? 'แจ้งหาย' : 'พบใหม่',
         description: tempDesc,
-        poster: localStorage.getItem('currentUserName') || 'นพวรรณ คงพันธประเสริฐ',
+        poster: loggedInUserName, // ผูกชื่อผู้โพสต์ให้ตรงกับบัญชีปัจจุบัน
         posterRole: tempType === 'lost' ? 'นิสิตผู้ทำของหาย (คณะ ICT)' : 'ผู้แจ้งประกาศ (คณะ ICT)',
         ref: 'REF-' + new Date().getFullYear() + String(new Date().getMonth() + 1).padStart(2, '0') + '-' + Math.floor(100 + Math.random() * 900)
       };

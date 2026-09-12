@@ -33,6 +33,7 @@
       padding: 32px 24px;
     }
 
+    /* กล่องการ์ดหลัก ปรับขนาดให้กะทัดรัดและสมดุล */
     .login-card {
       display: flex;
       width: 100%;
@@ -45,6 +46,7 @@
       border: 1px solid #e2e8f0;
     }
 
+    /* ฝั่งซ้าย: Banner */
     .banner-side {
       flex: 1.1;
       background: linear-gradient(135deg, rgba(30, 79, 138, 0.9) 0%, rgba(12, 59, 112, 0.94) 60%, rgba(5, 38, 76, 0.98) 100%),
@@ -89,6 +91,7 @@
       text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     }
 
+    /* ฝั่งขวา: ฟอร์ม */
     .form-side {
       flex: 1;
       padding: 40px 44px;
@@ -98,6 +101,7 @@
       background: #ffffff;
     }
 
+    /* แถบแท็บด้านบน */
     .nav-tabs {
       display: flex;
       justify-content: center;
@@ -139,6 +143,7 @@
       border-radius: 2px 2px 0 0;
     }
 
+    /* กล่องฟอร์ม */
     .form-content {
       margin: auto 0;
       width: 100%;
@@ -499,25 +504,6 @@
 
       if (!isValid) return;
 
-      // ตรวจสอบว่าเป็นบัญชีเจ้าหน้าที่หรือไม่
-      if (email === 'admin@staff.com') {
-        if (password === '12345678Admin') {
-          // บันทึกสถานะสิทธิ์เจ้าหน้าที่ลงใน localStorage แล้วเปลี่ยนหน้าไป staff-dashboard.html
-          localStorage.setItem('userEmail', email);
-          localStorage.setItem('userRole', 'staff');
-          localStorage.setItem('isStaff', 'true');
-          localStorage.setItem('userName', 'เจ้าหน้าที่ ICT');
-          window.location.href = 'staff-dashboard.html';
-          return;
-        } else {
-          passwordInput.classList.add('input-error');
-          alertText.innerHTML = 'รหัสผ่านเจ้าหน้าที่ไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง';
-          alertBox.classList.add('show');
-          passwordInput.focus();
-          return;
-        }
-      }
-
       let usersList = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
 
       const singleEmail = localStorage.getItem('userEmail');
@@ -562,8 +548,6 @@
       localStorage.setItem('currentUser', JSON.stringify(accountFound));
       localStorage.setItem('userEmail', accountFound.email);
       localStorage.setItem('userName', accountFound.name || 'ผู้ใช้งาน');
-      localStorage.removeItem('userRole');
-      localStorage.removeItem('isStaff');
 
       window.location.href = 'home.html';
     }
