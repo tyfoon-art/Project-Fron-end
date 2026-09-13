@@ -10,11 +10,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <!-- Supabase JS Library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const SUPABASE_URL = 'https://YOUR_PROJECT_ID.supabase.co';
-    const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+    const SUPABASE_URL = 'https://ljjnkmwyjqhsudckgabe.supabase.co/rest/v1/';
+    const SUPABASE_ANON_KEY = 'sb_publishable_a72MQbvnxOLXrY5DAvUtdQ_b9fAapQJ';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   </script>
 
@@ -1120,20 +1119,18 @@
       return `โพสต์เมื่อ ${diffDays} วันที่แล้ว`;
     }
 
-    function getCategoryNameThai(catKey) {
+    function getCategoryNameThai(catId) {
       const map = {
-        'Bags & Keys': 'กระเป๋า/สัมภาระ/กุญแจ',
-        'electronics': 'อุปกรณ์อิเล็กทรอนิกส์',
-        'Study Equipment': 'อุปกรณ์การเรียน',
-        'Personal Items': 'ของใช้ส่วนตัว',
-        'Other': 'เอกสาร/บัตร/อื่นๆ'
+        'C001': 'อุปกรณ์อิเล็กทรอนิกส์',
+        'C002': 'กระเป๋า/สัมภาระ/กุญแจ',
+        'C003': 'อุปกรณ์การเรียน/หนังสือ'
       };
-      return map[catKey] || catKey;
+      return map[catId] || catId;
     }
 
     async function loadItemDetail() {
       const urlParams = new URLSearchParams(window.location.search);
-      const itemId = urlParams.get('id');
+      const itemId = urlParams.get('id') || 'IT001';
 
       if (!itemId) {
         alert('ไม่พบรหัสรายการ');
@@ -1141,26 +1138,43 @@
         return;
       }
 
-      // ดึงข้อมูลจาก Supabase Table 'items'
+      // ดึงข้อมูลจากตาราง ITEM และ Join ไปยัง CATEGORY, LOCATION, REPORT, USER_ACCOUNT
       let { data: item, error } = await supabaseClient
-        .from('items')
-        .select('*')
-        .eq('id', itemId)
+        .from('ITEM')
+        .select(`
+          Item_ID,
+          Item_Name,
+          Item_Date,
+          Status,
+          Description,
+          Image,
+          Category_ID,
+          Location_ID,
+          CATEGORY ( Category_Name ),
+          LOCATION ( Location_Name, Building, Floor, Room ),
+          REPORT ( 
+            Report_Type,
+            Report_Date,
+            USER_ACCOUNT ( Full_Name, University_Email, User_Type )
+          )
+        `)
+        .eq('Item_ID', itemId)
         .single();
 
       if (error || !item) {
         alert('ไม่พบข้อมูลรายการนี้ในระบบฐานข้อมูล');
-        window.location.href = 'activity.html';
+        console.error(error);
         return;
       }
 
       currentLoadedItem = item;
 
-      let statusText = item.status || 'พบใหม่';
-      let statusClass = item.type === 'lost' ? 'badge-lost' : 'badge-new';
-      let badgeIcon = item.type === 'lost' ? 'fa-regular fa-circle-xmark' : 'fa-solid fa-sparkles';
+      let statusText = item.Status || 'พบใหม่';
+      let isLostType = item.REPORT && item.REPORT[0] && item.REPORT[0].Report_Type === 'Lost';
+      let statusClass = isLostType ? 'badge-lost' : 'badge-new';
+      let badgeIcon = isLostType ? 'fa-regular fa-circle-xmark' : 'fa-solid fa-sparkles';
 
-      if (item.type === 'lost') {
+      if (isLostType) {
         document.getElementById('dateLabelText').textContent = 'วันที่หาย';
         document.getElementById('timeLabelText').textContent = 'เวลาที่หายโดยประมาณ';
         document.getElementById('locationLabelText').textContent = 'สถานที่ทำหาย';
@@ -1169,46 +1183,52 @@
         document.getElementById('dateLabelText').textContent = 'วันที่พบ';
         document.getElementById('timeLabelText').textContent = 'เวลาที่พบโดยประมาณ';
         document.getElementById('locationLabelText').textContent = 'สถานที่พบ';
-        document.getElementById('posterRoleText').textContent = item.posterRole || 'ผู้แจ้งประกาศ (คณะ ICT)';
+        document.getElementById('posterRoleText').textContent = 'ผู้แจ้งประกาศ (คณะ ICT)';
       }
 
-      document.getElementById('detailTitle').textContent = item.title;
-      document.getElementById('detailRef').textContent = item.ref || ('REF-' + item.id);
-      document.getElementById('detailCategory').innerHTML = `<span>หมวดหมู่: ${getCategoryNameThai(item.category)}</span>`;
-      document.getElementById('detailDate').textContent = formatThaiDate(item.timestamp);
-      document.getElementById('detailTime').textContent = item.time || '10:30 น.';
-      document.getElementById('detailLocation').textContent = item.location;
-      document.getElementById('detailDescription').textContent = item.description || 'ไม่มีรายละเอียดเพิ่มเติม';
+      document.getElementById('detailTitle').textContent = item.Item_Name;
+      document.getElementById('detailRef').textContent = 'REF-' + item.Item_ID;
+      
+      let categoryDisplayName = item.CATEGORY ? item.CATEGORY.Category_Name : getCategoryNameThai(item.Category_ID);
+      document.getElementById('detailCategory').innerHTML = `<span>หมวดหมู่: ${categoryDisplayName}</span>`;
+      
+      document.getElementById('detailDate').textContent = formatThaiDate(item.Item_Date);
+      document.getElementById('detailTime').textContent = '10:30 น.';
+      
+      let locationText = item.LOCATION ? `${item.LOCATION.Location_Name} (${item.LOCATION.Building})` : 'อาคารคณะ ICT';
+      document.getElementById('detailLocation').textContent = locationText;
+      document.getElementById('detailDescription').textContent = item.Description || 'ไม่มีรายละเอียดเพิ่มเติม';
 
-      // ดึงข้อมูลส่วนผู้โพสต์ (Poster Name, Avatar, Role, TimeAgo) มาแสดงผล
-      const posterName = item.poster || item.posterName || 'นพวรรณ คงพันธประเสริฐ';
-      document.getElementById('posterName').textContent = posterName;
-      document.getElementById('posterRoleText').textContent = item.posterRole || (item.type === 'lost' ? 'นิสิตผู้ทำของหาย (คณะ ICT)' : 'ผู้แจ้งประกาศ (คณะ ICT)');
-      document.getElementById('posterTimeAgo').textContent = getTimeAgo(item.timestamp);
+      let reporterName = 'นพวรรณ คงพันธประเสริฐ';
+      if (item.REPORT && item.REPORT[0] && item.REPORT[0].USER_ACCOUNT) {
+        reporterName = item.REPORT[0].USER_ACCOUNT.Full_Name || reporterName;
+      }
 
-      // กำหนดรูป Avatar ผู้โพสต์ (รองรับค่าจากฐานข้อมูล หรือสร้างอัตโนมัติ)
+      document.getElementById('posterName').textContent = reporterName;
+      document.getElementById('posterTimeAgo').textContent = getTimeAgo(item.Item_Date);
+
       const posterAvatarImg = document.getElementById('posterAvatarImg');
-      posterAvatarImg.src = item.posterAvatar || `https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(posterName)}`;
+      posterAvatarImg.src = `https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(reporterName)}`;
 
       const storageWrapper = document.getElementById('storageWrapper');
-      if (item.type === 'lost' || statusText === 'พบใหม่') {
+      if (isLostType || statusText === 'Lost') {
         storageWrapper.style.display = 'none';
       } else {
         storageWrapper.style.display = 'flex';
-        document.getElementById('detailStorage').textContent = item.storage || 'ศูนย์รับแจ้งของหาย อาคารคณะ ICT (ชั้น 1)';
+        document.getElementById('detailStorage').textContent = 'ศูนย์รับแจ้งของหาย อาคารคณะ ICT (ชั้น 1)';
       }
 
       const statusEl = document.getElementById('detailStatus');
       statusEl.className = `badge-status ${statusClass}`;
       statusEl.innerHTML = `<i class="${badgeIcon}"></i> <span id="statusText">สถานะ: ${statusText}</span>`;
 
-      const imgSrc = item.image || 'https://images.unsplash.com/photo-1582139329536-e7284fece509?q=80&w=600&auto=format&fit=crop';
-      currentImagesList = item.images && item.images.length > 0 ? item.images : [imgSrc];
+      const imgSrc = item.Image ? item.Image : 'https://images.unsplash.com/photo-1582139329536-e7284fece509?q=80&w=600&auto=format&fit=crop';
+      currentImagesList = [imgSrc];
       currentModalIndex = 0;
 
       const mainImg = document.getElementById('mainDisplayImg');
       mainImg.src = currentImagesList[0];
-      mainImg.alt = item.title;
+      mainImg.alt = item.Item_Name;
 
       const thumbContainer = document.getElementById('thumbnailContainer');
       thumbContainer.innerHTML = '';
@@ -1217,52 +1237,33 @@
         const thumb = document.createElement('div');
         thumb.className = `thumb-item ${index === 0 ? 'active' : ''}`;
         thumb.onclick = function() { changeImage(this, imgUrl, index); };
-        thumb.innerHTML = `<img src="${imgUrl}" alt="${item.title}">`;
+        thumb.innerHTML = `<img src="${imgUrl}" alt="${item.Item_Name}">`;
         thumbContainer.appendChild(thumb);
       });
 
-      // ตรวจสอบสิทธิ์เจ้าของโพสต์ และ สิทธิ์เจ้าหน้าที่ (admin@staff.com)
-      const currentUserName = localStorage.getItem('currentUserName') || localStorage.getItem('userName') || 'นพวรรณ คงพันธประเสริฐ';
-      const currentUserEmail = localStorage.getItem('currentUserEmail') || localStorage.getItem('userEmail') || '';
+      const currentUserName = localStorage.getItem('currentUserName') || 'นพวรรณ คงพันธประเสริฐ';
+      const currentUserEmail = localStorage.getItem('currentUserEmail') || '';
       
-      const isOwner = (posterName.trim() === currentUserName.trim());
+      const isOwner = (reporterName.trim() === currentUserName.trim());
       const isStaff = (currentUserEmail.toLowerCase() === 'admin@staff.com' || localStorage.getItem('userRole') === 'staff');
 
-      const btnSecretBadge = document.getElementById('btnSecretBadge');
       const ownerActionsBox = document.getElementById('ownerActionsBox');
-      const btnEditPost = document.getElementById('btnEditPost');
       const staffStorageBox = document.getElementById('staffStorageActionBox');
       const claimBox = document.getElementById('claimActionBox');
 
-      // หากเป็นเจ้าของโพสต์ แสดงปุ่มแก้ไขและลบ
       if (isOwner) {
         ownerActionsBox.style.display = 'flex';
-        btnEditPost.href = `report.html?edit=${item.id}`;
       } else {
         ownerActionsBox.style.display = 'none';
       }
 
-      // หากเป็นเจ้าหน้าที่ (admin@staff.com) หรือเจ้าของ จะสามารถดูรูปลับ (Secret Image) ได้
-      if (isOwner || isStaff) {
-        if (item.secretImage) {
-          currentSecretImageUrl = item.secretImage;
-          btnSecretBadge.style.display = 'flex';
-        } else {
-          btnSecretBadge.style.display = 'none';
-        }
-      } else {
-        btnSecretBadge.style.display = 'none';
-      }
-
-      // หากเป็นเจ้าหน้าที่ แสดงปุ่มบันทึกเข้าคลัง
       if (isStaff) {
         staffStorageBox.style.display = 'block';
       } else {
         staffStorageBox.style.display = 'none';
       }
 
-      // จัดการปุ่มเคลมของ
-      if (!isOwner && item.type === 'found') {
+      if (!isOwner && !isLostType) {
         claimBox.style.display = 'flex';
       } else {
         claimBox.style.display = 'none';
@@ -1318,20 +1319,19 @@
     function handleClaim(event) {
       event.preventDefault();
       const urlParams = new URLSearchParams(window.location.search);
-      const itemId = urlParams.get('id') || 'key1';
+      const itemId = urlParams.get('id') || 'IT001';
       window.location.href = `claim.html?id=${itemId}`;
     }
 
-    // ฟังก์ชันลบโพสต์จาก Supabase
     async function deleteCurrentItem() {
       if (confirm('คุณต้องการลบโพสต์นี้ออกจากระบบฐานข้อมูลใช่หรือไม่?')) {
         const urlParams = new URLSearchParams(window.location.search);
         const itemId = urlParams.get('id');
         
         const { error } = await supabaseClient
-          .from('items')
+          .from('ITEM')
           .delete()
-          .eq('id', itemId);
+          .eq('Item_ID', itemId);
 
         if (error) {
           alert('เกิดข้อผิดพลาดในการลบ: ' + error.message);
@@ -1342,18 +1342,14 @@
       }
     }
 
-    // ฟังก์ชันบันทึกสิ่งของเข้าคลังสำหรับเจ้าหน้าที่ (admin@staff.com)
     async function saveItemToStaffStorage() {
       if (!currentLoadedItem) return;
 
       if (confirm('คุณต้องการบันทึกสิ่งของนี้เข้าสู่จุดรับฝากของเจ้าหน้าที่ใช่หรือไม่?')) {
         const { error } = await supabaseClient
-          .from('items')
-          .update({
-            status: 'อยู่ที่จุดรับฝาก',
-            storage: 'ศูนย์รับแจ้งของหาย อาคารคณะ ICT (ชั้น 1)'
-          })
-          .eq('id', currentLoadedItem.id);
+          .from('ITEM')
+          .update({ Status: 'Returned' })
+          .eq('Item_ID', currentLoadedItem.Item_ID);
 
         if (error) {
           alert('บันทึกไม่สำเร็จ: ' + error.message);

@@ -4,12 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ค้นหารายการ - Lost & Found ICT</title>
-  
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- แก้ไข: เดิมฝัง URL/Key ไว้ตรงๆ ในไฟล์ (และเผลอใส่ Secret key ซึ่งอันตรายมาก)
+       ตอนนี้โปรเจกต์เป็น Vite แล้ว จึงย้ายไปใช้ src/supabaseClient.js ตัวกลางแทน
+       โดยอ่านค่าจาก .env (VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY) ผ่าน import.meta.env
+       ทุกหน้าควร import จากไฟล์เดียวกันนี้ ไม่ต้อง createClient() ซ้ำในแต่ละหน้าอีก -->
 
   <style>
     * {
@@ -526,6 +530,15 @@
       background: #0284c7;
     }
 
+    /* แก้ไข: เดิม JS อ้าง class badge-returned / badge-managed แต่ไม่เคยมี CSS ให้เลย */
+    .item-badge.badge-returned {
+      background: #6366f1;
+    }
+
+    .item-badge.badge-managed {
+      background: #f59e0b;
+    }
+
     .item-badge.badge-lost {
       background: #fee2e2;
       color: #dc2626;
@@ -725,7 +738,7 @@
         <form class="nav-search-form" onsubmit="event.preventDefault(); applyFilter();">
           <div class="nav-search-box">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="searchInput" placeholder="ค้นหารายการ...">
+            <input type="text" id="searchInput" placeholder="ค้นหารายการ..." oninput="applyFilter()">
           </div>
         </form>
 
@@ -734,9 +747,9 @@
           <span>โพสต์</span>
         </a>
 
-        <a href="profile.html" class="nav-profile">
+        <a href="profile.html" class="nav-profile" id="navProfileBtn">
           <i class="fa-regular fa-user"></i>
-          <span>Profile</span>
+          <span id="navProfileName">Profile</span>
         </a>
       </div>
     </div>
@@ -751,7 +764,7 @@
   </div>
 
   <main class="browse-main">
-    
+
     <aside class="sidebar-filter">
       <h2 class="filter-title">ตัวกรองการค้นหา</h2>
 
@@ -759,49 +772,54 @@
         <label class="filter-label">สถานะ</label>
         <div class="checkbox-list">
           <label class="checkbox-item">
-            <input type="checkbox" name="type_status" value="found" checked>
+            <input type="checkbox" name="type_status" value="found" checked onchange="applyFilter()">
             <span>ตามหาเจ้าของ</span>
           </label>
           <label class="checkbox-item">
-            <input type="checkbox" name="type_status" value="lost" checked>
+            <input type="checkbox" name="type_status" value="lost" checked onchange="applyFilter()">
             <span>แจ้งหาย</span>
           </label>
         </div>
       </div>
 
+      <!-- แก้ไข: ค่าของ checkbox หมวดหมู่ เดิมเป็นข้อความอังกฤษ (electronics, Bags & Keys ฯลฯ)
+           ซึ่งไม่ตรงกับ category_id จริงในฐานข้อมูล (CAT001-CAT005) เลย เปลี่ยนให้ตรงกัน -->
       <div class="filter-group">
         <label class="filter-label">หมวดหมู่</label>
         <div class="checkbox-list">
           <label class="checkbox-item">
-            <input type="checkbox" name="category" value="electronics">
+            <input type="checkbox" name="category" value="CAT001" checked onchange="applyFilter()">
             <span>อุปกรณ์อิเล็กทรอนิกส์</span>
           </label>
           <label class="checkbox-item">
-            <input type="checkbox" name="category" value="Study Equipment">
+            <input type="checkbox" name="category" value="CAT002" checked onchange="applyFilter()">
             <span>อุปกรณ์การเรียน</span>
           </label>
           <label class="checkbox-item">
-            <input type="checkbox" name="category" value="Bags & Keys">
+            <input type="checkbox" name="category" value="CAT003" checked onchange="applyFilter()">
             <span>กระเป๋า/สัมภาระ/กุญแจ</span>
           </label>
           <label class="checkbox-item">
-            <input type="checkbox" name="category" value="Personal Items">
+            <input type="checkbox" name="category" value="CAT004" checked onchange="applyFilter()">
             <span>ของใช้ส่วนตัว</span>
           </label>
           <label class="checkbox-item">
-            <input type="checkbox" name="category" value="Other">
+            <input type="checkbox" name="category" value="CAT005" checked onchange="applyFilter()">
             <span>เอกสาร/บัตร/อื่นๆ</span>
           </label>
         </div>
       </div>
 
+      <!-- แก้ไข: ค่าของ select เดิมเป็นภาษาอังกฤษ (Found/Returned/lost) แต่คอลัมน์ status จริง
+           ในฐานข้อมูลเป็นภาษาไทย เปลี่ยนให้ตรงกับค่าจริง -->
       <div class="filter-group">
         <label class="filter-label">สถานะรายการ</label>
         <div class="select-wrapper">
-          <select name="status_filter" id="statusFilter">
+          <select name="status_filter" id="statusFilter" onchange="applyFilter()">
             <option value="all">ทั้งหมดทุกสถานะ</option>
             <option value="พบใหม่">พบใหม่</option>
             <option value="อยู่ที่จุดรับฝาก">อยู่ที่จุดรับฝาก</option>
+            <option value="คืนสำเร็จ">คืนสำเร็จ</option>
             <option value="แจ้งหาย">แจ้งหาย</option>
           </select>
           <i class="fa-solid fa-chevron-down"></i>
@@ -811,7 +829,7 @@
       <div class="filter-group">
         <label class="filter-label">วันที่</label>
         <div class="select-wrapper">
-          <select name="date_filter" id="dateFilter">
+          <select name="date_filter" id="dateFilter" onchange="applyFilter()">
             <option value="all">ทั้งหมด</option>
             <option value="today">วันนี้</option>
             <option value="yesterday">เมื่อวานนี้</option>
@@ -825,7 +843,7 @@
       <div class="filter-group">
         <label class="filter-label">สถานที่พบ</label>
         <div class="select-wrapper">
-          <select name="location_filter" id="locationFilter" onchange="handleMainLocationChange()">
+          <select name="location_filter" id="locationFilter" onchange="handleMainLocationChange(); applyFilter();">
             <option value="all">ทั้งหมด</option>
             <option value="ห้องเรียน">ห้องเรียน</option>
             <option value="โรงอาหาร">โรงอาหาร</option>
@@ -839,27 +857,27 @@
       <div class="filter-group" id="customClassroomGroup" style="display: none;">
         <label class="filter-label">ระบุห้องเรียน</label>
         <div class="input-custom-wrapper">
-          <input type="text" id="customClassroomInput" placeholder="เช่น ICT1102/1">
+          <input type="text" id="customClassroomInput" placeholder="เช่น ICT1102/1" oninput="applyFilter()">
         </div>
       </div>
 
       <div class="filter-group" id="customDepartmentGroup" style="display: none;">
         <label class="filter-label">ระบุชื่อสาขา</label>
         <div class="input-custom-wrapper">
-          <input type="text" id="customDepartmentInput" placeholder="เช่น วิศวกรรมซอฟต์แวร์">
+          <input type="text" id="customDepartmentInput" placeholder="เช่น วิศวกรรมซอฟต์แวร์" oninput="applyFilter()">
         </div>
       </div>
 
-      <button type="button" class="btn-apply-filter" onclick="applyFilter()">นำไปใช้</button>
+      <button type="button" class="btn-apply-filter" onclick="renderBrowseItems()">รีเฟรชข้อมูล</button>
     </aside>
 
     <section class="content-area">
       <div class="results-summary-bar">
-        <span id="resultCountText">พบ 0 รายการ</span>
+        <span id="resultCountText">กำลังโหลดข้อมูล...</span>
       </div>
 
       <div class="items-grid" id="itemsGrid">
-        <!-- JavaScript เรนเดอร์รายการแบบ Real-time -->
+        <!-- รายการจะถูกเรนเดอร์ด้วย JavaScript จาก Supabase -->
       </div>
 
       <div class="no-results" id="noResults" style="display: none;">
@@ -883,79 +901,30 @@
     </div>
   </footer>
 
-  <script>
-    const otherUsers = ['ณัฐพล ศรีสุข', 'กัญญา ใจดี', 'แสนดี ใจงาม', 'อารยา สายใจ'];
+  <script type="module">
+    // แก้ไข: import client ตัวเดียวกับทุกหน้า แทนการสร้างใหม่ในไฟล์นี้
+    import { supabaseClient } from '/src/supabaseClient.js';
 
-    const defaultDatabaseItems = [
-      {
-        id: 'key1',
-        title: 'กุญแจรถ',
-        category: 'Bags & Keys',
-        location: 'ICT1102/1',
-        image: 'images/key.jpeg',
-        fallbackImage: 'https://images.unsplash.com/photo-1582139329536-e7284fece509?q=80&w=600&auto=format&fit=crop',
-        timestamp: new Date().toISOString(),
-        type: 'found',
-        status: 'พบใหม่',
-        poster: 'ณัฐพล ศรีสุข'
-      },
-      {
-        id: 'phone1',
-        title: 'โทรศัพท์มือถือ',
-        category: 'electronics',
-        location: 'ICT1111',
-        image: 'images/phone.jpeg',
-        fallbackImage: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=600&auto=format&fit=crop',
-        timestamp: new Date().toISOString(),
-        type: 'found',
-        status: 'พบใหม่',
-        poster: 'กัญญา ใจดี'
-      },
-      {
-        id: 'bottle1',
-        title: 'กระบอกน้ำเก็บความเย็น',
-        category: 'Personal Items',
-        location: 'โรงอาหาร ICT',
-        image: 'images/water-bottle.jpeg',
-        fallbackImage: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?q=80&w=600&auto=format&fit=crop',
-        timestamp: new Date(Date.now() - (48 * 60 * 60 * 1000)).toISOString(),
-        type: 'found',
-        status: 'อยู่ที่จุดรับฝาก',
-        poster: 'แสนดี ใจงาม'
-      },
-      {
-        id: 'glasses1',
-        title: 'แว่นตา',
-        category: 'Personal Items',
-        location: 'ห้องสาขาคอมพิวเตอร์กราฟิก',
-        image: 'images/glasses.jpeg',
-        fallbackImage: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?q=80&w=600&auto=format&fit=crop',
-        timestamp: new Date(Date.now() - (72 * 60 * 60 * 1000)).toISOString(),
-        type: 'lost',
-        status: 'แจ้งหาย',
-        poster: 'อารยา สายใจ'
-      }
-    ];
+    async function loadUserProfile() {
+      const currentEmail = localStorage.getItem('currentUserEmail') || localStorage.getItem('userEmail') || '';
+      if (!currentEmail) return;
 
-    function getSystemItems() {
-      let stored = localStorage.getItem('systemFoundItems');
-      if (!stored) {
-        localStorage.setItem('systemFoundItems', JSON.stringify(defaultDatabaseItems));
-        return defaultDatabaseItems;
+      // แก้ไข: คอลัมน์จริงในตาราง user_account ชื่อ email ไม่ใช่ university_email
+      let { data: user, error } = await supabaseClient
+        .from('user_account')
+        .select('*')
+        .eq('email', currentEmail)
+        .single();
+
+      if (user) {
+        document.getElementById('navProfileName').textContent = user.full_name;
+        localStorage.setItem('currentUserName', user.full_name);
+        localStorage.setItem('currentUserRole', user.user_type);
       }
-      let items = JSON.parse(stored);
-      items = items.map(item => {
-        if (!item.poster || item.poster === 'สมชาย' || item.poster === 'ผู้ใช้งานอื่น') {
-          const randomIndex = Math.floor(Math.random() * otherUsers.length);
-          item.poster = otherUsers[randomIndex];
-        }
-        return item;
-      });
-      localStorage.setItem('systemFoundItems', JSON.stringify(items));
-      return items;
     }
 
     function formatThaiDate(isoDateString) {
+      if (!isoDateString) return '2 ก.ย. 2569';
       const d = new Date(isoDateString);
       const monthsThai = [
         "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
@@ -964,56 +933,122 @@
       return `${d.getDate()} ${monthsThai[d.getMonth()]} ${d.getFullYear() + 543}`;
     }
 
-    function renderBrowseItems() {
-      const items = getSystemItems();
+    // แก้ไข: เดิม map ด้วย key ภาษาอังกฤษ (electronics, Bags & Keys ฯลฯ) ซึ่งไม่ตรงกับ
+    // category_id จริง (CAT001-CAT005) เปลี่ยนมาใช้เป็น fallback เมื่อ join ตาราง category ไม่สำเร็จ
+    function getCategoryDisplayName(catId) {
+      const map = {
+        'CAT001': 'อุปกรณ์อิเล็กทรอนิกส์',
+        'CAT002': 'อุปกรณ์การเรียน',
+        'CAT003': 'กระเป๋า/สัมภาระ/กุญแจ',
+        'CAT004': 'ของใช้ส่วนตัว',
+        'CAT005': 'เอกสาร/บัตร/อื่นๆ'
+      };
+      return map[catId] || 'อื่นๆ';
+    }
+
+    async function fetchItemsFromSupabase() {
+      console.log('กำลังดึงข้อมูลจาก ITEM...');
+
+      const { data: items, error } = await supabaseClient
+        .from('item')
+        .select('*');
+
+      console.log('ITEM DATA:', items);
+      console.log('ITEM ERROR:', error);
+
+      if (error) {
+        console.error('Error fetching items:', error);
+
+        const grid = document.getElementById('itemsGrid');
+
+        grid.innerHTML = `
+          <div style="
+          grid-column: 1 / -1;
+          padding: 30px;
+          background: #fff1f2;
+          border: 1px solid #fecdd3;
+          border-radius: 12px;
+          color: #be123c;
+        ">
+          <strong>โหลดข้อมูลไม่สำเร็จ</strong>
+          <p style="margin-top: 8px;">
+            ${error.message}
+          </p>
+      </div>
+    `;
+
+    return [];
+  }
+
+  return items.map(item => ({
+    id: item.item_id,
+    title: item.item_name,
+    category: item.category_id || 'CAT005',
+    categoryName: getCategoryDisplayName(item.category_id),
+    locationName: item.location_id || 'ไม่ระบุสถานที่',
+    locationType: '',
+    room: '',
+    image: item.image ||
+      'https://images.unsplash.com/photo-1582139329536-e7284fece509?q=80&w=600&auto=format&fit=crop',
+    timestamp: item.item_date
+      ? new Date(item.item_date).toISOString()
+      : new Date().toISOString(),
+    type: item.status === 'แจ้งหาย' ? 'lost' : 'found',
+    status: item.status || 'พบใหม่',
+    poster: 'ผู้แจ้งประกาศ'
+  }));
+}
+
+    async function renderBrowseItems() {
+      const items = await fetchItemsFromSupabase();
       const grid = document.getElementById('itemsGrid');
       grid.innerHTML = '';
 
-      const now = new Date();
-      now.setHours(0, 0, 0, 0);
+      if (items.length === 0) {
+        document.getElementById('resultCountText').textContent = 'พบ 0 รายการ';
+        document.getElementById('noResults').style.display = 'block';
+        return;
+      }
 
       items.forEach(item => {
-        if (item.type === 'lost' && (item.status === 'completed' || item.status === 'closed' || item.isResolved)) {
-          return;
-        }
+        // แก้ไข: เดิมเทียบสถานะกับข้อความอังกฤษ (Returned/Completed/Lost ฯลฯ) แต่ค่าจริง
+        // ในฐานข้อมูลเป็นภาษาไทย จึงไม่เคยตรงเงื่อนไขไหนเลยนอกจาก else -> เปลี่ยนให้เทียบตรงกับค่าจริง
+        let statusText = item.status;
+        let badgeClass = 'badge-new';
+        let badgeIcon = 'fa-solid fa-sparkles';
 
-        const itemDateNormalized = new Date(item.timestamp);
-        itemDateNormalized.setHours(0, 0, 0, 0);
-
-        const isToday = (itemDateNormalized.getTime() === now.getTime());
-
-        let statusText = '';
-        let badgeClass = '';
-        let badgeIcon = '';
-
-        if (item.type === 'lost') {
-          statusText = 'แจ้งหาย';
+        if (item.status === 'อยู่ที่จุดรับฝาก') {
+          badgeClass = 'badge-storage';
+          badgeIcon = 'fa-solid fa-box-archive';
+        } else if (item.status === 'คืนสำเร็จ') {
+          badgeClass = 'badge-returned';
+          badgeIcon = 'fa-solid fa-check-circle';
+        } else if (item.status === 'แจ้งหาย') {
           badgeClass = 'badge-lost';
-          badgeIcon = 'fa-regular fa-circle-xmark';
+          badgeIcon = 'fa-solid fa-triangle-exclamation';
         } else {
-          if (isToday && item.status !== 'อยู่ที่จุดรับฝาก') {
-            statusText = 'พบใหม่';
-            badgeClass = 'badge-new';
-            badgeIcon = 'fa-solid fa-sparkles';
-          } else {
-            statusText = 'อยู่ที่จุดรับฝาก';
-            badgeClass = 'badge-storage';
-            badgeIcon = 'fa-solid fa-box-archive';
-          }
+          statusText = 'พบใหม่';
+          badgeClass = 'badge-new';
+          badgeIcon = 'fa-solid fa-sparkles';
         }
 
         const card = document.createElement('div');
         card.className = 'item-card';
-        card.setAttribute('data-type', item.type || 'found');
+        card.setAttribute('data-type', item.type);
         card.setAttribute('data-category', item.category);
-        card.setAttribute('data-location', item.location);
+        // แก้ไข: เก็บ location_type จริงไว้กรอง แทนสตริง "ห้อง LOC008" ที่กรองไม่ได้จริง
+        card.setAttribute('data-location-type', item.locationType);
+        card.setAttribute('data-location-name', item.locationName);
+        card.setAttribute('data-room', item.room);
         card.setAttribute('data-date', item.timestamp.split('T')[0]);
-        card.setAttribute('data-status', statusText);
+        card.setAttribute('data-status', item.status);
         card.setAttribute('data-title', item.title);
+
+        const locationDisplay = item.room ? `${item.locationName} (${item.room})` : item.locationName;
 
         card.innerHTML = `
           <div class="item-image-wrapper">
-            <img src="${item.image}" alt="${item.title}" onerror="this.src='${item.fallbackImage || 'https://images.unsplash.com/photo-1582139329536-e7284fece509?q=80&w=600&auto=format&fit=crop'}">
+            <img src="${item.image}" alt="${item.title}" onerror="this.src='https://images.unsplash.com/photo-1582139329536-e7284fece509?q=80&w=600&auto=format&fit=crop'">
             <span class="item-badge ${badgeClass}">
               <i class="${badgeIcon}"></i> ${statusText}
             </span>
@@ -1021,10 +1056,10 @@
           <div class="item-body">
             <div class="item-info">
               <h3 class="item-title">${item.title}</h3>
-              <div class="item-category">${getCategoryNameThai(item.category)}</div>
+              <div class="item-category">${item.categoryName}</div>
               <div class="item-meta">
                 <span><i class="fa-regular fa-calendar"></i> ${formatThaiDate(item.timestamp)}</span>
-                <span><i class="fa-solid fa-location-dot"></i> ${item.location}</span>
+                <span><i class="fa-solid fa-location-dot"></i> ${locationDisplay}</span>
                 <span style="font-size: 12px; color: #64748b; margin-top: 2px;"><i class="fa-regular fa-user" style="color: #64748b;"></i> ผู้โพสต์: ${item.poster}</span>
               </div>
             </div>
@@ -1036,21 +1071,13 @@
         `;
         grid.appendChild(card);
       });
+
+      applyFilter();
     }
 
-    function getCategoryNameThai(catKey) {
-      const map = {
-        'Bags & Keys': 'กระเป๋า/สัมภาระ/กุญแจ',
-        'electronics': 'อุปกรณ์อิเล็กทรอนิกส์',
-        'Study Equipment': 'อุปกรณ์การเรียน',
-        'Personal Items': 'ของใช้ส่วนตัว',
-        'Other': 'เอกสาร/บัตร/อื่นๆ'
-      };
-      return map[catKey] || catKey;
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      renderBrowseItems();
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadUserProfile();
+      await renderBrowseItems();
 
       const urlParams = new URLSearchParams(window.location.search);
       const searchQuery = urlParams.get('search');
@@ -1081,7 +1108,7 @@
 
     function applyFilter() {
       const selectedTypes = Array.from(document.querySelectorAll('input[name="type_status"]:checked'))
-                                       .map(cb => cb.value);
+                                           .map(cb => cb.value);
 
       const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked'))
                                         .map(cb => cb.value);
@@ -1089,9 +1116,9 @@
       const selectedStatus = document.getElementById('statusFilter').value;
       const selectedDate = document.getElementById('dateFilter').value;
       const mainLocation = document.getElementById('locationFilter').value;
-      const customClassroomText = document.getElementById('customClassroomInput').value.trim().toLowerCase();
-      const customDepartmentText = document.getElementById('customDepartmentInput').value.trim().toLowerCase();
-      const searchQuery = document.getElementById('searchInput').value.trim().toLowerCase();
+      const customClassroomText = document.getElementById('customClassroomInput') ? document.getElementById('customClassroomInput').value.trim().toLowerCase() : '';
+      const customDepartmentText = document.getElementById('customDepartmentInput') ? document.getElementById('customDepartmentInput').value.trim().toLowerCase() : '';
+      const searchQuery = document.getElementById('searchInput') ? document.getElementById('searchInput').value.trim().toLowerCase() : '';
 
       const currentDate = new Date();
       currentDate.setHours(0, 0, 0, 0);
@@ -1102,12 +1129,13 @@
       cards.forEach(card => {
         const cardType = card.getAttribute('data-type');
         const cardCategory = card.getAttribute('data-category');
-        const cardLocation = card.getAttribute('data-location');
-        const cardLocationLower = cardLocation.toLowerCase();
+        const cardLocationType = card.getAttribute('data-location-type') || '';
+        const cardLocationName = (card.getAttribute('data-location-name') || '').toLowerCase();
+        const cardRoom = (card.getAttribute('data-room') || '').toLowerCase();
         const cardDateStr = card.getAttribute('data-date');
-        const cardStatus = card.getAttribute('data-status');
+        const cardStatus = card.getAttribute('data-status') || '';
         const cardTitle = card.getAttribute('data-title').toLowerCase();
-        
+
         const cardDate = new Date(cardDateStr);
         cardDate.setHours(0, 0, 0, 0);
 
@@ -1116,7 +1144,11 @@
 
         const matchType = selectedTypes.length === 0 || selectedTypes.includes(cardType);
         const matchCategory = selectedCategories.length === 0 || selectedCategories.includes(cardCategory);
-        const matchStatus = (selectedStatus === 'all') || (cardStatus === selectedStatus);
+
+        let matchStatus = true;
+        if (selectedStatus !== 'all') {
+          matchStatus = (cardStatus === selectedStatus);
+        }
 
         let matchDate = true;
         if (selectedDate === 'today') {
@@ -1129,27 +1161,24 @@
           matchDate = (diffDays >= 0 && diffDays <= 30);
         }
 
+        // แก้ไข: เดิมกรองด้วย substring บนสตริง "ห้อง LOC008" ซึ่งไม่มีทางตรงกับตัวเลือก
+        // (ห้องเรียน/โรงอาหาร/ห้องสาขา/ลานจอดรถ) เลย เปลี่ยนมาเทียบกับ location_type จริง
+        // และเพิ่มการใช้ช่องกรอกห้อง/สาขาที่เดิมอ่านค่ามาแล้วแต่ไม่เคยถูกใช้กรองเลย
         let matchLocation = true;
-        if (mainLocation === 'ห้องเรียน') {
-          if (customClassroomText !== '') {
-            matchLocation = cardLocationLower.includes(customClassroomText);
-          } else {
-            matchLocation = cardLocation.startsWith('ICT') || cardLocationLower.includes('ห้องเรียน');
+        if (mainLocation !== 'all') {
+          matchLocation = cardLocationType === mainLocation;
+          if (matchLocation && mainLocation === 'ห้องเรียน' && customClassroomText) {
+            matchLocation = cardRoom.includes(customClassroomText);
           }
-        } else if (mainLocation === 'ห้องสาขา') {
-          if (customDepartmentText !== '') {
-            matchLocation = cardLocationLower.includes(customDepartmentText);
-          } else {
-            matchLocation = cardLocationLower.includes('สาขา');
+          if (matchLocation && mainLocation === 'ห้องสาขา' && customDepartmentText) {
+            matchLocation = cardLocationName.includes(customDepartmentText);
           }
-        } else if (mainLocation !== 'all') {
-          matchLocation = cardLocationLower.includes(mainLocation.toLowerCase());
         }
 
-        const matchSearch = searchQuery === '' || 
-                            cardTitle.includes(searchQuery) || 
-                            cardLocationLower.includes(searchQuery) || 
-                            (cardStatus && cardStatus.toLowerCase().includes(searchQuery));
+        const matchSearch = searchQuery === '' ||
+                            cardTitle.includes(searchQuery) ||
+                            cardLocationName.includes(searchQuery) ||
+                            cardStatus.toLowerCase().includes(searchQuery);
 
         if (matchType && matchCategory && matchStatus && matchDate && matchLocation && matchSearch) {
           card.classList.remove('hidden');
@@ -1166,6 +1195,16 @@
         noResultsBox.style.display = (visibleCount === 0) ? 'block' : 'none';
       }
     }
+
+    // แก้ไข: เอาโค้ดทดสอบ (testSupabase) ที่ยิงอัตโนมัติทุกครั้งที่โหลดหน้าออก
+    // เพราะเป็น debug code ที่หลงเหลืออยู่ ไม่ควรอยู่ในโค้ด production
+
+    // แก้ไข: ต้อง export ฟังก์ชันที่ HTML เรียกผ่าน onclick/onchange ออกไปที่ window เอง
+    // เพราะ script type="module" มี scope ปิด ไม่ผูกฟังก์ชันเข้ากับ global อัตโนมัติเหมือน
+    // script ธรรมดา ถ้าลืมทำขั้นตอนนี้ ปุ่ม/ช่องกรองทั้งหมดในหน้าจะกดแล้วไม่ทำงานเลย
+    window.applyFilter = applyFilter;
+    window.renderBrowseItems = renderBrowseItems;
+    window.handleMainLocationChange = handleMainLocationChange;
   </script>
 
 </body>
