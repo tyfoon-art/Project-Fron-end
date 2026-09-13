@@ -10,10 +10,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <!-- แก้ไข: เดิมฝัง URL/Key ไว้ตรงๆ ในไฟล์ (และเผลอใส่ Secret key ซึ่งอันตรายมาก)
-       ตอนนี้โปรเจกต์เป็น Vite แล้ว จึงย้ายไปใช้ src/supabaseClient.js ตัวกลางแทน
-       โดยอ่านค่าจาก .env (VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY) ผ่าน import.meta.env
-       ทุกหน้าควร import จากไฟล์เดียวกันนี้ ไม่ต้อง createClient() ซ้ำในแต่ละหน้าอีก -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = 'https://ljjnkmwyjqhsudckgabe.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_a72MQbvnxOLXrY5DAvUtdQ_b9fAapQJ';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  </script>
 
   <style>
     * {
@@ -901,10 +903,7 @@
     </div>
   </footer>
 
-  <script type="module">
-    // แก้ไข: import client ตัวเดียวกับทุกหน้า แทนการสร้างใหม่ในไฟล์นี้
-    import { supabaseClient } from '/src/supabaseClient.js';
-
+  <script>
     async function loadUserProfile() {
       const currentEmail = localStorage.getItem('currentUserEmail') || localStorage.getItem('userEmail') || '';
       if (!currentEmail) return;
@@ -1196,15 +1195,6 @@
       }
     }
 
-    // แก้ไข: เอาโค้ดทดสอบ (testSupabase) ที่ยิงอัตโนมัติทุกครั้งที่โหลดหน้าออก
-    // เพราะเป็น debug code ที่หลงเหลืออยู่ ไม่ควรอยู่ในโค้ด production
-
-    // แก้ไข: ต้อง export ฟังก์ชันที่ HTML เรียกผ่าน onclick/onchange ออกไปที่ window เอง
-    // เพราะ script type="module" มี scope ปิด ไม่ผูกฟังก์ชันเข้ากับ global อัตโนมัติเหมือน
-    // script ธรรมดา ถ้าลืมทำขั้นตอนนี้ ปุ่ม/ช่องกรองทั้งหมดในหน้าจะกดแล้วไม่ทำงานเลย
-    window.applyFilter = applyFilter;
-    window.renderBrowseItems = renderBrowseItems;
-    window.handleMainLocationChange = handleMainLocationChange;
   </script>
 
 </body>
