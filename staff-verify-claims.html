@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+
     <script>
         tailwind.config = {
             theme: {
@@ -28,57 +29,112 @@
             }
         }
     </script>
+
     <style>
-        body { font-family: 'Prompt', sans-serif; }
+        body {
+            font-family: 'Prompt', sans-serif;
+        }
     </style>
 </head>
+
 <body class="bg-ict-lightBg text-gray-800 min-h-screen flex flex-col font-sans relative">
 
     <!-- TOP NAVBAR -->
     <header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-            
-            <a href="staff-dashboard.html" class="flex items-center gap-2.5 flex-shrink-0 hover:opacity-80 transition">
+
+            <!-- Logo -->
+            <a href="staff-dashboard.html" class="flex items-center gap-2.5 flex-shrink-0 hover:opacity-80 transition pr-2">
                 <svg class="w-7 h-7 text-ict-blue flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
                     <path d="M3.8 12.8v3.7c0 2.2 3.7 4 8.2 4s8.2-1.8 8.2-4v-3.7l-8.2 4.5-8.2-4.5z"/>
                 </svg>
-                <span class="text-xl font-extrabold text-ict-blue tracking-tight whitespace-nowrap">Lost &amp; Found ICT</span>
+                <span class="text-xl font-extrabold text-ict-blue tracking-tight whitespace-nowrap">
+                    Lost &amp; Found ICT
+                </span>
             </a>
 
-            <nav class="hidden md:flex items-center space-x-1 lg:space-x-6 text-sm font-semibold text-gray-600 h-full">
-                <a href="staff-dashboard.html" class="h-full flex items-center border-b-2 border-transparent hover:text-ict-blue hover:border-gray-300 transition whitespace-nowrap px-1">แดชบอร์ดภาพรวม</a>
-                <a href="staff-inventory-add.html" class="h-full flex items-center border-b-2 border-transparent hover:text-ict-blue hover:border-gray-300 transition whitespace-nowrap px-1">รายการสิ่งของทั้งหมด</a>
-                <a href="staff-verify-claims.html" class="h-full flex items-center border-b-2 border-ict-blue text-ict-blue font-extrabold transition whitespace-nowrap px-1">ตรวจสอบคำร้อง</a>
-                <a href="staff-handover.html" class="h-full flex items-center border-b-2 border-transparent hover:text-ict-blue hover:border-gray-300 transition whitespace-nowrap px-1">ส่งคืนเจ้าของ</a>
-                <a href="staff-overdue-list.html" class="h-full flex items-center border-b-2 border-transparent hover:text-ict-blue hover:border-gray-300 transition whitespace-nowrap px-1">รายการสิ่งของตกค้าง</a>
+            <!-- Navigation -->
+            <nav class="hidden md:flex items-center space-x-1 lg:space-x-5 text-sm font-semibold text-gray-600 h-full">
+
+                <a href="staff-dashboard.html"
+                   class="h-full flex items-center border-b-4 border-transparent hover:text-ict-blue transition whitespace-nowrap px-1">
+                    แดชบอร์ดภาพรวม
+                </a>
+
+                <a href="staff-inventory-add.html"
+                   class="h-full flex items-center border-b-4 border-transparent hover:text-ict-blue transition whitespace-nowrap px-1">
+                    รายการสิ่งของทั้งหมด
+                </a>
+
+                <!-- ACTIVE -->
+                <a href="staff-verify-claims.html"
+                   class="h-full flex items-center border-b-4 border-ict-blue text-ict-blue font-bold transition whitespace-nowrap px-1">
+                    ตรวจสอบคำร้อง
+                </a>
+
+                <a href="staff-handover.html"
+                   class="h-full flex items-center border-b-4 border-transparent hover:text-ict-blue transition whitespace-nowrap px-1">
+                    ส่งคืนเจ้าของ
+                </a>
+
+                <a href="staff-overdue-list.html"
+                   class="h-full flex items-center border-b-4 border-transparent hover:text-ict-blue transition whitespace-nowrap px-1">
+                    รายการสิ่งของตกค้าง
+                </a>
+
             </nav>
 
-            <div class="flex items-center gap-3">
-                <div class="relative hidden sm:block w-48 md:w-60">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                        </svg>
-                    </span>
-                    <input type="text" id="topSearchInput" placeholder="ค้นหารายการ..." class="w-full bg-gray-50 border border-gray-200 text-xs rounded-full pl-9 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-ict-blue/20 transition">
+            <!-- Right Side -->
+            <div class="flex items-center gap-3 ml-auto md:ml-0">
+
+                <!-- Search -->
+                <div class="relative hidden sm:block w-44 lg:w-56">
+                    <svg class="w-4 h-4 text-gray-500 absolute left-3.5 top-2.5"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         viewBox="0 0 24 24">
+                        <path stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+
+                    <input
+                        type="text"
+                        id="topSearchInput"
+                        placeholder="ค้นหารายการ..."
+                        class="w-full bg-slate-50 border border-slate-200 text-xs rounded-full pl-9 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-ict-blue/20 transition">
                 </div>
 
-                <a href="staff-inventory-add.html" class="bg-ict-blue hover:bg-ict-hover text-white text-xs font-bold px-4 py-2 rounded-full flex items-center gap-1.5 shadow-sm transition whitespace-nowrap">
+                <!-- Post Button -->
+                <a href="staff-inventory-add.html"
+                   class="bg-ict-blue hover:bg-ict-hover text-white text-xs font-bold px-4 py-2 rounded-full flex items-center gap-1.5 shadow-sm transition whitespace-nowrap">
                     <span class="text-sm font-bold">+</span>
                     <span>โพสต์</span>
                 </a>
 
-                <a href="staff-profile.html" class="flex items-center gap-1.5 text-xs text-gray-700 hover:text-ict-blue font-semibold px-2 py-1.5 rounded-lg transition whitespace-nowrap">
-                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                    </svg>
-                    <span class="hidden lg:inline">Profile</span>
-                </a>
-            </div>
+                <!-- Profile -->
+                <a href="staff-profile.html"
+                   class="h-16 flex items-center gap-1.5 text-sm text-gray-700 hover:text-ict-blue font-bold px-2 border-b-4 border-transparent transition whitespace-nowrap">
 
+                    <svg class="w-5 h-5 text-gray-600 hover:text-ict-blue transition"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         viewBox="0 0 24 24">
+                        <path stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    </svg>
+
+                    <span>Profile</span>
+                </a>
+
+            </div>
         </div>
     </header>
+
 
     <!-- CONTENT หลัก -->
     <main class="flex-1 p-6 md:p-8 overflow-y-auto">
@@ -87,46 +143,102 @@
             <!-- Header -->
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900 tracking-tight">ตรวจสอบคำร้อง (Verify Claims)</h1>
-                    <p class="text-xs text-gray-500 font-medium mt-0.5">รายการคำร้องขอรับคืนสิ่งของที่รอการตรวจสอบจากเจ้าหน้าที่</p>
+                    <h1 class="text-2xl font-bold text-gray-900 tracking-tight">
+                        ตรวจสอบคำร้อง (Verify Claims)
+                    </h1>
+                    <p class="text-xs text-gray-500 font-medium mt-0.5">
+                        รายการคำร้องขอรับคืนสิ่งของที่รอการตรวจสอบจากเจ้าหน้าที่
+                    </p>
                 </div>
 
                 <div class="relative w-full sm:w-64">
-                    <input type="text" id="searchInput" onkeyup="applyFilters()" placeholder="ค้นหาคำร้อง..." class="w-full bg-white border border-gray-200 rounded-full pl-9 pr-4 py-2 text-xs text-gray-700 focus:outline-none focus:ring-2 focus:ring-ict-blue/20 shadow-sm transition">
-                    <svg class="w-4 h-4 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    <input
+                        type="text"
+                        id="searchInput"
+                        onkeyup="applyFilters()"
+                        placeholder="ค้นหาคำร้อง..."
+                        class="w-full bg-white border border-gray-200 rounded-full pl-9 pr-4 py-2 text-xs text-gray-700 focus:outline-none focus:ring-2 focus:ring-ict-blue/20 shadow-sm transition">
+
+                    <svg class="w-4 h-4 text-gray-400 absolute left-3 top-2.5"
+                         fill="none"
+                         stroke="currentColor"
+                         viewBox="0 0 24 24">
+                        <path stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z">
+                        </path>
                     </svg>
                 </div>
             </div>
+
 
             <!-- Card Table -->
             <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
 
                 <!-- Filters -->
                 <div class="p-4 border-b border-gray-100 flex flex-wrap items-center justify-between gap-3 bg-white">
+
                     <div class="flex items-center gap-2">
-                        
+
                         <!-- Dropdown Filter Panel -->
                         <div class="relative inline-block text-left">
-                            <button id="filterDropdownBtn" onclick="toggleFilterMenu()" class="px-3.5 py-1.5 border border-gray-200 rounded-lg text-xs font-medium text-gray-600 hover:bg-gray-50 flex items-center gap-1.5 transition focus:outline-none">
-                                <svg class="w-3.5 h-3.5 text-gray-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+
+                            <button
+                                id="filterDropdownBtn"
+                                onclick="toggleFilterMenu()"
+                                class="px-3.5 py-1.5 border border-gray-200 rounded-lg text-xs font-medium text-gray-600 hover:bg-gray-50 flex items-center gap-1.5 transition focus:outline-none">
+
+                                <svg class="w-3.5 h-3.5 text-gray-500"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="2"
+                                     viewBox="0 0 24 24">
+                                    <path stroke-linecap="round"
+                                          stroke-linejoin="round"
+                                          d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
                                 </svg>
+
                                 <span>ตัวกรอง (Filters)</span>
-                                <svg class="w-3 h-3 text-gray-400 ml-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+
+                                <svg class="w-3 h-3 text-gray-400 ml-0.5"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="2"
+                                     viewBox="0 0 24 24">
+                                    <path stroke-linecap="round"
+                                          stroke-linejoin="round"
+                                          d="M19 9l-7 7-7-7"/>
                                 </svg>
                             </button>
 
-                            <div id="filterMenu" class="hidden absolute left-0 mt-2 w-72 bg-white rounded-xl shadow-lg border border-gray-100 p-4 z-50 space-y-4">
+
+                            <div
+                                id="filterMenu"
+                                class="hidden absolute left-0 mt-2 w-72 bg-white rounded-xl shadow-lg border border-gray-100 p-4 z-50 space-y-4">
+
                                 <div class="flex items-center justify-between border-b border-gray-100 pb-2">
-                                    <span class="font-bold text-gray-800 text-xs">ตัวกรองค้นหา</span>
-                                    <button onclick="resetFilters()" class="text-[11px] text-ict-blue hover:underline">รีเซ็ต</button>
+                                    <span class="font-bold text-gray-800 text-xs">
+                                        ตัวกรองค้นหา
+                                    </span>
+
+                                    <button
+                                        onclick="resetFilters()"
+                                        class="text-[11px] text-ict-blue hover:underline">
+                                        รีเซ็ต
+                                    </button>
                                 </div>
 
+
                                 <div>
-                                    <label class="block font-medium text-gray-700 mb-1.5">หมวดหมู่สิ่งของ</label>
-                                    <select id="categoryFilter" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs text-gray-700 focus:outline-none focus:ring-1 focus:ring-ict-blue">
+                                    <label class="block font-medium text-gray-700 mb-1.5">
+                                        หมวดหมู่สิ่งของ
+                                    </label>
+
+                                    <select
+                                        id="categoryFilter"
+                                        class="w-full bg-gray-50 border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs text-gray-700 focus:outline-none focus:ring-1 focus:ring-ict-blue">
+
                                         <option value="all">ทั้งหมด</option>
                                         <option value="electronics">อุปกรณ์อิเล็กทรอนิกส์</option>
                                         <option value="wallet">กระเป๋า / กระเป๋าสตางค์</option>
@@ -134,9 +246,16 @@
                                     </select>
                                 </div>
 
+
                                 <div>
-                                    <label class="block font-medium text-gray-700 mb-1.5">ช่วงเวลาที่ยื่นเรื่อง</label>
-                                    <select id="dateFilter" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs text-gray-700 focus:outline-none focus:ring-1 focus:ring-ict-blue">
+                                    <label class="block font-medium text-gray-700 mb-1.5">
+                                        ช่วงเวลาที่ยื่นเรื่อง
+                                    </label>
+
+                                    <select
+                                        id="dateFilter"
+                                        class="w-full bg-gray-50 border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs text-gray-700 focus:outline-none focus:ring-1 focus:ring-ict-blue">
+
                                         <option value="all">ทั้งหมด</option>
                                         <option value="2024-10-24">24 ต.ค. 2024</option>
                                         <option value="2024-10-23">23 ต.ค. 2024</option>
@@ -144,41 +263,66 @@
                                     </select>
                                 </div>
 
+
                                 <div class="pt-2 flex gap-2">
-                                    <button onclick="applyFilters(); toggleFilterMenu();" class="w-full bg-ict-blue hover:bg-ict-hover text-white py-1.5 rounded-lg text-xs font-semibold transition">
+                                    <button
+                                        onclick="applyFilters(); toggleFilterMenu();"
+                                        class="w-full bg-ict-blue hover:bg-ict-hover text-white py-1.5 rounded-lg text-xs font-semibold transition">
                                         ยืนยัน
                                     </button>
                                 </div>
+
                             </div>
                         </div>
 
+
                         <!-- Status Filter Tabs -->
-                        <button id="btnPending" onclick="filterStatus('pending')" class="status-tab px-3.5 py-1.5 bg-blue-50 text-ict-blue border border-blue-200 rounded-lg text-xs font-semibold transition">
+                        <button
+                            id="btnPending"
+                            onclick="filterStatus('pending')"
+                            class="status-tab px-3.5 py-1.5 bg-blue-50 text-ict-blue border border-blue-200 rounded-lg text-xs font-semibold transition">
                             รอตรวจสอบ (Pending)
                         </button>
 
-                        <button id="btnMoreInfo" onclick="filterStatus('more_info')" class="status-tab px-3.5 py-1.5 bg-gray-50 text-gray-600 hover:bg-gray-100 rounded-lg text-xs font-medium transition">
+                        <button
+                            id="btnMoreInfo"
+                            onclick="filterStatus('more_info')"
+                            class="status-tab px-3.5 py-1.5 bg-gray-50 text-gray-600 hover:bg-gray-100 rounded-lg text-xs font-medium transition">
                             ขอข้อมูลเพิ่ม (More Info Req.)
                         </button>
 
-                        <button id="btnAllStatus" onclick="filterStatus('all')" class="status-tab px-3.5 py-1.5 bg-gray-50 text-gray-600 hover:bg-gray-100 rounded-lg text-xs font-medium transition">
+                        <button
+                            id="btnAllStatus"
+                            onclick="filterStatus('all')"
+                            class="status-tab px-3.5 py-1.5 bg-gray-50 text-gray-600 hover:bg-gray-100 rounded-lg text-xs font-medium transition">
                             ทั้งหมด
                         </button>
+
                     </div>
+
 
                     <div class="flex items-center gap-2 text-xs text-gray-500">
                         <span>เรียงตาม:</span>
-                        <select class="bg-gray-50 border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs text-gray-700 font-medium focus:outline-none">
+
+                        <select
+                            class="bg-gray-50 border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs text-gray-700 font-medium focus:outline-none">
+
                             <option>วันที่ล่าสุด</option>
                             <option>เก่าสุด</option>
+
                         </select>
                     </div>
+
                 </div>
+
 
                 <!-- Table Content -->
                 <div class="overflow-x-auto">
+
                     <table class="w-full text-left text-xs">
+
                         <thead class="text-gray-500 bg-gray-50/50 border-b border-gray-100">
+
                             <tr>
                                 <th class="py-3.5 px-5 font-semibold">รหัสคำร้อง</th>
                                 <th class="py-3.5 px-4 font-semibold">รายการสิ่งของ</th>
@@ -187,115 +331,256 @@
                                 <th class="py-3.5 px-4 font-semibold">สถานะ</th>
                                 <th class="py-3.5 px-5 font-semibold text-center">การจัดการ</th>
                             </tr>
+
                         </thead>
+
+
                         <tbody id="claimTableBody" class="divide-y divide-gray-100 text-gray-700">
 
                             <!-- รายการที่ 1 -->
-                            <tr class="claim-row hover:bg-gray-50/50 transition" data-category="electronics" data-status="pending" data-date="2024-10-24">
-                                <td class="py-4 px-5 font-mono text-xs font-bold text-gray-800">CLM-24-0891</td>
+                            <tr
+                                class="claim-row hover:bg-gray-50/50 transition"
+                                data-category="electronics"
+                                data-status="pending"
+                                data-date="2024-10-24">
+
+                                <td class="py-4 px-5 font-mono text-xs font-bold text-gray-800">
+                                    CLM-24-0891
+                                </td>
+
                                 <td class="py-4 px-4">
                                     <div class="flex items-center gap-3">
+
                                         <div class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500 flex-shrink-0">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                            <svg class="w-4 h-4"
+                                                 fill="none"
+                                                 stroke="currentColor"
+                                                 stroke-width="2"
+                                                 viewBox="0 0 24 24">
+                                                <path stroke-linecap="round"
+                                                      stroke-linejoin="round"
+                                                      d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                                             </svg>
                                         </div>
+
                                         <div>
-                                            <p class="font-bold text-gray-900">MacBook Pro 16"</p>
-                                            <p class="text-[11px] text-gray-400">สีเงิน (Silver)</p>
+                                            <p class="font-bold text-gray-900">
+                                                MacBook Pro 16"
+                                            </p>
+                                            <p class="text-[11px] text-gray-400">
+                                                สีเงิน (Silver)
+                                            </p>
                                         </div>
+
                                     </div>
                                 </td>
-                                <td class="py-4 px-4 font-medium text-gray-800">สมชาย ใจดี</td>
-                                <td class="py-4 px-4 text-gray-500">24 ต.ค. 2024</td>
+
+                                <td class="py-4 px-4 font-medium text-gray-800">
+                                    สมชาย ใจดี
+                                </td>
+
+                                <td class="py-4 px-4 text-gray-500">
+                                    24 ต.ค. 2024
+                                </td>
+
                                 <td class="py-4 px-4">
                                     <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-medium bg-amber-50 text-amber-700 rounded-full border border-amber-200">
                                         <span class="w-1.5 h-1.5 bg-amber-500 rounded-full"></span>
                                         รอตรวจสอบ
                                     </span>
                                 </td>
+
                                 <td class="py-4 px-5 text-center">
-                                    <!-- ปรับความกว้าง-สูงให้เท่ากัน (w-32 h-8) -->
-                                    <a href="staff-verify-detail.html?id=CLM-24-0891" class="w-32 h-8 bg-ict-blue hover:bg-ict-hover text-white text-[11px] font-medium rounded-lg inline-flex items-center justify-center gap-1.5 shadow-sm transition">
-                                        <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                    <a
+                                        href="staff-verify-detail.html?id=CLM-24-0891"
+                                        class="w-32 h-8 bg-ict-blue hover:bg-ict-hover text-white text-[11px] font-medium rounded-lg inline-flex items-center justify-center gap-1.5 shadow-sm transition">
+
+                                        <svg class="w-3.5 h-3.5 flex-shrink-0"
+                                             fill="none"
+                                             stroke="currentColor"
+                                             stroke-width="2"
+                                             viewBox="0 0 24 24">
+                                            <path stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                            <path stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                         </svg>
+
                                         <span>ตรวจสอบ</span>
                                     </a>
                                 </td>
                             </tr>
+
 
                             <!-- รายการที่ 2 -->
-                            <tr class="claim-row hover:bg-gray-50/50 transition" data-category="wallet" data-status="pending" data-date="2024-10-23">
-                                <td class="py-4 px-5 font-mono text-xs font-bold text-gray-800">CLM-24-0890</td>
+                            <tr
+                                class="claim-row hover:bg-gray-50/50 transition"
+                                data-category="wallet"
+                                data-status="pending"
+                                data-date="2024-10-23">
+
+                                <td class="py-4 px-5 font-mono text-xs font-bold text-gray-800">
+                                    CLM-24-0890
+                                </td>
+
                                 <td class="py-4 px-4">
                                     <div class="flex items-center gap-3">
+
                                         <div class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500 flex-shrink-0">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                            <svg class="w-4 h-4"
+                                                 fill="none"
+                                                 stroke="currentColor"
+                                                 stroke-width="2"
+                                                 viewBox="0 0 24 24">
+                                                <path stroke-linecap="round"
+                                                      stroke-linejoin="round"
+                                                      d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                                             </svg>
                                         </div>
+
                                         <div>
-                                            <p class="font-bold text-gray-900">กระเป๋าสตางค์หนังสีดำ</p>
-                                            <p class="text-[11px] text-gray-400">แบรนด์ Gucci</p>
+                                            <p class="font-bold text-gray-900">
+                                                กระเป๋าสตางค์หนังสีดำ
+                                            </p>
+                                            <p class="text-[11px] text-gray-400">
+                                                แบรนด์ Gucci
+                                            </p>
                                         </div>
+
                                     </div>
                                 </td>
-                                <td class="py-4 px-4 font-medium text-gray-800">วิไลภรณ์ ศรีสุข</td>
-                                <td class="py-4 px-4 text-gray-500">23 ต.ค. 2024</td>
+
+                                <td class="py-4 px-4 font-medium text-gray-800">
+                                    วิไลภรณ์ ศรีสุข
+                                </td>
+
+                                <td class="py-4 px-4 text-gray-500">
+                                    23 ต.ค. 2024
+                                </td>
+
                                 <td class="py-4 px-4">
                                     <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-medium bg-amber-50 text-amber-700 rounded-full border border-amber-200">
                                         <span class="w-1.5 h-1.5 bg-amber-500 rounded-full"></span>
                                         รอตรวจสอบ
                                     </span>
                                 </td>
+
                                 <td class="py-4 px-5 text-center">
-                                    <!-- ปรับความกว้าง-สูงให้เท่ากัน (w-32 h-8) -->
-                                    <a href="staff-verify-detail.html?id=CLM-24-0890" class="w-32 h-8 bg-ict-blue hover:bg-ict-hover text-white text-[11px] font-medium rounded-lg inline-flex items-center justify-center gap-1.5 shadow-sm transition">
-                                        <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                    <a
+                                        href="staff-verify-detail.html?id=CLM-24-0890"
+                                        class="w-32 h-8 bg-ict-blue hover:bg-ict-hover text-white text-[11px] font-medium rounded-lg inline-flex items-center justify-center gap-1.5 shadow-sm transition">
+
+                                        <svg class="w-3.5 h-3.5 flex-shrink-0"
+                                             fill="none"
+                                             stroke="currentColor"
+                                             stroke-width="2"
+                                             viewBox="0 0 24 24">
+                                            <path stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                            <path stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                         </svg>
+
                                         <span>ตรวจสอบ</span>
                                     </a>
                                 </td>
+
                             </tr>
 
+
                             <!-- รายการที่ 3 -->
-                            <tr class="claim-row hover:bg-gray-50/50 transition" data-category="electronics" data-status="more_info" data-date="2024-10-22">
-                                <td class="py-4 px-5 font-mono text-xs font-bold text-gray-800">CLM-24-0885</td>
+                            <tr
+                                class="claim-row hover:bg-gray-50/50 transition"
+                                data-category="electronics"
+                                data-status="more_info"
+                                data-date="2024-10-22">
+
+                                <td class="py-4 px-5 font-mono text-xs font-bold text-gray-800">
+                                    CLM-24-0885
+                                </td>
+
                                 <td class="py-4 px-4">
                                     <div class="flex items-center gap-3">
+
                                         <div class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500 flex-shrink-0">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+
+                                            <svg class="w-4 h-4"
+                                                 fill="none"
+                                                 stroke="currentColor"
+                                                 stroke-width="2"
+                                                 viewBox="0 0 24 24">
+                                                <path stroke-linecap="round"
+                                                      stroke-linejoin="round"
+                                                      d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
                                             </svg>
+
                                         </div>
+
                                         <div>
-                                            <p class="font-bold text-gray-900">iPhone 15 Pro</p>
-                                            <p class="text-[11px] text-gray-400">เคสใส</p>
+                                            <p class="font-bold text-gray-900">
+                                                iPhone 15 Pro
+                                            </p>
+
+                                            <p class="text-[11px] text-gray-400">
+                                                เคสใส
+                                            </p>
                                         </div>
+
                                     </div>
                                 </td>
-                                <td class="py-4 px-4 font-medium text-gray-800">John Doe</td>
-                                <td class="py-4 px-4 text-gray-500">22 ต.ค. 2024</td>
+
+                                <td class="py-4 px-4 font-medium text-gray-800">
+                                    John Doe
+                                </td>
+
+                                <td class="py-4 px-4 text-gray-500">
+                                    22 ต.ค. 2024
+                                </td>
+
                                 <td class="py-4 px-4">
+
                                     <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-medium bg-gray-100 text-gray-700 rounded-full border border-gray-200">
+
                                         <span class="w-1.5 h-1.5 bg-gray-500 rounded-full"></span>
+
                                         ขอข้อมูลเพิ่ม
+
                                     </span>
+
                                 </td>
+
                                 <td class="py-4 px-5 text-center">
-                                    <!-- ปรับความกว้าง-สูงให้เท่ากัน (w-32 h-8) -->
-                                    <a href="staff-verify-detail.html?id=CLM-24-0885" class="w-32 h-8 border border-ict-blue text-ict-blue hover:bg-blue-50 text-[11px] font-medium rounded-lg inline-flex items-center justify-center gap-1.5 transition">
-                                        <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+
+                                    <a
+                                        href="staff-verify-detail.html?id=CLM-24-0885"
+                                        class="w-32 h-8 border border-ict-blue text-ict-blue hover:bg-blue-50 text-[11px] font-medium rounded-lg inline-flex items-center justify-center gap-1.5 transition">
+
+                                        <svg class="w-3.5 h-3.5 flex-shrink-0"
+                                             fill="none"
+                                             stroke="currentColor"
+                                             stroke-width="2"
+                                             viewBox="0 0 24 24">
+
+                                            <path stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+
+                                            <path stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+
                                         </svg>
+
                                         <span>ดูรายละเอียด</span>
+
                                     </a>
+
                                 </td>
+
                             </tr>
 
                         </tbody>
@@ -307,6 +592,7 @@
         </div>
     </main>
 
+
     <script>
         let selectedStatus = 'pending';
 
@@ -316,66 +602,136 @@
         }
 
         document.addEventListener('click', function(event) {
+
             const dropdownBtn = document.getElementById('filterDropdownBtn');
             const filterMenu = document.getElementById('filterMenu');
-            if (dropdownBtn && filterMenu && !dropdownBtn.contains(event.target) && !filterMenu.contains(event.target)) {
+
+            if (
+                dropdownBtn &&
+                filterMenu &&
+                !dropdownBtn.contains(event.target) &&
+                !filterMenu.contains(event.target)
+            ) {
                 filterMenu.classList.add('hidden');
             }
         });
 
+
         function filterStatus(status) {
+
             selectedStatus = status;
 
             const tabs = document.querySelectorAll('.status-tab');
+
             tabs.forEach(tab => {
-                tab.className = 'status-tab px-3.5 py-1.5 bg-gray-50 text-gray-600 hover:bg-gray-100 rounded-lg text-xs font-medium transition';
+
+                tab.className =
+                    'status-tab px-3.5 py-1.5 bg-gray-50 text-gray-600 hover:bg-gray-100 rounded-lg text-xs font-medium transition';
+
             });
 
+
             if (status === 'pending') {
-                document.getElementById('btnPending').className = 'status-tab px-3.5 py-1.5 bg-blue-50 text-ict-blue border border-blue-200 rounded-lg text-xs font-semibold transition';
+
+                document.getElementById('btnPending').className =
+                    'status-tab px-3.5 py-1.5 bg-blue-50 text-ict-blue border border-blue-200 rounded-lg text-xs font-semibold transition';
+
             } else if (status === 'more_info') {
-                document.getElementById('btnMoreInfo').className = 'status-tab px-3.5 py-1.5 bg-blue-50 text-ict-blue border border-blue-200 rounded-lg text-xs font-semibold transition';
+
+                document.getElementById('btnMoreInfo').className =
+                    'status-tab px-3.5 py-1.5 bg-blue-50 text-ict-blue border border-blue-200 rounded-lg text-xs font-semibold transition';
+
             } else {
-                document.getElementById('btnAllStatus').className = 'status-tab px-3.5 py-1.5 bg-blue-50 text-ict-blue border border-blue-200 rounded-lg text-xs font-semibold transition';
+
+                document.getElementById('btnAllStatus').className =
+                    'status-tab px-3.5 py-1.5 bg-blue-50 text-ict-blue border border-blue-200 rounded-lg text-xs font-semibold transition';
+
             }
 
             applyFilters();
         }
 
-        function applyFilters() {
-            const selectedCategory = document.getElementById('categoryFilter').value;
-            const selectedDate = document.getElementById('dateFilter').value;
-            const searchText = document.getElementById('searchInput').value.toLowerCase().trim();
 
-            const rows = document.querySelectorAll('.claim-row');
+        function applyFilters() {
+
+            const selectedCategory =
+                document.getElementById('categoryFilter').value;
+
+            const selectedDate =
+                document.getElementById('dateFilter').value;
+
+            const searchText =
+                document.getElementById('searchInput').value
+                .toLowerCase()
+                .trim();
+
+            const rows =
+                document.querySelectorAll('.claim-row');
+
 
             rows.forEach(row => {
-                const rowCategory = row.getAttribute('data-category');
-                const rowStatus = row.getAttribute('data-status');
-                const rowDate = row.getAttribute('data-date');
-                const rowText = row.innerText.toLowerCase();
 
-                const matchCategory = (selectedCategory === 'all' || rowCategory === selectedCategory);
-                const matchDate = (selectedDate === 'all' || rowDate === selectedDate);
-                const matchStatus = (selectedStatus === 'all' || rowStatus === selectedStatus);
-                const matchSearch = (searchText === '' || rowText.includes(searchText));
+                const rowCategory =
+                    row.getAttribute('data-category');
 
-                if (matchCategory && matchDate && matchStatus && matchSearch) {
+                const rowStatus =
+                    row.getAttribute('data-status');
+
+                const rowDate =
+                    row.getAttribute('data-date');
+
+                const rowText =
+                    row.innerText.toLowerCase();
+
+
+                const matchCategory =
+                    (selectedCategory === 'all' ||
+                    rowCategory === selectedCategory);
+
+                const matchDate =
+                    (selectedDate === 'all' ||
+                    rowDate === selectedDate);
+
+                const matchStatus =
+                    (selectedStatus === 'all' ||
+                    rowStatus === selectedStatus);
+
+                const matchSearch =
+                    (searchText === '' ||
+                    rowText.includes(searchText));
+
+
+                if (
+                    matchCategory &&
+                    matchDate &&
+                    matchStatus &&
+                    matchSearch
+                ) {
                     row.style.display = '';
                 } else {
                     row.style.display = 'none';
                 }
+
             });
         }
 
+
         function resetFilters() {
+
             document.getElementById('categoryFilter').value = 'all';
+
             document.getElementById('dateFilter').value = 'all';
+
             document.getElementById('searchInput').value = '';
+
             applyFilters();
         }
 
-        document.addEventListener('DOMContentLoaded', applyFilters);
+
+        document.addEventListener(
+            'DOMContentLoaded',
+            applyFilters
+        );
     </script>
 
 </body>
