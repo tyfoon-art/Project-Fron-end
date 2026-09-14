@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>บันทึกการส่งมอบ (Handover Record) - Lost & Found ICT</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+
     <script>
         tailwind.config = {
             theme: {
@@ -28,458 +31,1207 @@
             }
         }
     </script>
+
     <style>
-        body { font-family: 'Prompt', sans-serif; }
+        body {
+            font-family: 'Prompt', sans-serif;
+        }
     </style>
 </head>
+
 <body class="bg-ict-lightBg text-gray-800 min-h-screen flex flex-col font-sans">
 
-    <!-- TOP NAVBAR -->
-    <header class="bg-white border-b border-gray-200 sticky top-0 z-40 px-6 py-2.5 shadow-sm">
-        <div class="max-w-7xl mx-auto flex items-center justify-between gap-6">
-            
-            <div class="flex items-center gap-8 overflow-x-auto">
-                <a href="staff-dashboard.html" class="flex items-center gap-2.5 flex-shrink-0">
-                    <svg class="w-8 h-8 text-ict-blue" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
-                        <path d="M3.8 12.8v3.7c0 2.2 3.7 4 8.2 4s8.2-1.8 8.2-4v-3.7l-8.2 4.5-8.2-4.5z"/>
-                    </svg>
-                    <span class="text-xl font-extrabold text-ict-blue tracking-tight">Lost &amp; Found ICT</span>
+    <!-- ========================================================= -->
+    <!-- TOP NAVBAR - ขนาดเดียวกับ Dashboard -->
+    <!-- ========================================================= -->
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+
+            <!-- Logo -->
+            <a href="staff-dashboard.html"
+               class="flex items-center gap-2.5 flex-shrink-0 hover:opacity-80 transition pr-2">
+
+                <svg class="w-7 h-7 text-ict-blue flex-shrink-0"
+                     viewBox="0 0 24 24"
+                     fill="currentColor">
+                    <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
+                    <path d="M3.8 12.8v3.7c0 2.2 3.7 4 8.2 4s8.2-1.8 8.2-4v-3.7l-8.2 4.5-8.2-4.5z"/>
+                </svg>
+
+                <span class="text-xl font-extrabold text-ict-blue tracking-tight whitespace-nowrap">
+                    Lost &amp; Found ICT
+                </span>
+            </a>
+
+
+            <!-- Navigation -->
+            <nav class="hidden md:flex items-center space-x-1 lg:space-x-5 text-sm font-semibold text-gray-600 h-full">
+
+                <a href="staff-dashboard.html"
+                   class="h-full flex items-center border-b-4 border-transparent hover:text-ict-blue transition whitespace-nowrap px-1">
+                    แดชบอร์ดภาพรวม
                 </a>
 
-                <nav class="flex items-center gap-6 text-sm font-semibold flex-shrink-0">
-                    <a href="staff-dashboard.html" class="py-2 text-gray-500 hover:text-ict-blue transition">
-                        แดชบอร์ดภาพรวม
-                    </a>
-                    <a href="staff-inventory-add.html" class="py-2 text-gray-500 hover:text-ict-blue transition">
-                        รายการสิ่งของทั้งหมด
-                    </a>
-                    <a href="staff-verify-claims.html" class="py-2 text-gray-500 hover:text-ict-blue transition">
-                        ตรวจสอบคำร้อง
-                    </a>
-                    <a href="staff-handover.html" class="relative py-2 text-ict-blue font-bold flex items-center gap-1.5 transition">
-                        <span>ส่งคืนเจ้าของ</span>
-                        <span class="absolute bottom-0 left-0 w-full h-[3px] bg-ict-blue rounded-full"></span>
-                    </a>
-                    <a href="staff-overdue-list.html" class="py-2 text-gray-500 hover:text-ict-blue transition">
-                        รายการสิ่งของตกค้าง
-                    </a>
-                </nav>
-            </div>
+                <a href="staff-inventory-add.html"
+                   class="h-full flex items-center border-b-4 border-transparent hover:text-ict-blue transition whitespace-nowrap px-1">
+                    รายการสิ่งของทั้งหมด
+                </a>
 
-            <div class="flex items-center gap-4 flex-shrink-0">
-                <div class="relative w-44 md:w-60 hidden lg:block">
-                    <svg class="w-4 h-4 text-gray-500 absolute left-3.5 top-2.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 0114 0z"/>
+                <a href="staff-verify-claims.html"
+                   class="h-full flex items-center border-b-4 border-transparent hover:text-ict-blue transition whitespace-nowrap px-1">
+                    ตรวจสอบคำร้อง
+                </a>
+
+                <!-- หน้าปัจจุบัน -->
+                <a href="staff-handover.html"
+                   class="h-full flex items-center border-b-4 border-ict-blue text-ict-blue font-bold transition whitespace-nowrap px-1">
+                    ส่งคืนเจ้าของ
+                </a>
+
+                <a href="staff-overdue-list.html"
+                   class="h-full flex items-center border-b-4 border-transparent hover:text-ict-blue transition whitespace-nowrap px-1">
+                    รายการสิ่งของตกค้าง
+                </a>
+
+            </nav>
+
+
+            <!-- Right Section -->
+            <div class="flex items-center gap-3 ml-auto md:ml-0">
+
+                <!-- Search -->
+                <div class="relative hidden sm:block w-44 lg:w-56">
+
+                    <svg class="w-4 h-4 text-gray-500 absolute left-3.5 top-2.5"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         viewBox="0 0 24 24">
+                        <path stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M21 21l-6-6m2-5a7 7 0 11-14 0z"/>
                     </svg>
-                    <input type="text" placeholder="ค้นหารายการ..." class="w-full bg-slate-100/80 border border-slate-200 rounded-full pl-10 pr-4 py-1.5 text-xs text-gray-700 focus:bg-white focus:outline-none focus:ring-2 focus:ring-ict-blue/20 transition">
+
+                    <input
+                        type="text"
+                        placeholder="ค้นหารายการ..."
+                        class="w-full bg-slate-50 border border-slate-200 text-xs rounded-full pl-9 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-ict-blue/20 transition">
+
                 </div>
 
-                <a href="staff-inventory-add.html" class="bg-ict-blue hover:bg-ict-hover text-white font-bold text-xs px-4 py-2 rounded-full flex items-center gap-1.5 shadow-sm transition">
-                    <span class="text-sm font-extrabold leading-none">+</span>
+
+                <!-- Post -->
+                <a href="staff-inventory-add.html"
+                   class="bg-ict-blue hover:bg-ict-hover text-white text-xs font-bold px-4 py-2 rounded-full flex items-center gap-1.5 shadow-sm transition whitespace-nowrap">
+
+                    <span class="text-sm font-bold">+</span>
                     <span>โพสต์</span>
+
                 </a>
 
-                <a href="staff-profile.html" class="flex items-center gap-1.5 text-xs font-bold text-gray-700 hover:text-ict-blue transition px-1">
-                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+
+                <!-- Profile -->
+                <a href="staff-profile.html"
+                   class="h-16 flex items-center gap-1.5 text-sm text-gray-700 hover:text-ict-blue font-bold px-2 border-b-4 border-transparent transition whitespace-nowrap">
+
+                    <svg class="w-5 h-5 text-gray-600 hover:text-ict-blue transition"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         viewBox="0 0 24 24">
+
+                        <path stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+
                     </svg>
-                    <span class="hidden md:inline">Profile</span>
+
+                    <span>Profile</span>
+
                 </a>
+
             </div>
 
         </div>
     </header>
 
+
+    <!-- ========================================================= -->
     <!-- Content หลัก -->
+    <!-- ========================================================= -->
     <main class="flex-1 p-6 md:p-8 overflow-y-auto">
+
         <div class="max-w-6xl mx-auto space-y-6">
 
+            <!-- Page Header -->
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900 tracking-tight">บันทึกการส่งมอบ (Handover Record)</h1>
-                    <p class="text-xs text-gray-500 font-medium mt-0.5">ส่งคืนสิ่งของให้เจ้าของและบันทึกหลักฐานการรับคืนในระบบ</p>
+                    <h1 class="text-2xl font-bold text-gray-900 tracking-tight">
+                        บันทึกการส่งมอบ (Handover Record)
+                    </h1>
+
+                    <p class="text-xs text-gray-500 font-medium mt-0.5">
+                        ส่งคืนสิ่งของให้เจ้าของและบันทึกหลักฐานการรับคืนในระบบ
+                    </p>
                 </div>
+
             </div>
 
+
+            <!-- ===================================================== -->
             <!-- ฟอร์มการส่งมอบ -->
-            <form id="handoverForm" onsubmit="openConfirmSummaryModal(event)" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- ===================================================== -->
+            <form id="handoverForm"
+                  onsubmit="openConfirmSummaryModal(event)"
+                  class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-                <!-- คอลัมน์ซ้าย: รายละเอียดสิ่งของ & ผู้รับคืน -->
+
+                <!-- ================================================= -->
+                <!-- คอลัมน์ซ้าย -->
+                <!-- ================================================= -->
                 <div class="lg:col-span-5 space-y-4">
-                    
+
+
+                    <!-- รายละเอียดสิ่งของ -->
                     <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm space-y-3">
+
                         <div class="flex items-center gap-2 border-b border-gray-100 pb-3">
-                            <svg class="w-4 h-4 text-ict-blue" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+
+                            <svg class="w-4 h-4 text-ict-blue"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 viewBox="0 0 24 24">
+
+                                <path stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+
                             </svg>
-                            <h2 class="font-bold text-xs text-gray-900">รายละเอียดสิ่งของ</h2>
+
+                            <h2 class="font-bold text-xs text-gray-900">
+                                รายละเอียดสิ่งของ
+                            </h2>
+
                         </div>
 
-                        <div onclick="openImageModal(this.querySelector('img').src)" class="relative rounded-xl overflow-hidden border border-gray-100 bg-gray-900 h-44 cursor-pointer group shadow-sm">
-                            <img id="itemImage" src="images.staff/นาฬิกาข้อมือชายสีเงิน.jpg" class="w-full h-full object-cover group-hover:scale-105 group-hover:opacity-85 transition duration-500" alt="สิ่งของที่พบ">
+
+                        <!-- รูปสิ่งของ -->
+                        <div onclick="openImageModal(this.querySelector('img').src)"
+                             class="relative rounded-xl overflow-hidden border border-gray-100 bg-gray-900 h-44 cursor-pointer group shadow-sm">
+
+                            <img id="itemImage"
+                                 src="images.staff/นาฬิกาข้อมือชายสีเงิน.jpg"
+                                 class="w-full h-full object-cover group-hover:scale-105 group-hover:opacity-85 transition duration-500"
+                                 alt="สิ่งของที่พบ">
+
                             <span class="absolute top-2.5 right-2.5 bg-emerald-500 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-md flex items-center gap-1">
+
                                 <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
+
                                 อนุมัติแล้ว
+
                             </span>
+
                         </div>
 
+
+                        <!-- ข้อมูลสิ่งของ -->
                         <div class="space-y-2 text-xs pt-1">
+
                             <div>
-                                <p class="text-gray-400 text-[10px] font-medium">รหัสการเคลม</p>
-                                <p id="claimIdText" class="font-bold text-gray-900 font-mono">CLM-2024-0891</p>
+                                <p class="text-gray-400 text-[10px] font-medium">
+                                    รหัสการเคลม
+                                </p>
+
+                                <p id="claimIdText"
+                                   class="font-bold text-gray-900 font-mono">
+                                    CLM-2024-0891
+                                </p>
                             </div>
+
+
                             <div>
-                                <p class="text-gray-400 text-[10px] font-medium">ชื่อสิ่งของ</p>
-                                <p id="itemNameText" class="font-bold text-gray-900">นาฬิกาข้อมือผู้ชาย สีเงิน</p>
+                                <p class="text-gray-400 text-[10px] font-medium">
+                                    ชื่อสิ่งของ
+                                </p>
+
+                                <p id="itemNameText"
+                                   class="font-bold text-gray-900">
+                                    นาฬิกาข้อมือผู้ชาย สีเงิน
+                                </p>
                             </div>
+
                         </div>
+
                     </div>
 
+
+                    <!-- ข้อมูลผู้รับคืน -->
                     <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm space-y-3">
+
                         <div class="flex items-center gap-2 border-b border-gray-100 pb-3">
-                            <svg class="w-4 h-4 text-ict-blue" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+
+                            <svg class="w-4 h-4 text-ict-blue"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 viewBox="0 0 24 24">
+
+                                <path stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+
                             </svg>
-                            <h2 class="font-bold text-xs text-gray-900">ข้อมูลผู้รับคืน</h2>
+
+                            <h2 class="font-bold text-xs text-gray-900">
+                                ข้อมูลผู้รับคืน
+                            </h2>
+
                         </div>
+
 
                         <div class="space-y-2 text-xs">
+
                             <div>
-                                <p class="text-gray-400 text-[10px] font-medium">ชื่อ-นามสกุล</p>
-                                <p id="recipientNameText" class="font-bold text-gray-900">สมชาย ใจดี</p>
+
+                                <p class="text-gray-400 text-[10px] font-medium">
+                                    ชื่อ-นามสกุล
+                                </p>
+
+                                <p id="recipientNameText"
+                                   class="font-bold text-gray-900">
+                                    สมชาย ใจดี
+                                </p>
+
                             </div>
+
                         </div>
+
                     </div>
 
                 </div>
 
-                <!-- คอลัมน์ขวา: ฟอร์มยืนยัน ลายเซ็น ไฟล์ -->
+
+                <!-- ================================================= -->
+                <!-- คอลัมน์ขวา -->
+                <!-- ================================================= -->
                 <div class="lg:col-span-7">
+
                     <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm space-y-5">
-                        <h2 class="font-bold text-sm text-gray-900 border-b border-gray-100 pb-3">แบบฟอร์มยืนยันการส่งมอบ</h2>
 
+                        <h2 class="font-bold text-sm text-gray-900 border-b border-gray-100 pb-3">
+                            แบบฟอร์มยืนยันการส่งมอบ
+                        </h2>
+
+
+                        <!-- Verification -->
                         <div class="bg-blue-50/50 border border-blue-100 rounded-xl p-3.5 flex items-start gap-3">
-                            <input type="checkbox" id="verifyCheck" required class="mt-0.5 rounded border-gray-300 text-ict-btnBlue focus:ring-ict-blue w-4 h-4 cursor-pointer">
-                            <label for="verifyCheck" class="cursor-pointer">
-                                <p class="font-bold text-gray-900 text-xs">ยืนยันตัวตนผู้รับคืน (Verification Check)</p>
+
+                            <input type="checkbox"
+                                   id="verifyCheck"
+                                   required
+                                   class="mt-0.5 rounded border-gray-300 text-ict-btnBlue focus:ring-ict-blue w-4 h-4 cursor-pointer">
+
+                            <label for="verifyCheck"
+                                   class="cursor-pointer">
+
+                                <p class="font-bold text-gray-900 text-xs">
+                                    ยืนยันตัวตนผู้รับคืน (Verification Check)
+                                </p>
+
                             </label>
+
                         </div>
 
+
+                        <!-- ================================================= -->
                         <!-- อัปโหลดภาพหลักฐาน -->
+                        <!-- ================================================= -->
                         <div class="space-y-2">
+
                             <div class="flex justify-between items-center text-xs">
+
                                 <label class="font-bold text-gray-700">
+
                                     ภาพถ่าย/วิดีโอ ขณะส่งมอบ (หลักฐาน)
-                                    <span id="fileCountText" class="text-ict-blue font-semibold ml-1">(0/5)</span>
+
+                                    <span id="fileCountText"
+                                          class="text-ict-blue font-semibold ml-1">
+                                        (0/5)
+                                    </span>
+
                                 </label>
-                                <button type="button" id="clearAllBtn" onclick="clearAllFiles()" class="text-[10px] text-red-500 hover:underline hidden font-semibold">ยกเลิกทั้งหมด</button>
+
+
+                                <button type="button"
+                                        id="clearAllBtn"
+                                        onclick="clearAllFiles()"
+                                        class="text-[10px] text-red-500 hover:underline hidden font-semibold">
+
+                                    ยกเลิกทั้งหมด
+
+                                </button>
+
                             </div>
 
-                            <input type="file" id="photoInput" accept="image/*,video/*" multiple class="hidden" onchange="previewFiles(event)">
 
-                            <label id="uploadLabel" for="photoInput" class="border-2 border-dashed border-gray-200 rounded-xl p-4 text-center hover:border-ict-blue transition cursor-pointer bg-gray-50/50 flex flex-col items-center justify-center space-y-1 block">
-                                <p class="font-bold text-gray-800 text-xs">คลิกเพื่อถ่ายภาพ หรือ อัปโหลดวิดีโอ</p>
+                            <input type="file"
+                                   id="photoInput"
+                                   accept="image/*,video/*"
+                                   multiple
+                                   class="hidden"
+                                   onchange="previewFiles(event)">
+
+
+                            <label id="uploadLabel"
+                                   for="photoInput"
+                                   class="border-2 border-dashed border-gray-200 rounded-xl p-4 text-center hover:border-ict-blue transition cursor-pointer bg-gray-50/50 flex flex-col items-center justify-center space-y-1 block">
+
+                                <p class="font-bold text-gray-800 text-xs">
+                                    คลิกเพื่อถ่ายภาพ หรือ อัปโหลดวิดีโอ
+                                </p>
+
                             </label>
 
-                            <div id="previewContainer" class="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-1"></div>
-                        </div>
 
-                        <!-- Canvas ลายเซ็น -->
-                        <div class="space-y-1.5 text-xs">
-                            <label class="font-bold text-gray-700">ลายเซ็นผู้รับคืน (Digital Signature)</label>
-                            <div class="border border-gray-200 rounded-xl bg-gray-50/40 h-32 relative overflow-hidden flex items-center justify-center">
-                                <canvas id="signaturePad" class="w-full h-full cursor-crosshair touch-none"></canvas>
-                                <button type="button" onclick="clearSignature()" class="absolute bottom-2 right-2 text-ict-btnBlue font-bold text-[10px] bg-white px-2 py-1 rounded-md border border-gray-200 shadow-sm transition">
-                                    ล้างลายเซ็น
-                                </button>
+                            <div id="previewContainer"
+                                 class="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-1">
                             </div>
+
                         </div>
 
-                        <!-- เจ้าหน้าที่ผู้ส่งมอบ -->
+
+                        <!-- ================================================= -->
+                        <!-- Canvas ลายเซ็น -->
+                        <!-- ================================================= -->
+                        <div class="space-y-1.5 text-xs">
+
+                            <label class="font-bold text-gray-700">
+                                ลายเซ็นผู้รับคืน (Digital Signature)
+                            </label>
+
+                            <div class="border border-gray-200 rounded-xl bg-gray-50/40 h-32 relative overflow-hidden flex items-center justify-center">
+
+                                <canvas id="signaturePad"
+                                        class="w-full h-full cursor-crosshair touch-none">
+                                </canvas>
+
+                                <button type="button"
+                                        onclick="clearSignature()"
+                                        class="absolute bottom-2 right-2 text-ict-btnBlue font-bold text-[10px] bg-white px-2 py-1 rounded-md border border-gray-200 shadow-sm transition">
+
+                                    ล้างลายเซ็น
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- เจ้าหน้าที่ -->
                         <div class="space-y-1 text-xs">
-                            <label class="font-bold text-gray-700">ชื่อเจ้าหน้าที่ผู้ส่งมอบ</label>
-                            <input type="text" id="staffNameInput" value="somying (Staff)" readonly class="w-full bg-gray-100 border border-gray-200 rounded-xl px-3.5 py-2 text-gray-600 font-semibold cursor-not-allowed">
+
+                            <label class="font-bold text-gray-700">
+                                ชื่อเจ้าหน้าที่ผู้ส่งมอบ
+                            </label>
+
+                            <input type="text"
+                                   id="staffNameInput"
+                                   value="somying (Staff)"
+                                   readonly
+                                   class="w-full bg-gray-100 border border-gray-200 rounded-xl px-3.5 py-2 text-gray-600 font-semibold cursor-not-allowed">
+
                         </div>
 
+
+                        <!-- Submit -->
                         <div class="pt-3 flex items-center justify-end gap-3 border-t border-gray-100 text-xs">
-                            <button type="submit" class="px-6 py-2.5 bg-ict-blue hover:bg-ict-hover text-white font-semibold rounded-full shadow-sm transition">
+
+                            <button type="submit"
+                                    class="px-6 py-2.5 bg-ict-blue hover:bg-ict-hover text-white font-semibold rounded-full shadow-sm transition">
+
                                 ยืนยันการส่งมอบ
+
                             </button>
+
                         </div>
+
                     </div>
+
                 </div>
+
             </form>
 
         </div>
+
     </main>
 
+
+    <!-- ========================================================= -->
     <!-- Modal ดูรูปภาพขนาดเต็ม -->
-    <div id="imageModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <!-- ========================================================= -->
+    <div id="imageModal"
+         class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+
         <div class="bg-white w-full max-w-3xl rounded-2xl p-5 space-y-4">
+
             <div class="flex items-center justify-between border-b pb-2">
-                <h3 class="font-bold text-sm">รูปภาพขนาดเต็ม</h3>
-                <button type="button" onclick="closeImageModal()" class="text-gray-500 font-bold">✕</button>
+
+                <h3 class="font-bold text-sm">
+                    รูปภาพขนาดเต็ม
+                </h3>
+
+                <button type="button"
+                        onclick="closeImageModal()"
+                        class="text-gray-500 font-bold">
+
+                    ✕
+
+                </button>
+
             </div>
+
+
             <div class="flex items-center justify-center bg-black rounded-xl overflow-hidden min-h-[300px]">
-                <img id="modalImage" src="" class="max-h-[60vh] object-contain" alt="รูปขยาย">
+
+                <img id="modalImage"
+                     src=""
+                     class="max-h-[60vh] object-contain"
+                     alt="รูปขยาย">
+
             </div>
+
         </div>
+
     </div>
 
+
+    <!-- ========================================================= -->
     <!-- Modal สรุปข้อมูลก่อนบันทึกจริง -->
-    <div id="confirmSummaryModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <!-- ========================================================= -->
+    <div id="confirmSummaryModal"
+         class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+
         <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl p-6 space-y-5">
-            <h3 class="font-bold text-gray-900 text-base border-b pb-2">สรุปรายละเอียดการส่งมอบ</h3>
+
+            <h3 class="font-bold text-gray-900 text-base border-b pb-2">
+                สรุปรายละเอียดการส่งมอบ
+            </h3>
+
 
             <div class="space-y-3 text-xs bg-gray-50 p-4 rounded-xl border border-gray-100">
+
                 <div class="flex justify-between border-b pb-2">
-                    <span class="text-gray-400">รหัสการเคลม:</span>
-                    <span id="summaryClaimId" class="font-bold font-mono text-gray-800">-</span>
+                    <span class="text-gray-400">
+                        รหัสการเคลม:
+                    </span>
+
+                    <span id="summaryClaimId"
+                          class="font-bold font-mono text-gray-800">
+                        -
+                    </span>
                 </div>
+
+
                 <div class="flex justify-between border-b pb-2">
-                    <span class="text-gray-400">สิ่งของที่ส่งมอบ:</span>
-                    <span id="summaryItemName" class="font-bold text-gray-800">-</span>
+                    <span class="text-gray-400">
+                        สิ่งของที่ส่งมอบ:
+                    </span>
+
+                    <span id="summaryItemName"
+                          class="font-bold text-gray-800">
+                        -
+                    </span>
                 </div>
+
+
                 <div class="flex justify-between border-b pb-2">
-                    <span class="text-gray-400">ชื่อผู้รับคืน:</span>
-                    <span id="summaryRecipient" class="font-bold text-gray-800">-</span>
+                    <span class="text-gray-400">
+                        ชื่อผู้รับคืน:
+                    </span>
+
+                    <span id="summaryRecipient"
+                          class="font-bold text-gray-800">
+                        -
+                    </span>
                 </div>
+
+
                 <div class="flex justify-between border-b pb-2">
-                    <span class="text-gray-400">เจ้าหน้าที่ผู้ส่งมอบ:</span>
-                    <span id="summaryStaff" class="font-bold text-gray-800">-</span>
+                    <span class="text-gray-400">
+                        เจ้าหน้าที่ผู้ส่งมอบ:
+                    </span>
+
+                    <span id="summaryStaff"
+                          class="font-bold text-gray-800">
+                        -
+                    </span>
                 </div>
+
+
                 <div class="flex justify-between items-center border-b pb-2">
-                    <span class="text-gray-400">หลักฐานที่แนบ:</span>
-                    <span id="summaryFileCount" class="font-bold text-ict-blue">0 ไฟล์</span>
+
+                    <span class="text-gray-400">
+                        หลักฐานที่แนบ:
+                    </span>
+
+                    <span id="summaryFileCount"
+                          class="font-bold text-ict-blue">
+                        0 ไฟล์
+                    </span>
+
                 </div>
+
+
                 <div>
-                    <span class="text-gray-400 block mb-1">ลายเซ็นดิจิทัลผู้รับ:</span>
+
+                    <span class="text-gray-400 block mb-1">
+                        ลายเซ็นดิจิทัลผู้รับ:
+                    </span>
+
                     <div class="border border-gray-200 bg-white rounded-lg h-20 flex items-center justify-center p-1 overflow-hidden">
-                        <img id="summarySignatureImg" src="" class="max-h-full object-contain" alt="ลายเซ็นผู้รับ">
+
+                        <img id="summarySignatureImg"
+                             src=""
+                             class="max-h-full object-contain"
+                             alt="ลายเซ็นผู้รับ">
+
                     </div>
+
                 </div>
+
             </div>
+
 
             <div class="flex items-center justify-end gap-3 pt-2 text-xs">
-                <button type="button" onclick="closeConfirmSummaryModal()" class="px-4 py-2.5 rounded-xl border border-gray-200 font-semibold text-gray-600 hover:bg-gray-50">
+
+                <button type="button"
+                        onclick="closeConfirmSummaryModal()"
+                        class="px-4 py-2.5 rounded-xl border border-gray-200 font-semibold text-gray-600 hover:bg-gray-50">
+
                     แก้ไขข้อมูล
+
                 </button>
-                <button type="button" onclick="submitFinalHandover()" class="px-5 py-2.5 rounded-xl bg-ict-blue hover:bg-ict-hover text-white font-bold shadow-md">
+
+
+                <button type="button"
+                        onclick="submitFinalHandover()"
+                        class="px-5 py-2.5 rounded-xl bg-ict-blue hover:bg-ict-hover text-white font-bold shadow-md">
+
                     ยืนยันบันทึกสำเร็จ
+
                 </button>
+
             </div>
+
         </div>
+
     </div>
 
-    <!-- Script สำหรับการทำงานทั้งหมด -->
+
+    <!-- ========================================================= -->
+    <!-- Script -->
+    <!-- ========================================================= -->
     <script>
+
+        // =========================================================
         // Digital Signature Canvas
+        // =========================================================
+
         const canvas = document.getElementById('signaturePad');
         const ctx = canvas.getContext('2d');
+
         let isDrawing = false;
         let hasSignature = false;
 
+
         function resizeCanvas() {
+
             const rect = canvas.parentElement.getBoundingClientRect();
+
             if (canvas.width !== rect.width || canvas.height !== rect.height) {
+
                 canvas.width = rect.width;
                 canvas.height = rect.height;
+
                 resetCanvasStyle();
+
             }
+
         }
 
+
         function resetCanvasStyle() {
+
             ctx.lineWidth = 2.5;
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
             ctx.strokeStyle = '#034383';
+
         }
+
 
         function getPos(e) {
+
             const rect = canvas.getBoundingClientRect();
-            let clientX = e.clientX || (e.touches && e.touches[0].clientX);
-            let clientY = e.clientY || (e.touches && e.touches[0].clientY);
-            return { x: clientX - rect.left, y: clientY - rect.top };
+
+            let clientX =
+                e.clientX ||
+                (e.touches && e.touches[0].clientX);
+
+            let clientY =
+                e.clientY ||
+                (e.touches && e.touches[0].clientY);
+
+            return {
+                x: clientX - rect.left,
+                y: clientY - rect.top
+            };
+
         }
+
 
         function startDrawing(e) {
+
             isDrawing = true;
             hasSignature = true;
+
             resetCanvasStyle();
+
             const pos = getPos(e);
+
             ctx.beginPath();
             ctx.moveTo(pos.x, pos.y);
+
         }
+
 
         function draw(e) {
+
             if (!isDrawing) return;
-            if (e.type === 'touchmove') e.preventDefault();
+
+            if (e.type === 'touchmove') {
+                e.preventDefault();
+            }
+
             const pos = getPos(e);
+
             ctx.lineTo(pos.x, pos.y);
             ctx.stroke();
+
         }
+
 
         function stopDrawing() {
+
             if (isDrawing) {
+
                 ctx.closePath();
                 isDrawing = false;
+
             }
+
         }
 
-        canvas.addEventListener('mousedown', startDrawing);
-        canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('mouseup', stopDrawing);
-        canvas.addEventListener('mouseleave', stopDrawing);
 
-        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDrawing(e); }, { passive: false });
-        canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e); }, { passive: false });
-        canvas.addEventListener('touchend', stopDrawing);
+        canvas.addEventListener(
+            'mousedown',
+            startDrawing
+        );
+
+        canvas.addEventListener(
+            'mousemove',
+            draw
+        );
+
+        canvas.addEventListener(
+            'mouseup',
+            stopDrawing
+        );
+
+        canvas.addEventListener(
+            'mouseleave',
+            stopDrawing
+        );
+
+
+        canvas.addEventListener(
+            'touchstart',
+            (e) => {
+                e.preventDefault();
+                startDrawing(e);
+            },
+            { passive: false }
+        );
+
+
+        canvas.addEventListener(
+            'touchmove',
+            (e) => {
+                e.preventDefault();
+                draw(e);
+            },
+            { passive: false }
+        );
+
+
+        canvas.addEventListener(
+            'touchend',
+            stopDrawing
+        );
+
 
         function clearSignature() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            ctx.clearRect(
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+
             hasSignature = false;
+
         }
 
-        window.addEventListener('resize', resizeCanvas);
-        document.addEventListener('DOMContentLoaded', () => { setTimeout(resizeCanvas, 150); });
 
+        window.addEventListener(
+            'resize',
+            resizeCanvas
+        );
+
+
+        document.addEventListener(
+            'DOMContentLoaded',
+            () => {
+                setTimeout(resizeCanvas, 150);
+            }
+        );
+
+
+        // =========================================================
         // Multi-File Upload & Preview Handler
+        // =========================================================
+
         let selectedFiles = [];
         const MAX_FILES = 5;
 
+
         function previewFiles(event) {
-            const newFiles = Array.from(event.target.files);
-            if (selectedFiles.length + newFiles.length > MAX_FILES) {
-                alert(`สามารถแนบไฟล์ได้สูงสุดไม่เกิน ${MAX_FILES} ไฟล์เท่านั้น`);
+
+            const newFiles =
+                Array.from(event.target.files);
+
+            if (
+                selectedFiles.length +
+                newFiles.length >
+                MAX_FILES
+            ) {
+
+                alert(
+                    `สามารถแนบไฟล์ได้สูงสุดไม่เกิน ${MAX_FILES} ไฟล์เท่านั้น`
+                );
+
             }
-            const availableSlots = MAX_FILES - selectedFiles.length;
+
+
+            const availableSlots =
+                MAX_FILES -
+                selectedFiles.length;
+
+
             if (availableSlots > 0) {
-                selectedFiles = selectedFiles.concat(newFiles.slice(0, availableSlots));
+
+                selectedFiles =
+                    selectedFiles.concat(
+                        newFiles.slice(
+                            0,
+                            availableSlots
+                        )
+                    );
+
             }
+
+
             updateFileInput();
             renderPreviews();
+
         }
+
 
         function updateFileInput() {
-            const dataTransfer = new DataTransfer();
-            selectedFiles.forEach(file => dataTransfer.items.add(file));
-            document.getElementById('photoInput').files = dataTransfer.files;
-            document.getElementById('fileCountText').textContent = `(${selectedFiles.length}/${MAX_FILES})`;
+
+            const dataTransfer =
+                new DataTransfer();
+
+            selectedFiles.forEach(
+                file =>
+                    dataTransfer.items.add(file)
+            );
+
+            document.getElementById(
+                'photoInput'
+            ).files = dataTransfer.files;
+
+
+            document.getElementById(
+                'fileCountText'
+            ).textContent =
+                `(${selectedFiles.length}/${MAX_FILES})`;
+
         }
+
 
         function renderPreviews() {
-            const container = document.getElementById('previewContainer');
-            const clearBtn = document.getElementById('clearAllBtn');
+
+            const container =
+                document.getElementById(
+                    'previewContainer'
+                );
+
+            const clearBtn =
+                document.getElementById(
+                    'clearAllBtn'
+                );
+
 
             if (selectedFiles.length === 0) {
+
                 clearBtn.classList.add('hidden');
+
                 container.innerHTML = '';
+
                 return;
+
             }
+
 
             clearBtn.classList.remove('hidden');
+
             container.innerHTML = '';
 
-            selectedFiles.forEach((file, index) => {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const div = document.createElement('div');
-                    div.className = 'relative h-20 border border-gray-200 rounded-xl overflow-hidden bg-black group shadow-sm';
-                    div.innerHTML = `
-                        <img src="${e.target.result}" class="w-full h-full object-cover cursor-pointer" onclick="openImageModal('${e.target.result}')" alt="Preview">
-                        <button type="button" onclick="removeFile(${index})" class="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 text-xs">✕</button>
-                    `;
-                    container.appendChild(div);
-                };
-                reader.readAsDataURL(file);
-            });
+
+            selectedFiles.forEach(
+                (file, index) => {
+
+                    const reader =
+                        new FileReader();
+
+
+                    reader.onload = function(e) {
+
+                        const div =
+                            document.createElement(
+                                'div'
+                            );
+
+
+                        div.className =
+                            'relative h-20 border border-gray-200 rounded-xl overflow-hidden bg-black group shadow-sm';
+
+
+                        div.innerHTML = `
+
+                            <img
+                                src="${e.target.result}"
+                                class="w-full h-full object-cover cursor-pointer"
+                                onclick="openImageModal('${e.target.result}')"
+                                alt="Preview"
+                            >
+
+                            <button
+                                type="button"
+                                onclick="removeFile(${index})"
+                                class="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 text-xs">
+                                ✕
+                            </button>
+
+                        `;
+
+
+                        container.appendChild(div);
+
+                    };
+
+
+                    reader.readAsDataURL(file);
+
+                }
+            );
+
         }
+
 
         function removeFile(index) {
+
             selectedFiles.splice(index, 1);
+
             updateFileInput();
             renderPreviews();
+
         }
+
 
         function clearAllFiles() {
+
             selectedFiles = [];
+
             updateFileInput();
             renderPreviews();
+
         }
 
+
+        // =========================================================
         // Image Modal
+        // =========================================================
+
         function openImageModal(src) {
-            document.getElementById('modalImage').src = src;
-            document.getElementById('imageModal').classList.remove('hidden');
-            document.getElementById('imageModal').classList.add('flex');
+
+            document.getElementById(
+                'modalImage'
+            ).src = src;
+
+
+            document.getElementById(
+                'imageModal'
+            ).classList.remove('hidden');
+
+
+            document.getElementById(
+                'imageModal'
+            ).classList.add('flex');
+
         }
+
 
         function closeImageModal() {
-            document.getElementById('imageModal').classList.add('hidden');
-            document.getElementById('imageModal').classList.remove('flex');
+
+            document.getElementById(
+                'imageModal'
+            ).classList.add('hidden');
+
+
+            document.getElementById(
+                'imageModal'
+            ).classList.remove('flex');
+
         }
 
-        // Modal Confirmation & Storage Handler
+
+        // =========================================================
+        // Modal Confirmation
+        // =========================================================
+
         function openConfirmSummaryModal(event) {
+
             event.preventDefault();
 
+
             if (!hasSignature) {
-                alert('กรุณาลงลายเซ็นดิจิทัลก่อนยืนยันการส่งมอบ');
+
+                alert(
+                    'กรุณาลงลายเซ็นดิจิทัลก่อนยืนยันการส่งมอบ'
+                );
+
                 return;
+
             }
 
-            document.getElementById('summaryClaimId').innerText = document.getElementById('claimIdText').innerText;
-            document.getElementById('summaryItemName').innerText = document.getElementById('itemNameText').innerText;
-            document.getElementById('summaryRecipient').innerText = document.getElementById('recipientNameText').innerText;
-            document.getElementById('summaryStaff').innerText = document.getElementById('staffNameInput').value;
-            document.getElementById('summaryFileCount').innerText = `${selectedFiles.length} ไฟล์`;
 
-            const signatureDataUrl = canvas.toDataURL('image/png');
-            document.getElementById('summarySignatureImg').src = signatureDataUrl;
+            document.getElementById(
+                'summaryClaimId'
+            ).innerText =
+                document.getElementById(
+                    'claimIdText'
+                ).innerText;
 
-            document.getElementById('confirmSummaryModal').classList.remove('hidden');
-            document.getElementById('confirmSummaryModal').classList.add('flex');
+
+            document.getElementById(
+                'summaryItemName'
+            ).innerText =
+                document.getElementById(
+                    'itemNameText'
+                ).innerText;
+
+
+            document.getElementById(
+                'summaryRecipient'
+            ).innerText =
+                document.getElementById(
+                    'recipientNameText'
+                ).innerText;
+
+
+            document.getElementById(
+                'summaryStaff'
+            ).innerText =
+                document.getElementById(
+                    'staffNameInput'
+                ).value;
+
+
+            document.getElementById(
+                'summaryFileCount'
+            ).innerText =
+                `${selectedFiles.length} ไฟล์`;
+
+
+            const signatureDataUrl =
+                canvas.toDataURL('image/png');
+
+
+            document.getElementById(
+                'summarySignatureImg'
+            ).src =
+                signatureDataUrl;
+
+
+            document.getElementById(
+                'confirmSummaryModal'
+            ).classList.remove('hidden');
+
+
+            document.getElementById(
+                'confirmSummaryModal'
+            ).classList.add('flex');
+
         }
+
 
         function closeConfirmSummaryModal() {
-            document.getElementById('confirmSummaryModal').classList.add('hidden');
-            document.getElementById('confirmSummaryModal').classList.remove('flex');
+
+            document.getElementById(
+                'confirmSummaryModal'
+            ).classList.add('hidden');
+
+
+            document.getElementById(
+                'confirmSummaryModal'
+            ).classList.remove('flex');
+
         }
+
+
+        // =========================================================
+        // Save Handover Record
+        // =========================================================
 
         function submitFinalHandover() {
-            const signatureDataUrl = canvas.toDataURL('image/png');
+
+            const signatureDataUrl =
+                canvas.toDataURL('image/png');
+
 
             const saveRecord = (proofUrl) => {
+
                 const newCompletedItem = {
-                    claimId: document.getElementById('claimIdText').textContent.trim(),
-                    itemName: document.getElementById('itemNameText').textContent.trim(),
-                    recipientName: document.getElementById('recipientNameText').textContent.trim(),
-                    handoverDate: new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' }),
-                    staffName: document.getElementById('staffNameInput').value,
-                    proofImageUrl: proofUrl,
-                    note: 'ส่งมอบคืนเจ้าของพร้อมลงลายเซ็นเรียบร้อยแล้ว'
+
+                    claimId:
+                        document.getElementById(
+                            'claimIdText'
+                        ).textContent.trim(),
+
+                    itemName:
+                        document.getElementById(
+                            'itemNameText'
+                        ).textContent.trim(),
+
+                    recipientName:
+                        document.getElementById(
+                            'recipientNameText'
+                        ).textContent.trim(),
+
+                    handoverDate:
+                        new Date().toLocaleDateString(
+                            'th-TH',
+                            {
+                                year: 'numeric',
+                                month: 'short',
+                                day: 'numeric'
+                            }
+                        ),
+
+                    staffName:
+                        document.getElementById(
+                            'staffNameInput'
+                        ).value,
+
+                    proofImageUrl:
+                        proofUrl,
+
+                    note:
+                        'ส่งมอบคืนเจ้าของพร้อมลงลายเซ็นเรียบร้อยแล้ว'
+
                 };
 
-                const existingList = JSON.parse(localStorage.getItem('completedHandovers') || '[]');
-                existingList.unshift(newCompletedItem);
-                localStorage.setItem('completedHandovers', JSON.stringify(existingList));
+
+                const existingList =
+                    JSON.parse(
+                        localStorage.getItem(
+                            'completedHandovers'
+                        ) || '[]'
+                    );
+
+
+                existingList.unshift(
+                    newCompletedItem
+                );
+
+
+                localStorage.setItem(
+                    'completedHandovers',
+                    JSON.stringify(existingList)
+                );
+
 
                 closeConfirmSummaryModal();
-                alert('บันทึกการส่งมอบสำเร็จ!');
-                window.location.href = 'staff-dashboard.html';
+
+
+                alert(
+                    'บันทึกการส่งมอบสำเร็จ!'
+                );
+
+
+                window.location.href =
+                    'staff-dashboard.html';
+
             };
 
+
             if (selectedFiles.length > 0) {
-                const reader = new FileReader();
+
+                const reader =
+                    new FileReader();
+
+
                 reader.onload = function(e) {
-                    saveRecord(e.target.result);
+
+                    saveRecord(
+                        e.target.result
+                    );
+
                 };
-                reader.readAsDataURL(selectedFiles[0]);
+
+
+                reader.readAsDataURL(
+                    selectedFiles[0]
+                );
+
             } else {
-                saveRecord(signatureDataUrl);
+
+                saveRecord(
+                    signatureDataUrl
+                );
+
             }
+
         }
+
     </script>
+
 </body>
 </html>
