@@ -13,7 +13,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const SUPABASE_URL = 'https://ljjnkmwyjqhsudckgabe.supabase.co/rest/v1/';
+    const SUPABASE_URL = 'https://ljjnkmwyjqhsudckgabe.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_a72MQbvnxOLXrY5DAvUtdQ_b9fAapQJ';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   </script>
@@ -506,6 +506,12 @@
       box-shadow: 0 4px 12px rgba(0, 59, 122, 0.25);
     }
 
+    .btn-next:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
     /* Footer */
     .footer {
       background: #ffffff;
@@ -661,7 +667,7 @@
             </div>
           </div>
         </div>
-        <input type="hidden" id="reportTypeInput" value="found">
+        <input type="hidden" id="reportTypeInput" value="Found">
       </div>
 
       <div class="form-group">
@@ -674,12 +680,7 @@
         <label class="form-label">หมวดหมู่ <span>*</span></label>
         <div class="select-box-wrapper">
           <select id="itemCategorySelect" class="form-select" onchange="clearError('itemCategorySelect', 'categoryError')">
-            <option value="" disabled selected>เลือกหมวดหมู่</option>
-            <option value="electronics">อุปกรณ์อิเล็กทรอนิกส์</option>
-            <option value="study">อุปกรณ์การเรียน</option>
-            <option value="bags">กระเป๋า/สัมภาระ/กุญแจ</option>
-            <option value="personal">ของใช้ส่วนตัว</option>
-            <option value="other">เอกสาร/บัตร/อื่นๆ</option>
+            <option value="" disabled selected>กำลังโหลดหมวดหมู่...</option>
           </select>
           <i class="fa-solid fa-chevron-down"></i>
         </div>
@@ -717,19 +718,55 @@
   </footer>
 
   <script>
+    // ---------- โหลดหมวดหมู่จริงจากตาราง category ใน Supabase ----------
+    // หมายเหตุ: ชื่อตาราง/คอลัมน์ที่สร้างด้วย SQL แบบไม่ใส่ "" จะถูก Postgres
+    // แปลงเป็นตัวพิมพ์เล็กทั้งหมดเสมอ (CATEGORY -> category, Category_ID -> category_id)
+    // จึงต้องเรียกด้วยชื่อตัวพิมพ์เล็กแบบนี้ ไม่ใช่ตามที่เขียนไว้ใน .sql
+    document.addEventListener('DOMContentLoaded', loadCategories);
+
+    async function loadCategories() {
+      const select = document.getElementById('itemCategorySelect');
+      try {
+        const { data, error } = await supabaseClient
+          .from('category')
+          .select('category_id, category_name')
+          .order('category_name', { ascending: true });
+
+        if (error) throw error;
+
+        select.innerHTML = '<option value="" disabled selected>เลือกหมวดหมู่</option>';
+
+        if (!data || data.length === 0) {
+          select.innerHTML = '<option value="" disabled selected>ยังไม่มีหมวดหมู่ในระบบ</option>';
+          return;
+        }
+
+        data.forEach(cat => {
+          const opt = document.createElement('option');
+          opt.value = cat.category_id;
+          opt.textContent = cat.category_name;
+          select.appendChild(opt);
+        });
+      } catch (err) {
+        console.error('โหลดหมวดหมู่ไม่สำเร็จ:', err);
+        select.innerHTML = '<option value="" disabled selected>โหลดหมวดหมู่ไม่สำเร็จ ลองรีเฟรชหน้า</option>';
+      }
+    }
+
     function selectReportType(type) {
       const cardLost = document.getElementById('cardLost');
       const cardFound = document.getElementById('cardFound');
       const inputType = document.getElementById('reportTypeInput');
 
+      // ค่าต้องตรงกับ CHECK constraint ของตาราง report: Report_Type IN ('Lost','Found')
       if (type === 'lost') {
         cardLost.classList.add('selected');
         cardFound.classList.remove('selected');
-        inputType.value = 'lost';
+        inputType.value = 'Lost';
       } else {
         cardFound.classList.add('selected');
         cardLost.classList.remove('selected');
-        inputType.value = 'found';
+        inputType.value = 'Found';
       }
     }
 
@@ -767,9 +804,11 @@
 
       if (!isValid) return;
 
+      // report_category เก็บเป็น category_id จริงที่มาจากฐานข้อมูล (ไม่ใช่ค่าคงที่แบบเดิม)
       sessionStorage.setItem('report_type', reportType);
       sessionStorage.setItem('report_title', titleInput.value.trim());
       sessionStorage.setItem('report_category', categorySelect.value);
+      sessionStorage.setItem('report_category_name', categorySelect.options[categorySelect.selectedIndex].text);
       sessionStorage.setItem('report_desc', document.getElementById('itemDescInput').value.trim());
 
       window.location.href = 'report-step2.html';

@@ -13,7 +13,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const SUPABASE_URL = 'https://ljjnkmwyjqhsudckgabe.supabase.co/rest/v1/';
+    const SUPABASE_URL = 'https://ljjnkmwyjqhsudckgabe.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_a72MQbvnxOLXrY5DAvUtdQ_b9fAapQJ';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   </script>
@@ -457,6 +457,12 @@
       box-shadow: 0 4px 12px rgba(0, 59, 122, 0.25);
     }
 
+    .btn-next:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
     /* Footer */
     .footer {
       background: #ffffff;
@@ -657,6 +663,14 @@
     let maxDateStr = '';
     let maxTimeStr = '';
 
+    // แผนที่ค่า option ในหน้านี้ -> location_type จริงในตาราง location
+    const LOCATION_TYPE_MAP = {
+      classroom: 'ห้องเรียน',
+      canteen: 'โรงอาหาร',
+      department: 'ห้องสาขา',
+      parking: 'ลานจอดรถ'
+    };
+
     document.addEventListener('DOMContentLoaded', () => {
       const now = new Date();
       const year = now.getFullYear();
@@ -695,7 +709,40 @@
       document.getElementById(errorId).style.display = 'none';
     }
 
-    function validateAndNext() {
+    // หา location_id ที่มีอยู่แล้วในตาราง location ตาม type (+ room ถ้ามี)
+    // ถ้ายังไม่เคยมี ให้สร้างแถวใหม่ แล้วคืน location_id กลับมา
+    async function resolveLocationId(locType, locName, room) {
+      let query = supabaseClient
+        .from('location')
+        .select('location_id')
+        .eq('location_type', locType);
+
+      query = room ? query.eq('room', room) : query.is('room', null);
+
+      const { data: existing, error: selectErr } = await query.limit(1);
+      if (selectErr) throw selectErr;
+
+      if (existing && existing.length > 0) {
+        return existing[0].location_id;
+      }
+
+      const newLocationId = 'LOC' + Date.now();
+      const { data: inserted, error: insertErr } = await supabaseClient
+        .from('location')
+        .insert({
+          location_id: newLocationId,
+          location_name: locName,
+          location_type: locType,
+          room: room || null
+        })
+        .select('location_id')
+        .single();
+
+      if (insertErr) throw insertErr;
+      return inserted.location_id;
+    }
+
+    async function validateAndNext() {
       let isValid = true;
       const locationSelect = document.getElementById('locationSelect');
       const locVal = locationSelect.value;
@@ -766,22 +813,38 @@
 
       if (!isValid) return;
 
-      let finalLocation = locVal;
+      const locType = LOCATION_TYPE_MAP[locVal];
+      let room = null;
+      let displayName = locType;
+
       if (locVal === 'classroom') {
-        finalLocation = classroomInput.value.trim();
+        room = classroomInput.value.trim();
+        displayName = `ห้องเรียน ${room}`;
       } else if (locVal === 'department') {
-        finalLocation = departmentInput.value.trim();
-      } else if (locVal === 'canteen') {
-        finalLocation = 'โรงอาหาร';
-      } else if (locVal === 'parking') {
-        finalLocation = 'ลานจอดรถ';
+        room = departmentInput.value.trim();
+        displayName = `ห้องสาขา ${room}`;
       }
 
-      sessionStorage.setItem('report_location', finalLocation);
-      sessionStorage.setItem('report_date', dateInput.value);
-      sessionStorage.setItem('report_time', timeInput.value);
+      const nextBtn = document.querySelector('.btn-next');
+      nextBtn.disabled = true;
+      nextBtn.querySelector('span').textContent = 'กำลังบันทึก...';
 
-      window.location.href = 'report-step3.html';
+      try {
+        const locationId = await resolveLocationId(locType, displayName, room);
+
+        sessionStorage.setItem('report_location_id', locationId);
+        sessionStorage.setItem('report_location_display', displayName);
+        sessionStorage.setItem('report_date', dateInput.value);
+        sessionStorage.setItem('report_time', timeInput.value);
+
+        window.location.href = 'report-step3.html';
+      } catch (err) {
+        console.error('บันทึกสถานที่ไม่สำเร็จ:', err);
+        alert('ไม่สามารถบันทึกสถานที่ได้ กรุณาลองใหม่อีกครั้ง');
+      } finally {
+        nextBtn.disabled = false;
+        nextBtn.querySelector('span').textContent = 'ถัดไป';
+      }
     }
   </script>
 

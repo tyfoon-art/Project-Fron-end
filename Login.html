@@ -4,19 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lost & Found ICT - เข้าสู่ระบบ</title>
-  
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    const SUPABASE_URL = 'https://ljjnkmwyjqhsudckgabe.supabase.co/rest/v1/';
-    const SUPABASE_ANON_KEY = 'sb_publishable_a72MQbvnxOLXrY5DAvUtdQ_b9fAapQJ';
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  </script>
+  <!-- แก้ไข: เอา SUPABASE_URL / SUPABASE_ANON_KEY และ createClient() ที่ฝังไว้เอง
+       (ซึ่ง URL ต่อ '/rest/v1/' ผิดรูปแบบ ทำให้ endpoint auth/rest ทั้งหมดพัง) ออกทิ้ง
+       เปลี่ยนไป import client กลางตัวเดียวกับ home.html และ browse.html จาก
+       /src/supabaseClient.js แทน เพื่อใช้ค่า .env ชุดเดียวกันทุกหน้า -->
 
   <style>
     * {
@@ -313,6 +311,11 @@
       box-shadow: 0 2px 8px rgba(0, 59, 122, 0.15);
     }
 
+    .btn-login:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
     .btn-login i {
       font-size: 13px;
       transition: transform 0.2s ease;
@@ -389,16 +392,16 @@
           <span id="loginAlertText">ไม่พบบัญชีผู้ใช้นี้ กรุณาลงทะเบียนก่อนเข้าสู่ระบบ</span>
         </div>
 
-        <form id="loginForm" onsubmit="handleLogin(event)" novalidate>
+        <form id="loginForm" novalidate>
           <div class="form-group">
             <label for="email">อีเมล</label>
             <div class="input-wrapper">
               <i class="fa-regular fa-envelope input-icon-left"></i>
-              <input 
-                type="email" 
-                id="email" 
-                name="email" 
-                placeholder="xxxx@gmail.com หรือ xxxx@up.ac.th" 
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="xxxx@gmail.com หรือ xxxx@up.ac.th"
                 oninput="clearError('email', 'emailError')"
                 required
               >
@@ -412,11 +415,11 @@
             <label for="password">รหัสผ่าน</label>
             <div class="input-wrapper">
               <i class="fa-solid fa-lock input-icon-left"></i>
-              <input 
-                type="password" 
-                id="password" 
-                name="password" 
-                placeholder="กรอกรหัสผ่าน" 
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="กรอกรหัสผ่าน"
                 oninput="clearError('password', 'passwordError')"
                 required
               >
@@ -429,12 +432,12 @@
             </div>
 
             <div class="forgot-link-wrapper">
-              <a href="forgot-password.html" class="forgot-link" onclick="goToForgotPassword(event)">ลืมรหัสผ่าน?</a>
+              <a href="forgotpassword.html" class="forgot-link">ลืมรหัสผ่าน?</a>
             </div>
           </div>
 
-          <button type="submit" class="btn-login">
-            <span>เข้าสู่ระบบ</span>
+          <button type="submit" class="btn-login" id="btnLoginSubmit">
+            <span id="btnLoginText">เข้าสู่ระบบ</span>
             <i class="fa-solid fa-arrow-right"></i>
           </button>
         </form>
@@ -442,10 +445,29 @@
     </div>
   </div>
 
-  <script>
-    function goToForgotPassword(event) {
-      if (event) event.preventDefault();
-      window.location.href = 'forgotpassword.html';
+  <script type="module">
+    // แก้ไข: import client กลางตัวเดียวกับ home.html / browse.html แทนการ
+    // createClient() เองในไฟล์นี้ (ของเดิม URL ผิดรูปแบบเพราะต่อ '/rest/v1/'
+    // เข้าไปเอง ทำให้ endpoint ของ auth/rest พังทั้งหมด)
+    import { supabaseClient } from '/src/supabaseClient.js';
+
+    // กติกาโดเมนอีเมลตามบทบาท: เจ้าหน้าที่ต้องใช้ @staff.com เท่านั้น
+    // ผู้ใช้ทั่วไปต้องใช้ @gmail.com หรือ @up.ac.th เท่านั้น โดเมนอื่นห้ามล็อกอิน
+    const STAFF_DOMAIN = 'staff.com';
+    const USER_DOMAINS = ['gmail.com', 'up.ac.th'];
+
+    function getEmailDomain(email) {
+      const parts = email.split('@');
+      return parts.length === 2 ? parts[1].toLowerCase() : '';
+    }
+
+    function isAllowedDomain(email) {
+      const domain = getEmailDomain(email);
+      return domain === STAFF_DOMAIN || USER_DOMAINS.includes(domain);
+    }
+
+    function isStaffDomain(email) {
+      return getEmailDomain(email) === STAFF_DOMAIN;
     }
 
     const togglePassword = document.getElementById('togglePassword');
@@ -455,7 +477,7 @@
     togglePassword.addEventListener('click', function () {
       const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
       passwordInput.setAttribute('type', type);
-      
+
       if (type === 'text') {
         toggleIcon.classList.remove('fa-eye');
         toggleIcon.classList.add('fa-eye-slash');
@@ -465,7 +487,15 @@
       }
     });
 
-    function showError(inputId, errorId, msg) {
+    window.clearError = function (inputId, errorId) {
+      const input = document.getElementById(inputId);
+      const error = document.getElementById(errorId);
+      if (input) input.classList.remove('input-error');
+      if (error) error.classList.remove('show');
+      document.getElementById('loginAlertError').classList.remove('show');
+    };
+
+    function showFieldError(inputId, errorId, msg) {
       const input = document.getElementById(inputId);
       const error = document.getElementById(errorId);
       if (input) input.classList.add('input-error');
@@ -475,105 +505,124 @@
       }
     }
 
-    function clearError(inputId, errorId) {
-      const input = document.getElementById(inputId);
-      const error = document.getElementById(errorId);
-      if (input) input.classList.remove('input-error');
-      if (error) error.classList.remove('show');
-      document.getElementById('loginAlertError').classList.remove('show');
+    function showAlert(html) {
+      const alertBox = document.getElementById('loginAlertError');
+      const alertText = document.getElementById('loginAlertText');
+      alertText.innerHTML = html;
+      alertBox.classList.add('show');
     }
 
-    function handleLogin(event) {
+    function setLoading(isLoading) {
+      const btn = document.getElementById('btnLoginSubmit');
+      const btnText = document.getElementById('btnLoginText');
+      btn.disabled = isLoading;
+      btnText.textContent = isLoading ? 'กำลังเข้าสู่ระบบ...' : 'เข้าสู่ระบบ';
+    }
+
+    async function handleLogin(event) {
       event.preventDefault();
 
       const emailInput = document.getElementById('email');
       const passwordInput = document.getElementById('password');
       const email = emailInput.value.trim().toLowerCase();
       const password = passwordInput.value;
-      const alertBox = document.getElementById('loginAlertError');
-      const alertText = document.getElementById('loginAlertText');
 
       let isValid = true;
-
       if (!email) {
-        showError('email', 'emailError', 'กรุณากรอกอีเมล');
+        showFieldError('email', 'emailError', 'กรุณากรอกอีเมล');
         isValid = false;
       }
       if (!password) {
-        showError('password', 'passwordError', 'กรุณากรอกรหัสผ่าน');
+        showFieldError('password', 'passwordError', 'กรุณากรอกรหัสผ่าน');
+        isValid = false;
+      }
+
+      // ตรวจโดเมนอีเมลก่อนยิงไป Supabase: กันไม่ให้แม้แต่พยายาม auth ด้วย
+      // โดเมนที่ไม่อนุญาต (เช่น @hotmail.com, @outlook.com) และแยกให้ชัดว่า
+      // อีเมลนี้ควรเป็นบัญชีเจ้าหน้าที่หรือผู้ใช้ทั่วไป
+      if (email && !isAllowedDomain(email)) {
+        showFieldError(
+          'email',
+          'emailError',
+          'ผู้ใช้ทั่วไปใช้อีเมล @gmail.com หรือ @up.ac.th ส่วนเจ้าหน้าที่ใช้อีเมล @staff.com เท่านั้น'
+        );
         isValid = false;
       }
 
       if (!isValid) return;
 
-      // ตรวจสอบว่าเป็นบัญชีเจ้าหน้าที่หรือไม่
-      if (email === 'admin@staff.com') {
-        if (password === '12345678Admin') {
-          // บันทึกสถานะสิทธิ์เจ้าหน้าที่ลงใน localStorage แล้วเปลี่ยนหน้าไป staff-dashboard.html
-          localStorage.setItem('userEmail', email);
-          localStorage.setItem('userRole', 'staff');
-          localStorage.setItem('isStaff', 'true');
-          localStorage.setItem('userName', 'เจ้าหน้าที่ ICT');
-          window.location.href = 'staff-dashboard.html';
-          return;
-        } else {
+      setLoading(true);
+
+      try {
+        // แก้ไข: เดิมเทียบรหัสผ่านแบบ plain text ที่เก็บใน localStorage เอง
+        // (ไม่มีคอลัมน์ password อยู่ใน USER_ACCOUNT จริงด้วยซ้ำ) เปลี่ยนมาใช้
+        // Supabase Auth ตรวจสอบอีเมล/รหัสผ่านจริงแทน
+        const { data: authData, error: authError } = await supabaseClient.auth.signInWithPassword({
+          email,
+          password
+        });
+
+        if (authError) {
+          setLoading(false);
           passwordInput.classList.add('input-error');
-          alertText.innerHTML = 'รหัสผ่านเจ้าหน้าที่ไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง';
-          alertBox.classList.add('show');
-          passwordInput.focus();
+          showAlert('อีเมลหรือรหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง');
           return;
         }
+
+        // แก้ไข: เดิมตัดสิน role จาก localStorage flag ('isStaff') ที่ผู้ใช้
+        // แก้เองผ่าน DevTools ได้ เปลี่ยนมา query สิทธิ์จริงจากตาราง
+        // user_account.user_type แทน (ตัวพิมพ์เล็กตามชื่อคอลัมน์จริงใน Postgres)
+        const { data: profile, error: profileError } = await supabaseClient
+          .from('user_account')
+          .select('user_id, full_name, email, user_type')
+          .eq('email', email)
+          .single();
+
+        if (profileError || !profile) {
+          setLoading(false);
+          await supabaseClient.auth.signOut();
+          showAlert('ไม่พบข้อมูลผู้ใช้ในระบบ กรุณาติดต่อผู้ดูแลระบบ');
+          return;
+        }
+
+        // ตรวจไขว้อีกชั้น: โดเมนอีเมลต้องสอดคล้องกับ user_type จริงในฐานข้อมูล
+        // ป้องกันกรณีมีแถวข้อมูลผิดเพี้ยน (เช่น somคนหนึ่งใช้ @gmail.com แต่ถูกตั้ง
+        // user_type เป็น 'staff' ไว้โดยไม่ตั้งใจ) ไม่ให้หลุดเข้าใช้สิทธิ์ผิดประเภท
+        const staffDomain = isStaffDomain(profile.email);
+        if (staffDomain && profile.user_type !== 'staff') {
+          setLoading(false);
+          await supabaseClient.auth.signOut();
+          showAlert('บัญชี @staff.com ต้องถูกตั้งค่าเป็นบัญชีเจ้าหน้าที่เท่านั้น กรุณาติดต่อผู้ดูแลระบบ');
+          return;
+        }
+        if (!staffDomain && profile.user_type === 'staff') {
+          setLoading(false);
+          await supabaseClient.auth.signOut();
+          showAlert('บัญชีเจ้าหน้าที่ต้องใช้อีเมล @staff.com เท่านั้น กรุณาติดต่อผู้ดูแลระบบ');
+          return;
+        }
+
+        localStorage.setItem('userId', profile.user_id);
+        localStorage.setItem('userEmail', profile.email);
+        localStorage.setItem('userName', profile.full_name);
+
+        if (profile.user_type === 'staff') {
+          localStorage.setItem('userRole', 'staff');
+          localStorage.setItem('isStaff', 'true');
+          window.location.href = 'staff-dashboard.html';
+        } else {
+          localStorage.removeItem('userRole');
+          localStorage.removeItem('isStaff');
+          window.location.href = 'home.html';
+        }
+      } catch (err) {
+        console.error('เข้าสู่ระบบไม่สำเร็จ:', err);
+        setLoading(false);
+        showAlert('เกิดข้อผิดพลาดในการเชื่อมต่อระบบ กรุณาลองใหม่อีกครั้ง');
       }
-
-      let usersList = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-
-      const singleEmail = localStorage.getItem('userEmail');
-      const singlePass = localStorage.getItem('userPassword');
-      const singleName = localStorage.getItem('userName');
-
-      if (singleEmail && !usersList.some(u => u.email.toLowerCase() === singleEmail.toLowerCase())) {
-        usersList.push({
-          email: singleEmail,
-          password: singlePass || 'Pass1234',
-          name: singleName || 'นพวรรณ คงพันธประเสริฐ'
-        });
-      }
-
-      const defaultUser = {
-        email: '67020001@up.ac.th',
-        password: 'Password123',
-        name: 'นพวรรณ คงพันธประเสริฐ'
-      };
-      if (!usersList.some(u => u.email.toLowerCase() === defaultUser.email.toLowerCase())) {
-        usersList.push(defaultUser);
-      }
-
-      const accountFound = usersList.find(u => u.email.toLowerCase() === email);
-
-      if (!accountFound) {
-        emailInput.classList.add('input-error');
-        alertText.innerHTML = 'ยังไม่มีบัญชีนี้ในระบบ กรุณากด <strong>"ลงทะเบียน"</strong> ก่อนเข้าสู่ระบบ';
-        alertBox.classList.add('show');
-        emailInput.focus();
-        return;
-      }
-
-      if (accountFound.password && accountFound.password !== password) {
-        passwordInput.classList.add('input-error');
-        alertText.innerHTML = 'รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง หรือกด "ลืมรหัสผ่าน?"';
-        alertBox.classList.add('show');
-        passwordInput.focus();
-        return;
-      }
-
-      localStorage.setItem('currentUser', JSON.stringify(accountFound));
-      localStorage.setItem('userEmail', accountFound.email);
-      localStorage.setItem('userName', accountFound.name || 'ผู้ใช้งาน');
-      localStorage.removeItem('userRole');
-      localStorage.removeItem('isStaff');
-
-      window.location.href = 'home.html';
     }
+
+    document.getElementById('loginForm').addEventListener('submit', handleLogin);
   </script>
 
 </body>

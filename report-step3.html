@@ -13,7 +13,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const SUPABASE_URL = 'https://ljjnkmwyjqhsudckgabe.supabase.co/rest/v1/';
+    const SUPABASE_URL = 'https://ljjnkmwyjqhsudckgabe.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_a72MQbvnxOLXrY5DAvUtdQ_b9fAapQJ';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   </script>
@@ -553,6 +553,12 @@
       box-shadow: 0 4px 12px rgba(22, 163, 74, 0.25);
     }
 
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
     /* Footer */
     .footer {
       background: #ffffff;
@@ -842,50 +848,115 @@
       document.getElementById('secretPreviewContainer').style.display = 'none';
     }
 
-    function handleSubmit() {
+    // ผู้ใช้ปัจจุบันต้อง login ผ่านระบบของเว็บนี้ไว้ก่อน (เก็บ user_id ไว้ใน localStorage)
+    // แก้ชื่อ key ตรงนี้ให้ตรงกับหน้า login จริงของระบบ ถ้าใช้ชื่ออื่น
+    function getCurrentUserId() {
+      return localStorage.getItem('currentUserId')
+          || localStorage.getItem('userId')
+          || localStorage.getItem('user_id')
+          || null;
+    }
+
+    async function handleSubmit() {
       if (selectedImagesBase64.length === 0) {
         document.getElementById('dropzoneBox').classList.add('error');
         document.getElementById('imageError').style.display = 'block';
         return;
       }
 
-      const tempTitle = sessionStorage.getItem('report_title') || 'กระเป๋าผ้าแคนวาส';
-      const tempCategory = sessionStorage.getItem('report_category') || 'Bags & Keys';
-      const tempLocation = sessionStorage.getItem('report_location') || 'ห้องเรียน ICT';
-      const tempType = sessionStorage.getItem('report_type') || 'found';
-      const tempDesc = sessionStorage.getItem('report_desc') || 'พบสิ่งของวางทิ้งไว้บริเวณเก้าอี้พักคอย';
-      const tempTime = sessionStorage.getItem('report_time') || '09:00 น.';
+      const userId = getCurrentUserId();
+      if (!userId) {
+        alert('กรุณาเข้าสู่ระบบก่อนโพสต์ประกาศ');
+        window.location.href = 'login.html';
+        return;
+      }
 
-      const newPostId = 'item_' + Date.now();
+      const reportType = sessionStorage.getItem('report_type');   // 'Lost' หรือ 'Found'
+      const title = sessionStorage.getItem('report_title');
+      const categoryId = sessionStorage.getItem('report_category');
+      const locationId = sessionStorage.getItem('report_location_id');
+      const locationDisplay = sessionStorage.getItem('report_location_display') || '';
+      const date = sessionStorage.getItem('report_date');
+      const time = sessionStorage.getItem('report_time');
+      const baseDesc = sessionStorage.getItem('report_desc') || '';
+
+      if (!reportType || !title || !categoryId || !locationId || !date || !time) {
+        alert('ข้อมูลจากขั้นตอนก่อนหน้าไม่ครบถ้วน กรุณาเริ่มกรอกใหม่ตั้งแต่ขั้นตอนที่ 1');
+        window.location.href = 'report.html';
+        return;
+      }
+
+      // ตาราง report ไม่มีคอลัมน์เก็บวัน-เวลาที่เกิดเหตุแยกต่างหาก (มีแค่ report_date ที่เป็นเวลาที่ "โพสต์")
+      // จึงรวมวันที่/เวลาที่ผู้ใช้กรอกไว้ในรายละเอียดแทน เพื่อไม่ให้ข้อมูลหาย
+      const fullDescription =
+        `${baseDesc}\n\nสถานที่: ${locationDisplay}\nวันที่เกิดเหตุ: ${date} เวลาโดยประมาณ: ${time}`.trim();
+
       const primaryImage = selectedImagesBase64[0];
+      const submitBtn = document.querySelector('.btn-submit');
+      submitBtn.disabled = true;
+      submitBtn.querySelector('span').textContent = 'กำลังบันทึก...';
 
-      // ดึงชื่อบัญชีจริงจาก localStorage เพื่อให้โพสต์ถูกบันทึกเป็นชื่อของคุณและมีสิทธิ์จัดการโพสต์ได้
-      const loggedInUserName = localStorage.getItem('currentUserName') || localStorage.getItem('userName') || localStorage.getItem('user_name') || 'นพวรรณ คงพันธประเสริฐ';
+      try {
+        const newItemId = 'ITM' + Date.now();
+        const newReportId = 'RPT' + Date.now();
 
-      const newPostObject = {
-        id: newPostId,
-        title: tempTitle,
-        category: tempCategory,
-        location: tempLocation,
-        image: primaryImage,
-        images: selectedImagesBase64,
-        secretImage: secretImageBase64,
-        timestamp: new Date().toISOString(),
-        time: tempTime,
-        type: tempType,
-        status: tempType === 'lost' ? 'แจ้งหาย' : 'พบใหม่',
-        description: tempDesc,
-        poster: loggedInUserName, // ผูกชื่อผู้โพสต์ให้ตรงกับบัญชีปัจจุบัน
-        posterRole: tempType === 'lost' ? 'นิสิตผู้ทำของหาย (คณะ ICT)' : 'ผู้แจ้งประกาศ (คณะ ICT)',
-        ref: 'REF-' + new Date().getFullYear() + String(new Date().getMonth() + 1).padStart(2, '0') + '-' + Math.floor(100 + Math.random() * 900)
-      };
+        // 1) สร้างรายการสิ่งของ (item) — Item_ID เป็น VARCHAR ไม่ auto-generate จึงสร้างเอง
+        const { error: itemError } = await supabaseClient
+          .from('item')
+          .insert({
+            item_id: newItemId,
+            item_name: title,
+            item_date: date,
+            status: reportType === 'Found' ? 'พบใหม่' : 'แจ้งหาย',
+            description: fullDescription,
+            image: primaryImage,
+            category_id: categoryId,
+            location_id: locationId
+          });
 
-      let existingItems = JSON.parse(localStorage.getItem('systemFoundItems') || '[]');
-      existingItems.unshift(newPostObject);
-      localStorage.setItem('systemFoundItems', JSON.stringify(existingItems));
+        if (itemError) throw itemError;
 
-      sessionStorage.clear();
-      window.location.href = 'home.html';
+        // 2) สร้างรายงาน (report) ผูกกับ item ด้านบน
+        //    constraint ของตาราง: ถ้า report_type = 'Found' ต้องมี image เสมอ
+        const { error: reportError } = await supabaseClient
+          .from('report')
+          .insert({
+            report_id: newReportId,
+            report_type: reportType,
+            description: fullDescription,
+            item_title: title,
+            category_id: categoryId,
+            location_id: locationId,
+            image: reportType === 'Found' ? primaryImage : null,
+            item_id: newItemId,
+            user_id: userId
+          });
+
+        if (reportError) throw reportError;
+
+        // 3) รูปตำหนิลับ (ถ้ามี)
+        //    หมายเหตุ: schema ที่ให้มายังไม่มีคอลัมน์เก็บรูปนี้ ต้องรันคำสั่งนี้ก่อนถึงจะบันทึกสำเร็จ:
+        //    ALTER TABLE ITEM ADD COLUMN Secret_Image TEXT;
+        if (secretImageBase64) {
+          const { error: secretError } = await supabaseClient
+            .from('item')
+            .update({ secret_image: secretImageBase64 })
+            .eq('item_id', newItemId);
+
+          if (secretError) {
+            console.warn('บันทึกรูปตำหนิลับไม่สำเร็จ (อาจยังไม่มีคอลัมน์ secret_image ในตาราง item):', secretError.message);
+          }
+        }
+
+        sessionStorage.clear();
+        window.location.href = 'home.html';
+
+      } catch (err) {
+        console.error('บันทึกประกาศไม่สำเร็จ:', err);
+        alert('ไม่สามารถบันทึกประกาศได้: ' + (err.message || 'เกิดข้อผิดพลาด กรุณาลองใหม่'));
+        submitBtn.disabled = false;
+        submitBtn.querySelector('span').textContent = 'ยืนยันการโพสต์ประกาศ';
+      }
     }
   </script>
 

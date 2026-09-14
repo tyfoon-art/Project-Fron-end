@@ -811,7 +811,9 @@
       </div>
 
       <!-- แก้ไข: ค่าของ select เดิมเป็นภาษาอังกฤษ (Found/Returned/lost) แต่คอลัมน์ status จริง
-           ในฐานข้อมูลเป็นภาษาไทย เปลี่ยนให้ตรงกับค่าจริง -->
+           ในฐานข้อมูลเป็นภาษาไทย เปลี่ยนให้ตรงกับค่าจริง
+           เพิ่มเติม: เอาตัวเลือก "คืนสำเร็จ" ออก เพราะรายการที่คืนสำเร็จแล้วจะไม่แสดง
+           ให้ผู้ใช้ทั่วไปเห็นในหน้านี้อีกต่อไป (ย้ายไปอยู่หน้าแดชบอร์ดเจ้าหน้าที่แทน) -->
       <div class="filter-group">
         <label class="filter-label">สถานะรายการ</label>
         <div class="select-wrapper">
@@ -819,7 +821,6 @@
             <option value="all">ทั้งหมดทุกสถานะ</option>
             <option value="พบใหม่">พบใหม่</option>
             <option value="อยู่ที่จุดรับฝาก">อยู่ที่จุดรับฝาก</option>
-            <option value="คืนสำเร็จ">คืนสำเร็จ</option>
             <option value="แจ้งหาย">แจ้งหาย</option>
           </select>
           <i class="fa-solid fa-chevron-down"></i>
@@ -949,9 +950,16 @@
     async function fetchItemsFromSupabase() {
       console.log('กำลังดึงข้อมูลจาก ITEM...');
 
+      // เพิ่มเติม: รายการที่ "คืนสำเร็จ" แล้ว ไม่ต้องแสดงให้ผู้ใช้ทั่วไปเห็นอีก
+      // (จะย้ายไปอยู่หน้าแดชบอร์ดของเจ้าหน้าที่ในภายหลัง) กรองออกตั้งแต่ตอน query เลย
+      // แก้ไข: เพิ่ม .order('item_date', { ascending: false }) เพื่อให้รายการเรียง
+      // จากวันที่ล่าสุดไปเก่าสุดตั้งแต่ตอนดึงข้อมูล เดิมไม่ได้สั่ง order เลย
+      // ลำดับการ์ดที่แสดงจึงไม่แน่นอน (ขึ้นอยู่กับลำดับที่ Postgres คืนมา)
       const { data: items, error } = await supabaseClient
         .from('item')
-        .select('*');
+        .select('*')
+        .neq('status', 'คืนสำเร็จ')
+        .order('item_date', { ascending: false });
 
       console.log('ITEM DATA:', items);
       console.log('ITEM ERROR:', error);
@@ -1013,6 +1021,8 @@
       items.forEach(item => {
         // แก้ไข: เดิมเทียบสถานะกับข้อความอังกฤษ (Returned/Completed/Lost ฯลฯ) แต่ค่าจริง
         // ในฐานข้อมูลเป็นภาษาไทย จึงไม่เคยตรงเงื่อนไขไหนเลยนอกจาก else -> เปลี่ยนให้เทียบตรงกับค่าจริง
+        // เพิ่มเติม: เอากิ่ง 'คืนสำเร็จ' ออก เพราะ query ข้างบนกรองสถานะนี้ทิ้งไปแล้ว
+        // จะไม่มีทางเจอ item.status นี้ในลูปนี้อีก (ลดโค้ดที่ไม่มีวันถูกเรียกใช้)
         let statusText = item.status;
         let badgeClass = 'badge-new';
         let badgeIcon = 'fa-solid fa-sparkles';
@@ -1020,9 +1030,6 @@
         if (item.status === 'อยู่ที่จุดรับฝาก') {
           badgeClass = 'badge-storage';
           badgeIcon = 'fa-solid fa-box-archive';
-        } else if (item.status === 'คืนสำเร็จ') {
-          badgeClass = 'badge-returned';
-          badgeIcon = 'fa-solid fa-check-circle';
         } else if (item.status === 'แจ้งหาย') {
           badgeClass = 'badge-lost';
           badgeIcon = 'fa-solid fa-triangle-exclamation';

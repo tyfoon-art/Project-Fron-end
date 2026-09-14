@@ -4,19 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>แบบฟอร์มขอรับคืนสิ่งของ - Lost & Found ICT</title>
-  
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    const SUPABASE_URL = 'https://ljjnkmwyjqhsudckgabe.supabase.co/rest/v1/';
-    const SUPABASE_ANON_KEY = 'sb_publishable_a72MQbvnxOLXrY5DAvUtdQ_b9fAapQJ';
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  </script>
+  <!-- แก้ไข: เดิมฝัง URL/Key ตรงๆ ในไฟล์นี้ (คนละชุดกับที่หน้าอื่นใช้) เปลี่ยนมา
+       import client กลางตัวเดียวกับ home.html / browse.html / detail.html
+       จาก /src/supabaseClient.js แทน ดูใน <script type="module"> ท้ายไฟล์ -->
+
   <style>
     * {
       margin: 0;
@@ -422,10 +420,19 @@
       background: #f0f7ff;
     }
 
+    .upload-box.has-file {
+      border-color: #16a34a;
+      background: #f0fdf4;
+    }
+
     .upload-box i {
       font-size: 24px;
       color: #003b7a;
       margin-bottom: 2px;
+    }
+
+    .upload-box.has-file i {
+      color: #16a34a;
     }
 
     .upload-box-title {
@@ -439,6 +446,7 @@
       color: #64748b;
       font-weight: 400;
       line-height: 1.4;
+      word-break: break-all;
     }
 
     .privacy-box {
@@ -509,6 +517,12 @@
       background: #002d5e;
       transform: translateY(-1px);
       box-shadow: 0 4px 12px rgba(0, 59, 122, 0.25);
+    }
+
+    .btn-submit-claim:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
     }
 
     /* Footer */
@@ -620,12 +634,12 @@
 
   <main class="claim-main">
     <div class="claim-card-container">
-      
+
       <div class="left-item-box">
         <h3 class="left-section-title">ข้อมูลสิ่งของ</h3>
-        <img id="claimItemImg" src="" alt="ภาพสิ่งของ" class="left-item-img">
+        <img id="claimItemImg" src="images/no-image.png" alt="ภาพสิ่งของ" class="left-item-img">
         <div class="left-item-info">
-          <h4 class="left-item-name" id="claimItemTitle">ชื่อสิ่งของ</h4>
+          <h4 class="left-item-name" id="claimItemTitle">กำลังโหลดข้อมูล...</h4>
           <div class="left-item-meta">
             <i class="fa-regular fa-calendar"></i>
             <span id="claimItemDate">พบเมื่อ: -</span>
@@ -634,7 +648,7 @@
             <i class="fa-solid fa-location-dot"></i>
             <span id="claimItemLocation">สถานที่: -</span>
           </div>
-          <span class="badge-claimable" id="claimItemStatus">สถานะ: อยู่ที่จุดรับฝาก</span>
+          <span class="badge-claimable" id="claimItemStatus">สถานะ: -</span>
         </div>
       </div>
 
@@ -646,24 +660,24 @@
 
         <div class="form-group">
           <label class="form-label">อธิบายลักษณะเฉพาะ (Proof of Ownership) <span>*</span></label>
-          <textarea class="form-textarea" placeholder="เช่น มีรอยขีดข่วนด้านหลัง, มีรูปถ่ายซ่อนอยู่ด้านใน, รหัสปลดล็อคหน้าจอ..."></textarea>
+          <textarea id="evidenceText" class="form-textarea" placeholder="เช่น มีรอยขีดข่วนด้านหลัง, มีรูปถ่ายซ่อนอยู่ด้านใน, รหัสปลดล็อคหน้าจอ..."></textarea>
         </div>
 
         <div class="form-group">
           <label class="form-label">หลักฐานยืนยันตัวตนและสิ่งของ <span>*</span></label>
           <div class="upload-dual-grid">
-            
-            <div class="upload-box" onclick="document.getElementById('proofImgInput').click()">
+
+            <div class="upload-box" id="proofBox" onclick="document.getElementById('proofImgInput').click()">
               <i class="fa-solid fa-cloud-arrow-up"></i>
-              <div class="upload-box-title">คลิกเพื่ออัปโหลด</div>
-              <div class="upload-box-desc">รูปภาพยืนยัน (ใบเสร็จ/รูปคู่สิ่งของ)<br>JPG, PNG สูงสุด 5MB</div>
+              <div class="upload-box-title" id="proofBoxTitle">คลิกเพื่ออัปโหลด</div>
+              <div class="upload-box-desc" id="proofBoxDesc">รูปภาพยืนยัน (ใบเสร็จ/รูปคู่สิ่งของ)<br>JPG, PNG สูงสุด 5MB</div>
               <input type="file" id="proofImgInput" accept="image/*" style="display: none;">
             </div>
 
-            <div class="upload-box" onclick="document.getElementById('idCardInput').click()">
+            <div class="upload-box" id="idBox" onclick="document.getElementById('idCardInput').click()">
               <i class="fa-solid fa-id-card"></i>
-              <div class="upload-box-title">คลิกเพื่ออัปโหลด</div>
-              <div class="upload-box-desc">เอกสารยืนยันตัวตน (บัตรนิสิต/บัตรปชช.)<br>JPG, PNG, PDF สูงสุด 5MB</div>
+              <div class="upload-box-title" id="idBoxTitle">คลิกเพื่ออัปโหลด</div>
+              <div class="upload-box-desc" id="idBoxDesc">เอกสารยืนยันตัวตน (บัตรนิสิต/บัตรปชช.)<br>JPG, PNG, PDF สูงสุด 5MB</div>
               <input type="file" id="idCardInput" accept=".pdf,image/*" style="display: none;">
             </div>
 
@@ -680,7 +694,7 @@
 
         <div class="form-actions-row">
           <button type="button" class="btn-cancel" onclick="history.back()">ยกเลิก</button>
-          <button type="button" class="btn-submit-claim" onclick="submitClaim()">
+          <button type="button" class="btn-submit-claim" id="submitBtn" onclick="submitClaim()">
             <span>ส่งคำร้องขอรับคืน</span>
             <i class="fa-solid fa-arrow-right"></i>
           </button>
@@ -705,88 +719,223 @@
     </div>
   </footer>
 
-  <script>
-    const itemsDB = {
-      key: { 
-        title: "กุญแจรถ", 
-        date: "พบเมื่อ: 1 ก.ย. 2026", 
-        location: "สถานที่: ห้องปฏิบัติการ ICT1102/1", 
-        image: "images/key.jpeg",
-        status: "พบใหม่",
-        type: "found"
-      },
-      phone: { 
-        title: "โทรศัพท์มือถือ", 
-        date: "พบเมื่อ: 1 ก.ย. 2026", 
-        location: "สถานที่: ห้องเรียน ICT1111", 
-        image: "images/phone.jpeg",
-        status: "พบใหม่",
-        type: "found"
-      },
-      wallet: { 
-        title: "กระเป๋าสตางค์", 
-        date: "พบเมื่อ: 31 ส.ค. 2026", 
-        location: "สถานที่: โรงอาหารกลาง", 
-        image: "images/wallet.jpeg",
-        status: "แจ้งหาย",
-        type: "lost"
-      },
-      airpods: { 
-        title: "หูฟังไร้สายเคสสีขาว", 
-        date: "พบเมื่อ: 29 ส.ค. 2026", 
-        location: "สถานที่: โรงอาหารกลาง", 
-        image: "images/airpods.jpeg",
-        status: "อยู่ที่จุดรับฝาก",
-        type: "found"
-      },
-      glasses: { 
-        title: "แว่นตา", 
-        date: "พบเมื่อ: 28 ส.ค. 2026", 
-        location: "สถานที่: ห้องสาขา CG", 
-        image: "images/glasses.jpeg",
-        status: "แจ้งหาย",
-        type: "lost"
-      },
-      umbrella: { 
-        title: "ร่มพับลายตาราง", 
-        date: "พบเมื่อ: 27 ส.ค. 2026", 
-        location: "สถานที่: ห้องสาขา SE", 
-        image: "images/umbrella.jpeg",
-        status: "กำลังยื่นคำร้องขอรับคืน",
-        type: "found"
-      }
-    };
+  <script type="module">
+    // แก้ไข: import client กลางตัวเดียวกับทุกหน้า แทนการฝัง URL/Key เอง
+    import { supabaseClient } from '/src/supabaseClient.js';
 
-    document.addEventListener('DOMContentLoaded', () => {
+    // ------------------------------------------------------------
+    // NOTE ON TABLE/COLUMN NAMES
+    // The SQL schema was written with unquoted identifiers
+    // (e.g. CREATE TABLE ITEM (Item_ID ...)). PostgreSQL folds
+    // unquoted identifiers to lowercase, so the real names stored
+    // in the database are: item, item_id, item_name, item_date,
+    // status, description, image, category_id, location_id,
+    // location, location_name, room, claim, claim_id,
+    // ownership_evidence, claim_status, user_id, staff_id, etc.
+    // All queries below use the lowercase forms - using the
+    // CamelCase names (as the original mock code implied) would
+    // fail against the real database.
+    // ------------------------------------------------------------
+
+    const CLAIMABLE_STATUS = 'อยู่ที่จุดรับฝาก';
+    let currentItem = null;
+    let currentUserId = null;
+
+    function formatThaiDate(dateStr) {
+      if (!dateStr) return '-';
+      const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.',
+                       'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+      const d = new Date(dateStr);
+      if (isNaN(d.getTime())) return '-';
+      const buddhistYear = d.getFullYear() + 543;
+      return `${d.getDate()} ${months[d.getMonth()]} ${buddhistYear}`;
+    }
+
+    function markFileSelected(boxId, titleId, descId, file) {
+      document.getElementById(boxId).classList.add('has-file');
+      document.getElementById(titleId).textContent = 'เลือกไฟล์แล้ว';
+      document.getElementById(descId).textContent = file.name;
+    }
+
+    document.getElementById('proofImgInput').addEventListener('change', (e) => {
+      if (e.target.files[0]) markFileSelected('proofBox', 'proofBoxTitle', 'proofBoxDesc', e.target.files[0]);
+    });
+
+    document.getElementById('idCardInput').addEventListener('change', (e) => {
+      if (e.target.files[0]) markFileSelected('idBox', 'idBoxTitle', 'idBoxDesc', e.target.files[0]);
+    });
+
+    document.addEventListener('DOMContentLoaded', async () => {
       const urlParams = new URLSearchParams(window.location.search);
-      const itemId = urlParams.get('id') || 'airpods';
+      const itemId = urlParams.get('id');
 
-      if (!itemsDB[itemId]) {
-        alert('ไม่พบข้อมูลรายการสิ่งของที่ต้องการขอรับคืน');
+      if (!itemId) {
+        alert('ไม่พบรหัสสิ่งของที่ต้องการขอรับคืน');
         window.location.href = 'browse.html';
         return;
       }
 
-      const item = itemsDB[itemId];
-
-      if (item.type === 'lost' || item.status === 'พบใหม่') {
-        alert(`รายการนี้มีสถานะเป็น "${item.status}" จึงไม่สามารถดำเนินการยื่นคำร้องขอรับคืนได้ในขณะนี้`);
-        window.location.href = `detail.html?id=${itemId}`;
+      // A logged-in user is required to file a claim (there is no
+      // anonymous claimant in the schema - claim.user_id is NOT NULL).
+      // แก้ไข: localStorage เก็บ currentUserEmail (ไม่ใช่ user_id ตรงๆ)
+      // ตาม pattern เดียวกับ detail.html จึงต้อง lookup user_id จริง
+      // จากตาราง user_account ด้วย email ก่อน
+      const currentUserEmail = localStorage.getItem('currentUserEmail');
+      if (!currentUserEmail) {
+        alert('กรุณาเข้าสู่ระบบก่อนยื่นคำร้องขอรับคืนสิ่งของ');
+        window.location.href = `login.html?redirect=claim.html?id=${itemId}`;
         return;
       }
 
-      document.getElementById('claimItemTitle').textContent = item.title;
-      document.getElementById('claimItemDate').textContent = item.date;
-      document.getElementById('claimItemLocation').textContent = item.location;
-      document.getElementById('claimItemStatus').textContent = `สถานะ: ${item.status}`;
-      document.getElementById('claimItemImg').src = item.image;
+      const { data: userAccount, error: userError } = await supabaseClient
+        .from('user_account')
+        .select('user_id')
+        .eq('email', currentUserEmail)
+        .maybeSingle();
+
+      if (userError || !userAccount) {
+        alert('ไม่พบบัญชีผู้ใช้งาน กรุณาเข้าสู่ระบบใหม่อีกครั้ง');
+        window.location.href = `login.html?redirect=claim.html?id=${itemId}`;
+        return;
+      }
+
+      currentUserId = userAccount.user_id;
+
       document.getElementById('breadcrumbDetailLink').href = `detail.html?id=${itemId}`;
+
+      try {
+        const { data: item, error } = await supabaseClient
+          .from('item')
+          .select(`
+            item_id,
+            item_name,
+            item_date,
+            status,
+            description,
+            image,
+            location ( location_name, room )
+          `)
+          .eq('item_id', itemId)
+          .maybeSingle();
+
+        if (error) throw error;
+
+        if (!item) {
+          alert('ไม่พบข้อมูลรายการสิ่งของที่ต้องการขอรับคืน');
+          window.location.href = 'browse.html';
+          return;
+        }
+
+        if (item.status !== CLAIMABLE_STATUS) {
+          alert(`รายการนี้มีสถานะเป็น "${item.status}" จึงไม่สามารถดำเนินการยื่นคำร้องขอรับคืนได้ในขณะนี้`);
+          window.location.href = `detail.html?id=${itemId}`;
+          return;
+        }
+
+        currentItem = item;
+
+        const locText = item.location
+          ? `${item.location.location_name}${item.location.room ? ' ' + item.location.room : ''}`
+          : 'ไม่ระบุ';
+
+        document.getElementById('claimItemTitle').textContent = item.item_name;
+        document.getElementById('claimItemDate').textContent = `พบเมื่อ: ${formatThaiDate(item.item_date)}`;
+        document.getElementById('claimItemLocation').textContent = `สถานที่: ${locText}`;
+        document.getElementById('claimItemStatus').textContent = `สถานะ: ${item.status}`;
+        document.getElementById('claimItemImg').src = item.image || 'images/no-image.png';
+      } catch (err) {
+        console.error('Failed to load item:', err);
+        alert('เกิดข้อผิดพลาดในการโหลดข้อมูลสิ่งของ กรุณาลองใหม่อีกครั้ง');
+      }
     });
 
-    function submitClaim() {
-      alert('ส่งคำร้องขอรับคืนสิ่งของสำเร็จเรียบร้อยแล้ว! เจ้าหน้าที่กำลังตรวจสอบข้อมูล');
-      window.location.href = 'home.html';
+    async function uploadEvidenceFile(file, prefix) {
+      const fileExt = file.name.split('.').pop();
+      const filePath = `${currentUserId}/${prefix}-${Date.now()}.${fileExt}`;
+
+      // Requires a public Storage bucket named "claim-evidence"
+      // to already exist in the Supabase project.
+      const { error: uploadError } = await supabaseClient
+        .storage
+        .from('claim-evidence')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data } = supabaseClient
+        .storage
+        .from('claim-evidence')
+        .getPublicUrl(filePath);
+
+      return data.publicUrl;
     }
+
+    async function submitClaim() {
+      if (!currentItem || !currentUserId) {
+        alert('ไม่พบข้อมูลสิ่งของหรือผู้ใช้งาน กรุณาโหลดหน้านี้ใหม่');
+        return;
+      }
+
+      const evidenceText = document.getElementById('evidenceText').value.trim();
+      const proofFile = document.getElementById('proofImgInput').files[0];
+      const idFile = document.getElementById('idCardInput').files[0];
+
+      if (!evidenceText) {
+        alert('กรุณากรอกรายละเอียดลักษณะเฉพาะของสิ่งของ');
+        return;
+      }
+      if (!proofFile || !idFile) {
+        alert('กรุณาอัปโหลดหลักฐานยืนยันตัวตนและสิ่งของให้ครบถ้วน');
+        return;
+      }
+
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span>กำลังส่งคำร้อง...</span>';
+
+      try {
+        const [proofUrl, idUrl] = await Promise.all([
+          uploadEvidenceFile(proofFile, 'proof'),
+          uploadEvidenceFile(idFile, 'idcard')
+        ]);
+
+        // claim.ownership_evidence is a single TEXT column, so the
+        // description and the two uploaded file URLs are combined
+        // into one structured string.
+        const ownershipEvidence = JSON.stringify({
+          description: evidenceText,
+          proof_image_url: proofUrl,
+          id_card_url: idUrl
+        });
+
+        const claimId = `CLM-${Date.now()}`;
+
+        const { error } = await supabaseClient
+          .from('claim')
+          .insert([{
+            claim_id: claimId,
+            ownership_evidence: ownershipEvidence,
+            item_id: currentItem.item_id,
+            user_id: currentUserId
+            // claim_status defaults to 'Pending' in the schema
+          }]);
+
+        if (error) throw error;
+
+        alert('ส่งคำร้องขอรับคืนสิ่งของสำเร็จเรียบร้อยแล้ว! เจ้าหน้าที่กำลังตรวจสอบข้อมูล');
+        window.location.href = 'home.html';
+      } catch (err) {
+        console.error('Failed to submit claim:', err);
+        alert('เกิดข้อผิดพลาดในการส่งคำร้อง กรุณาลองใหม่อีกครั้ง');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span>ส่งคำร้องขอรับคืน</span><i class="fa-solid fa-arrow-right"></i>';
+      }
+    }
+
+    // แก้ไข: script type="module" มี scope ปิด ไม่ผูกฟังก์ชันเข้ากับ global
+    // อัตโนมัติเหมือน script ธรรมดา ต้อง export ฟังก์ชันที่ HTML เรียกผ่าน
+    // onclick ออกไปที่ window เอง ไม่งั้นปุ่ม "ส่งคำร้องขอรับคืน" จะกดแล้วไม่ทำงาน
+    window.submitClaim = submitClaim;
   </script>
 
 </body>

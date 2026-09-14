@@ -10,12 +10,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    const SUPABASE_URL = 'https://ljjnkmwyjqhsudckgabe.supabase.co/rest/v1/';
-    const SUPABASE_ANON_KEY = 'sb_publishable_a72MQbvnxOLXrY5DAvUtdQ_b9fAapQJ';
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  </script>
+  <!-- แก้ไข: เดิมฝัง URL/Key ตรงๆ ในไฟล์นี้ ทำให้คนละชุดกับที่ home.html และ
+       browse.html ใช้ (ซึ่งเปลี่ยนไปอ่านจาก .env ผ่าน /src/supabaseClient.js แล้ว)
+       ถ้าคีย์ที่ฝังไว้ตรงนี้เก่ากว่า/ถูก rotate ไปแล้ว หน้านี้จะได้ 401 ทันทีในขณะที่
+       หน้าอื่นทำงานปกติ — ย้ายมาใช้ client กลางตัวเดียวกับทุกหน้าแทน -->
+
 
   <style>
     * {
@@ -40,7 +39,6 @@
       overflow-x: hidden;
     }
 
-    /* Navbar */
     .navbar {
       background: #ffffff;
       border-bottom: 1px solid #e2e8f0;
@@ -209,7 +207,6 @@
       color: #003b7a;
     }
 
-    /* Breadcrumb */
     .breadcrumb-container {
       width: 100%;
       padding: 24px 32px 0 32px;
@@ -249,7 +246,6 @@
       font-weight: 600;
     }
 
-    /* Main Detail Layout */
     .detail-main {
       flex: 1;
       padding: 20px 32px 48px 32px;
@@ -262,7 +258,6 @@
       align-items: flex-start;
     }
 
-    /* Left: Gallery */
     .detail-left {
       display: flex;
       flex-direction: column;
@@ -331,31 +326,6 @@
       transform: scale(1.05);
     }
 
-    .btn-secret-badge {
-      position: absolute;
-      top: 56px;
-      right: 12px;
-      background: #fffbeb;
-      color: #b45309;
-      border: 1px solid #f59e0b;
-      padding: 6px 10px;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      box-shadow: 0 2px 6px rgba(245, 158, 11, 0.15);
-      transition: all 0.2s ease;
-      z-index: 5;
-    }
-
-    .btn-secret-badge:hover {
-      background: #fef3c7;
-      transform: scale(1.05);
-    }
-
     .thumbnail-list {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -388,7 +358,6 @@
       box-shadow: 0 0 0 2px rgba(0, 59, 122, 0.2);
     }
 
-    /* Modal */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -493,7 +462,6 @@
     .modal-nav-btn.prev { left: 16px; }
     .modal-nav-btn.next { right: 16px; }
 
-    /* Right: Details */
     .detail-right {
       background: #ffffff;
       border-radius: 16px;
@@ -689,7 +657,6 @@
       color: #334155;
     }
 
-    /* Owner Action Buttons */
     .owner-actions-row {
       display: flex;
       gap: 10px;
@@ -809,7 +776,6 @@
       font-weight: 400;
     }
 
-    /* Footer */
     .footer {
       background: #ffffff;
       border-top: 1px solid #e2e8f0;
@@ -879,7 +845,7 @@
 
         <ul class="nav-menu">
           <li><a href="home.html" class="nav-link">Home</a></li>
-          <li><a href="activity.html" class="nav-link">My Activity</a></li>
+          <li><a href="browse.html" class="nav-link">ค้นหาสิ่งของ</a></li>
         </ul>
       </div>
 
@@ -901,25 +867,21 @@
     <ul class="breadcrumb-list">
       <li><a href="home.html">หน้าหลัก</a></li>
       <li class="separator"><i class="fa-solid fa-chevron-right"></i></li>
-      <li><a href="activity.html">My Activity</a></li>
+      <li><a href="browse.html">ค้นหาสิ่งของ</a></li>
       <li class="separator"><i class="fa-solid fa-chevron-right"></i></li>
       <li class="current">รายละเอียด</li>
     </ul>
   </div>
 
   <main class="detail-main">
-    
+
     <div class="detail-left">
       <div class="gallery-card">
         <div class="main-image-box">
           <img id="mainDisplayImg" src="" alt="ภาพสิ่งของ">
-          
+
           <button type="button" class="btn-fullscreen" title="ดูรูปขนาดเต็ม" onclick="openFullscreenModal()">
             <i class="fa-solid fa-expand"></i>
-          </button>
-          
-          <button type="button" class="btn-secret-badge" id="btnSecretBadge" onclick="openSecretModal()" style="display: none;" title="ดูรูปตำหนิเฉพาะ (ข้อมูลลับ)">
-            <i class="fa-solid fa-lock"></i> <span>ตำหนิลับ</span>
           </button>
         </div>
 
@@ -928,7 +890,7 @@
     </div>
 
     <div class="detail-right">
-      
+
       <div class="poster-profile-header">
         <div class="poster-info-left">
           <img id="posterAvatarImg" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop" alt="Avatar" class="poster-avatar">
@@ -964,7 +926,7 @@
             <i class="fa-regular fa-calendar"></i>
             <span id="dateLabelText">วันที่พบ</span>
           </div>
-          <div class="meta-item-val" id="detailDate">2 ก.ย. 2026</div>
+          <div class="meta-item-val" id="detailDate">2 ก.ย. 2569</div>
         </div>
 
         <div class="meta-item">
@@ -972,7 +934,7 @@
             <i class="fa-regular fa-clock"></i>
             <span id="timeLabelText">เวลาที่พบโดยประมาณ</span>
           </div>
-          <div class="meta-item-val" id="detailTime">10:30 น.</div>
+          <div class="meta-item-val" id="detailTime">ไม่ระบุ</div>
         </div>
 
         <div class="meta-item full-width">
@@ -997,8 +959,7 @@
         <div class="desc-box" id="detailDescription">
           รายละเอียดสิ่งของ
         </div>
-        
-        <!-- แถวปุ่มจัดการสำหรับเจ้าของโพสต์ (แก้ไข และ ลบ) -->
+
         <div class="owner-actions-row" id="ownerActionsBox" style="display: none;">
           <a href="#" id="btnEditPost" class="btn-edit-post">
             <i class="fa-solid fa-pen-to-square"></i> แก้ไขโพสต์
@@ -1008,7 +969,6 @@
           </button>
         </div>
 
-        <!-- ปุ่มบันทึกเข้าคลังสำหรับเจ้าหน้าที่ (admin@staff.com) -->
         <div class="staff-action-box" id="staffStorageActionBox" style="display: none;">
           <button type="button" class="btn-staff-storage" onclick="saveItemToStaffStorage()">
             <i class="fa-solid fa-box-archive"></i>
@@ -1031,7 +991,6 @@
 
   </main>
 
-  <!-- Modal สำหรับแสดงรูปภาพหลักขนาดเต็มพร้อมปุ่มเลื่อน -->
   <div class="modal-overlay" id="fullscreenModal">
     <div class="modal-content-box">
       <div class="modal-header">
@@ -1052,27 +1011,6 @@
     </div>
   </div>
 
-  <!-- Modal สำหรับแสดงรูปตำหนิลับขนาดเต็ม -->
-  <div class="modal-overlay" id="secretModal">
-    <div class="modal-content-box" style="max-width: 700px;">
-      <div class="modal-header" style="color: #b45309;">
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <i class="fa-solid fa-lock"></i>
-          <span>รูปตำหนิเฉพาะ (ข้อมูลลับ)</span>
-        </div>
-        <button type="button" class="modal-close-btn" onclick="closeSecretModal()">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-      <p style="font-size: 13.5px; color: #78350f; line-height: 1.4;">
-        ภาพนี้แสดงให้เห็นเฉพาะคุณในฐานะเจ้าของโพสต์ หรือเจ้าหน้าที่ เพื่อใช้ตรวจสอบและยืนยันความเป็นเจ้าของ
-      </p>
-      <div class="modal-img-wrapper" style="height: 380px;">
-        <img id="modalSecretImg" src="" alt="รูปตำหนิลับขนาดเต็ม">
-      </div>
-    </div>
-  </div>
-
   <footer class="footer">
     <div class="footer-inner">
       <div>
@@ -1087,14 +1025,17 @@
     </div>
   </footer>
 
-  <script>
-    let currentSecretImageUrl = '';
+  <script type="module">
+    // แก้ไข: import client กลางตัวเดียวกับ home.html / browse.html แทนการฝัง
+    // URL/Key เองในไฟล์นี้ ให้ทุกหน้าใช้ค่า .env ชุดเดียวกันเสมอ
+    import { supabaseClient } from '/src/supabaseClient.js';
+
     let currentImagesList = [];
     let currentModalIndex = 0;
     let currentLoadedItem = null;
 
     function formatThaiDate(isoDateString) {
-      if (!isoDateString) return '2 ก.ย. 2569';
+      if (!isoDateString) return '-';
       const d = new Date(isoDateString);
       const monthsThai = [
         "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
@@ -1119,13 +1060,29 @@
       return `โพสต์เมื่อ ${diffDays} วันที่แล้ว`;
     }
 
-    function getCategoryNameThai(catId) {
-      const map = {
-        'C001': 'อุปกรณ์อิเล็กทรอนิกส์',
-        'C002': 'กระเป๋า/สัมภาระ/กุญแจ',
-        'C003': 'อุปกรณ์การเรียน/หนังสือ'
-      };
-      return map[catId] || catId;
+    // สร้างข้อความสถานที่จาก location_name + location_type (+ room ถ้ามี)
+    // Building/Floor ไม่มีอยู่จริงในตาราง LOCATION จึงตัดออก
+    function formatLocationText(loc) {
+      if (!loc) return 'อาคารคณะ ICT';
+      let text = loc.location_name || '';
+      if (loc.location_type) text += ` (${loc.location_type}${loc.room ? ' ห้อง ' + loc.room : ''})`;
+      else if (loc.room) text += ` (ห้อง ${loc.room})`;
+      return text || 'อาคารคณะ ICT';
+    }
+
+    // แปลง status จริงในฐานข้อมูล -> class/icon ของ badge
+    function getStatusBadgeMeta(status, isLostType) {
+      if (isLostType || status === 'แจ้งหาย') {
+        return { cls: 'badge-lost', icon: 'fa-regular fa-circle-xmark' };
+      }
+      if (status === 'อยู่ที่จุดรับฝาก') {
+        return { cls: 'badge-storage', icon: 'fa-solid fa-box-archive' };
+      }
+      if (status === 'คืนสำเร็จ') {
+        return { cls: 'badge-new', icon: 'fa-solid fa-circle-check' };
+      }
+      // ค่าเริ่มต้น: 'พบใหม่'
+      return { cls: 'badge-new', icon: 'fa-solid fa-sparkles' };
     }
 
     async function loadItemDetail() {
@@ -1134,31 +1091,32 @@
 
       if (!itemId) {
         alert('ไม่พบรหัสรายการ');
-        window.location.href = 'activity.html';
+        window.location.href = 'browse.html';
         return;
       }
 
-      // ดึงข้อมูลจากตาราง ITEM และ Join ไปยัง CATEGORY, LOCATION, REPORT, USER_ACCOUNT
+      // ชื่อ table/column ทุกตัวใช้ตัวพิมพ์เล็กให้ตรงกับที่ Postgres เก็บจริง
+      // (Postgres จะ fold identifier ที่ไม่ใส่ quote เป็นตัวพิมพ์เล็กเสมอ)
       let { data: item, error } = await supabaseClient
-        .from('ITEM')
+        .from('item')
         .select(`
-          Item_ID,
-          Item_Name,
-          Item_Date,
-          Status,
-          Description,
-          Image,
-          Category_ID,
-          Location_ID,
-          CATEGORY ( Category_Name ),
-          LOCATION ( Location_Name, Building, Floor, Room ),
-          REPORT ( 
-            Report_Type,
-            Report_Date,
-            USER_ACCOUNT ( Full_Name, University_Email, User_Type )
+          item_id,
+          item_name,
+          item_date,
+          status,
+          description,
+          image,
+          category_id,
+          location_id,
+          category ( category_name ),
+          location ( location_name, location_type, room ),
+          report (
+            report_type,
+            report_date,
+            user_account ( full_name, email, user_type )
           )
         `)
-        .eq('Item_ID', itemId)
+        .eq('item_id', itemId)
         .single();
 
       if (error || !item) {
@@ -1169,10 +1127,13 @@
 
       currentLoadedItem = item;
 
-      let statusText = item.Status || 'พบใหม่';
-      let isLostType = item.REPORT && item.REPORT[0] && item.REPORT[0].Report_Type === 'Lost';
-      let statusClass = isLostType ? 'badge-lost' : 'badge-new';
-      let badgeIcon = isLostType ? 'fa-regular fa-circle-xmark' : 'fa-solid fa-sparkles';
+      const report0 = (item.report && item.report[0]) ? item.report[0] : null;
+      const isLostType = report0 ? report0.report_type === 'Lost' : false;
+
+      // แก้ไข: ปุ่มอ้างสิทธิ์ต้องแสดงเฉพาะตอนที่เจ้าหน้าที่รับของเข้าคลังแล้ว
+      // (status === 'อยู่ที่จุดรับฝาก') เท่านั้น สถานะอื่นทั้งหมด — 'พบใหม่'
+      // (ยังไม่ถูกนำเข้าคลัง), 'แจ้งหาย', 'คืนสำเร็จ' — ไม่ควรมีปุ่มนี้
+      const canClaim = item.status === 'อยู่ที่จุดรับฝาก';
 
       if (isLostType) {
         document.getElementById('dateLabelText').textContent = 'วันที่หาย';
@@ -1186,88 +1147,81 @@
         document.getElementById('posterRoleText').textContent = 'ผู้แจ้งประกาศ (คณะ ICT)';
       }
 
-      document.getElementById('detailTitle').textContent = item.Item_Name;
-      document.getElementById('detailRef').textContent = 'REF-' + item.Item_ID;
-      
-      let categoryDisplayName = item.CATEGORY ? item.CATEGORY.Category_Name : getCategoryNameThai(item.Category_ID);
-      document.getElementById('detailCategory').innerHTML = `<span>หมวดหมู่: ${categoryDisplayName}</span>`;
-      
-      document.getElementById('detailDate').textContent = formatThaiDate(item.Item_Date);
-      document.getElementById('detailTime').textContent = '10:30 น.';
-      
-      let locationText = item.LOCATION ? `${item.LOCATION.Location_Name} (${item.LOCATION.Building})` : 'อาคารคณะ ICT';
-      document.getElementById('detailLocation').textContent = locationText;
-      document.getElementById('detailDescription').textContent = item.Description || 'ไม่มีรายละเอียดเพิ่มเติม';
+      document.getElementById('detailTitle').textContent = item.item_name;
+      document.getElementById('detailRef').textContent = 'REF-' + item.item_id;
 
-      let reporterName = 'นพวรรณ คงพันธประเสริฐ';
-      if (item.REPORT && item.REPORT[0] && item.REPORT[0].USER_ACCOUNT) {
-        reporterName = item.REPORT[0].USER_ACCOUNT.Full_Name || reporterName;
+      const categoryDisplayName = item.category ? item.category.category_name : (item.category_id || '-');
+      document.getElementById('detailCategory').innerHTML = `<span>หมวดหมู่: ${categoryDisplayName}</span>`;
+
+      document.getElementById('detailDate').textContent = formatThaiDate(item.item_date);
+      document.getElementById('detailTime').textContent = 'ไม่ระบุ'; // Item_Date เป็น DATE ล้วน ไม่มีเวลาเก็บในฐานข้อมูล
+      document.getElementById('detailLocation').textContent = formatLocationText(item.location);
+      document.getElementById('detailDescription').textContent = item.description || 'ไม่มีรายละเอียดเพิ่มเติม';
+
+      let reporterName = 'ไม่ทราบชื่อผู้แจ้ง';
+      if (report0 && report0.user_account) {
+        reporterName = report0.user_account.full_name || reporterName;
       }
 
       document.getElementById('posterName').textContent = reporterName;
-      document.getElementById('posterTimeAgo').textContent = getTimeAgo(item.Item_Date);
+      document.getElementById('posterTimeAgo').textContent = getTimeAgo(report0 ? report0.report_date : item.item_date);
 
       const posterAvatarImg = document.getElementById('posterAvatarImg');
       posterAvatarImg.src = `https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(reporterName)}`;
 
       const storageWrapper = document.getElementById('storageWrapper');
-      if (isLostType || statusText === 'Lost') {
+      if (isLostType) {
         storageWrapper.style.display = 'none';
       } else {
         storageWrapper.style.display = 'flex';
-        document.getElementById('detailStorage').textContent = 'ศูนย์รับแจ้งของหาย อาคารคณะ ICT (ชั้น 1)';
+        document.getElementById('detailStorage').textContent =
+          item.status === 'อยู่ที่จุดรับฝาก'
+            ? formatLocationText(item.location)
+            : 'ศูนย์รับแจ้งของหาย อาคารคณะ ICT (ชั้น 1)';
       }
 
+      const statusText = item.status || 'พบใหม่';
+      const { cls: statusClass, icon: badgeIcon } = getStatusBadgeMeta(item.status, isLostType);
       const statusEl = document.getElementById('detailStatus');
       statusEl.className = `badge-status ${statusClass}`;
       statusEl.innerHTML = `<i class="${badgeIcon}"></i> <span id="statusText">สถานะ: ${statusText}</span>`;
 
-      const imgSrc = item.Image ? item.Image : 'https://images.unsplash.com/photo-1582139329536-e7284fece509?q=80&w=600&auto=format&fit=crop';
+      const imgSrc = item.image ? item.image : 'https://images.unsplash.com/photo-1582139329536-e7284fece509?q=80&w=600&auto=format&fit=crop';
       currentImagesList = [imgSrc];
       currentModalIndex = 0;
 
       const mainImg = document.getElementById('mainDisplayImg');
       mainImg.src = currentImagesList[0];
-      mainImg.alt = item.Item_Name;
+      mainImg.alt = item.item_name;
 
       const thumbContainer = document.getElementById('thumbnailContainer');
       thumbContainer.innerHTML = '';
-      
+
       currentImagesList.forEach((imgUrl, index) => {
         const thumb = document.createElement('div');
         thumb.className = `thumb-item ${index === 0 ? 'active' : ''}`;
         thumb.onclick = function() { changeImage(this, imgUrl, index); };
-        thumb.innerHTML = `<img src="${imgUrl}" alt="${item.Item_Name}">`;
+        thumb.innerHTML = `<img src="${imgUrl}" alt="${item.item_name}">`;
         thumbContainer.appendChild(thumb);
       });
 
-      const currentUserName = localStorage.getItem('currentUserName') || 'นพวรรณ คงพันธประเสริฐ';
+      const currentUserName = localStorage.getItem('currentUserName') || '';
       const currentUserEmail = localStorage.getItem('currentUserEmail') || '';
-      
-      const isOwner = (reporterName.trim() === currentUserName.trim());
-      const isStaff = (currentUserEmail.toLowerCase() === 'admin@staff.com' || localStorage.getItem('userRole') === 'staff');
+
+      const isOwner = !!currentUserName && (reporterName.trim() === currentUserName.trim());
+      // แก้ไข: ปุ่ม "บันทึกสิ่งของเข้าคลัง" ต้องเห็นเฉพาะบัญชีที่อีเมลลงท้ายด้วย
+      // โดเมน @staff.com เท่านั้น (ไม่ใช่เช็คอีเมลเดียวหรืออิง userRole ที่ตั้งเองได้)
+      const isStaff = currentUserEmail.toLowerCase().endsWith('@staff.com');
 
       const ownerActionsBox = document.getElementById('ownerActionsBox');
       const staffStorageBox = document.getElementById('staffStorageActionBox');
       const claimBox = document.getElementById('claimActionBox');
 
-      if (isOwner) {
-        ownerActionsBox.style.display = 'flex';
-      } else {
-        ownerActionsBox.style.display = 'none';
-      }
-
-      if (isStaff) {
-        staffStorageBox.style.display = 'block';
-      } else {
-        staffStorageBox.style.display = 'none';
-      }
-
-      if (!isOwner && !isLostType) {
-        claimBox.style.display = 'flex';
-      } else {
-        claimBox.style.display = 'none';
-      }
+      ownerActionsBox.style.display = isOwner ? 'flex' : 'none';
+      staffStorageBox.style.display = isStaff ? 'block' : 'none';
+      // แก้ไข: ปุ่มอ้างสิทธิ์แสดงเมื่อไม่ใช่เจ้าของ และสถานะเป็น
+      // 'อยู่ที่จุดรับฝาก' เท่านั้น (canClaim) — สถานะอื่นไม่แสดง
+      claimBox.style.display = (!isOwner && canClaim) ? 'flex' : 'none';
     }
 
     function changeImage(element, src, index) {
@@ -1305,17 +1259,6 @@
       document.getElementById('modalImageCounter').textContent = `รูปภาพขนาดเต็ม (${currentModalIndex + 1}/${currentImagesList.length})`;
     }
 
-    function openSecretModal() {
-      if (currentSecretImageUrl) {
-        document.getElementById('modalSecretImg').src = currentSecretImageUrl;
-        document.getElementById('secretModal').style.display = 'flex';
-      }
-    }
-
-    function closeSecretModal() {
-      document.getElementById('secretModal').style.display = 'none';
-    }
-
     function handleClaim(event) {
       event.preventDefault();
       const urlParams = new URLSearchParams(window.location.search);
@@ -1327,17 +1270,17 @@
       if (confirm('คุณต้องการลบโพสต์นี้ออกจากระบบฐานข้อมูลใช่หรือไม่?')) {
         const urlParams = new URLSearchParams(window.location.search);
         const itemId = urlParams.get('id');
-        
+
         const { error } = await supabaseClient
-          .from('ITEM')
+          .from('item')
           .delete()
-          .eq('Item_ID', itemId);
+          .eq('item_id', itemId);
 
         if (error) {
           alert('เกิดข้อผิดพลาดในการลบ: ' + error.message);
         } else {
           alert('ลบโพสต์เรียบร้อยแล้ว');
-          window.location.href = 'activity.html';
+          window.location.href = 'browse.html';
         }
       }
     }
@@ -1346,10 +1289,12 @@
       if (!currentLoadedItem) return;
 
       if (confirm('คุณต้องการบันทึกสิ่งของนี้เข้าสู่จุดรับฝากของเจ้าหน้าที่ใช่หรือไม่?')) {
+        // ค่า status ต้องอยู่ในขอบเขตของ CHECK constraint:
+        // 'พบใหม่' | 'อยู่ที่จุดรับฝาก' | 'คืนสำเร็จ' | 'แจ้งหาย'
         const { error } = await supabaseClient
-          .from('ITEM')
-          .update({ Status: 'Returned' })
-          .eq('Item_ID', currentLoadedItem.Item_ID);
+          .from('item')
+          .update({ status: 'อยู่ที่จุดรับฝาก' })
+          .eq('item_id', currentLoadedItem.item_id);
 
         if (error) {
           alert('บันทึกไม่สำเร็จ: ' + error.message);
@@ -1361,6 +1306,21 @@
     }
 
     document.addEventListener('DOMContentLoaded', loadItemDetail);
+
+    // แก้ไข: script type="module" มี scope ปิด ไม่ผูกฟังก์ชันเข้ากับ global
+    // อัตโนมัติเหมือน script ธรรมดา ต้อง export ฟังก์ชันที่ HTML เรียกผ่าน
+    // onclick ออกไปที่ window เอง ไม่งั้นปุ่มทั้งหมดในหน้านี้จะกดแล้วไม่ทำงานเลย
+    window.openFullscreenModal = openFullscreenModal;
+    window.closeFullscreenModal = closeFullscreenModal;
+    window.prevModalImage = prevModalImage;
+    window.nextModalImage = nextModalImage;
+    window.changeImage = changeImage;
+    window.handleClaim = handleClaim;
+    window.deleteCurrentItem = deleteCurrentItem;
+    // แก้ไข: ของเดิมพิมพ์ผิดเป็น saveItemTostaffStorage (ตัว T ใหญ่ s เล็ก)
+    // ซึ่งไม่ตรงกับชื่อฟังก์ชันที่ประกาศไว้ด้านบน ทำให้บรรทัดนี้โยน
+    // ReferenceError ทันทีตอนโหลดสคริปต์ และปุ่ม Staff Storage ใช้งานไม่ได้เลย
+    window.saveItemToStaffStorage = saveItemToStaffStorage;
   </script>
 
 </body>

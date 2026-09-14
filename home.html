@@ -11,12 +11,9 @@
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    const SUPABASE_URL = 'https://ljjnkmwyjqhsudckgabe.supabase.co/rest/v1/';
-    const SUPABASE_ANON_KEY = 'sb_publishable_a72MQbvnxOLXrY5DAvUtdQ_b9fAapQJ';
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  </script>
+  <!-- แก้ไข: เอา URL/Key ที่เคยฝังตรงในไฟล์ทิ้ง เปลี่ยนไป import client กลาง
+       จาก src/supabaseClient.js เหมือนหน้า browse.html เพื่อไม่ให้ต้อง
+       createClient() ซ้ำและใช้ชุดค่า .env เดียวกันทุกหน้า -->
 
   <style>
     * {
@@ -430,7 +427,13 @@
       transform: scale(1.03);
     }
 
-    .item-badge-new, .item-badge-found {
+    /* แก้ไข: เดิม home.html มีระบบ badge เป็นของตัวเอง (.item-badge-new /
+       .item-badge-found) ที่ตัดสินสีจาก "วันที่โพสต์" ล้วนๆ ไม่เกี่ยวกับ
+       status จริงเลย ในขณะที่ browse.html ตัดสินจาก item.status จริง
+       (พบใหม่/อยู่ที่จุดรับฝาก/คืนสำเร็จ/แจ้งหาย) ทำให้การ์ดของเดียวกัน
+       ขึ้นคนละสี/คนละข้อความระหว่างสองหน้า เปลี่ยนมาใช้ class ชุดเดียวกับ
+       browse.html ทั้งหมดเพื่อให้สอดคล้องกัน */
+    .item-badge {
       position: absolute;
       top: 10px;
       right: 10px;
@@ -438,7 +441,7 @@
       font-weight: 600;
       padding: 4px 10px;
       border-radius: 20px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
       z-index: 2;
       display: inline-flex;
       align-items: center;
@@ -446,8 +449,16 @@
       color: #ffffff;
     }
 
-    .item-badge-new { background: #22c55e; }
-    .item-badge-found { background: #0284c7; }
+    .item-badge.badge-new { background: #22c55e; }
+    .item-badge.badge-storage { background: #0284c7; }
+    .item-badge.badge-returned { background: #6366f1; }
+    .item-badge.badge-managed { background: #f59e0b; }
+
+    .item-badge.badge-lost {
+      background: #fee2e2;
+      color: #dc2626;
+      border: 1px solid #fecaca;
+    }
 
     .item-body {
       padding: 18px 20px;
@@ -842,47 +853,103 @@
     </div>
   </footer>
 
-  <script>
+  <script type="module">
+    // แก้ไข: import client กลางตัวเดียวกับ browse.html แทนการสร้างเองในไฟล์นี้
+    import { supabaseClient } from '/src/supabaseClient.js';
+
+    // ใช้เป็น fallback เฉพาะตอน query Supabase ไม่สำเร็จเท่านั้น
+    // (ไม่ได้ผูกกับ localStorage แล้ว) — status ปรับให้ตรงกับค่าจริงตาม
+    // CHECK constraint ของคอลัมน์ ITEM.Status ในฐานข้อมูล
     const defaultDatabaseItems = [
       {
         id: 'key1',
         title: 'กุญแจรถ',
-        category: 'กระเป๋า/กุญแจ',
+        category: 'CAT003',
+        categoryName: 'กระเป๋า/สัมภาระ/กุญแจ',
         location: 'ICT1102/1',
-        image: 'images/key.jpeg',
-        fallbackImage: 'https://images.unsplash.com/photo-1582139329536-e7284fece509?q=80&w=600&auto=format&fit=crop',
+        image: 'https://images.unsplash.com/photo-1582139329536-e7284fece509?q=80&w=600&auto=format&fit=crop',
         timestamp: new Date().toISOString(),
-        status: 'open'
+        status: 'พบใหม่'
       },
       {
         id: 'phone1',
         title: 'โทรศัพท์มือถือ',
-        category: 'อุปกรณ์อิเล็กทรอนิกส์',
+        category: 'CAT001',
+        categoryName: 'อุปกรณ์อิเล็กทรอนิกส์',
         location: 'ICT1111',
-        image: 'images/phone.jpeg',
-        fallbackImage: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=600&auto=format&fit=crop',
+        image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=600&auto=format&fit=crop',
         timestamp: new Date().toISOString(),
-        status: 'open'
+        status: 'พบใหม่'
       },
       {
         id: 'bottle1',
         title: 'กระบอกน้ำเก็บความเย็น',
-        category: 'ของใช้ส่วนตัว',
+        category: 'CAT004',
+        categoryName: 'ของใช้ส่วนตัว',
         location: 'โรงอาหาร ICT',
-        image: 'images/bottle.jpeg',
-        fallbackImage: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?q=80&w=600&auto=format&fit=crop',
+        image: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?q=80&w=600&auto=format&fit=crop',
         timestamp: new Date(Date.now() - (48 * 60 * 60 * 1000)).toISOString(),
-        status: 'open'
+        status: 'อยู่ที่จุดรับฝาก'
       }
     ];
 
-    function getSystemItems() {
-      let stored = localStorage.getItem('systemFoundItems');
-      if (!stored) {
-        localStorage.setItem('systemFoundItems', JSON.stringify(defaultDatabaseItems));
+    // แก้ไข: ชื่อ table/คอลัมน์เดิม ('items', 'timestamp') เป็นการเดาที่ไม่ตรงกับ
+    // schema จริง — ตาม ITEM table ในฐานข้อมูล Postgres จะ lowercase ชื่อคอลัมน์ที่ไม่ได้
+    // ใส่ quote ไว้ให้อัตโนมัติ จึงต้อง query จากตาราง "item" (ตัวเล็ก) และใช้ item_date
+    // เหมือนที่หน้า browse.html ใช้จริง เพื่อให้ข้อมูลสองหน้าตรงกัน
+    function getCategoryDisplayName(catId) {
+      const map = {
+        'CAT001': 'อุปกรณ์อิเล็กทรอนิกส์',
+        'CAT002': 'อุปกรณ์การเรียน',
+        'CAT003': 'กระเป๋า/สัมภาระ/กุญแจ',
+        'CAT004': 'ของใช้ส่วนตัว',
+        'CAT005': 'เอกสาร/บัตร/อื่นๆ'
+      };
+      return map[catId] || 'อื่นๆ';
+    }
+
+    async function getSystemItems() {
+      try {
+        const { data, error } = await supabaseClient
+          .from('item')
+          .select('*')
+          .order('item_date', { ascending: false });
+
+        if (error) throw error;
+        if (!data || data.length === 0) return defaultDatabaseItems;
+
+        return data.map(item => ({
+          id: item.item_id,
+          title: item.item_name,
+          category: item.category_id || 'CAT005',
+          categoryName: getCategoryDisplayName(item.category_id),
+          location: item.location_id || 'ไม่ระบุสถานที่',
+          image: item.image || 'https://images.unsplash.com/photo-1582139329536-e7284fece509?q=80&w=600&auto=format&fit=crop',
+          timestamp: item.item_date ? new Date(item.item_date).toISOString() : new Date().toISOString(),
+          status: item.status || 'พบใหม่'
+        }));
+      } catch (err) {
+        console.error('โหลดข้อมูลจาก Supabase ไม่สำเร็จ ใช้ข้อมูลตัวอย่างแทน:', err);
         return defaultDatabaseItems;
       }
-      return JSON.parse(stored);
+    }
+
+    // แก้ไข: เดิมนับจากตาราง "claims" (ไม่มีอยู่จริง) คอลัมน์ status='Completed'
+    // (ก็ไม่มีอยู่จริงเช่นกัน) ตาม schema จริง ITEM.Status มีค่า 'คืนสำเร็จ' อยู่แล้ว
+    // จึงนับจากตาราง item โดยตรงแทน ไม่ต้องพึ่งตาราง claim
+    async function getReturnedSuccessCount() {
+      try {
+        const { count, error } = await supabaseClient
+          .from('item')
+          .select('*', { count: 'exact', head: true })
+          .eq('status', 'คืนสำเร็จ');
+
+        if (error) throw error;
+        return count || 0;
+      } catch (err) {
+        console.error('โหลดจำนวนส่งคืนสำเร็จไม่สำเร็จ:', err);
+        return 0;
+      }
     }
 
     function formatThaiDate(isoDateString) {
@@ -894,48 +961,58 @@
       return `${d.getDate()} ${monthsThai[d.getMonth()]} ${d.getFullYear() + 543}`;
     }
 
-    function renderHomePage() {
-      const items = getSystemItems();
+    // จำนวนรายการล่าสุดสูงสุดที่จะแสดงในหน้าแรก (ไม่ใช่แค่ของวันนี้)
+    const MAX_RECENT_ITEMS = 6;
+
+    async function renderHomePage() {
+      const items = await getSystemItems();
       const now = new Date();
       now.setHours(0, 0, 0, 0);
 
       let todayFoundCount = 0;
       let openItemsCount = 0;
 
-      let userActData = JSON.parse(localStorage.getItem('userActivitiesData') || '{}');
-      let returnedCount = 0;
-      if (userActData.claimRequests) {
-        returnedCount = userActData.claimRequests.filter(c => c.status === 'Completed').length;
-      }
-      returnedCount += 8;
-
-      const todayItems = [];
+      // แก้: ใช้จำนวนจริงจาก Supabase แทนเลข +8 ที่ฝังไว้ตายตัว
+      const returnedCount = await getReturnedSuccessCount();
 
       items.forEach(item => {
         const itemDateNormalized = new Date(item.timestamp);
         itemDateNormalized.setHours(0, 0, 0, 0);
 
         const isToday = (itemDateNormalized.getTime() === now.getTime());
+        if (isToday) todayFoundCount++;
 
-        if (isToday) {
-          todayFoundCount++;
-          todayItems.push(item);
-        }
-
+        // แก้ไข: เดิมเทียบกับ 'open'/'pending' ซึ่งไม่มีอยู่จริงในค่า status
+        // (CHECK constraint ของ ITEM.Status มีแค่ 4 ค่าภาษาไทย) เปลี่ยนให้เทียบ
+        // กับค่าจริง 'พบใหม่' และ 'อยู่ที่จุดรับฝาก' ซึ่งถือว่ายังเป็นรายการที่เปิดอยู่
         const s = item.status;
-        if (!s || s === 'open' || s === 'pending' || s === 'พบใหม่' || s === 'อยู่ที่จุดรับฝาก') {
+        if (s === 'พบใหม่' || s === 'อยู่ที่จุดรับฝาก') {
           openItemsCount++;
         }
       });
 
+      // เพิ่มเติม: รายการที่ "คืนสำเร็จ" แล้ว ไม่ต้องโชว์ให้ผู้ใช้ทั่วไปเห็นอีก
+      // (จะถูกย้ายไปอยู่หน้าแดชบอร์ดของเจ้าหน้าที่แทนในอนาคต) — ยังคงนับรวมอยู่ใน
+      // สถิติ "ส่งคืนสำเร็จ" ด้านบนตามเดิม แค่ไม่ต้องขึ้นเป็นการ์ดในหน้านี้
+      const visibleItems = items.filter(item => item.status !== 'คืนสำเร็จ');
+
+      // แก้: เดิมกรองเอาเฉพาะรายการ "วันนี้" เท่านั้น ทำให้ badge "พบแล้ว"
+      // เป็นโค้ดที่ไม่มีวันถูกเรียกใช้จริง (dead code) และของที่พบเมื่อวาน/
+      // เมื่อวานซืนก็จะไม่โผล่ในหน้าแรกเลย เปลี่ยนเป็นแสดง "รายการล่าสุด"
+      // เรียงตามวันที่ใหม่สุด แล้วค่อยตัดสิน badge จากวันที่ของแต่ละชิ้นแทน
+      const sortedItems = [...visibleItems].sort(
+        (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+      );
+      const recentItems = sortedItems.slice(0, MAX_RECENT_ITEMS);
+
       const container = document.getElementById('recentItemsContainer');
       container.innerHTML = '';
 
-      if (todayItems.length === 0) {
+      if (recentItems.length === 0) {
         container.innerHTML = `
           <div class="empty-today-box">
             <i class="fa-regular fa-calendar-xmark"></i>
-            <h3>ยังไม่มีรายการแจ้งพบสิ่งของในวันนี้</h3>
+            <h3>ยังไม่มีรายการแจ้งพบสิ่งของ</h3>
             <p>รายการที่พบในอดีตสามารถค้นหาและตรวจสอบได้ในหน้าค้นหาและฟิลเตอร์</p>
             <a href="browse.html" class="btn-browse-history">
               <span>ไปที่หน้าค้นหาและฟิลเตอร์</span>
@@ -944,18 +1021,32 @@
           </div>
         `;
       } else {
-        todayItems.forEach(item => {
-          const itemDateNormalized = new Date(item.timestamp);
-          itemDateNormalized.setHours(0, 0, 0, 0);
+        recentItems.forEach(item => {
+          // แก้ไข: เดิมตัดสิน badge จากวันที่โพสต์ ("วันนี้" = เขียว, อื่นๆ = ฟ้า)
+          // ซึ่งไม่สัมพันธ์กับ status จริงของรายการเลย ทำให้ของชิ้นเดียวกันขึ้น
+          // badge คนละสี/คนละคำกับหน้า browse.html เปลี่ยนมาใช้ item.status จริง
+          // ด้วยลอจิกและ class เดียวกับ browse.html เป๊ะๆ เพื่อให้สอดคล้องกัน
+          let statusText = item.status;
+          let badgeClass = 'badge-new';
+          let badgeIcon = 'fa-solid fa-sparkles';
 
-          const isCurrentDay = (itemDateNormalized.getTime() === now.getTime());
-
-          let badgeHtml = '';
-          if (isCurrentDay) {
-            badgeHtml = `<span class="item-badge-new"><i class="fa-solid fa-sparkles"></i> พบใหม่</span>`;
+          if (item.status === 'อยู่ที่จุดรับฝาก') {
+            badgeClass = 'badge-storage';
+            badgeIcon = 'fa-solid fa-box-archive';
+          } else if (item.status === 'คืนสำเร็จ') {
+            badgeClass = 'badge-returned';
+            badgeIcon = 'fa-solid fa-check-circle';
+          } else if (item.status === 'แจ้งหาย') {
+            badgeClass = 'badge-lost';
+            badgeIcon = 'fa-solid fa-triangle-exclamation';
           } else {
-            badgeHtml = `<span class="item-badge-found"><i class="fa-solid fa-check"></i> พบแล้ว</span>`;
+            statusText = 'พบใหม่';
+            badgeClass = 'badge-new';
+            badgeIcon = 'fa-solid fa-sparkles';
           }
+
+          const badgeHtml = `<span class="item-badge ${badgeClass}"><i class="${badgeIcon}"></i> ${statusText}</span>`;
+
 
           const card = document.createElement('div');
           card.className = 'item-card';
@@ -967,7 +1058,7 @@
             <div class="item-body">
               <div class="item-info">
                 <h3 class="item-title">${item.title}</h3>
-                <div class="item-category">${item.category}</div>
+                <div class="item-category">${item.categoryName}</div>
                 <div class="item-meta">
                   <span><i class="fa-regular fa-calendar"></i> ${formatThaiDate(item.timestamp)}</span>
                   <span><i class="fa-solid fa-location-dot"></i> ${item.location}</span>

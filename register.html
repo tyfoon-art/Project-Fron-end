@@ -10,12 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    const SUPABASE_URL = 'https://ljjnkmwyjqhsudckgabe.supabase.co/rest/v1/';
-    const SUPABASE_ANON_KEY = 'sb_publishable_a72MQbvnxOLXrY5DAvUtdQ_b9fAapQJ';
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  </script>
+  <!-- แก้ไข: เปลี่ยนมาใช้ client กลางจาก /src/supabaseClient.js เช่นเดียวกับหน้าอื่นๆ เพื่อความถูกต้องและเป็นมาตรฐานเดียวกัน -->
 
   <style>
     * {
@@ -533,8 +528,10 @@
     </div>
   </div>
 
-  <script>
-    function togglePass(inputId, iconId) {
+  <script type="module">
+    import { supabaseClient } from '/src/supabaseClient.js';
+
+    window.togglePass = function(inputId, iconId) {
       const input = document.getElementById(inputId);
       const icon = document.getElementById(iconId);
       
@@ -547,9 +544,9 @@
         icon.classList.remove('fa-eye-slash');
         icon.classList.add('fa-eye');
       }
-    }
+    };
 
-    function handleGenderChange(radio) {
+    window.handleGenderChange = function(radio) {
       const otherWrapper = document.getElementById('otherGenderWrapper');
       const otherInput = document.getElementById('other_gender_text');
       
@@ -561,9 +558,9 @@
         clearError('other_gender_text', 'otherGenderError');
         otherInput.value = '';
       }
-    }
+    };
 
-    function showError(inputId, errorId, msg) {
+    window.showError = function(inputId, errorId, msg) {
       const input = document.getElementById(inputId);
       const error = document.getElementById(errorId);
       if (input) input.classList.add('input-error');
@@ -571,16 +568,16 @@
         if (msg) error.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${msg}`;
         error.classList.add('show');
       }
-    }
+    };
 
-    function clearError(inputId, errorId) {
+    window.clearError = function(inputId, errorId) {
       const input = document.getElementById(inputId);
       const error = document.getElementById(errorId);
       if (input) input.classList.remove('input-error');
       if (error) error.classList.remove('show');
-    }
+    };
 
-    function handleRegister(event) {
+    window.handleRegister = async function(event) {
       event.preventDefault();
 
       const fullname = document.getElementById('fullname').value.trim();
@@ -615,8 +612,23 @@
         isValid = false;
         if (!firstInvalidInput) firstInvalidInput = document.getElementById('email');
       } else {
+        // ตรวจสอบอีเมลซ้ำจาก Supabase ตาราง users หรือโปรไฟล์ (ถ้ามี) ร่วมกับ localStorage
+        try {
+          const { data: existingUsers, error } = await supabaseClient
+            .from('users') // หรือตารางที่เก็บข้อมูลสมาชิกใน Supabase หากใช้งานจริง
+            .select('email')
+            .eq('email', email);
+
+          if (!error && existingUsers && existingUsers.length > 0) {
+            showError('email', 'emailError', 'อีเมลนี้ถูกใช้งานในระบบแล้ว กรุณาใช้อีเมลอื่น');
+            isValid = false;
+            if (!firstInvalidInput) firstInvalidInput = document.getElementById('email');
+          }
+        } catch (e) {
+          // Fallback ข้ามหากตาราง users ยังไม่ถูกสร้างใน supabase
+        }
+
         let usersList = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-        
         if (!usersList.some(u => u.email.toLowerCase() === '67020001@up.ac.th')) {
           usersList.push({ email: '67020001@up.ac.th' });
         }
@@ -678,7 +690,7 @@
       localStorage.setItem('userEmail', email);
 
       window.location.href = 'home.html';
-    }
+    };
   </script>
 
 </body>
