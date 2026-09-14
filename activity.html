@@ -11,12 +11,10 @@
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    const SUPABASE_URL = 'https://ljjnkmwyjqhsudckgabe.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_a72MQbvnxOLXrY5DAvUtdQ_b9fAapQJ';
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  </script>
+  <!-- แก้ไข: เอา URL/Key ที่เคยฝังตรงในไฟล์ทิ้ง (และเลิกใช้ supabase-js ผ่าน CDN
+       + createClient() เอง) เปลี่ยนไป import client กลางจาก
+       src/supabaseClient.js เหมือนหน้า home.html เพื่อไม่ให้ต้องสร้าง client
+       ซ้ำและใช้ชุดค่า .env เดียวกันทุกหน้า -->
 
   <style>
     * {
@@ -700,7 +698,11 @@
     </div>
   </footer>
 
-  <script>
+  <script type="module">
+    // แก้ไข: import client กลางตัวเดียวกับ home.html/browse.html แทนการฝัง
+    // SUPABASE_URL/SUPABASE_ANON_KEY และ createClient() เองในไฟล์นี้
+    import { supabaseClient } from '/src/supabaseClient.js';
+
     // ผู้ใช้ปัจจุบันต้อง login ไว้ก่อน (เก็บ user_id ไว้ใน localStorage)
     // แก้ชื่อ key ตรงนี้ให้ตรงกับหน้า login จริงของระบบ ถ้าใช้ชื่ออื่น
     function getCurrentUserId() {
@@ -903,6 +905,10 @@
       }
     }
 
+    // แก้ไข: switchTab เดิมถูกเรียกผ่าน onclick="" แบบ inline ในปุ่ม HTML
+    // ซึ่งใช้งานไม่ได้กับฟังก์ชันที่ประกาศอยู่ใน <script type="module"> เพราะ
+    // module scope ไม่ใช่ global scope แล้ว จึงต้อง expose ฟังก์ชันนี้ไปที่
+    // window ตรงๆ เพื่อให้ onclick ในปุ่มยังเรียกใช้งานได้เหมือนเดิม
     function switchTab(tabType) {
       const tabReported = document.getElementById('tabReported');
       const tabClaimed = document.getElementById('tabClaimed');
@@ -916,6 +922,7 @@
       }
       renderMyActivities(tabType);
     }
+    window.switchTab = switchTab;
 
     document.addEventListener('DOMContentLoaded', () => {
       renderMyActivities('reported');
