@@ -10,8 +10,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <!-- แก้ไข: เปลี่ยนมาใช้ client กลางจาก /src/supabaseClient.js เช่นเดียวกับหน้าอื่นๆ เพื่อความถูกต้องและเป็นมาตรฐานเดียวกัน -->
-
   <style>
     * {
       margin: 0;
@@ -34,7 +32,6 @@
       padding: 32px 24px;
     }
 
-    /* กล่องการ์ดหลัก ปรับขนาดให้กะทัดรัดและสมดุล */
     .login-card {
       display: flex;
       width: 100%;
@@ -47,7 +44,6 @@
       border: 1px solid #e2e8f0;
     }
 
-    /* ฝั่งซ้าย: Banner */
     .banner-side {
       flex: 1.1;
       background: linear-gradient(135deg, rgba(30, 79, 138, 0.9) 0%, rgba(12, 59, 112, 0.94) 60%, rgba(5, 38, 76, 0.98) 100%),
@@ -92,7 +88,6 @@
       text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     }
 
-    /* ฝั่งขวา: ฟอร์ม */
     .form-side {
       flex: 1;
       padding: 36px 44px;
@@ -102,7 +97,6 @@
       background: #ffffff;
     }
 
-    /* แถบแท็บด้านบน */
     .nav-tabs {
       display: flex;
       justify-content: center;
@@ -144,7 +138,6 @@
       border-radius: 2px 2px 0 0;
     }
 
-    /* กล่องฟอร์ม */
     .form-content {
       margin-top: 16px;
       width: 100%;
@@ -240,7 +233,6 @@
       display: block;
     }
 
-    /* Gender Options */
     .gender-options {
       display: flex;
       gap: 32px;
@@ -307,18 +299,18 @@
       color: #94a3b8;
       font-size: 15px;
       cursor: pointer;
-      padding: 2px;
+      padding: 4px;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: color 0.2s ease;
+      z-index: 10;
     }
 
     .btn-toggle-password:hover {
       color: #003b7a;
     }
 
-    /* ปุ่ม Submit */
     .btn-login {
       width: 100%;
       padding: 11px;
@@ -409,7 +401,7 @@
           <p>ร่วมเป็นส่วนหนึ่งของสังคมแห่งการแบ่งปันและช่วยเหลือกัน</p>
         </div>
 
-        <form id="registerForm" onsubmit="handleRegister(event)" novalidate>
+        <form id="registerForm" novalidate>
           
           <div class="form-group">
             <label for="fullname">ชื่อ-นามสกุล</label>
@@ -432,15 +424,15 @@
             <label>เพศ</label>
             <div class="gender-options">
               <label class="gender-radio">
-                <input type="radio" name="gender" value="male" checked onclick="handleGenderChange(this)">
+                <input type="radio" name="gender" value="male" checked id="genderMale">
                 <span>ชาย</span>
               </label>
               <label class="gender-radio">
-                <input type="radio" name="gender" value="female" onclick="handleGenderChange(this)">
+                <input type="radio" name="gender" value="female" id="genderFemale">
                 <span>หญิง</span>
               </label>
               <label class="gender-radio">
-                <input type="radio" name="gender" value="other" id="genderOtherRadio" onclick="handleGenderChange(this)">
+                <input type="radio" name="gender" value="other" id="genderOtherRadio">
                 <span>อื่นๆ</span>
               </label>
             </div>
@@ -490,8 +482,9 @@
                 placeholder="อย่างน้อย 8 ตัวอักษร (A-Z, a-z, 0-9)" 
                 oninput="clearError('password', 'passwordError')"
               >
-              <button type="button" class="btn-toggle-password" onclick="togglePass('password', 'togglePassIcon1')" aria-label="Toggle password visibility">
-                <i class="fa-regular fa-eye" id="togglePassIcon1"></i>
+              <!-- เอา onclick ออก แล้วใช้ Event Listener ใน Script แทน -->
+              <button type="button" class="btn-toggle-password" id="togglePassBtn1" aria-label="Toggle password visibility">
+                <i class="fa-regular fa-eye" id="togglePassIcon1" style="pointer-events: none;"></i>
               </button>
             </div>
             <div class="error-hint" id="passwordError">
@@ -510,8 +503,9 @@
                 placeholder="กรอกยืนยันรหัสผ่าน" 
                 oninput="clearError('confirm-password', 'confirmPasswordError')"
               >
-              <button type="button" class="btn-toggle-password" onclick="togglePass('confirm-password', 'togglePassIcon2')" aria-label="Toggle confirm password visibility">
-                <i class="fa-regular fa-eye" id="togglePassIcon2"></i>
+              <!-- เอา onclick ออก แล้วใช้ Event Listener ใน Script แทน -->
+              <button type="button" class="btn-toggle-password" id="togglePassBtn2" aria-label="Toggle confirm password visibility">
+                <i class="fa-regular fa-eye" id="togglePassIcon2" style="pointer-events: none;"></i>
               </button>
             </div>
             <div class="error-hint" id="confirmPasswordError">
@@ -531,44 +525,45 @@
   <script type="module">
     import { supabaseClient } from '/src/supabaseClient.js';
 
-    window.togglePass = function(inputId, iconId) {
-      const input = document.getElementById(inputId);
-      const icon = document.getElementById(iconId);
-      
-      if (input.type === 'password') {
-        input.type = 'text';
-        icon.classList.remove('fa-eye');
-        icon.classList.add('fa-eye-slash');
-      } else {
-        input.type = 'password';
-        icon.classList.remove('fa-eye-slash');
-        icon.classList.add('fa-eye');
-      }
-    };
+    // จัดการปุ่มเปิด-ปิดรหัสผ่านช่องที่ 1
+    const toggleBtn1 = document.getElementById('togglePassBtn1');
+    const passwordInput = document.getElementById('password');
+    const toggleIcon1 = document.getElementById('togglePassIcon1');
 
-    window.handleGenderChange = function(radio) {
-      const otherWrapper = document.getElementById('otherGenderWrapper');
-      const otherInput = document.getElementById('other_gender_text');
-      
-      if (radio.value === 'other') {
-        otherWrapper.classList.add('active');
-        otherInput.focus();
-      } else {
-        otherWrapper.classList.remove('active');
-        clearError('other_gender_text', 'otherGenderError');
-        otherInput.value = '';
-      }
-    };
+    toggleBtn1.addEventListener('click', () => {
+      const isPassword = passwordInput.type === 'password';
+      passwordInput.type = isPassword ? 'text' : 'password';
+      toggleIcon1.className = isPassword ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
+    });
 
-    window.showError = function(inputId, errorId, msg) {
-      const input = document.getElementById(inputId);
-      const error = document.getElementById(errorId);
-      if (input) input.classList.add('input-error');
-      if (error) {
-        if (msg) error.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${msg}`;
-        error.classList.add('show');
-      }
-    };
+    // จัดการปุ่มเปิด-ปิดรหัสผ่านช่องที่ 2
+    const toggleBtn2 = document.getElementById('togglePassBtn2');
+    const confirmPasswordInput = document.getElementById('confirm-password');
+    const toggleIcon2 = document.getElementById('togglePassIcon2');
+
+    toggleBtn2.addEventListener('click', () => {
+      const isPassword = confirmPasswordInput.type === 'password';
+      confirmPasswordInput.type = isPassword ? 'text' : 'password';
+      toggleIcon2.className = isPassword ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
+    });
+
+    // จัดการเลือกเพศอื่นๆ
+    const genderRadios = document.querySelectorAll('input[name="gender"]');
+    const otherWrapper = document.getElementById('otherGenderWrapper');
+    const otherInput = document.getElementById('other_gender_text');
+
+    genderRadios.forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        if (e.target.value === 'other') {
+          otherWrapper.classList.add('active');
+          otherInput.focus();
+        } else {
+          otherWrapper.classList.remove('active');
+          clearError('other_gender_text', 'otherGenderError');
+          otherInput.value = '';
+        }
+      });
+    });
 
     window.clearError = function(inputId, errorId) {
       const input = document.getElementById(inputId);
@@ -577,15 +572,29 @@
       if (error) error.classList.remove('show');
     };
 
-    window.handleRegister = async function(event) {
+    function showError(inputId, errorId, msg) {
+      const input = document.getElementById(inputId);
+      const error = document.getElementById(errorId);
+      if (input) input.classList.add('input-error');
+      if (error) {
+        if (msg) error.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${msg}`;
+        error.classList.add('show');
+      }
+    }
+
+    // จัดการฟอร์มลงทะเบียน
+    document.getElementById('registerForm').addEventListener('submit', async (event) => {
       event.preventDefault();
 
       const fullname = document.getElementById('fullname').value.trim();
-      const email = document.getElementById('email').value.trim();
+      const email = document.getElementById('email').value.trim().toLowerCase();
       const password = document.getElementById('password').value;
       const confirmPassword = document.getElementById('confirm-password').value;
-      const gender = document.querySelector('input[name="gender"]:checked').value;
+      const genderRadio = document.querySelector('input[name="gender"]:checked');
+      const genderValue = genderRadio ? genderRadio.value : 'male';
       const otherGender = document.getElementById('other_gender_text').value.trim();
+
+      let gender = genderValue === 'other' ? otherGender : (genderValue === 'male' ? 'ชาย' : 'หญิง');
 
       let isValid = true;
       let firstInvalidInput = null;
@@ -596,26 +605,28 @@
         if (!firstInvalidInput) firstInvalidInput = document.getElementById('fullname');
       }
 
-      if (gender === 'other' && !otherGender) {
+      if (genderValue === 'other' && !otherGender) {
         showError('other_gender_text', 'otherGenderError', 'กรุณาระบุเพศของคุณ');
         isValid = false;
         if (!firstInvalidInput) firstInvalidInput = document.getElementById('other_gender_text');
       }
 
-      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const isGmail = email.endsWith('@gmail.com');
+      const isUp = email.endsWith('@up.ac.th');
+      const isStaff = email.endsWith('@staff.com');
+
       if (!email) {
         showError('email', 'emailError', 'กรุณากรอกอีเมล');
         isValid = false;
         if (!firstInvalidInput) firstInvalidInput = document.getElementById('email');
-      } else if (!emailPattern.test(email)) {
-        showError('email', 'emailError', 'รูปแบบอีเมลไม่ถูกต้อง');
+      } else if (!isGmail && !isUp && !isStaff) {
+        showError('email', 'emailError', 'ต้องใช้อีเมล @gmail.com, @up.ac.th หรือ @staff.com เท่านั้น');
         isValid = false;
         if (!firstInvalidInput) firstInvalidInput = document.getElementById('email');
       } else {
-        // ตรวจสอบอีเมลซ้ำจาก Supabase ตาราง users หรือโปรไฟล์ (ถ้ามี) ร่วมกับ localStorage
         try {
           const { data: existingUsers, error } = await supabaseClient
-            .from('users') // หรือตารางที่เก็บข้อมูลสมาชิกใน Supabase หากใช้งานจริง
+            .from('user_account')
             .select('email')
             .eq('email', email);
 
@@ -625,23 +636,7 @@
             if (!firstInvalidInput) firstInvalidInput = document.getElementById('email');
           }
         } catch (e) {
-          // Fallback ข้ามหากตาราง users ยังไม่ถูกสร้างใน supabase
-        }
-
-        let usersList = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-        if (!usersList.some(u => u.email.toLowerCase() === '67020001@up.ac.th')) {
-          usersList.push({ email: '67020001@up.ac.th' });
-        }
-        const singleEmail = localStorage.getItem('userEmail');
-        if (singleEmail && !usersList.some(u => u.email.toLowerCase() === singleEmail.toLowerCase())) {
-          usersList.push({ email: singleEmail });
-        }
-
-        const isDuplicate = usersList.some(user => user.email.toLowerCase() === email.toLowerCase());
-        if (isDuplicate) {
-          showError('email', 'emailError', 'อีเมลนี้ถูกใช้งานแล้ว กรุณาใช้อีเมลอื่นหรือเข้าสู่ระบบ');
-          isValid = false;
-          if (!firstInvalidInput) firstInvalidInput = document.getElementById('email');
+          console.error('Error checking email:', e);
         }
       }
 
@@ -675,22 +670,53 @@
         return;
       }
 
-      let usersList = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-      const newUser = {
-        name: fullname,
-        email: email,
-        password: password,
-        gender: gender === 'other' ? otherGender : gender
-      };
-      usersList.push(newUser);
-      localStorage.setItem('registeredUsers', JSON.stringify(usersList));
+      try {
+        const { data: authData, error: authError } = await supabaseClient.auth.signUp({
+          email: email,
+          password: password
+        });
 
-      localStorage.setItem('currentUser', JSON.stringify(newUser));
-      localStorage.setItem('userName', fullname);
-      localStorage.setItem('userEmail', email);
+        if (authError) {
+          showError('email', 'emailError', authError.message);
+          return;
+        }
 
-      window.location.href = 'home.html';
-    };
+        const userType = isStaff ? 'staff' : 'user';
+        const randomIdNum = Math.floor(100 + Math.random() * 900);
+        const userId = 'U' + randomIdNum;
+
+        const { error: dbError } = await supabaseClient
+          .from('user_account')
+          .insert([
+            {
+              user_id: userId,
+              auth_uid: authData.user.id,
+              full_name: fullname,
+              email: email,
+              phone_number: null,
+              gender: gender,
+              user_type: userType
+            }
+          ]);
+
+        if (dbError) {
+          console.error('Database insert error:', dbError);
+          alert('เกิดข้อผิดพลาดในการบันทึกข้อมูลโปรไฟล์: ' + dbError.message);
+          return;
+        }
+
+        localStorage.setItem('userId', userId);
+        localStorage.setItem('userEmail', email);
+        localStorage.setItem('userName', fullname);
+
+        alert('ลงทะเบียนสำเร็จ! กรุณาเข้าสู่ระบบ');
+        window.location.href = 'login.html';
+
+      } catch (err) {
+        console.error('Registration error:', err);
+        alert('เกิดข้อผิดพลาดในการเชื่อมต่อระบบ กรุณาลองใหม่อีกครั้ง');
+      }
+    });
   </script>
 
 </body>
