@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>หน้าหลัก (Home) - Lost & Found ICT</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="nav-left">
+        <a href="home.html" class="nav-brand">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Lost & Found ICT</span>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="home.html" class="nav-link active">Home</a></li>
+          <li><a href="activity.html" class="nav-link">My Activity</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-actions">
+        <form class="nav-search-form" action="browse.html" method="GET">
+          <div class="nav-search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" name="search" placeholder="ค้นหารายการ...">
+          </div>
+        </form>
+
+        <a href="report.html" class="btn-post">
+          <i class="fa-solid fa-plus"></i>
+          <span>โพสต์</span>
+        </a>
+
+        <a href="profile.html" class="nav-profile">
+          <i class="fa-regular fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="hero-wrapper-full">
+    <section class="hero-section">
+      <div class="hero-animated-bg"></div>
+      <div class="hero-overlay"></div>
+      
+      <div class="hero-content">
+        <h1>ค้นหาสิ่งของคุณที่ทำหาย</h1>
+        <p>ระบบจัดการของหายที่น่าเชื่อถือ สะดวก และรวดเร็วที่สุด</p>
+      </div>
+    </section>
+  </div>
+
+  <main class="container-fluid">
+    
+    <section class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon-wrapper blue">
+          <i class="fa-regular fa-calendar"></i>
+        </div>
+        <div class="stat-info">
+          <div class="stat-number" id="statTodayFound">0</div>
+          <div class="stat-label">พบวันนี้</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-wrapper green">
+          <i class="fa-regular fa-circle-check"></i>
+        </div>
+        <div class="stat-info">
+          <div class="stat-number" id="statReturnedSuccess">0</div>
+          <div class="stat-label">ส่งคืนสำเร็จ</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-wrapper amber">
+          <i class="fa-regular fa-folder-open"></i>
+        </div>
+        <div class="stat-info">
+          <div class="stat-number" id="statOpenItems">0</div>
+          <div class="stat-label">รายการที่ยังเปิดอยู่</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-header">
+        <h2>รายการล่าสุด</h2>
+      </div>
+
+      <div class="items-grid" id="recentItemsContainer">
+        <!-- โหลดการ์ดไอเทมผ่าน JavaScript -->
+      </div>
+    </section>
+
+    <section class="how-it-works">
+      <h2>วิธีการใช้งาน</h2>
+      <div class="steps-grid">
+        <div class="step-item">
+          <div class="step-icon">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </div>
+          <div class="step-title">1. ค้นหาหรือแจ้ง</div>
+          <div class="step-desc">ค้นหาของที่คุณทำหายในระบบ หรือแจ้งข้อมูลกรณีไม่พบ</div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-icon">
+            <i class="fa-solid fa-clipboard-check"></i>
+          </div>
+          <div class="step-title">2. ยืนยันตัวตน</div>
+          <div class="step-desc">แสดงหลักฐานความเป็นเจ้าของ</div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-icon">
+            <i class="fa-solid fa-box-archive"></i>
+          </div>
+          <div class="step-title">3. รับคืน</div>
+          <div class="step-desc">นัดรับสิ่งของตามตำแหน่งที่กำหนด</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <strong>Lost & Found ICT</strong> &copy; 2026 Lost & Found System. All rights reserved.
+      </div>
+      <div class="footer-links">
+        <a href="#">Contact Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="js/home.js"></script>
+</body>
+</html>

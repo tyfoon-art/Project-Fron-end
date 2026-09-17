@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ค้นหาสิ่งของ - Lost & Found ICT</title>
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Supabase JS Library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabaseClient.js"></script>
+  <script src="js/browse.js"></script>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="nav-left">
+        <a href="home.html" class="nav-brand">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Lost & Found ICT</span>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="home.html" class="nav-link">Home</a></li>
+          <li><a href="activity.html" class="nav-link">My Activity</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-actions">
+        <form class="nav-search-form" onsubmit="event.preventDefault(); applyFilter();">
+          <div class="nav-search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="ค้นหารายการ..." oninput="applyFilter()">
+          </div>
+        </form>
+
+        <a href="report.html" class="btn-post">
+          <i class="fa-solid fa-plus"></i>
+          <span>โพสต์</span>
+        </a>
+
+        <a href="profile.html" class="nav-profile" id="navProfileBtn">
+          <i class="fa-regular fa-user"></i>
+          <span id="navProfileName">Profile</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumb Navigation -->
+  <div class="breadcrumb-container">
+    <ul class="breadcrumb-list">
+      <li><a href="home.html">หน้าหลัก</a></li>
+      <li class="separator"><i class="fa-solid fa-chevron-right"></i></li>
+      <li class="current">ค้นหาสิ่งของ</li>
+    </ul>
+  </div>
+
+  <!-- Main Content Layout -->
+  <main class="browse-main container-fluid">
+
+    <!-- Sidebar Filters -->
+    <aside class="sidebar-filter">
+      <h2 class="filter-title">ตัวกรองการค้นหา</h2>
+
+      <div class="filter-group">
+        <label class="filter-label">สถานะ</label>
+        <div class="checkbox-list">
+          <label class="checkbox-item">
+            <input type="checkbox" name="type_status" value="found" checked onchange="applyFilter()">
+            <span>ตามหาเจ้าของ</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="type_status" value="lost" checked onchange="applyFilter()">
+            <span>แจ้งหาย</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">หมวดหมู่</label>
+        <div class="checkbox-list">
+          <label class="checkbox-item">
+            <input type="checkbox" name="category" value="CAT001" checked onchange="applyFilter()">
+            <span>อุปกรณ์อิเล็กทรอนิกส์</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="category" value="CAT002" checked onchange="applyFilter()">
+            <span>อุปกรณ์การเรียน</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="category" value="CAT003" checked onchange="applyFilter()">
+            <span>กระเป๋า/สัมภาระ/กุญแจ</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="category" value="CAT004" checked onchange="applyFilter()">
+            <span>ของใช้ส่วนตัว</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="category" value="CAT005" checked onchange="applyFilter()">
+            <span>เอกสาร/บัตร/อื่นๆ</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">สถานะรายการ</label>
+        <div class="select-wrapper">
+          <select name="status_filter" id="statusFilter" onchange="applyFilter()">
+            <option value="all">ทั้งหมดทุกสถานะ</option>
+            <option value="พบใหม่">พบใหม่</option>
+            <option value="อยู่ที่จุดรับฝาก">อยู่ที่จุดรับฝาก</option>
+            <option value="แจ้งหาย">แจ้งหาย</option>
+          </select>
+          <i class="fa-solid fa-chevron-down select-icon"></i>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">วันที่</label>
+        <div class="select-wrapper">
+          <select name="date_filter" id="dateFilter" onchange="applyFilter()">
+            <option value="all">ทั้งหมด</option>
+            <option value="today">วันนี้</option>
+            <option value="yesterday">เมื่อวานนี้</option>
+            <option value="7days">7 วันที่ผ่านมา</option>
+            <option value="30days">30 วันที่ผ่านมา</option>
+          </select>
+          <i class="fa-solid fa-chevron-down select-icon"></i>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">สถานที่พบ</label>
+        <div class="select-wrapper">
+          <select name="location_filter" id="locationFilter" onchange="handleMainLocationChange(); applyFilter();">
+            <option value="all">ทั้งหมด</option>
+            <option value="ห้องเรียน">ห้องเรียน</option>
+            <option value="โรงอาหาร">โรงอาหาร</option>
+            <option value="ห้องสาขา">ห้องสาขา</option>
+            <option value="ลานจอดรถ">ลานจอดรถ</option>
+          </select>
+          <i class="fa-solid fa-chevron-down select-icon"></i>
+        </div>
+      </div>
+
+      <div class="filter-group" id="customClassroomGroup" style="display: none;">
+        <label class="filter-label">ระบุห้องเรียน</label>
+        <div class="input-custom-wrapper">
+          <input type="text" id="customClassroomInput" placeholder="เช่น ICT1102/1" oninput="applyFilter()">
+        </div>
+      </div>
+
+      <div class="filter-group" id="customDepartmentGroup" style="display: none;">
+        <label class="filter-label">ระบุชื่อสาขา</label>
+        <div class="input-custom-wrapper">
+          <input type="text" id="customDepartmentInput" placeholder="เช่น วิศวกรรมซอฟต์แวร์" oninput="applyFilter()">
+        </div>
+      </div>
+
+      <button type="button" class="btn-apply-filter" onclick="renderBrowseItems()">รีเฟรชข้อมูล</button>
+    </aside>
+
+    <!-- Main Results Grid -->
+    <section class="content-area">
+      <div class="results-summary-bar">
+        <span id="resultCountText">กำลังโหลดข้อมูล...</span>
+      </div>
+
+      <div class="items-grid" id="itemsGrid">
+        <!-- Dynamic Content from Supabase -->
+      </div>
+
+      <div class="no-results" id="noResults" style="display: none;">
+        <i class="fa-solid fa-box-open"></i>
+        <div>ไม่พบรายการที่ตรงกับเงื่อนไขการค้นหา</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <strong>Lost & Found ICT</strong> &copy; 2026 Lost & Found System. All rights reserved.
+      </div>
+      <div class="footer-links">
+        <a href="#">Contact Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Page Script -->
+  <script src="js/browse.js"></script>
+</body>
+</html>
