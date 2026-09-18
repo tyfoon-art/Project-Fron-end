@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ข้อมูลส่วนตัว - Lost & Found ICT</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- components.css: reset พื้นฐาน + navbar + footer ที่ใช้ร่วมกับ browse.html -->
+  <link rel="stylesheet" href="css/components.css">
+  <!-- profile.css: สไตล์เฉพาะหน้านี้เท่านั้น (การ์ดโปรไฟล์, ฟอร์ม, สถิติ, modal) -->
+  <link rel="stylesheet" href="css/profile.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="nav-left">
+        <a href="home.html" class="nav-brand">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Lost & Found ICT</span>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="home.html" class="nav-link">Home</a></li>
+          <li><a href="activity.html" class="nav-link">My Activity</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-actions">
+        <form class="nav-search-form" action="browse.html" method="GET">
+          <div class="nav-search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" name="search" placeholder="ค้นหารายการ...">
+          </div>
+        </form>
+
+        <a href="report.html" class="btn-post">
+          <i class="fa-solid fa-plus"></i>
+          <span>โพสต์</span>
+        </a>
+
+        <a href="profile.html" class="nav-profile active">
+          <i class="fa-regular fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="profile-main">
+
+    <div class="profile-header">
+      <h1>ข้อมูลส่วนตัว</h1>
+      <p>จัดการรายละเอียดบัญชีและการตั้งค่าของคุณ</p>
+    </div>
+
+    <div class="profile-grid">
+
+      <div class="profile-left-column">
+        <section class="profile-card">
+          <div class="user-intro-row">
+
+            <div class="user-avatar-wrap">
+              <img id="avatarPreview" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=250&auto=format&fit=crop" alt="User Profile" class="user-avatar-img">
+
+              <label for="avatarFileInput" class="avatar-upload-label" title="เปลี่ยนรูปโปรไฟล์">
+                <i class="fa-solid fa-camera" style="font-size: 12px;"></i>
+              </label>
+              <input type="file" id="avatarFileInput" accept="image/*" onchange="previewAvatar(event)">
+            </div>
+            <div class="error-text" id="avatarError" style="display: none;">ขนาดไฟล์ภาพต้องไม่เกิน 5 MB</div>
+
+            <div class="user-intro-info">
+              <h2 class="user-name-display" id="displayName">กำลังโหลด...</h2>
+              <span class="user-role-display" id="userRoleDisplay"></span>
+            </div>
+          </div>
+
+          <form id="profileForm" onsubmit="handleSave(event)">
+            <div class="profile-form-grid">
+
+              <div class="form-group full-width">
+                <label class="form-label">ชื่อ - นามสกุล</label>
+                <input type="text" class="form-input" id="nameInput" placeholder="กรอกชื่อ - นามสกุล" oninput="clearError('nameInput', 'nameError')">
+                <div class="error-text" id="nameError">กรุณากรอกชื่อ - นามสกุล</div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">อีเมล</label>
+                <input type="email" class="form-input" id="emailInput" placeholder="กรอกอีเมล" oninput="clearError('emailInput', 'emailError')">
+                <div class="error-text" id="emailError">กรุณากรอกอีเมลให้ถูกต้อง</div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">เบอร์โทรศัพท์</label>
+                <input type="tel" class="form-input" id="phoneInput" placeholder="กรอกเบอร์โทรศัพท์" oninput="clearError('phoneInput', 'phoneError')">
+                <div class="error-text" id="phoneError">กรุณากรอกเบอร์โทรศัพท์</div>
+              </div>
+
+            </div>
+
+            <div class="form-actions-end" style="margin-top: 16px;">
+              <span class="success-text" id="saveSuccessText">บันทึกข้อมูลเรียบร้อยแล้ว!</span>
+              <button type="submit" class="btn-save-profile" id="saveBtn">
+                <i class="fa-solid fa-floppy-disk"></i>
+                <span>บันทึกข้อมูล</span>
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <div class="outside-actions-row">
+          <button type="button" class="btn-logout-red" onclick="openLogoutModal()">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <span>ออกจากระบบ</span>
+          </button>
+        </div>
+      </div>
+
+      <aside class="stats-card">
+        <div class="stats-title">
+          <i class="fa-solid fa-chart-simple"></i>
+          <span>สถิติการใช้งาน</span>
+        </div>
+
+        <div class="stats-item-box">
+          <div class="stats-item-left">
+            <div class="stats-icon-circle lost-icon">
+              <i class="fa-solid fa-bullhorn"></i>
+            </div>
+            <span class="stats-item-label">แจ้งของหาย</span>
+          </div>
+          <span class="stats-item-count" id="statLostCount">0</span>
+        </div>
+
+        <div class="stats-item-box">
+          <div class="stats-item-left">
+            <div class="stats-icon-circle found-icon">
+              <i class="fa-solid fa-hand-holding-heart"></i>
+            </div>
+            <span class="stats-item-label">แจ้งพบของ</span>
+          </div>
+          <span class="stats-item-count" id="statFoundCount">0</span>
+        </div>
+
+        <div class="stats-item-box">
+          <div class="stats-item-left">
+            <div class="stats-icon-circle claim-icon">
+              <i class="fa-solid fa-handshake-angle"></i>
+            </div>
+            <span class="stats-item-label">รับคืนสำเร็จ</span>
+          </div>
+          <span class="stats-item-count" id="statCompletedCount">0</span>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- Modal กล่องยืนยันออกจากระบบ -->
+  <div class="modal-overlay" id="logoutModal">
+    <div class="modal-card">
+      <div class="modal-icon-box">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+      </div>
+      <div class="modal-content-group">
+        <div class="modal-title">ยืนยันการออกจากระบบ</div>
+        <div class="modal-desc">คุณต้องการออกจากระบบใช่หรือไม่?</div>
+      </div>
+      <div class="modal-actions-row">
+        <button type="button" class="btn-modal-cancel" onclick="closeLogoutModal()">ยกเลิก</button>
+        <button type="button" class="btn-modal-confirm" onclick="confirmLogout()">ออกจากระบบ</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <strong>Lost & Found ICT</strong> &copy; 2026 Lost & Found System. All rights reserved.
+      </div>
+      <div class="footer-links">
+        <a href="#">Contact Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="js/profile.js"></script>
+
+</body>
+</html>

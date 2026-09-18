@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>สถานที่และเวลา - Lost & Found ICT</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/report.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="nav-left">
+        <a href="home.html" class="nav-brand">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Lost & Found ICT</span>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="home.html" class="nav-link">Home</a></li>
+          <li><a href="activity.html" class="nav-link">My Activity</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-actions">
+        <form class="nav-search-form" action="browse.html" method="GET">
+          <div class="nav-search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" name="search" placeholder="ค้นหารายการ...">
+          </div>
+        </form>
+
+        <a href="report.html" class="btn-post">
+          <i class="fa-solid fa-plus"></i>
+          <span>โพสต์</span>
+        </a>
+
+        <a href="profile.html" class="nav-profile">
+          <i class="fa-regular fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="report-main">
+
+    <div class="report-header">
+      <h1>แจ้งของหาย / พบของ</h1>
+      <p>ระบุสถานที่และเวลาที่เกิดเหตุเพื่อให้ผู้เกี่ยวข้องตรวจสอบได้แม่นยำยิ่งขึ้น</p>
+    </div>
+
+    <div class="form-card">
+
+      <div class="steps-tracker-top">
+        <div class="steps-top-info">
+          <span>ขั้นตอน 2 จาก 3</span>
+          <span style="color: #003b7a;">สถานที่และเวลา</span>
+        </div>
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill step-2"></div>
+        </div>
+
+        <div class="steps-circles-row" style="margin-top: 8px;">
+          <div class="step-node completed">
+            <div class="step-circle"><i class="fa-solid fa-check"></i></div>
+            <div class="step-label">รายละเอียด</div>
+          </div>
+          <div class="step-node active">
+            <div class="step-circle">2</div>
+            <div class="step-label">สถานที่และเวลา</div>
+          </div>
+          <div class="step-node">
+            <div class="step-circle">3</div>
+            <div class="step-label">รูปภาพ</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ส่วนสถานที่เกิดเหตุ (เปลี่ยนเป็นกรอกเองแล้ว) -->
+      <div class="form-group">
+        <label class="form-label">สถานที่เกิดเหตุ / พบสิ่งของ <span>*</span></label>
+        <input type="text" 
+               class="form-input" 
+               id="locationInput" 
+               placeholder="เช่น หน้าตึก ICT, ลานจอดรถ, ห้องเรียน ICT1102" 
+               oninput="clearError('locationInput', 'locationError')">
+        <div class="error-text" id="locationError">กรุณาระบุสถานที่เกิดเหตุ / พบสิ่งของ</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">วันที่ <span>*</span></label>
+        <input type="date" class="form-input" id="dateInput" onchange="clearError('dateInput', 'dateError')">
+        <div class="error-text" id="dateError">กรุณาเลือกวันที่ถูกต้อง (ห้ามเลือกวันในอนาคต)</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">เวลาโดยประมาณ <span>*</span></label>
+        <input type="time" class="form-input" id="timeInput" onchange="clearError('timeInput', 'timeError')">
+        <div class="error-text" id="timeError">กรุณากรอกเวลาให้ถูกต้อง (ห้ามเลือกเวลาในอนาคตสำหรับวันนี้)</div>
+      </div>
+
+      <div class="form-actions-row with-back">
+        <button type="button" class="btn-back" onclick="location.href='report.html'">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span>ย้อนกลับ</span>
+        </button>
+        <button type="button" class="btn-next" onclick="validateAndNext()">
+          <span>ถัดไป</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <strong>Lost & Found ICT</strong> &copy; 2026 Lost & Found System. All rights reserved.
+      </div>
+      <div class="footer-links">
+        <a href="#">Contact Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="js/report2.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lost & Found ICT - เข้าสู่ระบบ</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- components.css: ใช้เฉพาะส่วน reset พื้นฐาน (*, box-sizing, font-family)
+       ร่วมกับหน้าอื่นๆ — หน้านี้ไม่มี navbar/footer จึงไม่ได้ใช้ .navbar-*/.footer-* -->
+  <link rel="stylesheet" href="css/components.css">
+  <!-- login.css: สไตล์เฉพาะหน้าเข้าสู่ระบบทั้งหมด -->
+  <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+  <div class="login-card">
+    <div class="banner-side">
+      <div class="banner-logo">
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>Lost & Found ICT</span>
+      </div>
+      <div class="banner-content">
+        <h2>ค้นพบสิ่งที่หายไป<br>อย่างปลอดภัยและรวดเร็ว</h2>
+        <p>ระบบจัดการทรัพย์สินสูญหาย ICT พร้อมให้บริการช่วยเหลือและติดตามทรัพย์สินตลอดเวลา</p>
+      </div>
+    </div>
+
+    <div class="form-side">
+      <div class="nav-tabs">
+        <a href="login.html" class="nav-tab active">เข้าสู่ระบบ</a>
+        <a href="register.html" class="nav-tab">ลงทะเบียน</a>
+      </div>
+
+      <div class="form-content">
+        <div class="form-title-group">
+          <h2>ยินดีต้อนรับ</h2>
+          <p>ระบบแจ้งของหายและตามหาของภายในตึกคณะ ICT</p>
+        </div>
+
+        <div class="alert-login-error" id="loginAlertError">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          <span id="loginAlertText">ไม่พบบัญชีผู้ใช้นี้ กรุณาลงทะเบียนก่อนเข้าสู่ระบบ</span>
+        </div>
+
+        <form id="loginForm" novalidate>
+          <div class="form-group">
+            <label for="email">อีเมล</label>
+            <div class="input-wrapper">
+              <i class="fa-regular fa-envelope input-icon-left"></i>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="xxxx@gmail.com หรือ xxxx@up.ac.th"
+                oninput="clearError('email', 'emailError')"
+                required
+              >
+            </div>
+            <div class="error-hint" id="emailError">
+              <i class="fa-solid fa-circle-exclamation"></i> กรุณากรอกอีเมล
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">รหัสผ่าน</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-lock input-icon-left"></i>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="กรอกรหัสผ่าน"
+                oninput="clearError('password', 'passwordError')"
+                required
+              >
+              <button type="button" class="btn-toggle-password" id="togglePassword" aria-label="Toggle password visibility">
+                <i class="fa-regular fa-eye" id="togglePasswordIcon"></i>
+              </button>
+            </div>
+            <div class="error-hint" id="passwordError">
+              <i class="fa-solid fa-circle-exclamation"></i> กรุณากรอกรหัสผ่าน
+            </div>
+
+            <div class="forgot-link-wrapper">
+              <a href="forgotpassword.html" class="forgot-link">ลืมรหัสผ่าน?</a>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-login" id="btnLoginSubmit">
+            <span id="btnLoginText">เข้าสู่ระบบ</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/login.js"></script>
+
+</body>
+</html>

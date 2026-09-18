@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>แจ้งของหาย / พบของ - Lost & Found ICT</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/report.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="nav-left">
+        <a href="home.html" class="nav-brand">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Lost & Found ICT</span>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="home.html" class="nav-link">Home</a></li>
+          <li><a href="activity.html" class="nav-link">My Activity</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-actions">
+        <form class="nav-search-form" action="browse.html" method="GET">
+          <div class="nav-search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" name="search" placeholder="ค้นหารายการ...">
+          </div>
+        </form>
+
+        <a href="report.html" class="btn-post">
+          <i class="fa-solid fa-plus"></i>
+          <span>โพสต์</span>
+        </a>
+
+        <a href="profile.html" class="nav-profile">
+          <i class="fa-regular fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="report-main">
+
+    <div class="report-header">
+      <h1>แจ้งของหาย / พบของ</h1>
+      <p>กรุณากรอกข้อมูลให้ครบถ้วนเพื่อให้เราช่วยเหลือคุณได้ดีที่สุด</p>
+    </div>
+
+    <div class="form-card">
+
+      <div class="steps-tracker-top">
+        <div class="steps-top-info">
+          <span>ขั้นตอน 1 จาก 3</span>
+          <span style="color: #003b7a;">รายละเอียดสิ่งของ</span>
+        </div>
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill"></div>
+        </div>
+
+        <div class="steps-circles-row" style="margin-top: 8px;">
+          <div class="step-node active">
+            <div class="step-circle">1</div>
+            <div class="step-label">รายละเอียด</div>
+          </div>
+          <div class="step-node">
+            <div class="step-circle">2</div>
+            <div class="step-label">สถานที่และเวลา</div>
+          </div>
+          <div class="step-node">
+            <div class="step-circle">3</div>
+            <div class="step-label">รูปภาพ</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">ประเภทการแจ้ง <span>*</span></label>
+
+        <div class="report-type-grid">
+          <div class="report-type-card" id="cardLost" onclick="selectReportType('lost')">
+            <div class="type-icon-circle lost">
+              <i class="fa-solid fa-magnifying-glass-location"></i>
+            </div>
+            <div class="type-text-info">
+              <div class="type-title">แจ้งของหาย</div>
+              <div class="type-desc">ฉันทำสิ่งของสูญหาย</div>
+            </div>
+          </div>
+
+          <div class="report-type-card selected" id="cardFound" onclick="selectReportType('found')">
+            <div class="type-icon-circle found">
+              <i class="fa-solid fa-hand-holding-heart"></i>
+            </div>
+            <div class="type-text-info">
+              <div class="type-title">แจ้งพบของ</div>
+              <div class="type-desc">ฉันพบสิ่งของของผู้อื่น</div>
+            </div>
+          </div>
+        </div>
+        <!-- ค่าต้องตรงกับ public.report_type_enum ('lost' | 'found') -->
+        <input type="hidden" id="reportTypeInput" value="found">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">ชื่อสิ่งของ <span>*</span></label>
+        <input type="text" id="itemTitleInput" class="form-input" placeholder="เช่น กระเป๋าสตางค์สีดำ, โทรศัพท์ iPhone 13" oninput="clearError('itemTitleInput', 'titleError')">
+        <div class="error-text" id="titleError">กรุณากรอกชื่อสิ่งของ</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">หมวดหมู่ <span>*</span></label>
+        <div class="select-box-wrapper">
+          <select id="itemCategorySelect" class="form-select" onchange="clearError('itemCategorySelect', 'categoryError')">
+            <option value="" disabled selected>กำลังโหลดหมวดหมู่...</option>
+          </select>
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+        <div class="error-text" id="categoryError">กรุณาเลือกหมวดหมู่สิ่งของ</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">รายละเอียดเพิ่มเติม</label>
+        <textarea id="itemDescInput" class="form-textarea" placeholder="ระบุตำหนิ, สี, แบรนด์, หรือจุดสังเกตอื่นๆ..."></textarea>
+      </div>
+
+      <div class="form-actions-row">
+        <button type="button" class="btn-next" onclick="validateAndNext()">
+          <span>ถัดไป</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <strong>Lost & Found ICT</strong> &copy; 2026 Lost & Found System. All rights reserved.
+      </div>
+      <div class="footer-links">
+        <a href="#">Contact Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="js/report.js"></script>
+
+</body>
+</html>

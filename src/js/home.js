@@ -1,15 +1,27 @@
-import { supabaseClient } from '/src/supabaseClient.js';
+import { supabaseClient } from './supabaseClient.js';
 
 const MAX_RECENT_ITEMS = 6;
 
 function formatThaiDate(isoDateString) {
   if (!isoDateString) return 'ไม่ระบุวันที่';
   const d = new Date(isoDateString);
+  if (isNaN(d.getTime())) return 'ไม่ระบุวันที่';
   const monthsThai = [
     "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
     "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."
   ];
   return `${d.getDate()} ${monthsThai[d.getMonth()]} ${d.getFullYear() + 543}`;
+}
+
+// แปลง Date เป็น String 'YYYY-MM-DD' ตาม Timezone ท้องถิ่น ป้องกันปัญหาเวลาคลาดเคลื่อน
+function getLocalDateString(dateInput) {
+  if (!dateInput) return '';
+  const d = new Date(dateInput);
+  if (isNaN(d.getTime())) return '';
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 }
 
 // 1. ดึงรายการล่าสุดจากตาราง public.item พร้อม Join ตาราง category, storage_point และ report
@@ -26,10 +38,9 @@ async function getRecentItems() {
         created_at,
         category:category_id ( category_name ),
         storage_point:current_storage_id ( storage_name ),
-        report:report!report_item_id_fkey ( incident_location, incident_datetime )
+        report ( incident_location, incident_datetime )
       `)
-      .is('deleted_at', null)
-      .order('created_at', { ascending: false });
+      .is('deleted_at', null);
 
     if (error) throw error;
     return data || [];
@@ -61,31 +72,49 @@ async function renderHomePage() {
   const items = await getRecentItems();
   const returnedCount = await getReturnedSuccessCount();
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const todayStr = getLocalDateString(new Date());
 
   let todayFoundCount = 0;
   let openItemsCount = 0;
 
-  items.forEach(item => {
-    // นับรายการที่พบ/ลงทะเบียนวันนี้
-    const itemDate = new Date(item.created_at);
-    itemDate.setHours(0, 0, 0, 0);
-    if (itemDate.getTime() === today.getTime()) {
+  // กรองเฉพาะรายการที่ยังเปิดอยู่/ยังไม่ถูกทำลาย
+  const visibleItems = items.filter(item => item.status !== 'คืนสำเร็จ' && item.status !== 'หมดอายุ/ทำลายทิ้ง');
+
+  // คำนวณสถิติจากรายการที่ยังเปิดอยู่
+  visibleItems.forEach(item => {
+    const reportData = Array.isArray(item.report) ? item.report[0] : item.report;
+    const targetDate = reportData?.incident_datetime || item.created_at;
+
+    // นับรายการที่พบ/ลงทะเบียนวันนี้ (เทียบ String YYYY-MM-DD)
+    if (getLocalDateString(targetDate) === todayStr) {
       todayFoundCount++;
     }
 
-    // นับรายการที่ยังเปิดอยู่ (ยังไม่คืน/ไม่ทำลาย)
+    // นับรายการที่ยังเปิดอยู่
     if (['รอตรวจสอบ', 'อยู่ที่จุดรับฝาก', 'กำลังดำเนินการเคลม'].includes(item.status)) {
       openItemsCount++;
     }
   });
 
-  // กรองแสดงเฉพาะรายการที่ยังไม่สำเร็จในหน้าแรก
-  const visibleItems = items.filter(item => item.status !== 'คืนสำเร็จ' && item.status !== 'หมดอายุ/ทำลายทิ้ง');
+  // --------------------------------------------------------------------------
+  // เรียงลำดับ: เรียงจากวันที่เกิดเหตุล่าสุด (ใหม่สุด -> เก่าสุด)
+  // --------------------------------------------------------------------------
+  visibleItems.sort((a, b) => {
+    const reportA = Array.isArray(a.report) ? a.report[0] : a.report;
+    const reportB = Array.isArray(b.report) ? b.report[0] : b.report;
+
+    const dateA = new Date(reportA?.incident_datetime || a.created_at).getTime();
+    const dateB = new Date(reportB?.incident_datetime || b.created_at).getTime();
+
+    return dateB - dateA; // ล่าสุดขึ้นก่อน
+  });
+
+  // ตัดแสดงเฉพาะตามจำนวนที่กำหนดไว้
   const recentItems = visibleItems.slice(0, MAX_RECENT_ITEMS);
 
   const container = document.getElementById('recentItemsContainer');
+  if (!container) return;
+  
   container.innerHTML = '';
 
   if (recentItems.length === 0) {
@@ -130,13 +159,11 @@ async function renderHomePage() {
 
       const badgeHtml = `<span class="item-badge ${badgeClass}"><i class="${badgeIcon}"></i> ${item.status}</span>`;
       
-      // ดึงสถานที่จากตาราง report หรือ storage_point
       const reportData = Array.isArray(item.report) ? item.report[0] : item.report;
       const locationText = reportData?.incident_location || item.storage_point?.storage_name || 'ไม่ระบุสถานที่';
       const categoryName = item.category?.category_name || 'หมวดหมู่ทั่วไป';
       const displayDate = reportData?.incident_datetime || item.created_at;
 
-      // แสดงกรอบกรณีไม่มีรูปภาพ
       const imageContent = item.image_url 
         ? `<img src="${item.image_url}" alt="${item.item_name}">`
         : `<div class="no-image-placeholder">

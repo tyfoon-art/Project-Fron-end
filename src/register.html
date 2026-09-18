@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lost & Found ICT - ลงทะเบียน</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- components.css: ใช้เฉพาะส่วน reset พื้นฐาน (*, box-sizing, font-family)
+       ร่วมกับหน้าอื่นๆ — หน้านี้ไม่มี navbar/footer จึงไม่ได้ใช้ .navbar-*/.footer-* -->
+  <link rel="stylesheet" href="css/components.css">
+  <!-- register.css: สไตล์เฉพาะหน้าลงทะเบียนทั้งหมด -->
+  <link rel="stylesheet" href="css/register.css">
+</head>
+<body>
+
+  <div class="login-card">
+    <div class="banner-side">
+      <div class="banner-logo">
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>Lost & Found ICT</span>
+      </div>
+      <div class="banner-content">
+        <h2>ค้นพบสิ่งที่หายไป<br>อย่างปลอดภัยและรวดเร็ว</h2>
+        <p>ระบบจัดการทรัพย์สินสูญหาย ICT พร้อมให้บริการช่วยเหลือและติดตามทรัพย์สินตลอดเวลา</p>
+      </div>
+    </div>
+
+    <div class="form-side">
+      <div class="nav-tabs">
+        <a href="login.html" class="nav-tab">เข้าสู่ระบบ</a>
+        <a href="register.html" class="nav-tab active">ลงทะเบียน</a>
+      </div>
+
+      <div class="form-content">
+        <div class="form-title-group">
+          <h2>สร้างบัญชีผู้ใช้</h2>
+          <p>ร่วมเป็นส่วนหนึ่งของสังคมแห่งการแบ่งปันและช่วยเหลือกัน</p>
+        </div>
+
+        <form id="registerForm" novalidate>
+
+          <div class="form-group">
+            <label for="fullname">ชื่อ-นามสกุล</label>
+            <div class="input-wrapper">
+              <i class="fa-regular fa-user input-icon-left"></i>
+              <input
+                type="text"
+                id="fullname"
+                name="fullname"
+                placeholder="John Doe"
+                oninput="clearError('fullname', 'fullnameError')"
+              >
+            </div>
+            <div class="error-hint" id="fullnameError">
+              <i class="fa-solid fa-circle-exclamation"></i> กรุณากรอกชื่อ-นามสกุล
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">อีเมล</label>
+            <div class="input-wrapper">
+              <i class="fa-regular fa-envelope input-icon-left"></i>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="xxxx@gmail.com หรือ xxxx@up.ac.th"
+                oninput="clearError('email', 'emailError')"
+              >
+            </div>
+            <div class="error-hint" id="emailError">
+              <i class="fa-solid fa-circle-exclamation"></i> กรุณากรอกอีเมลให้ถูกต้อง
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">รหัสผ่าน</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-lock input-icon-left"></i>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="อย่างน้อย 8 ตัวอักษร (A-Z, a-z, 0-9)"
+                oninput="clearError('password', 'passwordError')"
+              >
+              <button type="button" class="btn-toggle-password" id="togglePassBtn1" aria-label="Toggle password visibility">
+                <i class="fa-regular fa-eye" id="togglePassIcon1" style="pointer-events: none;"></i>
+              </button>
+            </div>
+            <div class="error-hint" id="passwordError">
+              <i class="fa-solid fa-circle-exclamation"></i> รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร ประกอบด้วยตัวพิมพ์ใหญ่ ตัวพิมพ์เล็ก และตัวเลข
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="confirm-password">ยืนยันรหัสผ่าน</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-lock input-icon-left"></i>
+              <input
+                type="password"
+                id="confirm-password"
+                name="confirm_password"
+                placeholder="กรอกยืนยันรหัสผ่าน"
+                oninput="clearError('confirm-password', 'confirmPasswordError')"
+              >
+              <button type="button" class="btn-toggle-password" id="togglePassBtn2" aria-label="Toggle confirm password visibility">
+                <i class="fa-regular fa-eye" id="togglePassIcon2" style="pointer-events: none;"></i>
+              </button>
+            </div>
+            <div class="error-hint" id="confirmPasswordError">
+              <i class="fa-solid fa-circle-exclamation"></i> รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน
+            </div>
+          </div>
+
+          <button type="submit" class="btn-login">
+            <span>ลงทะเบียน</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/register.js"></script>
+
+</body>
+</html>

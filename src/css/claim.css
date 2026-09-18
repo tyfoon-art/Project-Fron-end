@@ -1,0 +1,369 @@
+/* ==============================================================
+   claim.css
+   สไตล์เฉพาะหน้า "แบบฟอร์มขอรับคืนสิ่งของ" (claim.html) เท่านั้น
+   ---------------------------------------------------------------
+   หมายเหตุ: navbar (.navbar-*) และ footer (.footer-*) รวมถึง reset
+   พื้นฐาน (*, html, body) ถูกย้ายไปไว้ที่ css/components.css แล้ว
+   (ใช้ร่วมกับ profile.html / browse.html) จึงไม่ได้ใส่ซ้ำในไฟล์นี้
+
+   ข้อสังเกต (ไม่ได้แก้ให้อัตโนมัติ เพราะเป็นเรื่องดีไซน์ ไม่ใช่บั๊ก):
+   - .nav-profile ของหน้านี้ "ไม่เหมือน" กับของ profile.html จริงๆ —
+     profile.html ให้ปุ่ม Profile เป็นสีน้ำเงินตัวหนาตลอดเวลา ส่วนหน้านี้
+     เป็นสีเทาปกติแล้วเปลี่ยนเป็นน้ำเงินตอน hover เท่านั้น จึงคง override
+     ส่วนนี้ไว้เป็นสไตล์เฉพาะหน้า เพื่อรักษาหน้าตาเดิมไว้ก่อน ไม่ได้เดาว่า
+     อันไหนถูก — ถ้าตั้งใจให้เหมือนกันทั้งเว็บ ให้ตัด block นี้ทิ้งแล้วให้
+     components.css จัดการแทน
+   - body ของหน้านี้มี overflow-x: hidden เพิ่มจาก profile.html เก็บไว้
+     เป็น override ย่อยด้านล่าง
+   ============================================================== */
+
+body {
+  overflow-x: hidden;
+}
+
+.nav-profile {
+  color: #334155;
+  font-weight: 600;
+}
+
+.nav-profile i {
+  color: #64748b;
+}
+
+.nav-profile:hover {
+  color: #003b7a;
+}
+
+/* Breadcrumb */
+.breadcrumb-container {
+  width: 100%;
+  padding: 24px 32px 0 32px;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.breadcrumb-list {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.breadcrumb-list a {
+  text-decoration: none;
+  color: #64748b;
+  transition: color 0.2s ease;
+}
+
+.breadcrumb-list a:hover {
+  color: #003b7a;
+  text-decoration: underline;
+}
+
+.breadcrumb-list .separator {
+  color: #94a3b8;
+  font-size: 11px;
+}
+
+.breadcrumb-list .current {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+/* Main Claim Layout */
+.claim-main {
+  flex: 1;
+  padding: 20px 32px 48px 32px;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.claim-card-container {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+  padding: 32px;
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 32px;
+  align-items: flex-start;
+  width: 100%;
+}
+
+/* Left: Item Info */
+.left-item-box {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: #f8fafc;
+}
+
+.left-section-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.left-item-img {
+  width: 100%;
+  height: 200px;
+  border-radius: 10px;
+  object-fit: cover;
+  background: #e2e8f0;
+}
+
+.left-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.left-item-name {
+  font-size: 17px;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.3;
+}
+
+.left-item-meta {
+  font-size: 13px;
+  color: #475569;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.left-item-meta i {
+  color: #003b7a;
+  width: 16px;
+  text-align: center;
+  font-size: 13px;
+}
+
+.badge-claimable {
+  display: inline-flex;
+  align-items: center;
+  background: #e0f2fe;
+  color: #0369a1;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  width: fit-content;
+  margin-top: 2px;
+}
+
+/* Right: Form */
+.right-form-box {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.form-main-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 4px;
+}
+
+.form-main-subtitle {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 400;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.form-label span {
+  color: #dc2626;
+}
+
+.form-textarea {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 13.5px;
+  font-weight: 400;
+  color: #1e293b;
+  outline: none;
+  resize: vertical;
+  min-height: 100px;
+  transition: all 0.2s ease;
+}
+
+.form-textarea:focus {
+  border-color: #003b7a;
+  box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.1);
+}
+
+.upload-dual-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.upload-box {
+  border: 1.5px dashed #cbd5e1;
+  border-radius: 12px;
+  background: #f8fafc;
+  padding: 24px 16px;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.upload-box:hover {
+  border-color: #003b7a;
+  background: #f0f7ff;
+}
+
+.upload-box.has-file {
+  border-color: #16a34a;
+  background: #f0fdf4;
+}
+
+.upload-box i {
+  font-size: 24px;
+  color: #003b7a;
+  margin-bottom: 2px;
+}
+
+.upload-box.has-file i {
+  color: #16a34a;
+}
+
+.upload-box-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.upload-box-desc {
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 400;
+  line-height: 1.4;
+  word-break: break-all;
+}
+
+.privacy-box {
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 12px;
+  padding: 16px 18px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.privacy-box i {
+  font-size: 18px;
+  color: #0284c7;
+  margin-top: 2px;
+}
+
+.privacy-text {
+  font-size: 13px;
+  color: #0369a1;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+.form-actions-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  padding-top: 8px;
+}
+
+.btn-cancel {
+  background: #ffffff;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-cancel:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.btn-submit-claim {
+  background: #003b7a;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 28px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 2px 8px rgba(0, 59, 122, 0.15);
+  transition: all 0.2s ease;
+}
+
+.btn-submit-claim:hover {
+  background: #002d5e;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 59, 122, 0.25);
+}
+
+.btn-submit-claim:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsive: เฉพาะส่วนที่เกี่ยวกับเลย์เอาต์ของหน้านี้เท่านั้น
+   (การย่อ navbar-inner/footer-inner อยู่ใน components.css) */
+@media (max-width: 900px) {
+  .claim-card-container {
+    grid-template-columns: 1fr;
+    padding: 20px;
+  }
+  .breadcrumb-container, .claim-main {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .upload-dual-grid {
+    grid-template-columns: 1fr;
+  }
+}

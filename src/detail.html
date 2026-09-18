@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>รายละเอียดสิ่งของ - Lost & Found ICT</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- navbar/footer/base reset อยู่ใน components.css ที่ใช้ร่วมกับ home.html / browse.html -->
+  <link rel="stylesheet" href="css/components.css">
+  <!-- สไตล์เฉพาะหน้านี้เท่านั้น -->
+  <link rel="stylesheet" href="css/detail.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="nav-left">
+        <a href="home.html" class="nav-brand">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Lost & Found ICT</span>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="home.html" class="nav-link">Home</a></li>
+          <li><a href="activity.html" class="nav-link">My Activity</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-actions">
+        <a href="report.html" class="btn-post">
+          <i class="fa-solid fa-plus"></i>
+          <span>โพสต์</span>
+        </a>
+
+        <a href="profile.html" class="nav-profile">
+          <i class="fa-regular fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="breadcrumb-container">
+    <ul class="breadcrumb-list">
+      <li><a href="home.html">หน้าหลัก</a></li>
+      <li class="separator"><i class="fa-solid fa-chevron-right"></i></li>
+      <li><a href="browse.html">ค้นหาสิ่งของ</a></li>
+      <li class="separator"><i class="fa-solid fa-chevron-right"></i></li>
+      <li class="current">รายละเอียด</li>
+    </ul>
+  </div>
+
+  <main class="detail-main">
+
+    <div class="detail-left">
+      <div class="gallery-card">
+        <div class="main-image-box">
+          <img id="mainDisplayImg" src="" alt="ภาพสิ่งของ">
+
+          <button type="button" class="btn-fullscreen" title="ดูรูปขนาดเต็ม" onclick="openFullscreenModal()">
+            <i class="fa-solid fa-expand"></i>
+          </button>
+        </div>
+
+        <div class="thumbnail-list" id="thumbnailContainer"></div>
+      </div>
+    </div>
+
+    <div class="detail-right">
+
+      <div class="poster-profile-header">
+        <div class="poster-info-left">
+          <img id="posterAvatarImg" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop" alt="Avatar" class="poster-avatar">
+          <div class="poster-text-group">
+            <div class="poster-name" id="posterName">กำลังโหลด...</div>
+            <div class="poster-role" id="posterRoleText">กำลังโหลด...</div>
+          </div>
+        </div>
+        <div class="poster-badge-time" id="posterTimeAgo">กำลังโหลด...</div>
+      </div>
+
+      <div class="tag-row">
+        <!-- ประเภทประกาศ (report_type: lost/found) แยกจากสถานะสิ่งของ -->
+        <span class="badge-type" id="detailReportType"></span>
+        <span class="badge-status" id="detailStatus">
+          <i class="fa-regular fa-circle-check"></i>
+          <span id="statusText">สถานะ: กำลังโหลด...</span>
+        </span>
+        <span class="badge-category" id="detailCategory">
+          <span>หมวดหมู่: -</span>
+        </span>
+      </div>
+
+      <div class="item-header-info">
+        <h1 class="detail-title" id="detailTitle">ชื่อสิ่งของ</h1>
+        <div class="reference-box">
+          <span>รหัสอ้างอิง:</span>
+          <span class="ref-code" id="detailRef">REF-...</span>
+        </div>
+      </div>
+
+      <!-- แสดงเฉพาะเมื่อ item.matched_item_id มีค่า (จับคู่ของหาย-ของเจอกันแล้ว) -->
+      <a href="#" class="matched-item-box" id="matchedItemBox" style="display: none;"></a>
+
+      <div class="meta-info-grid">
+        <div class="meta-item">
+          <div class="meta-item-label" id="dateLabel">
+            <i class="fa-regular fa-calendar"></i>
+            <span id="dateLabelText">วันที่พบ</span>
+          </div>
+          <div class="meta-item-val" id="detailDate">-</div>
+        </div>
+
+        <div class="meta-item">
+          <div class="meta-item-label" id="timeLabel">
+            <i class="fa-regular fa-clock"></i>
+            <span id="timeLabelText">เวลาที่พบโดยประมาณ</span>
+          </div>
+          <div class="meta-item-val" id="detailTime">ไม่ระบุ</div>
+        </div>
+
+        <div class="meta-item full-width">
+          <div class="meta-item-label" id="locationLabel">
+            <i class="fa-solid fa-location-dot"></i>
+            <span id="locationLabelText">สถานที่พบ</span>
+          </div>
+          <div class="meta-item-val" id="detailLocation">-</div>
+        </div>
+
+        <div class="meta-item full-width" id="storageWrapper">
+          <div class="meta-item-label">
+            <i class="fa-solid fa-box-archive"></i>
+            <span>จุดรับของปัจจุบัน</span>
+          </div>
+          <div class="meta-item-val" id="detailStorage">-</div>
+        </div>
+      </div>
+
+      <div class="desc-section">
+        <h3 class="desc-title">รายละเอียดเพิ่มเติม</h3>
+        <div class="desc-box" id="detailDescription">
+          รายละเอียดสิ่งของ
+        </div>
+
+        <div class="owner-actions-row" id="ownerActionsBox" style="display: none;">
+          <a href="#" id="btnEditPost" class="btn-edit-post">
+            <i class="fa-solid fa-pen-to-square"></i> แก้ไขโพสต์
+          </a>
+          <button type="button" class="btn-delete-post" id="btnDeletePost" onclick="deleteCurrentItem()">
+            <i class="fa-solid fa-trash"></i> ลบโพสต์นี้
+          </button>
+        </div>
+
+        <div class="staff-action-box" id="staffStorageActionBox" style="display: none;">
+          <button type="button" class="btn-staff-storage" onclick="saveItemToStaffStorage()">
+            <i class="fa-solid fa-box-archive"></i>
+            <span>บันทึกสิ่งของเข้าคลัง (Staff Storage)</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="claim-action-box" id="claimActionBox" style="display: none;">
+        <a href="#" id="btnClaimLink" class="btn-claim" onclick="handleClaim(event)">
+          <i class="fa-solid fa-hand-holding-heart"></i>
+          <span>อ้างสิทธิ์ความเป็นเจ้าของ</span>
+        </a>
+        <div class="claim-notice">
+          คุณจะต้องเข้าสู่ระบบและยืนยันตัวตนเพื่อทำรายการนี้
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <div class="modal-overlay" id="fullscreenModal">
+    <div class="modal-content-box">
+      <div class="modal-header">
+        <span id="modalImageCounter">รูปภาพขนาดเต็ม (1/1)</span>
+        <button type="button" class="modal-close-btn" onclick="closeFullscreenModal()">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-img-wrapper">
+        <button type="button" class="modal-nav-btn prev" onclick="prevModalImage()">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <img id="modalFullscreenImg" src="" alt="รูปภาพขนาดเต็ม">
+        <button type="button" class="modal-nav-btn next" onclick="nextModalImage()">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <strong>Lost & Found ICT</strong> &copy; 2026 Lost & Found System. All rights reserved.
+      </div>
+      <div class="footer-links">
+        <a href="#">Contact Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="js/detail.js"></script>
+
+</body>
+</html>

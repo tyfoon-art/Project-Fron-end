@@ -3,18 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ค้นหาสิ่งของ - Lost & Found ICT</title>
+  <title>ค้นหารายการ - Lost & Found ICT</title>
 
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="css/style.css">
 
-  <!-- Supabase JS Library -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/supabaseClient.js"></script>
-  <script src="js/browse.js"></script>
+  <!-- ไฟล์ CSS ส่วนกลาง (มี Font, Reset, Navbar, Footer, Breadcrumb) -->
+  <link rel="stylesheet" href="css/components.css">
+  
+  <!-- ไฟล์ CSS เฉพาะหน้าค้นหา -->
+  <link rel="stylesheet" href="css/browse.css">
 </head>
 <body>
 
@@ -63,10 +61,10 @@
     </ul>
   </div>
 
-  <!-- Main Content Layout -->
-  <main class="browse-main container-fluid">
+  <!-- Main Layout -->
+  <main class="browse-main">
 
-    <!-- Sidebar Filters -->
+    <!-- Sidebar Filter -->
     <aside class="sidebar-filter">
       <h2 class="filter-title">ตัวกรองการค้นหา</h2>
 
@@ -84,29 +82,11 @@
         </div>
       </div>
 
+      <!-- หมวดหมู่โหลดไดนามิกผ่าน JavaScript จากตาราง category -->
       <div class="filter-group">
         <label class="filter-label">หมวดหมู่</label>
-        <div class="checkbox-list">
-          <label class="checkbox-item">
-            <input type="checkbox" name="category" value="CAT001" checked onchange="applyFilter()">
-            <span>อุปกรณ์อิเล็กทรอนิกส์</span>
-          </label>
-          <label class="checkbox-item">
-            <input type="checkbox" name="category" value="CAT002" checked onchange="applyFilter()">
-            <span>อุปกรณ์การเรียน</span>
-          </label>
-          <label class="checkbox-item">
-            <input type="checkbox" name="category" value="CAT003" checked onchange="applyFilter()">
-            <span>กระเป๋า/สัมภาระ/กุญแจ</span>
-          </label>
-          <label class="checkbox-item">
-            <input type="checkbox" name="category" value="CAT004" checked onchange="applyFilter()">
-            <span>ของใช้ส่วนตัว</span>
-          </label>
-          <label class="checkbox-item">
-            <input type="checkbox" name="category" value="CAT005" checked onchange="applyFilter()">
-            <span>เอกสาร/บัตร/อื่นๆ</span>
-          </label>
+        <div class="checkbox-list" id="categoryCheckboxList">
+          <span style="font-size: 13px; color: #94a3b8;">กำลังโหลดหมวดหมู่...</span>
         </div>
       </div>
 
@@ -115,11 +95,11 @@
         <div class="select-wrapper">
           <select name="status_filter" id="statusFilter" onchange="applyFilter()">
             <option value="all">ทั้งหมดทุกสถานะ</option>
-            <option value="พบใหม่">พบใหม่</option>
+            <option value="รอตรวจสอบ">รอตรวจสอบ</option>
             <option value="อยู่ที่จุดรับฝาก">อยู่ที่จุดรับฝาก</option>
-            <option value="แจ้งหาย">แจ้งหาย</option>
+            <option value="กำลังดำเนินการเคลม">กำลังดำเนินการเคลม</option>
           </select>
-          <i class="fa-solid fa-chevron-down select-icon"></i>
+          <i class="fa-solid fa-chevron-down"></i>
         </div>
       </div>
 
@@ -133,49 +113,28 @@
             <option value="7days">7 วันที่ผ่านมา</option>
             <option value="30days">30 วันที่ผ่านมา</option>
           </select>
-          <i class="fa-solid fa-chevron-down select-icon"></i>
+          <i class="fa-solid fa-chevron-down"></i>
         </div>
       </div>
 
       <div class="filter-group">
-        <label class="filter-label">สถานที่พบ</label>
-        <div class="select-wrapper">
-          <select name="location_filter" id="locationFilter" onchange="handleMainLocationChange(); applyFilter();">
-            <option value="all">ทั้งหมด</option>
-            <option value="ห้องเรียน">ห้องเรียน</option>
-            <option value="โรงอาหาร">โรงอาหาร</option>
-            <option value="ห้องสาขา">ห้องสาขา</option>
-            <option value="ลานจอดรถ">ลานจอดรถ</option>
-          </select>
-          <i class="fa-solid fa-chevron-down select-icon"></i>
-        </div>
-      </div>
-
-      <div class="filter-group" id="customClassroomGroup" style="display: none;">
-        <label class="filter-label">ระบุห้องเรียน</label>
+        <label class="filter-label">สถานที่เกิดเหตุ</label>
         <div class="input-custom-wrapper">
-          <input type="text" id="customClassroomInput" placeholder="เช่น ICT1102/1" oninput="applyFilter()">
-        </div>
-      </div>
-
-      <div class="filter-group" id="customDepartmentGroup" style="display: none;">
-        <label class="filter-label">ระบุชื่อสาขา</label>
-        <div class="input-custom-wrapper">
-          <input type="text" id="customDepartmentInput" placeholder="เช่น วิศวกรรมซอฟต์แวร์" oninput="applyFilter()">
+          <input type="text" id="locationSearchInput" placeholder="เช่น ห้องเรียน, โรงอาหาร, ICT1102/1" oninput="applyFilter()">
         </div>
       </div>
 
       <button type="button" class="btn-apply-filter" onclick="renderBrowseItems()">รีเฟรชข้อมูล</button>
     </aside>
 
-    <!-- Main Results Grid -->
+    <!-- Content Area -->
     <section class="content-area">
       <div class="results-summary-bar">
         <span id="resultCountText">กำลังโหลดข้อมูล...</span>
       </div>
 
       <div class="items-grid" id="itemsGrid">
-        <!-- Dynamic Content from Supabase -->
+        <!-- Rendered via JS -->
       </div>
 
       <div class="no-results" id="noResults" style="display: none;">
@@ -200,7 +159,8 @@
     </div>
   </footer>
 
-  <!-- Page Script -->
-  <script src="js/browse.js"></script>
+  <!-- Script Logic -->
+  <script type="module" src="js/browse.js"></script>
+
 </body>
 </html>

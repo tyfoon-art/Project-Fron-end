@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>กิจกรรมส่วนตัว (My Activity) - Lost & Found ICT</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- navbar/footer/base reset อยู่ใน components.css ที่ใช้ร่วมกับ home.html / browse.html / detail.html -->
+  <link rel="stylesheet" href="css/components.css">
+  <!-- สไตล์เฉพาะหน้านี้เท่านั้น -->
+  <link rel="stylesheet" href="css/activity.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="nav-left">
+        <a href="home.html" class="nav-brand">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Lost & Found ICT</span>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="home.html" class="nav-link">Home</a></li>
+          <li><a href="activity.html" class="nav-link active">My Activity</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-actions">
+        <form class="nav-search-form" action="browse.html" method="GET">
+          <div class="nav-search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" name="search" placeholder="ค้นหารายการ...">
+          </div>
+        </form>
+
+        <a href="report.html" class="btn-post">
+          <i class="fa-solid fa-plus"></i>
+          <span>โพสต์</span>
+        </a>
+
+        <a href="profile.html" class="nav-profile">
+          <i class="fa-regular fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="activity-main">
+
+    <div class="activity-header">
+      <h1>กิจกรรมส่วนตัว</h1>
+      <p>ติดตามสถานะสิ่งของที่คุณแจ้งหายหรือพบ และตรวจสอบคำร้องขอคืนของ</p>
+    </div>
+
+    <!-- ลบ onclick ออกเพื่อให้ js/activity.js ผูก Event Listener แทน -->
+    <div class="activity-tabs">
+      <button type="button" class="tab-btn active" id="tabReported">ของที่ฉันแจ้งหาย/พบ</button>
+      <button type="button" class="tab-btn" id="tabClaimed">คำร้องขอคืนของฉัน</button>
+    </div>
+
+    <div class="activity-grid">
+
+      <aside class="notif-section">
+        <div class="notif-title">
+          <i class="fa-regular fa-bell"></i>
+          <span>การแจ้งเตือนล่าสุด</span>
+        </div>
+
+        <div class="notif-card">
+          <div class="notif-icon-circle info">
+            <i class="fa-solid fa-circle-info"></i>
+          </div>
+          <div class="notif-content">
+            <div class="notif-head">ระบบพร้อมใช้งาน</div>
+            <div class="notif-desc">คุณสามารถตรวจสอบสถานะประกาศสิ่งของของคุณได้ที่นี่</div>
+            <div class="notif-time">เมื่อสักครู่นี้</div>
+          </div>
+        </div>
+      </aside>
+
+      <section class="items-section" id="activityList">
+        <!-- เรนเดอร์รายการด้วย JavaScript -->
+      </section>
+
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <strong>Lost & Found ICT</strong> &copy; 2026 Lost & Found System. All rights reserved.
+      </div>
+      <div class="footer-links">
+        <a href="#">Contact Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="js/activity.js"></script>
+
+</body>
+</html>

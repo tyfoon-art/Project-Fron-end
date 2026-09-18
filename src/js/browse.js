@@ -1,30 +1,32 @@
-/**
- * โหลดข้อมูลสิทธิ์และโปรไฟล์ผู้ใช้งาน
- */
-async function loadUserProfile() {
-  const currentEmail = localStorage.getItem('currentUserEmail') || localStorage.getItem('userEmail') || '';
-  if (!currentEmail) return;
+import { supabaseClient } from './supabaseClient.js';
 
-  let { data: user, error } = await supabaseClient
+async function loadUserProfile() {
+  const { data: { user: authUser }, error: authError } = await supabaseClient.auth.getUser();
+  if (authError || !authUser) return;
+
+  const { data: profile, error } = await supabaseClient
     .from('user_account')
-    .select('*')
-    .eq('email', currentEmail)
+    .select('user_id, full_name, role')
+    .eq('user_id', authUser.id)
     .single();
 
-  if (user) {
-    const profileNameEl = document.getElementById('navProfileName');
-    if (profileNameEl) profileNameEl.textContent = user.full_name;
-    localStorage.setItem('currentUserName', user.full_name);
-    localStorage.setItem('currentUserRole', user.user_type);
+  if (error) {
+    console.error('โหลดโปรไฟล์ผู้ใช้ไม่สำเร็จ:', error);
+    return;
+  }
+
+  if (profile) {
+    document.getElementById('navProfileName').textContent = profile.full_name;
+    localStorage.setItem('currentUserName', profile.full_name);
+    localStorage.setItem('currentUserRole', profile.role);
+    localStorage.setItem('currentUserId', profile.user_id);
   }
 }
 
-/**
- * แปลงวันที่ ISO เป็นรูปแบบวันที่ไทย
- */
 function formatThaiDate(isoDateString) {
-  if (!isoDateString) return '2 ก.ย. 2569';
+  if (!isoDateString) return 'ไม่ระบุวันที่';
   const d = new Date(isoDateString);
+  if (isNaN(d.getTime())) return 'ไม่ระบุวันที่';
   const monthsThai = [
     "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
     "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."
@@ -32,31 +34,43 @@ function formatThaiDate(isoDateString) {
   return `${d.getDate()} ${monthsThai[d.getMonth()]} ${d.getFullYear() + 543}`;
 }
 
-/**
- * รับชื่อหมวดหมู่ภาษาไทยตาม Category ID
- */
-function getCategoryDisplayName(catId) {
-  const map = {
-    'CAT001': 'อุปกรณ์อิเล็กทรอนิกส์',
-    'CAT002': 'อุปกรณ์การเรียน',
-    'CAT003': 'กระเป๋า/สัมภาระ/กุญแจ',
-    'CAT004': 'ของใช้ส่วนตัว',
-    'CAT005': 'เอกสาร/บัตร/อื่นๆ'
-  };
-  return map[catId] || 'อื่นๆ';
+async function loadCategoryFilters() {
+  const container = document.getElementById('categoryCheckboxList');
+
+  const { data, error } = await supabaseClient
+    .from('category')
+    .select('category_id, category_name')
+    .eq('is_active', true)
+    .order('category_name', { ascending: true });
+
+  if (error || !data || data.length === 0) {
+    container.innerHTML = '<span style="font-size: 13px; color: #94a3b8;">ไม่พบหมวดหมู่ในระบบ</span>';
+    return;
+  }
+
+  container.innerHTML = '';
+  data.forEach(cat => {
+    const label = document.createElement('label');
+    label.className = 'checkbox-item';
+    label.innerHTML = `
+      <input type="checkbox" name="category" value="${cat.category_id}" checked onchange="applyFilter()">
+      <span>${cat.category_name}</span>
+    `;
+    container.appendChild(label);
+  });
 }
 
-/**
- * ดึงข้อมูลสิ่งของจาก Supabase
- */
 async function fetchItemsFromSupabase() {
-  console.log('กำลังดึงข้อมูลจาก ITEM...');
-
   const { data: items, error } = await supabaseClient
     .from('item')
-    .select('*')
+    .select(`
+      item_id, item_name, description, image_url, status, created_at,
+      category_id, category:category_id(category_name),
+      storage:current_storage_id(storage_name, room),
+      report(report_type, incident_location, incident_datetime, user:user_id(full_name))
+    `)
     .neq('status', 'คืนสำเร็จ')
-    .order('item_date', { ascending: false });
+    .neq('status', 'หมดอายุ/ทำลายทิ้ง');
 
   if (error) {
     console.error('Error fetching items:', error);
@@ -70,25 +84,33 @@ async function fetchItemsFromSupabase() {
     return [];
   }
 
-  return items.map(item => ({
-    id: item.item_id,
-    title: item.item_name,
-    category: item.category_id || 'CAT005',
-    categoryName: getCategoryDisplayName(item.category_id),
-    locationName: item.location_id || 'ไม่ระบุสถานที่',
-    locationType: '',
-    room: '',
-    image: item.image || 'https://images.unsplash.com/photo-1582139329536-e7284fece509?q=80&w=600&auto=format&fit=crop',
-    timestamp: item.item_date ? new Date(item.item_date).toISOString() : new Date().toISOString(),
-    type: item.status === 'แจ้งหาย' ? 'lost' : 'found',
-    status: item.status || 'พบใหม่',
-    poster: 'ผู้แจ้งประกาศ'
-  }));
+  const formattedItems = items.map(item => {
+    const rep = Array.isArray(item.report) && item.report.length > 0 ? item.report[0] : null;
+
+    return {
+      id: item.item_id,
+      title: item.item_name || 'ไม่ระบุชื่อสิ่งของ',
+      description: item.description,
+      categoryName: (item.category && item.category.category_name) || 'หมวดหมู่ทั่วไป',
+      categoryId: item.category_id || '',
+      storageName: (item.storage && item.storage.storage_name) || '',
+      locationText: (rep && rep.incident_location) || item.storage?.storage_name || 'ไม่ระบุสถานที่',
+      image_url: item.image_url,
+      timestamp: (rep && rep.incident_datetime)
+        ? new Date(rep.incident_datetime).toISOString()
+        : new Date(item.created_at).toISOString(),
+      type: rep ? rep.report_type : 'found',
+      status: item.status || 'รอตรวจสอบ',
+      poster: (rep && rep.user && rep.user.full_name) || 'ผู้แจ้งประกาศ'
+    };
+  });
+
+  // เรียงลำดับจากวันที่ล่าสุด (ใหม่สุด -> เก่าสุด)
+  formattedItems.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+  return formattedItems;
 }
 
-/**
- * เรนเดอร์การ์ดสิ่งของทั้งหมด
- */
 async function renderBrowseItems() {
   const items = await fetchItemsFromSupabase();
   const grid = document.getElementById('itemsGrid');
@@ -101,41 +123,54 @@ async function renderBrowseItems() {
   }
 
   items.forEach(item => {
-    let statusText = item.status;
-    let badgeClass = 'badge-new';
-    let badgeIcon = 'fa-solid fa-sparkles';
+    // แมปปิ้ง Badge Class
+    let badgeClass = 'badge-pending';
+    let badgeIcon = 'fa-solid fa-clock';
 
-    if (item.status === 'อยู่ที่จุดรับฝาก') {
-      badgeClass = 'badge-storage';
-      badgeIcon = 'fa-solid fa-box-archive';
-    } else if (item.status === 'แจ้งหาย') {
-      badgeClass = 'badge-lost';
-      badgeIcon = 'fa-solid fa-triangle-exclamation';
-    } else {
-      statusText = 'พบใหม่';
-      badgeClass = 'badge-new';
-      badgeIcon = 'fa-solid fa-sparkles';
+    switch (item.status) {
+      case 'อยู่ที่จุดรับฝาก':
+        badgeClass = 'badge-storage';
+        badgeIcon = 'fa-solid fa-box-archive';
+        break;
+      case 'กำลังดำเนินการเคลม':
+        badgeClass = 'badge-claiming';
+        badgeIcon = 'fa-solid fa-spinner';
+        break;
+      case 'คืนสำเร็จ':
+        badgeClass = 'badge-returned';
+        badgeIcon = 'fa-solid fa-check-circle';
+        break;
+      case 'หมดอายุ/ทำลายทิ้ง':
+        badgeClass = 'badge-disposed';
+        badgeIcon = 'fa-solid fa-trash';
+        break;
+      default:
+        badgeClass = 'badge-pending';
+        badgeIcon = 'fa-solid fa-clock';
     }
+
+    const badgeHtml = `<span class="item-badge ${badgeClass}"><i class="${badgeIcon}"></i> ${item.status}</span>`;
+
+    const imageContent = item.image_url 
+      ? `<img src="${item.image_url}" alt="${item.title}">`
+      : `<div class="no-image-placeholder">
+           <i class="fa-solid fa-image"></i>
+           <span>ไม่มีรูปภาพ</span>
+         </div>`;
 
     const card = document.createElement('div');
     card.className = 'item-card';
     card.setAttribute('data-type', item.type);
-    card.setAttribute('data-category', item.category);
-    card.setAttribute('data-location-type', item.locationType);
-    card.setAttribute('data-location-name', item.locationName);
-    card.setAttribute('data-room', item.room);
+    card.setAttribute('data-category', item.categoryId);
+    card.setAttribute('data-location-name', item.locationText);
     card.setAttribute('data-date', item.timestamp.split('T')[0]);
     card.setAttribute('data-status', item.status);
     card.setAttribute('data-title', item.title);
 
-    const locationDisplay = item.room ? `${item.locationName} (${item.room})` : item.locationName;
-
     card.innerHTML = `
       <div class="item-image-wrapper">
-        <img src="${item.image}" alt="${item.title}" onerror="this.src='https://images.unsplash.com/photo-1582139329536-e7284fece509?q=80&w=600&auto=format&fit=crop'">
-        <span class="item-badge ${badgeClass}">
-          <i class="${badgeIcon}"></i> ${statusText}
-        </span>
+        ${imageContent}
+        ${badgeHtml}
       </div>
       <div class="item-body">
         <div class="item-info">
@@ -143,10 +178,7 @@ async function renderBrowseItems() {
           <div class="item-category">${item.categoryName}</div>
           <div class="item-meta">
             <span><i class="fa-regular fa-calendar"></i> ${formatThaiDate(item.timestamp)}</span>
-            <span><i class="fa-solid fa-location-dot"></i> ${locationDisplay}</span>
-            <span style="font-size: 12px; color: #64748b; margin-top: 2px;">
-              <i class="fa-regular fa-user" style="color: #64748b;"></i> ผู้โพสต์: ${item.poster}
-            </span>
+            <span><i class="fa-solid fa-location-dot"></i> ${item.locationText}</span>
           </div>
         </div>
         <a href="detail.html?id=${item.id}" class="btn-detail">
@@ -161,43 +193,14 @@ async function renderBrowseItems() {
   applyFilter();
 }
 
-/**
- * ควบคุมการแสดงผลอินพุตเพิ่มเติมตามสถานที่
- */
-function handleMainLocationChange() {
-  const mainLoc = document.getElementById('locationFilter').value;
-  const customClassroomGroup = document.getElementById('customClassroomGroup');
-  const customDepartmentGroup = document.getElementById('customDepartmentGroup');
-  const customClassroomInput = document.getElementById('customClassroomInput');
-  const customDepartmentInput = document.getElementById('customDepartmentInput');
-
-  customClassroomGroup.style.display = 'none';
-  customDepartmentGroup.style.display = 'none';
-  customClassroomInput.value = '';
-  customDepartmentInput.value = '';
-
-  if (mainLoc === 'ห้องเรียน') {
-    customClassroomGroup.style.display = 'flex';
-  } else if (mainLoc === 'ห้องสาขา') {
-    customDepartmentGroup.style.display = 'flex';
-  }
-}
-
-/**
- * ใช้ตัวกรองค้นหาการ์ดตามเงื่อนไขทั้งหมด
- */
 function applyFilter() {
-  const selectedTypes = Array.from(document.querySelectorAll('input[name="type_status"]:checked'))
-                             .map(cb => cb.value);
-
-  const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked'))
-                                .map(cb => cb.value);
-
+  const selectedTypes = Array.from(document.querySelectorAll('input[name="type_status"]:checked')).map(cb => cb.value);
+  const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked')).map(cb => cb.value);
   const selectedStatus = document.getElementById('statusFilter').value;
   const selectedDate = document.getElementById('dateFilter').value;
-  const mainLocation = document.getElementById('locationFilter').value;
-  const customClassroomText = document.getElementById('customClassroomInput') ? document.getElementById('customClassroomInput').value.trim().toLowerCase() : '';
-  const customDepartmentText = document.getElementById('customDepartmentInput') ? document.getElementById('customDepartmentInput').value.trim().toLowerCase() : '';
+  const locationSearchText = document.getElementById('locationSearchInput')
+    ? document.getElementById('locationSearchInput').value.trim().toLowerCase()
+    : '';
   const searchQuery = document.getElementById('searchInput') ? document.getElementById('searchInput').value.trim().toLowerCase() : '';
 
   const currentDate = new Date();
@@ -209,9 +212,7 @@ function applyFilter() {
   cards.forEach(card => {
     const cardType = card.getAttribute('data-type');
     const cardCategory = card.getAttribute('data-category');
-    const cardLocationType = card.getAttribute('data-location-type') || '';
     const cardLocationName = (card.getAttribute('data-location-name') || '').toLowerCase();
-    const cardRoom = (card.getAttribute('data-room') || '').toLowerCase();
     const cardDateStr = card.getAttribute('data-date');
     const cardStatus = card.getAttribute('data-status') || '';
     const cardTitle = card.getAttribute('data-title').toLowerCase();
@@ -241,17 +242,7 @@ function applyFilter() {
       matchDate = (diffDays >= 0 && diffDays <= 30);
     }
 
-    let matchLocation = true;
-    if (mainLocation !== 'all') {
-      matchLocation = cardLocationType === mainLocation;
-      if (matchLocation && mainLocation === 'ห้องเรียน' && customClassroomText) {
-        matchLocation = cardRoom.includes(customClassroomText);
-      }
-      if (matchLocation && mainLocation === 'ห้องสาขา' && customDepartmentText) {
-        matchLocation = cardLocationName.includes(customDepartmentText);
-      }
-    }
-
+    const matchLocation = locationSearchText === '' || cardLocationName.includes(locationSearchText);
     const matchSearch = searchQuery === '' ||
                         cardTitle.includes(searchQuery) ||
                         cardLocationName.includes(searchQuery) ||
@@ -273,16 +264,33 @@ function applyFilter() {
   }
 }
 
-/* Event Listener เมื่อโหลด DOM เสร็จสมบูรณ์ */
+window.applyFilter = applyFilter;
+window.renderBrowseItems = renderBrowseItems;
+
 document.addEventListener('DOMContentLoaded', async () => {
   await loadUserProfile();
+  await loadCategoryFilters();
   await renderBrowseItems();
 
   const urlParams = new URLSearchParams(window.location.search);
   const searchQuery = urlParams.get('search');
   if (searchQuery) {
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) searchInput.value = searchQuery;
+    document.getElementById('searchInput').value = searchQuery;
   }
   applyFilter();
+
+  // Bind Event ให้ปุ่มรีเฟรชข้อมูล (เช็ก Selector ให้ตรงกับ HTML เช่น id="btnRefresh" หรือ class="btn-refresh")
+  const refreshBtn = document.getElementById('btnRefresh') || document.querySelector('.btn-refresh');
+  if (refreshBtn) {
+    refreshBtn.addEventListener('click', async () => {
+      refreshBtn.disabled = true;
+      const originalText = refreshBtn.innerHTML;
+      refreshBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> กำลังโหลด...';
+
+      await renderBrowseItems();
+
+      refreshBtn.disabled = false;
+      refreshBtn.innerHTML = originalText;
+    });
+  }
 });

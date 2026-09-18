@@ -1,0 +1,247 @@
+/* ==========================================================================
+   Global & Layout Base
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Prompt', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-gutter: stable;
+}
+
+body {
+  background-color: #f8fafc;
+  color: #1e293b;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.container-fluid {
+  width: 100%;
+  padding: 0 32px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ==========================================================================
+   Navbar Component
+   ========================================================================== */
+.navbar {
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  width: 100%;
+}
+
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+  padding: 0 32px;
+  max-width: 1400px;
+  margin: 0 auto;
+  gap: 24px;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #003b7a;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  flex-shrink: 0;
+}
+
+.nav-brand i {
+  font-size: 26px;
+  color: #003b7a;
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  list-style: none;
+}
+
+.nav-link {
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  color: #64748b;
+  transition: color 0.2s;
+  position: relative;
+  padding-bottom: 4px;
+  white-space: nowrap;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: #003b7a;
+  font-weight: 600;
+}
+
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: #003b7a;
+  border-radius: 2px;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.nav-search-form {
+  position: relative;
+  width: 280px;
+}
+
+.nav-search-box {
+  display: flex;
+  align-items: center;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 30px;
+  padding: 8px 16px;
+  transition: all 0.2s ease;
+}
+
+.nav-search-box:focus-within {
+  background: #ffffff;
+  border-color: #003b7a;
+  box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.1);
+}
+
+.nav-search-box i {
+  color: #64748b;
+  font-size: 14px;
+  margin-right: 8px;
+}
+
+.nav-search-box input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  color: #1e293b;
+}
+
+.btn-post {
+  background: #003b7a;
+  color: #ffffff;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 59, 122, 0.15);
+}
+
+.btn-post:hover {
+  background: #002d5e;
+  transform: translateY(-1px);
+}
+
+.nav-profile {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  color: #334155;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.nav-profile i {
+  font-size: 16px;
+  color: #64748b;
+}
+
+.nav-profile:hover {
+  background: #f1f5f9;
+  color: #003b7a;
+}
+
+/* ==========================================================================
+   Footer Component
+   ========================================================================== */
+.footer {
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  margin-top: auto;
+  padding: 20px 0;
+  width: 100%;
+}
+
+.footer-inner {
+  padding: 0 32px;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.footer-links {
+  display: flex;
+  gap: 16px;
+}
+
+.footer-links a {
+  color: #64748b;
+  text-decoration: none;
+}
+
+/* Responsive Footer & Navbar */
+@media (max-width: 900px) {
+  .navbar-inner, .footer-inner {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .nav-search-form {
+    display: none;
+  }
+}
