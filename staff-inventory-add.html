@@ -26,10 +26,7 @@
          Google Font : Prompt
     ========================================================== -->
 
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com"
-    >
+    <link rel="preconnect" href="https://fonts.googleapis.com">
 
     <link
         rel="preconnect"
@@ -75,6 +72,8 @@
 
                             lightBg: '#F4F7F9',
 
+                            muted: '#6B7280'
+
                         }
 
                     }
@@ -108,7 +107,6 @@
 
     <!-- =========================================================
          TOP NAVIGATION BAR
-         Standard: Lost & Found ICT Staff
     ========================================================== -->
 
     <header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
@@ -160,9 +158,6 @@
                 class="hidden md:flex items-center space-x-1 lg:space-x-5 text-sm font-semibold text-gray-600 h-full"
             >
 
-
-                <!-- Dashboard -->
-
                 <a
                     href="staff-dashboard.html"
                     class="h-full flex items-center border-b-4 border-transparent hover:text-ict-blue transition whitespace-nowrap px-1"
@@ -171,22 +166,13 @@
                 </a>
 
 
-
-                <!-- =================================================
-                     รายการสิ่งของทั้งหมด
-                     ตอนนี้ให้ไปหน้ารายการคลัง
-                ================================================== -->
-
                 <a
                     href="staff-inventory-list.html"
-                    class="h-full flex items-center border-b-4 border-ict-blue text-ict-blue font-bold transition whitespace-nowrap px-1"
+                    class="h-full flex items-center border-b-4 border-transparent hover:text-ict-blue transition whitespace-nowrap px-1"
                 >
                     รายการสิ่งของทั้งหมด
                 </a>
 
-
-
-                <!-- ตรวจสอบคำร้อง -->
 
                 <a
                     href="staff-verify-claims.html"
@@ -196,25 +182,11 @@
                 </a>
 
 
-
-                <!-- ส่งคืนเจ้าของ -->
-
                 <a
                     href="staff-handover.html"
                     class="h-full flex items-center border-b-4 border-transparent hover:text-ict-blue transition whitespace-nowrap px-1"
                 >
                     ส่งคืนเจ้าของ
-                </a>
-
-
-
-                <!-- รายการสิ่งของตกค้าง -->
-
-                <a
-                    href="staff-overdue-list.html"
-                    class="h-full flex items-center border-b-4 border-transparent hover:text-ict-blue transition whitespace-nowrap px-1"
-                >
-                    รายการสิ่งของตกค้าง
                 </a>
 
             </nav>
@@ -228,7 +200,9 @@
             <div class="flex items-center gap-3 ml-auto md:ml-0">
 
 
-                <!-- Search -->
+                <!-- =================================================
+                     SEARCH
+                ================================================== -->
 
                 <div class="relative hidden sm:block w-44 lg:w-56">
 
@@ -307,7 +281,7 @@
                         <path
                             stroke-linecap="round"
                             stroke-linejoin="round"
-                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7-7 0 00-7-7z"
                         />
 
                     </svg>
@@ -333,11 +307,6 @@
 
     <main class="flex-1 p-4 sm:p-8 overflow-y-auto">
 
-
-        <!-- =====================================================
-             FORM
-        ====================================================== -->
-
         <form
             id="lostFoundForm"
             onsubmit="handleFormSubmit(event)"
@@ -346,7 +315,7 @@
 
 
             <!-- =================================================
-                 HEADER
+                 PAGE HEADER
             ================================================== -->
 
             <div
@@ -400,7 +369,7 @@
 
 
                     <!-- =================================================
-                         SECTION 1 : ข้อมูลเบื้องต้น
+                         SECTION 1 : BASIC INFORMATION
                     ================================================== -->
 
                     <div
@@ -430,12 +399,14 @@
 
 
                             <!-- =================================================
-                                 ชื่อสิ่งของ
+                                 ITEM NAME
                             ================================================== -->
 
                             <div>
 
-                                <label class="block font-semibold text-gray-700 mb-1">
+                                <label
+                                    class="block font-semibold text-gray-700 mb-1"
+                                >
 
                                     ชื่อสิ่งของ / หัวข้อ
 
@@ -462,14 +433,18 @@
                                  CATEGORY
                             ================================================== -->
 
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div
+                                class="grid grid-cols-1 sm:grid-cols-2 gap-4"
+                            >
 
 
                                 <!-- MAIN CATEGORY -->
 
                                 <div>
 
-                                    <label class="block font-semibold text-gray-700 mb-1">
+                                    <label
+                                        class="block font-semibold text-gray-700 mb-1"
+                                    >
 
                                         หมวดหมู่หลัก
 
@@ -517,7 +492,9 @@
 
                                 <div>
 
-                                    <label class="block font-semibold text-gray-700 mb-1">
+                                    <label
+                                        class="block font-semibold text-gray-700 mb-1"
+                                    >
                                         หมวดหมู่อย่อย
                                     </label>
 
@@ -545,7 +522,9 @@
 
                             <div>
 
-                                <label class="block font-semibold text-gray-700 mb-1">
+                                <label
+                                    class="block font-semibold text-gray-700 mb-1"
+                                >
 
                                     รายละเอียดเพิ่มเติมลักษณะเด่น
                                     (สี, ยี่ห้อ, ตำหนิ)
@@ -569,7 +548,7 @@
 
 
                     <!-- =================================================
-                         SECTION 2 : สถานที่พบ
+                         SECTION 2 : FOUND LOCATION
                     ================================================== -->
 
                     <div
@@ -577,38 +556,38 @@
                     >
 
                         <div
-                            class="flex items-center justify-between border-b border-gray-100 pb-3"
+                            class="flex items-center gap-2 border-b border-gray-100 pb-3"
                         >
 
-                            <div class="flex items-center gap-2">
-
-                                <span
-                                    class="w-6 h-6 rounded-full bg-blue-50 text-ict-blue text-xs flex items-center justify-center font-bold"
-                                >
-                                    2
-                                </span>
+                            <span
+                                class="w-6 h-6 rounded-full bg-blue-50 text-ict-blue text-xs flex items-center justify-center font-bold"
+                            >
+                                2
+                            </span>
 
 
-                                <h2 class="font-bold text-xs text-gray-900">
-                                    สถานที่ที่พบ (คณะ ICT มหาวิทยาลัยพะเยา)
-                                </h2>
-
-                            </div>
+                            <h2 class="font-bold text-xs text-gray-900">
+                                สถานที่ที่พบ (คณะ ICT มหาวิทยาลัยพะเยา)
+                            </h2>
 
                         </div>
 
 
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                        <div
+                            class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs"
+                        >
 
 
                             <!-- =================================================
                                  LOCATION ZONE
                             ================================================== -->
 
-                            <div class="sm:col-span-2">
+                            <div>
 
-                                <label class="block font-semibold text-gray-700 mb-1">
+                                <label
+                                    class="block font-semibold text-gray-700 mb-1"
+                                >
 
                                     โซน / พื้นที่
 
@@ -619,13 +598,77 @@
                                 </label>
 
 
+                                <select
+                                    id="locationType"
+                                    required
+                                    onchange="updateLocationDetail()"
+                                    class="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-ict-blue/20 bg-white text-gray-700 cursor-pointer transition"
+                                >
+
+                                    <option value="">
+                                        เลือกโซน / พื้นที่
+                                    </option>
+
+                                    <option value="โรงอาหาร">
+                                        โรงอาหาร
+                                    </option>
+
+                                    <option value="โรงจอดรถ">
+                                        โรงจอดรถ
+                                    </option>
+
+                                    <option value="ห้องเรียน">
+                                        ห้องเรียน
+                                    </option>
+
+                                    <option value="ห้องสาขา">
+                                        ห้องสาขา
+                                    </option>
+
+                                    <option value="อื่นๆ">
+                                        อื่น ๆ
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+
+                            <!-- =================================================
+                                 LOCATION DETAIL
+                            ================================================== -->
+
+                            <div
+                                id="locationDetailWrapper"
+                                class="hidden"
+                            >
+
+                                <label
+                                    id="locationDetailLabel"
+                                    class="block font-semibold text-gray-700 mb-1"
+                                >
+
+                                    รายละเอียดสถานที่
+
+                                    <span class="text-red-500">
+                                        *
+                                    </span>
+
+                                </label>
+
+
                                 <input
                                     type="text"
-                                    id="locationZone"
-                                    required
-                                    placeholder="ระบุโซน หรือสถานที่พบสิ่งของ..."
-                                    class="w-full border-2 border-ict-blue rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-ict-blue/20 bg-white text-gray-800 font-medium placeholder-gray-400 shadow-sm transition"
+                                    id="locationDetail"
+                                    class="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-ict-blue/20 bg-gray-50/30 transition"
                                 >
+
+
+                                <p
+                                    id="locationDetailHint"
+                                    class="text-[11px] text-gray-400 mt-1"
+                                ></p>
 
                             </div>
 
@@ -637,9 +680,11 @@
 
                             <div>
 
-                                <label class="block font-semibold text-gray-700 mb-1">
+                                <label
+                                    class="block font-semibold text-gray-700 mb-1"
+                                >
 
-                                    จุดอ้างอิง / ห้อง (Landmark)
+                                    จุดอ้างอิงเพิ่มเติม
 
                                 </label>
 
@@ -647,7 +692,7 @@
                                 <input
                                     type="text"
                                     id="locationLandmark"
-                                    placeholder="เช่น โต๊ะหินอ่อนหน้าลิฟต์, ห้อง ICT 102"
+                                    placeholder="เช่น หน้าลิฟต์, ข้างโต๊ะประชาสัมพันธ์"
                                     class="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-ict-blue/20 bg-gray-50/30 transition"
                                 >
 
@@ -661,7 +706,9 @@
 
                             <div>
 
-                                <label class="block font-semibold text-gray-700 mb-1">
+                                <label
+                                    class="block font-semibold text-gray-700 mb-1"
+                                >
 
                                     วันที่และเวลาที่พบ
 
@@ -688,7 +735,7 @@
 
 
                     <!-- =================================================
-                         SECTION 3 : ตำแหน่งจัดเก็บ
+                         SECTION 3 : STORAGE
                     ================================================== -->
 
                     <div
@@ -714,16 +761,18 @@
 
 
 
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+                        <div
+                            class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs"
+                        >
 
 
-                            <!-- =================================================
-                                 STORAGE ROOM
-                            ================================================== -->
+                            <!-- STORAGE ROOM -->
 
                             <div>
 
-                                <label class="block font-semibold text-gray-700 mb-1">
+                                <label
+                                    class="block font-semibold text-gray-700 mb-1"
+                                >
 
                                     ห้องเก็บของ
 
@@ -758,13 +807,13 @@
 
 
 
-                            <!-- =================================================
-                                 SHELF
-                            ================================================== -->
+                            <!-- SHELF -->
 
                             <div>
 
-                                <label class="block font-semibold text-gray-700 mb-1">
+                                <label
+                                    class="block font-semibold text-gray-700 mb-1"
+                                >
 
                                     ชั้นวาง (Shelf ID)
 
@@ -787,14 +836,14 @@
 
 
 
-                            <!-- =================================================
-                                 BIN
-                            ================================================== -->
+                            <!-- BIN -->
 
                             <div>
 
-                                <label class="block font-semibold text-gray-700 mb-1">
-                                    กล่อง/Bin (Bin ID)
+                                <label
+                                    class="block font-semibold text-gray-700 mb-1"
+                                >
+                                    กล่อง / Bin (Bin ID)
                                 </label>
 
 
@@ -823,16 +872,20 @@
 
 
                     <!-- =================================================
-                         UPLOAD MEDIA
+                         MEDIA UPLOAD
                     ================================================== -->
 
                     <div
                         class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3"
                     >
 
-                        <div class="flex justify-between items-center">
+                        <div
+                            class="flex justify-between items-center"
+                        >
 
-                            <h2 class="font-bold text-sm text-[#034383]">
+                            <h2
+                                class="font-bold text-sm text-[#034383]"
+                            >
 
                                 ภาพถ่าย / วิดีโอสิ่งของ
 
@@ -859,10 +912,14 @@
 
 
 
+                        <!-- =================================================
+                             FILE INPUT
+                             ไม่มี accept เพื่อไม่ดักประเภทไฟล์
+                        ================================================== -->
+
                         <input
                             type="file"
                             id="imageInput"
-                            accept="image/*,video/*"
                             multiple
                             class="hidden"
                             onchange="previewImages(event)"
@@ -870,9 +927,12 @@
 
 
 
+                        <!-- =================================================
+                             UPLOAD AREA
+                        ================================================== -->
+
                         <label
                             for="imageInput"
-                            id="uploadLabel"
                             class="border-2 border-dashed border-gray-200 rounded-2xl p-6 text-center hover:border-ict-blue transition cursor-pointer bg-white flex flex-col items-center justify-center space-y-3 min-h-[160px] block"
                         >
 
@@ -881,7 +941,7 @@
                             >
 
                                 <svg
-                                    class="w-6 h-6 text-[#034383]"
+                                    class="w-6 h-6"
                                     fill="none"
                                     stroke="currentColor"
                                     stroke-width="2"
@@ -908,12 +968,17 @@
 
                             <div class="space-y-1">
 
-                                <p class="text-sm font-bold text-[#034383]">
+                                <p
+                                    class="text-sm font-bold text-[#034383]"
+                                >
                                     อัปโหลดรูปภาพ หรือ วิดีโอ
                                 </p>
 
-                                <p class="text-xs text-gray-400">
-                                    สูงสุด 5 ไฟล์ (JPG, PNG, MP4 ฯลฯ)
+
+                                <p
+                                    class="text-xs text-gray-400"
+                                >
+                                    อัปโหลดอย่างน้อย 1 ไฟล์ และสูงสุด 5 ไฟล์
                                 </p>
 
                             </div>
@@ -922,7 +987,9 @@
 
 
 
-                        <!-- Preview -->
+                        <!-- =================================================
+                             PREVIEW CONTAINER
+                        ================================================== -->
 
                         <div
                             id="previewContainer"
@@ -934,14 +1001,16 @@
 
 
                     <!-- =================================================
-                         QR CODE & LABEL
+                         QR CODE
                     ================================================== -->
 
                     <div
                         class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-4 text-center"
                     >
 
-                        <h2 class="font-bold text-xs text-gray-900 text-left">
+                        <h2
+                            class="font-bold text-xs text-gray-900 text-left"
+                        >
                             QR Code &amp; Label
                         </h2>
 
@@ -980,7 +1049,9 @@
 
 
 
-                        <p class="text-[10px] text-gray-400 leading-relaxed">
+                        <p
+                            class="text-[10px] text-gray-400 leading-relaxed"
+                        >
 
                             ระบบจะสร้าง QR Code อัตโนมัติหลังบันทึกข้อมูลสำเร็จ
                             เพื่อนำไปพิมพ์และติดที่สิ่งของ
@@ -1032,34 +1103,43 @@
 
 
         // =========================================================
+        // MAX FILES
+        // =========================================================
+
+        const maxFiles =
+            5;
+
+
+
+        // =========================================================
         // SUB CATEGORY DATA
         // =========================================================
 
         const subCategories = {
 
             electronics: [
-                'สมาร์ทโฟน/แท็บเล็ต',
-                'โน๊ตบุ๊ค/คอมพิวเตอร์',
-                'หูฟัง/อุปกรณ์เสริม',
-                'สายชาร์จ/แบตสำรอง'
+                'สมาร์ทโฟน / แท็บเล็ต',
+                'โน๊ตบุ๊ค / คอมพิวเตอร์',
+                'หูฟัง / อุปกรณ์เสริม',
+                'สายชาร์จ / แบตสำรอง'
             ],
 
             bags: [
                 'กระเป๋าสตางค์',
-                'กระเป๋าสะพาย/เป้',
+                'กระเป๋าสะพาย / เป้',
                 'กระเป๋าถือ',
                 'ถุงผ้า'
             ],
 
             documents: [
-                'บัตรประจำตัว/บัตรนิสิต',
-                'บัตรเครดิต/ธนาคาร',
+                'บัตรประจำตัว / บัตรนิสิต',
+                'บัตรเครดิต / ธนาคาร',
                 'เอกสารสำคัญ',
-                'หนังสือ/สมุด'
+                'หนังสือ / สมุด'
             ],
 
             personal: [
-                'กุญแจ/คีย์การ์ด',
+                'กุญแจ / คีย์การ์ด',
                 'แว่นตา',
                 'นาฬิกา',
                 'เครื่องประดับ',
@@ -1072,18 +1152,21 @@
 
         // =========================================================
         // CATEGORY DISPLAY NAME
-        // ใช้ชื่อเดียวกับหน้า inventory-list
         // =========================================================
 
         const categoryNames = {
 
-            electronics: 'อุปกรณ์ไอที',
+            electronics:
+                'อุปกรณ์ไอที',
 
-            bags: 'กระเป๋า',
+            bags:
+                'กระเป๋า',
 
-            documents: 'เอกสาร / บัตร',
+            documents:
+                'เอกสาร / บัตร',
 
-            personal: 'อื่น ๆ'
+            personal:
+                'อื่น ๆ'
 
         };
 
@@ -1147,17 +1230,175 @@
 
 
         // =========================================================
-        // FILE UPLOAD
+        // UPDATE LOCATION DETAIL
+        // =========================================================
+
+        function updateLocationDetail() {
+
+            const locationType =
+                document.getElementById(
+                    'locationType'
+                ).value;
+
+
+            const detailWrapper =
+                document.getElementById(
+                    'locationDetailWrapper'
+                );
+
+
+            const detailInput =
+                document.getElementById(
+                    'locationDetail'
+                );
+
+
+            const detailLabel =
+                document.getElementById(
+                    'locationDetailLabel'
+                );
+
+
+            const detailHint =
+                document.getElementById(
+                    'locationDetailHint'
+                );
+
+
+            // -----------------------------------------------------
+            // RESET
+            // -----------------------------------------------------
+
+            detailWrapper.classList.add(
+                'hidden'
+            );
+
+
+            detailInput.required =
+                false;
+
+
+            detailInput.value =
+                '';
+
+
+            detailInput.placeholder =
+                '';
+
+
+            detailHint.textContent =
+                '';
+
+
+
+            // -----------------------------------------------------
+            // ห้องเรียน
+            // -----------------------------------------------------
+
+            if (
+                locationType === 'ห้องเรียน'
+            ) {
+
+                detailWrapper.classList.remove(
+                    'hidden'
+                );
+
+
+                detailInput.required =
+                    true;
+
+
+                detailLabel.innerHTML =
+                    'ระบุห้องเรียน <span class="text-red-500">*</span>';
+
+
+                detailInput.placeholder =
+                    'เช่น ICT 1102';
+
+
+                detailHint.textContent =
+                    'กรอกหมายเลขหรือชื่อห้องเรียน เช่น ICT 1102';
+
+            }
+
+
+
+            // -----------------------------------------------------
+            // ห้องสาขา
+            // -----------------------------------------------------
+
+            else if (
+                locationType === 'ห้องสาขา'
+            ) {
+
+                detailWrapper.classList.remove(
+                    'hidden'
+                );
+
+
+                detailInput.required =
+                    true;
+
+
+                detailLabel.innerHTML =
+                    'ระบุห้องสาขา <span class="text-red-500">*</span>';
+
+
+                detailInput.placeholder =
+                    'เช่น ห้องสาขาวิศวกรรมซอฟต์แวร์';
+
+
+                detailHint.textContent =
+                    'กรอกชื่อห้องหรือห้องประจำสาขาที่พบสิ่งของ';
+
+            }
+
+
+
+            // -----------------------------------------------------
+            // อื่น ๆ
+            // -----------------------------------------------------
+
+            else if (
+                locationType === 'อื่นๆ'
+            ) {
+
+                detailWrapper.classList.remove(
+                    'hidden'
+                );
+
+
+                detailInput.required =
+                    true;
+
+
+                detailLabel.innerHTML =
+                    'ระบุสถานที่ <span class="text-red-500">*</span>';
+
+
+                detailInput.placeholder =
+                    'เช่น ลานกิจกรรมหน้าอาคาร ICT';
+
+
+                detailHint.textContent =
+                    'ระบุสถานที่ที่พบสิ่งของให้ชัดเจน';
+
+            }
+
+        }
+
+
+
+        // =========================================================
+        // SELECTED FILES
         // =========================================================
 
         let selectedFiles = [];
 
-        const maxFiles = 5;
-
 
 
         // =========================================================
-        // PREVIEW IMAGES / VIDEOS
+        // PREVIEW IMAGES / FILES
         // =========================================================
 
         function previewImages(event) {
@@ -1167,6 +1408,12 @@
                     event.target.files
                 );
 
+
+            // -----------------------------------------------------
+            // ตรวจเฉพาะจำนวนไฟล์
+            // ไม่ตรวจประเภทไฟล์
+            // ไม่ตรวจขนาดไฟล์
+            // -----------------------------------------------------
 
             if (
                 selectedFiles.length +
@@ -1178,7 +1425,10 @@
                     `สามารถอัปโหลดได้สูงสุด ${maxFiles} ไฟล์เท่านั้น`
                 );
 
-                event.target.value = '';
+
+                event.target.value =
+                    '';
+
 
                 return;
 
@@ -1191,7 +1441,8 @@
             ];
 
 
-            event.target.value = '';
+            event.target.value =
+                '';
 
 
             renderPreviews();
@@ -1229,7 +1480,8 @@
 
             document.getElementById(
                 'imageInput'
-            ).value = '';
+            ).value =
+                '';
 
 
             renderPreviews();
@@ -1296,36 +1548,120 @@
 
 
                                 div.className =
-                                    'relative h-20 border border-gray-200 rounded-xl overflow-hidden bg-black group shadow-sm';
+                                    'relative h-20 border border-gray-200 rounded-xl overflow-hidden bg-gray-100 group shadow-sm';
 
 
-                                const isVideo =
+
+                                // -------------------------------------------------
+                                // ตรวจเฉพาะว่าเบราว์เซอร์สามารถ preview ได้หรือไม่
+                                // ไม่ใช่การดักประเภทไฟล์
+                                // -------------------------------------------------
+
+                                if (
+                                    file.type &&
+                                    file.type.startsWith(
+                                        'image/'
+                                    )
+                                ) {
+
+                                    div.innerHTML = `
+
+                                        <img
+                                            src="${e.target.result}"
+                                            class="w-full h-full object-cover"
+                                            alt="preview"
+                                        >
+
+                                        <button
+                                            type="button"
+                                            onclick="removeFile(${index})"
+                                            class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold hover:bg-red-600 transition"
+                                        >
+                                            ✕
+                                        </button>
+
+                                    `;
+
+                                }
+
+
+                                else if (
+                                    file.type &&
                                     file.type.startsWith(
                                         'video/'
-                                    );
+                                    )
+                                ) {
+
+                                    div.innerHTML = `
+
+                                        <video
+                                            src="${e.target.result}"
+                                            class="w-full h-full object-cover"
+                                            controls
+                                        ></video>
+
+                                        <button
+                                            type="button"
+                                            onclick="removeFile(${index})"
+                                            class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold hover:bg-red-600 transition"
+                                        >
+                                            ✕
+                                        </button>
+
+                                    `;
+
+                                }
 
 
-                                const mediaTag =
-                                    isVideo
+                                else {
 
-                                        ? `<video src="${e.target.result}" class="w-full h-full object-cover"></video>`
+                                    div.innerHTML = `
 
-                                        : `<img src="${e.target.result}" class="w-full h-full object-cover">`;
+                                        <div class="w-full h-full flex flex-col items-center justify-center bg-gray-50 px-2 text-center">
+
+                                            <svg
+                                                class="w-7 h-7 text-gray-400 mb-1"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="1.8"
+                                                viewBox="0 0 24 24"
+                                            >
+
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    d="M7 3h7l4 4v14H7a2 2 0 01-2-2V5a2 2 0 012-2z"
+                                                />
+
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    d="M14 3v5h5"
+                                                />
+
+                                            </svg>
 
 
-                                div.innerHTML = `
+                                            <span
+                                                class="text-[9px] text-gray-500 truncate w-full px-2"
+                                            >
+                                                ${file.name}
+                                            </span>
 
-                                    ${mediaTag}
+                                        </div>
 
-                                    <button
-                                        type="button"
-                                        onclick="removeFile(${index})"
-                                        class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold hover:bg-red-600 transition"
-                                    >
-                                        ✕
-                                    </button>
 
-                                `;
+                                        <button
+                                            type="button"
+                                            onclick="removeFile(${index})"
+                                            class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold hover:bg-red-600 transition"
+                                        >
+                                            ✕
+                                        </button>
+
+                                    `;
+
+                                }
 
 
                                 container.appendChild(
@@ -1342,7 +1678,9 @@
                     }
                 );
 
-            } else {
+            }
+
+            else {
 
                 clearBtn.classList.add(
                     'hidden'
@@ -1359,7 +1697,7 @@
 
 
         // =========================================================
-        // GET EXISTING INVENTORY
+        // GET INVENTORY ITEMS
         // =========================================================
 
         function getInventoryItems() {
@@ -1370,7 +1708,9 @@
                 );
 
 
-            if (!storedData) {
+            if (
+                !storedData
+            ) {
 
                 return [];
 
@@ -1385,11 +1725,15 @@
                     );
 
 
-                return Array.isArray(parsedData)
+                return Array.isArray(
+                    parsedData
+                )
                     ? parsedData
                     : [];
 
-            } catch (error) {
+            }
+
+            catch (error) {
 
                 console.error(
                     'ไม่สามารถอ่านข้อมูลคลังได้:',
@@ -1419,7 +1763,8 @@
                 getInventoryItems();
 
 
-            let highestNumber = 0;
+            let highestNumber =
+                0;
 
 
             items.forEach(
@@ -1436,12 +1781,16 @@
 
 
                     const match =
-                        String(item.id).match(
+                        String(
+                            item.id
+                        ).match(
                             /ITM-\d{4}-(\d+)/
                         );
 
 
-                    if (match) {
+                    if (
+                        match
+                    ) {
 
                         const number =
                             parseInt(
@@ -1537,7 +1886,6 @@
 
         // =========================================================
         // FILE TO DATA URL
-        // ใช้เก็บ preview ลง localStorage
         // =========================================================
 
         function fileToDataURL(file) {
@@ -1573,7 +1921,7 @@
 
 
         // =========================================================
-        // SAVE MEDIA
+        // PREPARE MEDIA FILES
         // =========================================================
 
         async function prepareMediaFiles() {
@@ -1595,17 +1943,23 @@
 
                     media.push({
 
-                        name: file.name,
+                        name:
+                            file.name,
 
-                        type: file.type,
+                        type:
+                            file.type || '',
 
-                        size: file.size,
+                        size:
+                            file.size,
 
-                        dataUrl: dataUrl
+                        dataUrl:
+                            dataUrl
 
                     });
 
-                } catch (error) {
+                }
+
+                catch (error) {
 
                     console.error(
                         'ไม่สามารถอ่านไฟล์:',
@@ -1625,7 +1979,7 @@
 
 
         // =========================================================
-        // FORM SUBMIT
+        // HANDLE FORM SUBMIT
         // =========================================================
 
         async function handleFormSubmit(event) {
@@ -1639,6 +1993,11 @@
                 );
 
 
+
+            // =====================================================
+            // FORM VALIDATION
+            // =====================================================
+
             if (
                 !form.checkValidity()
             ) {
@@ -1648,6 +2007,37 @@
                 return;
 
             }
+
+
+
+            // =====================================================
+            // MEDIA VALIDATION
+            //
+            // ตรวจเฉพาะ "ต้องมีอย่างน้อย 1 ไฟล์"
+            //
+            // ไม่ตรวจ:
+            // - ขนาดไฟล์
+            // - ประเภทไฟล์
+            // =====================================================
+
+            if (
+                selectedFiles.length < 1
+            ) {
+
+                alert(
+                    'กรุณาอัปโหลดภาพหรือไฟล์อย่างน้อย 1 ไฟล์'
+                );
+
+
+                document.getElementById(
+                    'imageInput'
+                ).focus();
+
+
+                return;
+
+            }
+
 
 
             const submitButton =
@@ -1660,7 +2050,7 @@
 
 
                 // =================================================
-                // DISABLE BUTTON
+                // DISABLE SUBMIT BUTTON
                 // =================================================
 
                 submitButton.disabled =
@@ -1669,7 +2059,9 @@
 
                 submitButton.innerHTML = `
 
-                    <span class="inline-flex items-center gap-2">
+                    <span
+                        class="inline-flex items-center gap-2"
+                    >
 
                         <svg
                             class="animate-spin w-4 h-4"
@@ -1703,7 +2095,7 @@
 
 
                 // =================================================
-                // GET FORM DATA
+                // BASIC INFORMATION
                 // =================================================
 
                 const itemName =
@@ -1730,9 +2122,20 @@
                     ).value.trim();
 
 
-                const locationZone =
+
+                // =================================================
+                // LOCATION INFORMATION
+                // =================================================
+
+                const locationType =
                     document.getElementById(
-                        'locationZone'
+                        'locationType'
+                    ).value;
+
+
+                const locationDetail =
+                    document.getElementById(
+                        'locationDetail'
                     ).value.trim();
 
 
@@ -1747,6 +2150,53 @@
                         'foundDateTime'
                     ).value;
 
+
+
+                // =================================================
+                // LOCATION DETAIL VALIDATION
+                // =================================================
+
+                if (
+
+                    (
+                        locationType === 'ห้องเรียน' ||
+                        locationType === 'ห้องสาขา' ||
+                        locationType === 'อื่นๆ'
+                    )
+
+                    &&
+
+                    !locationDetail
+
+                ) {
+
+                    alert(
+                        'กรุณาระบุรายละเอียดสถานที่เพิ่มเติม'
+                    );
+
+
+                    submitButton.disabled =
+                        false;
+
+
+                    submitButton.innerHTML =
+                        'บันทึกข้อมูลเข้าคลัง';
+
+
+                    document.getElementById(
+                        'locationDetail'
+                    ).focus();
+
+
+                    return;
+
+                }
+
+
+
+                // =================================================
+                // STORAGE INFORMATION
+                // =================================================
 
                 const storageRoom =
                     document.getElementById(
@@ -1790,7 +2240,7 @@
 
 
                 // =================================================
-                // GET OLD ITEMS
+                // GET EXISTING ITEMS
                 // =================================================
 
                 const existingItems =
@@ -1799,11 +2249,21 @@
 
 
                 // =================================================
-                // CREATE LOCATION TEXT
+                // BUILD FULL LOCATION
                 // =================================================
 
                 let fullLocation =
-                    locationZone;
+                    locationType;
+
+
+                if (
+                    locationDetail
+                ) {
+
+                    fullLocation +=
+                        ` • ${locationDetail}`;
+
+                }
 
 
                 if (
@@ -1818,7 +2278,7 @@
 
 
                 // =================================================
-                // CREATE STORAGE TEXT
+                // BUILD STORAGE LOCATION
                 // =================================================
 
                 let storageLocation =
@@ -1847,25 +2307,30 @@
 
 
                 // =================================================
-                // CREATE ITEM OBJECT
+                // CREATE NEW ITEM
                 // =================================================
 
                 const newItem = {
 
-                    // ---------------------------------------------
-                    // Identification
-                    // ---------------------------------------------
 
-                    id: itemId,
+                    // -------------------------------------------------
+                    // IDENTIFICATION
+                    // -------------------------------------------------
 
-                    referenceId: referenceId,
+                    id:
+                        itemId,
+
+                    referenceId:
+                        referenceId,
 
 
-                    // ---------------------------------------------
-                    // Basic Information
-                    // ---------------------------------------------
 
-                    name: itemName,
+                    // -------------------------------------------------
+                    // BASIC INFORMATION
+                    // -------------------------------------------------
+
+                    name:
+                        itemName,
 
                     category:
                         categoryNames[mainCategory] ||
@@ -1877,20 +2342,26 @@
                     subCategory:
                         subCategory,
 
-
                     description:
                         description,
 
 
-                    // ---------------------------------------------
-                    // Found Location
-                    // ---------------------------------------------
+
+                    // -------------------------------------------------
+                    // FOUND LOCATION
+                    // -------------------------------------------------
 
                     foundLocation:
                         fullLocation,
 
+                    locationType:
+                        locationType,
+
                     locationZone:
-                        locationZone,
+                        locationType,
+
+                    locationDetail:
+                        locationDetail,
 
                     locationLandmark:
                         locationLandmark,
@@ -1899,9 +2370,10 @@
                         foundDateTime,
 
 
-                    // ---------------------------------------------
-                    // Storage Location
-                    // ---------------------------------------------
+
+                    // -------------------------------------------------
+                    // STORAGE
+                    // -------------------------------------------------
 
                     storageRoom:
                         storageRoom,
@@ -1916,25 +2388,28 @@
                         storageLocation,
 
 
-                    // ---------------------------------------------
-                    // Status
-                    // ---------------------------------------------
+
+                    // -------------------------------------------------
+                    // STATUS
+                    // -------------------------------------------------
 
                     status:
                         'in_storage',
 
 
-                    // ---------------------------------------------
-                    // Media
-                    // ---------------------------------------------
+
+                    // -------------------------------------------------
+                    // MEDIA
+                    // -------------------------------------------------
 
                     media:
                         media,
 
 
-                    // ---------------------------------------------
-                    // Timestamps
-                    // ---------------------------------------------
+
+                    // -------------------------------------------------
+                    // TIMESTAMP
+                    // -------------------------------------------------
 
                     createdAt:
                         new Date().toISOString(),
@@ -1947,7 +2422,7 @@
 
 
                 // =================================================
-                // ADD NEW ITEM
+                // ADD TO INVENTORY
                 // =================================================
 
                 existingItems.push(
@@ -1973,41 +2448,32 @@
 
 
                 // =================================================
-                // UPDATE REFERENCE
-                // =================================================
-
-                document.getElementById(
-                    'refId'
-                ).textContent =
-                    `#${referenceId}`;
-
-
-                document.getElementById(
-                    'qrReference'
-                ).textContent =
-                    `#${referenceId}`;
-
-
-
-                // =================================================
-                // SUCCESS
+                // SUCCESS MESSAGE
                 // =================================================
 
                 alert(
-                    `บันทึกข้อมูล "${itemName}" เข้าคลังเรียบร้อยแล้ว\n\nรหัสสิ่งของ: ${itemId}`
+
+                    `บันทึกข้อมูล "${itemName}" เข้าคลังเรียบร้อยแล้ว\n\n` +
+
+                    `รหัสสิ่งของ: ${itemId}\n` +
+
+                    `Reference ID: #${referenceId}`
+
                 );
 
 
 
                 // =================================================
-                // REDIRECT TO INVENTORY LIST
+                // REDIRECT
                 // =================================================
 
                 window.location.href =
                     'staff-inventory-list.html';
 
 
-            } catch (error) {
+            }
+
+            catch (error) {
 
 
                 console.error(
@@ -2020,10 +2486,6 @@
                     'ไม่สามารถบันทึกข้อมูลได้ กรุณาลองใหม่อีกครั้ง'
                 );
 
-
-                // =================================================
-                // ENABLE BUTTON AGAIN
-                // =================================================
 
                 submitButton.disabled =
                     false;
@@ -2039,14 +2501,82 @@
 
 
         // =========================================================
-        // INITIALIZE
+        // DOM CONTENT LOADED
         // =========================================================
 
         document.addEventListener(
             'DOMContentLoaded',
             function () {
 
+
+                // -------------------------------------------------
+                // Reference ID
+                // -------------------------------------------------
+
                 updateReferenceId();
+
+
+
+                // -------------------------------------------------
+                // Location Detail
+                // -------------------------------------------------
+
+                updateLocationDetail();
+
+
+
+                // -------------------------------------------------
+                // Search
+                // -------------------------------------------------
+
+                const searchInput =
+                    document.getElementById(
+                        'search-input'
+                    );
+
+
+                if (
+                    searchInput
+                ) {
+
+                    searchInput.addEventListener(
+                        'keydown',
+                        function (event) {
+
+                            if (
+                                event.key === 'Enter'
+                            ) {
+
+                                event.preventDefault();
+
+
+                                const keyword =
+                                    searchInput.value.trim();
+
+
+                                if (
+                                    keyword
+                                ) {
+
+                                    window.location.href =
+                                        `staff-inventory-list.html?search=${encodeURIComponent(keyword)}`;
+
+                                }
+
+                            }
+
+                        }
+                    );
+
+                }
+
+
+
+                // -------------------------------------------------
+                // Initial File Preview
+                // -------------------------------------------------
+
+                renderPreviews();
 
             }
         );
