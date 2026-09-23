@@ -1,30 +1,39 @@
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>โปรไฟล์ & แดชบอร์ดเจ้าหน้าที่ - Lost & Found ICT</title>
+    <title>แดชบอร์ดเจ้าหน้าที่ - Lost & Found ICT</title>
 
+    <!-- =========================================================
+         Tailwind CSS
+    ========================================================== -->
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- =========================================================
+         Google Font : Prompt
+    ========================================================== -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet"
     >
 
+    <!-- =========================================================
+         Tailwind Configuration
+    ========================================================== -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['"Prompt"', 'sans-serif'],
+                        sans: ['Prompt', 'sans-serif']
                     },
                     colors: {
                         ict: {
                             blue: '#034383',
+                            btnBlue: '#0062cc',
                             hover: '#022e5b',
                             lightBg: '#F4F7F9',
                             muted: '#6B7280'
@@ -35,22 +44,101 @@
         }
     </script>
 
+    <!-- =========================================================
+         Custom CSS
+    ========================================================== -->
     <style>
         body {
             font-family: 'Prompt', sans-serif;
         }
+
+        /* =====================================================
+           Scrollbar
+        ====================================================== */
+        ::-webkit-scrollbar {
+            width: 7px;
+            height: 7px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 999px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* =====================================================
+           Proof Modal
+        ====================================================== */
+        .proof-modal-overlay {
+            opacity: 0;
+            visibility: hidden;
+            transition:
+                opacity 0.2s ease,
+                visibility 0.2s ease;
+        }
+
+        .proof-modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .proof-modal-box {
+            transform: translateY(15px) scale(0.98);
+            opacity: 0;
+            transition:
+                transform 0.25s ease,
+                opacity 0.25s ease;
+        }
+
+        .proof-modal-overlay.show .proof-modal-box {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        /* =====================================================
+           Proof Image Hover
+        ====================================================== */
+        .proof-image-wrapper img {
+            transition: transform 0.3s ease;
+        }
+
+        .proof-image-wrapper:hover img {
+            transform: scale(1.02);
+        }
+
+        /* =====================================================
+           Refresh Button
+        ====================================================== */
+        .refresh-btn:hover svg {
+            transform: rotate(180deg);
+        }
+
+        .refresh-btn svg {
+            transition: transform 0.35s ease;
+        }
     </style>
 </head>
 
-<body class="bg-ict-lightBg text-gray-800 flex flex-col min-h-screen font-sans relative">
+<body class="bg-ict-lightBg text-gray-800 flex flex-col min-h-screen">
 
     <!-- =========================================================
-         Top Navigation Bar
+         TOP NAVIGATION BAR
     ========================================================== -->
     <header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+        <div
+            class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4"
+        >
 
-            <!-- โลโก้ระบบ -->
+            <!-- =====================================================
+                 Logo
+            ====================================================== -->
             <a
                 href="staff-dashboard.html"
                 class="flex items-center gap-2.5 flex-shrink-0 hover:opacity-80 transition pr-2"
@@ -61,16 +149,24 @@
                     fill="currentColor"
                 >
                     <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
-                    <path d="M3.8 12.8v3.7c0 2.2 3.7 4 8.2 4s8.2-1.8 8.2-4v-3.7l-8.2 4.5-8.2-4.5z"/>
+                    <path
+                        d="M3.8 12.8v3.7c0 2.2 3.7 4 8.2 4s8.2-1.8 8.2-4v-3.7l-8.2 4.5-8.2-4.5z"
+                    />
                 </svg>
 
-                <span class="text-xl font-extrabold text-ict-blue tracking-tight whitespace-nowrap">
+                <span
+                    class="text-xl font-extrabold text-ict-blue tracking-tight whitespace-nowrap"
+                >
                     Lost &amp; Found ICT
                 </span>
             </a>
 
-            <!-- รายการเมนู Navigation แนวนอน -->
-            <nav class="hidden md:flex items-center space-x-1 lg:space-x-5 text-sm font-semibold text-gray-600 h-full">
+            <!-- =====================================================
+                 Navigation Menu
+            ====================================================== -->
+            <nav
+                class="hidden md:flex items-center space-x-1 lg:space-x-5 text-sm font-semibold text-gray-600 h-full"
+            >
                 <a
                     href="staff-dashboard.html"
                     class="h-full flex items-center border-b-4 border-ict-blue text-ict-blue font-bold transition whitespace-nowrap px-1"
@@ -107,12 +203,18 @@
                 </a>
             </nav>
 
-            <!-- ช่องค้นหา -> ปุ่มโพสต์ -> Profile -->
+            <!-- =====================================================
+                 Right Navigation
+            ====================================================== -->
             <div class="flex items-center gap-3 ml-auto md:ml-0">
 
-                <!-- ช่องค้นหา -->
+                <!-- =================================================
+                     Search
+                ================================================== -->
                 <div class="relative hidden sm:block w-44 lg:w-56">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-gray-400">
+                    <span
+                        class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-gray-400"
+                    >
                         <svg
                             class="w-4 h-4"
                             fill="none"
@@ -137,22 +239,32 @@
                     >
                 </div>
 
-                <!-- ปุ่มโพสต์ -->
+                <!-- =================================================
+                     Post Button
+                ================================================== -->
                 <a
                     href="staff-inventory-add.html"
                     class="bg-ict-blue hover:bg-ict-hover text-white text-xs font-bold px-4 py-2 rounded-full flex items-center gap-1.5 shadow-sm transition whitespace-nowrap"
                 >
-                    <span class="text-sm font-bold">+</span>
-                    <span>โพสต์</span>
+                    <span class="text-sm font-bold">
+                        +
+                    </span>
+
+                    <span>
+                        โพสต์
+                    </span>
                 </a>
 
-                <!-- Profile -->
+                <!-- =================================================
+                     Profile
+                     ใช้รายละเอียดไอคอนตามมาตรฐานเดิม
+                ================================================== -->
                 <a
                     href="staff-profile.html"
                     class="h-16 flex items-center gap-1.5 text-sm text-gray-700 hover:text-ict-blue font-bold px-2 border-b-4 border-transparent transition whitespace-nowrap"
                 >
                     <svg
-                        class="w-5 h-5 text-gray-600 hover:text-ict-blue transition"
+                        class="w-5 h-5"
                         fill="none"
                         stroke="currentColor"
                         stroke-width="2"
@@ -165,24 +277,26 @@
                         />
                     </svg>
 
-                    <span>Profile</span>
+                    <span>
+                        Profile
+                    </span>
                 </a>
-
             </div>
-
         </div>
     </header>
 
-
     <!-- =========================================================
-         Main Content
+         MAIN CONTENT
     ========================================================== -->
-    <main class="flex-1 p-8 space-y-8 overflow-y-auto">
+    <main class="flex-1 p-8 overflow-y-auto">
         <div class="max-w-7xl mx-auto space-y-6">
 
-            <!-- Header ส่วนควบคุมสถิติ -->
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-
+            <!-- =====================================================
+                 Dashboard Header
+            ====================================================== -->
+            <div
+                class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+            >
                 <div>
                     <div class="flex items-center gap-3">
                         <h2 class="text-2xl font-bold text-gray-900 tracking-tight">
@@ -193,50 +307,115 @@
                             id="system-status-badge"
                             class="px-2.5 py-1 text-[11px] font-semibold rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center gap-1.5"
                         >
-                            <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                            <span
+                                class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"
+                            ></span>
                             เปิดรับแจ้งความ
                         </span>
                     </div>
 
                     <p class="text-xs text-gray-500 font-medium mt-1">
-                        สรุปข้อมูลจริงปัจจุบันจากระบบจัดการของหายและประวัติการส่งคืนเจ้าของสำเร็จ
+                        สรุปข้อมูลปัจจุบันจากระบบจัดการของหายและประวัติการส่งคืนเจ้าของ
                     </p>
                 </div>
 
+                <!-- =================================================
+                     Dashboard Actions
+                ================================================== -->
                 <div class="flex items-center gap-3 w-full sm:w-auto">
 
-                    <!-- ปุ่มรีเฟรช -->
+                    <!-- =================================================
+                         Refresh Data Button
+                    ================================================== -->
                     <button
+                        type="button"
                         onclick="fetchRealtimeDashboardData()"
-                        class="px-3.5 py-2 text-xs font-semibold rounded-full border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 shadow-sm transition flex items-center gap-1.5"
+                        class="refresh-btn group inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-600 shadow-sm hover:bg-slate-50 hover:border-ict-blue/30 hover:text-ict-blue hover:shadow-md transition-all duration-200"
+                        title="รีเฟรชข้อมูลล่าสุด"
                     >
-                        🔄
-                        <span>รีเฟรชข้อมูล</span>
+                        <svg
+                            class="w-4 h-4 text-slate-500 group-hover:text-ict-blue"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M20 11a8.1 8.1 0 00-14.9-4.2L3 9"
+                            />
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M3 4v5h5"
+                            />
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M4 13a8.1 8.1 0 0014.9 4.2L21 15"
+                            />
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M21 20v-5h-5"
+                            />
+                        </svg>
+
+                        <span>
+                            รีเฟรชข้อมูล
+                        </span>
                     </button>
 
-                    <!-- ปุ่มเปิด/ปิดระบบ -->
+                    <!-- =================================================
+                         System Toggle Button
+                    ================================================== -->
                     <button
                         id="toggle-system-btn"
                         onclick="toggleSystemStatus()"
-                        class="px-4 py-2 text-xs font-semibold rounded-full border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 shadow-sm transition flex items-center gap-2"
+                        class="px-4 py-2.5 text-xs font-semibold rounded-xl border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 shadow-sm transition flex items-center gap-2"
                     >
-                        <span>⚙️</span>
-                        <span id="toggle-btn-text">ระงับรับแจ้งชั่วคราว</span>
-                    </button>
+                        <svg
+                            class="w-4 h-4 text-gray-500"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M12 15.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7z"
+                            />
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M19.4 15a1.7 1.7 0 00.34 1.88l.06.06-1.7 1.7-.06-.06a1.7 1.7 0 00-1.88-.34 1.7 1.7 0 00-1.03 1.56V20h-2.4v-.2a1.7 1.7 0 00-1.03-1.56 1.7 1.7 0 00-1.88.34l-.06.06-1.7-1.7.06-.06A1.7 1.7 0 008.46 15a1.7 1.7 0 00-1.56-1.03H6v-2.4h.9A1.7 1.7 0 008.46 10a1.7 1.7 0 00-.34-1.88l-.06-.06 1.7-1.7.06.06a1.7 1.7 0 001.88.34A1.7 1.7 0 0012.73 5.2V5h2.4v.2a1.7 1.7 0 001.03 1.56 1.7 1.7 0 001.88-.34l.06-.06 1.7 1.7-.06.06A1.7 1.7 0 0019.4 10c.14.5.5.88 1.03 1.03H21v2.4h-.57A1.7 1.7 0 0019.4 15z"
+                            />
+                        </svg>
 
+                        <span id="toggle-btn-text">
+                            ระงับรับแจ้งชั่วคราว
+                        </span>
+                    </button>
                 </div>
             </div>
 
-
             <!-- =====================================================
-                 Stat Cards
+                 STAT CARDS
             ====================================================== -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
 
-                <!-- Card: ทั้งหมด -->
-                <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden transition hover:shadow-md">
+                <!-- =================================================
+                     Total
+                ================================================== -->
+                <div
+                    class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm transition hover:shadow-md"
+                >
                     <div class="flex justify-between items-start">
-                        <div class="w-10 h-10 rounded-xl bg-blue-50 text-ict-blue flex items-center justify-center">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-blue-50 text-ict-blue flex items-center justify-center"
+                        >
                             <svg
                                 class="w-5 h-5"
                                 fill="none"
@@ -252,7 +431,9 @@
                             </svg>
                         </div>
 
-                        <span class="text-[10px] text-gray-400 font-semibold bg-gray-50 px-2.5 py-1 rounded-full border border-gray-100">
+                        <span
+                            class="text-[10px] text-gray-400 font-semibold bg-gray-50 px-2.5 py-1 rounded-full border border-gray-100"
+                        >
                             ทั้งหมด
                         </span>
                     </div>
@@ -271,11 +452,16 @@
                     </div>
                 </div>
 
-
-                <!-- Card: รอตรวจ -->
-                <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden transition hover:shadow-md">
+                <!-- =================================================
+                     Pending
+                ================================================== -->
+                <div
+                    class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm transition hover:shadow-md"
+                >
                     <div class="flex justify-between items-start">
-                        <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center"
+                        >
                             <svg
                                 class="w-5 h-5"
                                 fill="none"
@@ -286,12 +472,14 @@
                                 <path
                                     stroke-linecap="round"
                                     stroke-linejoin="round"
-                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 022 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a3 3 0 006 0"
                                 />
                             </svg>
                         </div>
 
-                        <span class="text-[10px] text-amber-700 font-bold bg-amber-50 px-2.5 py-1 rounded-full border border-amber-100">
+                        <span
+                            class="text-[10px] text-amber-700 font-bold bg-amber-50 px-2.5 py-1 rounded-full border border-amber-100"
+                        >
                             รอตรวจ
                         </span>
                     </div>
@@ -310,11 +498,16 @@
                     </div>
                 </div>
 
-
-                <!-- Card: ส่งคืนสำเร็จ -->
-                <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden transition hover:shadow-md">
+                <!-- =================================================
+                     Handover Success
+                ================================================== -->
+                <div
+                    class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm transition hover:shadow-md"
+                >
                     <div class="flex justify-between items-start">
-                        <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center"
+                        >
                             <svg
                                 class="w-5 h-5"
                                 fill="none"
@@ -330,7 +523,9 @@
                             </svg>
                         </div>
 
-                        <span class="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
+                        <span
+                            class="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100"
+                        >
                             สำเร็จแล้ว
                         </span>
                     </div>
@@ -349,11 +544,16 @@
                     </div>
                 </div>
 
-
-                <!-- Card: ของตกค้าง -->
-                <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden transition hover:shadow-md">
+                <!-- =================================================
+                     Overdue
+                ================================================== -->
+                <div
+                    class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm transition hover:shadow-md"
+                >
                     <div class="flex justify-between items-start">
-                        <div class="w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center"
+                        >
                             <svg
                                 class="w-5 h-5"
                                 fill="none"
@@ -369,7 +569,9 @@
                             </svg>
                         </div>
 
-                        <span class="text-[10px] text-red-600 font-bold bg-red-50 px-2.5 py-1 rounded-full border border-red-100">
+                        <span
+                            class="text-[10px] text-red-600 font-bold bg-red-50 px-2.5 py-1 rounded-full border border-red-100"
+                        >
                             &gt; 30 วัน
                         </span>
                     </div>
@@ -387,21 +589,30 @@
                         </p>
                     </div>
                 </div>
-
             </div>
 
-
             <!-- =====================================================
-                 Table: รายการที่ส่งมอบคืนเสร็จสมบูรณ์แล้ว
+                 COMPLETED HANDOVER TABLE
             ====================================================== -->
-            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-5">
-
-                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-gray-100 pb-4 gap-3">
-
+            <div
+                class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-5"
+            >
+                <div
+                    class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-gray-100 pb-4 gap-3"
+                >
                     <div>
-                        <h3 class="font-bold text-base text-gray-900 flex items-center gap-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                            รายการที่ส่งมอบคืนเสร็จสมบูรณ์แล้ว (Handover Completed)
+                        <h3
+                            class="font-bold text-base text-gray-900 flex items-center gap-2"
+                        >
+                            <span
+                                class="w-2.5 h-2.5 rounded-full bg-emerald-500"
+                            ></span>
+
+                            รายการที่ส่งมอบคืนเสร็จสมบูรณ์แล้ว
+
+                            <span class="text-gray-400 font-medium">
+                                (Handover Completed)
+                            </span>
                         </h3>
 
                         <p class="text-xs text-gray-400 mt-0.5">
@@ -413,214 +624,426 @@
                         href="staff-handover.html"
                         class="text-xs text-ict-blue hover:underline font-bold"
                     >
-                        ไปที่หน้าส่งคืนเจ้าของ &rarr;
+                        ไปที่หน้าส่งคืนเจ้าของ →
                     </a>
-
                 </div>
 
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs">
-
-                        <thead class="text-gray-400 font-semibold border-b border-gray-100 bg-gray-50/50">
+                        <thead
+                            class="text-gray-400 font-semibold border-b border-gray-100 bg-gray-50/50"
+                        >
                             <tr>
-                                <th class="py-3 px-3">รหัสรายการ</th>
-                                <th class="py-3 px-3">สิ่งของ</th>
-                                <th class="py-3 px-3">ผู้รับคืน (เจ้าของ)</th>
-                                <th class="py-3 px-3">วันที่ส่งมอบ</th>
-                                <th class="py-3 px-3">เจ้าหน้าที่ผู้ส่งมอบ</th>
-                                <th class="py-3 px-3">สถานะ</th>
-                                <th class="py-3 px-3 text-right">หลักฐานการคืน</th>
+                                <th class="py-3 px-3">
+                                    รหัสรายการ
+                                </th>
+
+                                <th class="py-3 px-3">
+                                    สิ่งของ
+                                </th>
+
+                                <th class="py-3 px-3">
+                                    ผู้รับคืน (เจ้าของ)
+                                </th>
+
+                                <th class="py-3 px-3">
+                                    วันที่ส่งมอบ
+                                </th>
+
+                                <th class="py-3 px-3">
+                                    เจ้าหน้าที่ผู้ส่งมอบ
+                                </th>
+
+                                <th class="py-3 px-3">
+                                    สถานะ
+                                </th>
+
+                                <th class="py-3 px-3 text-right">
+                                    หลักฐานการคืน
+                                </th>
                             </tr>
                         </thead>
 
                         <tbody
                             id="completed-table-body"
                             class="divide-y divide-gray-50 text-gray-700"
-                        >
-                        </tbody>
-
+                        ></tbody>
                     </table>
                 </div>
-
             </div>
-
         </div>
     </main>
 
-
     <!-- =========================================================
-         Modal แสดงหลักฐานการรับคืน
+         PROOF MODAL
     ========================================================== -->
     <div
         id="proof-modal"
-        class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4"
+        class="proof-modal-overlay fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4 hidden"
+        onclick="handleModalBackgroundClick(event)"
     >
-        <div class="bg-white rounded-2xl border border-gray-100 shadow-xl max-w-lg w-full overflow-hidden transform transition-all p-6 space-y-4">
+        <div
+            class="proof-modal-box bg-white rounded-2xl border border-gray-200 shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden"
+            onclick="event.stopPropagation()"
+        >
 
-            <!-- Modal Header -->
-            <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-                <h3 class="font-bold text-sm text-gray-900 flex items-center gap-2">
-                    <span class="text-emerald-600 text-base">✓</span>
-                    หลักฐานการส่งคืนเจ้าของ
-                </h3>
+            <!-- =====================================================
+                 Modal Header
+            ====================================================== -->
+            <div
+                class="px-6 py-5 border-b border-gray-100 bg-white flex items-center justify-between"
+            >
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center"
+                    >
+                        <svg
+                            class="w-5 h-5 text-emerald-600"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M9 12.75l2 2 4-4.5"
+                            />
+
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M7.5 3.75h9A2.25 2.25 0 0118.75 6v12A2.25 2.25 0 0116.5 20.25h-9A2.25 2.25 0 015.25 18V6A2.25 2.25 0 017.5 3.75z"
+                            />
+                        </svg>
+                    </div>
+
+                    <div>
+                        <h3 class="font-bold text-base text-gray-900">
+                            หลักฐานการส่งคืนเจ้าของ
+                        </h3>
+
+                        <p class="text-[11px] text-gray-400 mt-0.5">
+                            ตรวจสอบข้อมูลและหลักฐานการส่งมอบรายการ
+                        </p>
+                    </div>
+                </div>
 
                 <button
+                    type="button"
                     onclick="closeProofModal()"
-                    class="text-gray-400 hover:text-gray-600 text-lg font-bold"
+                    class="w-9 h-9 rounded-xl flex items-center justify-center text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition"
+                    aria-label="ปิดหน้าต่าง"
+                    title="ปิด"
                 >
-                    &times;
+                    <svg
+                        class="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M6 6l12 12M18 6L6 18"
+                        />
+                    </svg>
                 </button>
             </div>
 
+            <!-- =====================================================
+                 Modal Body
+            ====================================================== -->
+            <div
+                class="p-6 overflow-y-auto max-h-[calc(90vh-100px)]"
+            >
 
-            <!-- Modal Content -->
-            <div class="space-y-3">
-
-                <!-- ข้อมูลรายการ -->
-                <div class="bg-gray-50 p-3 rounded-xl border border-gray-100 space-y-1 text-xs">
-                    <p>
-                        <span class="text-gray-400">รหัสรายการ:</span>
-                        <span
-                            id="modal-item-id"
-                            class="font-mono font-bold text-gray-800"
+                <!-- =================================================
+                     Status Banner
+                ================================================== -->
+                <div
+                    class="flex items-center gap-3 p-4 rounded-xl bg-emerald-50 border border-emerald-100 mb-5"
+                >
+                    <div
+                        class="w-9 h-9 rounded-full bg-white border border-emerald-200 flex items-center justify-center flex-shrink-0"
+                    >
+                        <svg
+                            class="w-5 h-5 text-emerald-600"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            viewBox="0 0 24 24"
                         >
-                            -
-                        </span>
-                    </p>
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M5 13l4 4L19 7"
+                            />
+                        </svg>
+                    </div>
 
-                    <p>
-                        <span class="text-gray-400">สิ่งของ:</span>
-                        <span
-                            id="modal-item-name"
-                            class="font-semibold text-gray-800"
-                        >
-                            -
-                        </span>
-                    </p>
+                    <div>
+                        <p class="text-xs font-bold text-emerald-800">
+                            การส่งคืนเสร็จสมบูรณ์
+                        </p>
 
-                    <p>
-                        <span class="text-gray-400">ผู้รับคืน:</span>
-                        <span
-                            id="modal-recipient"
-                            class="font-semibold text-ict-blue"
-                        >
-                            -
-                        </span>
-                    </p>
-
-                    <p>
-                        <span class="text-gray-400">วันที่ส่งมอบ:</span>
-                        <span
-                            id="modal-date"
-                            class="text-gray-700"
-                        >
-                            -
-                        </span>
-                    </p>
+                        <p class="text-[11px] text-emerald-700 mt-0.5">
+                            รายการนี้ได้รับการบันทึกเป็นประวัติการส่งคืนในระบบแล้ว
+                        </p>
+                    </div>
                 </div>
 
+                <!-- =================================================
+                     Information Section
+                ================================================== -->
+                <div class="mb-5">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="w-1 h-4 bg-ict-blue rounded-full"></span>
 
-                <!-- รูปภาพ/เอกสารหลักฐาน -->
-                <div>
-                    <label class="block text-[11px] font-bold text-gray-500 mb-1">
-                        รูปถ่าย/เอกสารหลักฐานยืนยันการรับคืน:
-                    </label>
+                        <h4 class="text-sm font-bold text-gray-900">
+                            ข้อมูลการส่งคืน
+                        </h4>
+                    </div>
 
-                    <div class="aspect-video bg-gray-100 rounded-xl border border-gray-200 overflow-hidden flex items-center justify-center relative">
-                        <img
-                            id="modal-proof-img"
-                            src=""
-                            alt="หลักฐานการคืน"
-                            class="w-full h-full object-cover hidden"
-                        >
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
 
                         <div
-                            id="modal-no-img"
-                            class="w-full h-full flex flex-col items-center justify-center p-4 text-center"
+                            class="bg-gray-50 border border-gray-100 rounded-xl p-3.5"
                         >
-                            <span class="text-4xl mb-2">📸</span>
+                            <p class="text-[10px] font-semibold text-gray-400 mb-1">
+                                รหัสรายการ
+                            </p>
 
-                            <span
-                                id="modal-img-name"
-                                class="text-xs font-semibold text-gray-600"
+                            <p
+                                id="modal-item-id"
+                                class="text-sm font-bold text-gray-900 font-mono"
                             >
-                                ไม่พบไฟล์รูปถ่ายหลักฐาน
-                            </span>
+                                -
+                            </p>
+                        </div>
+
+                        <div
+                            class="bg-gray-50 border border-gray-100 rounded-xl p-3.5"
+                        >
+                            <p class="text-[10px] font-semibold text-gray-400 mb-1">
+                                สิ่งของ
+                            </p>
+
+                            <p
+                                id="modal-item-name"
+                                class="text-sm font-semibold text-gray-900"
+                            >
+                                -
+                            </p>
+                        </div>
+
+                        <div
+                            class="bg-gray-50 border border-gray-100 rounded-xl p-3.5"
+                        >
+                            <p class="text-[10px] font-semibold text-gray-400 mb-1">
+                                ผู้รับคืน / เจ้าของ
+                            </p>
+
+                            <p
+                                id="modal-recipient"
+                                class="text-sm font-semibold text-ict-blue"
+                            >
+                                -
+                            </p>
+                        </div>
+
+                        <div
+                            class="bg-gray-50 border border-gray-100 rounded-xl p-3.5"
+                        >
+                            <p class="text-[10px] font-semibold text-gray-400 mb-1">
+                                วันที่ส่งมอบ
+                            </p>
+
+                            <p
+                                id="modal-date"
+                                class="text-sm font-medium text-gray-700"
+                            >
+                                -
+                            </p>
                         </div>
                     </div>
                 </div>
 
+                <!-- =================================================
+                     Evidence Section
+                ================================================== -->
+                <div class="mb-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="w-1 h-4 bg-ict-blue rounded-full"></span>
 
-                <!-- บันทึกเพิ่มเติม -->
-                <div>
-                    <label class="block text-[11px] font-bold text-gray-500 mb-1">
-                        บันทึกเพิ่มเติมจากเจ้าหน้าที่:
-                    </label>
+                            <h4 class="text-sm font-bold text-gray-900">
+                                หลักฐานการรับคืน
+                            </h4>
+                        </div>
 
-                    <p
-                        id="modal-note"
-                        class="text-xs text-gray-600 bg-emerald-50/50 p-3 rounded-xl border border-emerald-100"
+                        <span
+                            class="text-[10px] text-gray-400 bg-gray-50 border border-gray-100 px-2.5 py-1 rounded-full"
+                        >
+                            Evidence
+                        </span>
+                    </div>
+
+                    <div
+                        class="proof-image-wrapper relative aspect-video bg-slate-50 rounded-xl border border-gray-200 overflow-hidden"
                     >
-                        "-"
-                    </p>
+                        <img
+                            id="modal-proof-img"
+                            src=""
+                            alt="หลักฐานการคืน"
+                            class="w-full h-full object-contain hidden bg-gray-50"
+                        >
+
+                        <div
+                            id="modal-no-img"
+                            class="absolute inset-0 flex flex-col items-center justify-center text-center p-6"
+                        >
+                            <div
+                                class="w-14 h-14 rounded-2xl bg-white border border-gray-200 shadow-sm flex items-center justify-center mb-3"
+                            >
+                                <svg
+                                    class="w-7 h-7 text-gray-400"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.6"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <rect
+                                        x="3"
+                                        y="4"
+                                        width="18"
+                                        height="16"
+                                        rx="2"
+                                    />
+
+                                    <circle
+                                        cx="8.5"
+                                        cy="9"
+                                        r="1.5"
+                                    />
+
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M21 15l-4.5-4.5L9 18l-2.5-2.5L3 19"
+                                    />
+                                </svg>
+                            </div>
+
+                            <p
+                                id="modal-img-name"
+                                class="text-xs font-semibold text-gray-500"
+                            >
+                                ไม่พบไฟล์รูปถ่ายหลักฐาน
+                            </p>
+
+                            <p class="text-[10px] text-gray-400 mt-1">
+                                รายการนี้ไม่มีรูปภาพหลักฐานแนบในระบบ
+                            </p>
+                        </div>
+                    </div>
                 </div>
 
+                <!-- =================================================
+                     Staff Note
+                ================================================== -->
+                <div>
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="w-1 h-4 bg-ict-blue rounded-full"></span>
+
+                        <h4 class="text-sm font-bold text-gray-900">
+                            บันทึกเพิ่มเติม
+                        </h4>
+                    </div>
+
+                    <div
+                        class="bg-slate-50 border border-gray-200 rounded-xl p-4"
+                    >
+                        <div class="flex gap-3">
+                            <div
+                                class="w-8 h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center flex-shrink-0"
+                            >
+                                <svg
+                                    class="w-4 h-4 text-gray-500"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.8"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M8 10h8M8 14h5"
+                                    />
+
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M19 4H5a2 2 0 00-2 2v12a2 2 0 002 2h14a2 2 0 002-2V6a2 2 0 002-2z"
+                                    />
+                                </svg>
+                            </div>
+
+                            <p
+                                id="modal-note"
+                                class="text-xs text-gray-600 leading-6"
+                            >
+                                -
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-
-            <!-- Modal Footer -->
-            <div class="pt-2">
-                <button
-                    onclick="closeProofModal()"
-                    class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold py-2.5 rounded-xl transition"
-                >
-                    ปิดหน้าต่าง
-                </button>
-            </div>
-
         </div>
     </div>
 
-
     <!-- =========================================================
-         JavaScript
+         JAVASCRIPT
     ========================================================== -->
     <script>
 
         // =========================================================
-        // Dashboard Data
+        // Fetch Dashboard Data
         // =========================================================
-
-        // ดึงข้อมูลจริงจาก LocalStorage มาแสดงในแดชบอร์ด
         function fetchRealtimeDashboardData() {
-            const tbody = document.getElementById('completed-table-body');
+            const tbody =
+                document.getElementById('completed-table-body');
 
             try {
-                // ดึงรายการที่กดบันทึกส่งมอบแล้ว
-                const realCompletedList = JSON.parse(
-                    localStorage.getItem('completedHandovers') || '[]'
-                );
+                const realCompletedList =
+                    JSON.parse(
+                        localStorage.getItem('completedHandovers') || '[]'
+                    );
 
-                // ดึงรายการฐานข้อมูลหลัก (ถ้ามี)
-                const realMasterDb = JSON.parse(
-                    localStorage.getItem('lost_and_found_db') || '[]'
-                );
+                const realMasterDb =
+                    JSON.parse(
+                        localStorage.getItem('lost_and_found_db') || '[]'
+                    );
 
-                // คำนวณตัวเลขสำหรับ Stat Cards
-                const handoverSuccessCount = realCompletedList.length;
-                const totalCount = realMasterDb.length > 0
-                    ? realMasterDb.length
-                    : handoverSuccessCount;
+                const handoverSuccessCount =
+                    realCompletedList.length;
 
-                const pendingCount = realMasterDb.filter(
-                    i => i.status === 'pending'
-                ).length;
+                const totalCount =
+                    realMasterDb.length > 0
+                        ? realMasterDb.length
+                        : handoverSuccessCount;
 
-                const overdueCount = realMasterDb.filter(
-                    i => i.status === 'overdue'
-                ).length;
+                const pendingCount =
+                    realMasterDb.filter(
+                        item => item.status === 'pending'
+                    ).length;
 
-                // อัปเดตตัวเลขการ์ดสถิติ
+                const overdueCount =
+                    realMasterDb.filter(
+                        item => item.status === 'overdue'
+                    ).length;
+
                 document.getElementById('stat-total').textContent =
                     totalCount.toLocaleString('th-TH');
 
@@ -633,11 +1056,15 @@
                 document.getElementById('stat-overdue').textContent =
                     overdueCount.toLocaleString('th-TH');
 
-                // เรนเดอร์ลงตาราง
-                renderCompletedTable(realCompletedList);
+                renderCompletedTable(
+                    realCompletedList
+                );
 
             } catch (error) {
-                console.error("Fetch Data Error:", error);
+                console.error(
+                    'Fetch Data Error:',
+                    error
+                );
 
                 tbody.innerHTML = `
                     <tr>
@@ -645,21 +1072,19 @@
                             colspan="7"
                             class="py-8 text-center text-red-500 font-medium"
                         >
-                            ❌ เกิดข้อผิดพลาดในการดึงข้อมูล
+                            ไม่สามารถโหลดข้อมูลได้
                         </td>
                     </tr>
                 `;
             }
         }
 
-
         // =========================================================
-        // Completed Handover Table
+        // Render Completed Table
         // =========================================================
-
-        // แสดงผลตารางส่งมอบคืนสำเร็จ
         function renderCompletedTable(list) {
-            const tbody = document.getElementById('completed-table-body');
+            const tbody =
+                document.getElementById('completed-table-body');
 
             tbody.innerHTML = '';
 
@@ -678,78 +1103,148 @@
                 return;
             }
 
-            list.forEach((item, index) => {
-                const tr = document.createElement('tr');
+            list.forEach(item => {
+                const tr =
+                    document.createElement('tr');
 
                 tr.className =
                     'hover:bg-emerald-50/30 transition completed-row';
 
-                // แปลงและเตรียมค่ารูปภาพ/หลักฐานสำหรับส่งเข้า Modal
-                const proofUrl = item.proofImageUrl || '';
+                const proofUrl =
+                    item.proofImageUrl || '';
 
-                const safeClaimId = (item.claimId || item.id || '-')
+                const safeClaimId =
+                    String(
+                        item.claimId ||
+                        item.id ||
+                        '-'
+                    )
+                    .replace(/\\/g, '\\\\')
                     .replace(/'/g, "\\'");
 
-                const safeItemName = (item.itemName || item.name || '-')
+                const safeItemName =
+                    String(
+                        item.itemName ||
+                        item.name ||
+                        '-'
+                    )
+                    .replace(/\\/g, '\\\\')
                     .replace(/'/g, "\\'");
 
-                const safeRecipient = (
-                    item.recipientName ||
-                    item.recipient ||
-                    '-'
-                ).replace(/'/g, "\\'");
+                const safeRecipient =
+                    String(
+                        item.recipientName ||
+                        item.recipient ||
+                        '-'
+                    )
+                    .replace(/\\/g, '\\\\')
+                    .replace(/'/g, "\\'");
 
-                const safeDate = (
-                    item.handoverDate ||
-                    item.date ||
-                    '-'
-                ).replace(/'/g, "\\'");
+                const safeDate =
+                    String(
+                        item.handoverDate ||
+                        item.date ||
+                        '-'
+                    )
+                    .replace(/\\/g, '\\\\')
+                    .replace(/'/g, "\\'");
 
-                const safeNote = (item.note || '')
+                const safeNote =
+                    String(
+                        item.note ||
+                        ''
+                    )
+                    .replace(/\\/g, '\\\\')
+                    .replace(/'/g, "\\'");
+
+                const safeProofUrl =
+                    String(
+                        proofUrl
+                    )
+                    .replace(/\\/g, '\\\\')
                     .replace(/'/g, "\\'");
 
                 tr.innerHTML = `
+                    <!-- รหัสรายการ -->
                     <td class="py-3.5 px-3 font-mono font-bold text-gray-900">
                         ${item.claimId || item.id || '-'}
                     </td>
 
+                    <!-- สิ่งของ -->
                     <td class="py-3.5 px-3 font-semibold text-gray-800">
                         ${item.itemName || item.name || '-'}
                     </td>
 
+                    <!-- ผู้รับคืน -->
                     <td class="py-3.5 px-3 text-ict-blue font-medium">
                         ${item.recipientName || item.recipient || '-'}
                     </td>
 
+                    <!-- วันที่ -->
                     <td class="py-3.5 px-3 text-gray-500 font-medium">
                         ${item.handoverDate || item.date || '-'}
                     </td>
 
+                    <!-- เจ้าหน้าที่ -->
                     <td class="py-3.5 px-3 text-gray-600">
                         ${item.staffName || item.staff || 'เจ้าหน้าที่'}
                     </td>
 
+                    <!-- สถานะ -->
                     <td class="py-3.5 px-3">
-                        <span class="px-2.5 py-1 text-[10px] font-bold rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 inline-flex items-center gap-1">
-                            <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                        <span
+                            class="px-2.5 py-1 text-[10px] font-bold rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 inline-flex items-center gap-1"
+                        >
+                            <span
+                                class="w-1.5 h-1.5 bg-emerald-500 rounded-full"
+                            ></span>
+
                             ส่งมอบแล้ว
                         </span>
                     </td>
 
+                    <!-- ปุ่มดูหลักฐาน -->
                     <td class="py-3.5 px-3 text-right">
                         <button
+                            type="button"
                             onclick="openProofModal(
                                 '${safeClaimId}',
                                 '${safeItemName}',
                                 '${safeRecipient}',
                                 '${safeDate}',
-                                '${proofUrl}',
+                                '${safeProofUrl}',
                                 '${safeNote}'
                             )"
-                            class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-[11px] font-semibold px-3 py-1.5 rounded-lg inline-flex items-center gap-1.5 transition"
+                            class="group inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-ict-blue text-[11px] font-semibold shadow-sm hover:bg-ict-blue hover:text-white hover:border-ict-blue hover:shadow-md transition-all duration-200"
+                            title="ดูหลักฐานการส่งคืน"
                         >
-                            <span>📷</span>
-                            ดูหลักฐาน
+                            <span
+                                class="w-6 h-6 rounded-lg bg-blue-50 text-ict-blue group-hover:bg-white/15 group-hover:text-white flex items-center justify-center transition"
+                            >
+                                <svg
+                                    class="w-3.5 h-3.5 transition-transform duration-200 group-hover:scale-110"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.8"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M2.25 12s3.75-6 9.75-6 9.75 6 9.75 6-3.75 6-9.75 6-9.75-6-9.75-6z"
+                                    />
+
+                                    <circle
+                                        cx="12"
+                                        cy="12"
+                                        r="2.5"
+                                    />
+                                </svg>
+                            </span>
+
+                            <span>
+                                ดูหลักฐาน
+                            </span>
                         </button>
                     </td>
                 `;
@@ -758,67 +1253,75 @@
             });
         }
 
-
         // =========================================================
         // System Status
         // =========================================================
-
-        // สลับสถานะระบบเปิด/ปิดรับแจ้ง
         function toggleSystemStatus() {
             const currentStatus =
-                localStorage.getItem('system_accepting_reports') !== 'false';
+                localStorage.getItem(
+                    'system_accepting_reports'
+                ) !== 'false';
 
-            const newStatus = !currentStatus;
+            const newStatus =
+                !currentStatus;
 
             localStorage.setItem(
                 'system_accepting_reports',
                 newStatus
             );
 
-            updateSystemStatusUI(newStatus);
+            updateSystemStatusUI(
+                newStatus
+            );
         }
 
-
-        // อัปเดต UI สถานะระบบ
+        // =========================================================
+        // Update System Status UI
+        // =========================================================
         function updateSystemStatusUI(isAccepting) {
             const badge =
-                document.getElementById('system-status-badge');
+                document.getElementById(
+                    'system-status-badge'
+                );
 
             const btnText =
-                document.getElementById('toggle-btn-text');
+                document.getElementById(
+                    'toggle-btn-text'
+                );
 
             if (isAccepting) {
                 badge.className =
-                    "px-2.5 py-1 text-[11px] font-semibold rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center gap-1.5";
+                    'px-2.5 py-1 text-[11px] font-semibold rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center gap-1.5';
 
                 badge.innerHTML = `
-                    <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                    <span
+                        class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"
+                    ></span>
                     เปิดรับแจ้งความ
                 `;
 
                 btnText.textContent =
-                    "ระงับรับแจ้งชั่วคราว";
+                    'ระงับรับแจ้งชั่วคราว';
 
             } else {
                 badge.className =
-                    "px-2.5 py-1 text-[11px] font-semibold rounded-full bg-red-50 text-red-600 border border-red-100 flex items-center gap-1.5";
+                    'px-2.5 py-1 text-[11px] font-semibold rounded-full bg-red-50 text-red-600 border border-red-100 flex items-center gap-1.5';
 
                 badge.innerHTML = `
-                    <span class="w-2 h-2 bg-red-500 rounded-full"></span>
+                    <span
+                        class="w-2 h-2 bg-red-500 rounded-full"
+                    ></span>
                     ระงับการรับแจ้งความ
                 `;
 
                 btnText.textContent =
-                    "เปิดระบบรับแจ้งความ";
+                    'เปิดระบบรับแจ้งความ';
             }
         }
 
-
         // =========================================================
-        // Proof Modal
+        // Open Proof Modal
         // =========================================================
-
-        // เปิด Modal หลักฐาน
         function openProofModal(
             id,
             name,
@@ -827,91 +1330,225 @@
             proofUrl,
             note
         ) {
-            document.getElementById('modal-item-id').innerText =
-                id.startsWith('#') ? id : `#${id}`;
+            document.getElementById(
+                'modal-item-id'
+            ).innerText =
+                id.startsWith('#')
+                    ? id
+                    : `#${id}`;
 
-            document.getElementById('modal-item-name').innerText =
+            document.getElementById(
+                'modal-item-name'
+            ).innerText =
                 name;
 
-            document.getElementById('modal-recipient').innerText =
+            document.getElementById(
+                'modal-recipient'
+            ).innerText =
                 recipient;
 
-            document.getElementById('modal-date').innerText =
+            document.getElementById(
+                'modal-date'
+            ).innerText =
                 date;
 
-            document.getElementById('modal-note').innerText =
+            document.getElementById(
+                'modal-note'
+            ).innerText =
                 note
                     ? `"${note}"`
-                    : "ส่งมอบคืนเจ้าของสำเร็จเรียบร้อยแล้ว";
+                    : 'ส่งมอบคืนเจ้าของสำเร็จเรียบร้อยแล้ว';
 
             const imgEl =
-                document.getElementById('modal-proof-img');
+                document.getElementById(
+                    'modal-proof-img'
+                );
 
             const noImgEl =
-                document.getElementById('modal-no-img');
+                document.getElementById(
+                    'modal-no-img'
+                );
 
-            if (proofUrl && proofUrl.trim() !== '') {
-                imgEl.src = proofUrl;
-                imgEl.classList.remove('hidden');
-                noImgEl.classList.add('hidden');
+            const modal =
+                document.getElementById(
+                    'proof-modal'
+                );
+
+            if (
+                proofUrl &&
+                proofUrl.trim() !== ''
+            ) {
+                imgEl.src =
+                    proofUrl;
+
+                imgEl.classList.remove(
+                    'hidden'
+                );
+
+                noImgEl.classList.add(
+                    'hidden'
+                );
+
+                imgEl.onerror =
+                    function () {
+                        imgEl.classList.add(
+                            'hidden'
+                        );
+
+                        noImgEl.classList.remove(
+                            'hidden'
+                        );
+
+                        document.getElementById(
+                            'modal-img-name'
+                        ).innerText =
+                            'ไม่สามารถเปิดไฟล์หลักฐานได้';
+                    };
 
             } else {
-                imgEl.classList.add('hidden');
-                noImgEl.classList.remove('hidden');
+                imgEl.src =
+                    '';
+
+                imgEl.classList.add(
+                    'hidden'
+                );
+
+                noImgEl.classList.remove(
+                    'hidden'
+                );
+
+                document.getElementById(
+                    'modal-img-name'
+                ).innerText =
+                    'ไม่พบไฟล์รูปถ่ายหลักฐาน';
             }
 
-            document
-                .getElementById('proof-modal')
-                .classList.remove('hidden');
+            modal.classList.remove(
+                'hidden'
+            );
+
+            requestAnimationFrame(
+                () => {
+                    modal.classList.add(
+                        'show'
+                    );
+                }
+            );
+
+            document.body.classList.add(
+                'overflow-hidden'
+            );
         }
 
-
-        // ปิด Modal หลักฐาน
+        // =========================================================
+        // Close Proof Modal
+        // =========================================================
         function closeProofModal() {
-            document
-                .getElementById('proof-modal')
-                .classList.add('hidden');
+            const modal =
+                document.getElementById(
+                    'proof-modal'
+                );
+
+            modal.classList.remove(
+                'show'
+            );
+
+            setTimeout(
+                () => {
+                    modal.classList.add(
+                        'hidden'
+                    );
+                },
+                200
+            );
+
+            document.body.classList.remove(
+                'overflow-hidden'
+            );
         }
 
+        // =========================================================
+        // Close Modal by Background
+        // =========================================================
+        function handleModalBackgroundClick(event) {
+            if (
+                event.target ===
+                document.getElementById(
+                    'proof-modal'
+                )
+            ) {
+                closeProofModal();
+            }
+        }
 
         // =========================================================
-        // Search
+        // ESC Key
         // =========================================================
+        document.addEventListener(
+            'keydown',
+            function (event) {
+                const modal =
+                    document.getElementById(
+                        'proof-modal'
+                    );
 
-        // ระบบค้นหาในตาราง
+                if (
+                    event.key === 'Escape' &&
+                    !modal.classList.contains(
+                        'hidden'
+                    )
+                ) {
+                    closeProofModal();
+                }
+            }
+        );
+
+        // =========================================================
+        // Search Completed Table
+        // =========================================================
         function filterCompletedTable() {
             const query =
-                document.getElementById('search-input')
-                    .value
-                    .toLowerCase();
+                document.getElementById(
+                    'search-input'
+                )
+                .value
+                .toLowerCase()
+                .trim();
 
             const rows =
-                document.querySelectorAll('.completed-row');
+                document.querySelectorAll(
+                    '.completed-row'
+                );
 
-            rows.forEach(row => {
-                const text =
-                    row.innerText.toLowerCase();
+            rows.forEach(
+                row => {
+                    const text =
+                        row.innerText.toLowerCase();
 
-                row.style.display =
-                    text.includes(query) ? '' : 'none';
-            });
+                    row.style.display =
+                        text.includes(query)
+                            ? ''
+                            : 'none';
+                }
+            );
         }
-
 
         // =========================================================
         // Page Initialization
         // =========================================================
+        window.onload =
+            function () {
+                const isAccepting =
+                    localStorage.getItem(
+                        'system_accepting_reports'
+                    ) !== 'false';
 
-        window.onload = function() {
-            const isAccepting =
-                localStorage.getItem('system_accepting_reports') !== 'false';
+                updateSystemStatusUI(
+                    isAccepting
+                );
 
-            updateSystemStatusUI(isAccepting);
-            fetchRealtimeDashboardData();
-        };
-
+                fetchRealtimeDashboardData();
+            };
     </script>
-
 </body>
-
 </html>
