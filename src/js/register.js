@@ -1,10 +1,3 @@
-// ==============================================================
-// register.js — ลงทะเบียนด้วย custom auth (password_hash ในตาราง user_account)
-// ไม่ใช้ Supabase Auth (auth.signUp) และไม่ query ตาราง user_account ตรงๆ
-// อีกต่อไป (ตารางถูกปิด RLS ไว้ ต้องผ่าน RPC เท่านั้น) — ใช้ RPC "register_user"
-// ซึ่งจะ hash รหัสผ่านด้วย pgcrypto และเช็คอีเมลซ้ำให้ในฝั่งฐานข้อมูล
-// ==============================================================
-
 import { supabaseClient } from './supabaseClient.js';
 
 // จัดการปุ่มเปิด-ปิดรหัสผ่านช่องที่ 1
@@ -82,9 +75,6 @@ document.getElementById('registerForm').addEventListener('submit', async (event)
     isValid = false;
     if (!firstInvalidInput) firstInvalidInput = document.getElementById('email');
   }
-  // หมายเหตุ: ตัดการเช็คอีเมลซ้ำด้วย select ตรงๆ ออก เพราะตาราง user_account
-  // ปิด RLS ไว้แล้ว (อ่าน/เขียนตรงไม่ได้) — RPC "register_user" จะเช็คซ้ำให้เอง
-  // และคืน error 'EMAIL_ALREADY_EXISTS' กลับมาแทน (เช็คด้านล่างหลัง submit)
 
   const hasUpperCase = /[A-Z]/.test(password);
   const hasLowerCase = /[a-z]/.test(password);
@@ -119,8 +109,6 @@ document.getElementById('registerForm').addEventListener('submit', async (event)
   setLoading(true);
 
   try {
-    // เรียก RPC เดียวจบ: hash รหัสผ่าน + เช็คโดเมน/อีเมลซ้ำ + insert
-    // ทั้งหมดทำในฝั่งฐานข้อมูล ไม่มี password_hash หลุดออกมาที่ client
     const { data: rows, error: rpcError } = await supabaseClient.rpc('register_user', {
       p_full_name: fullname,
       p_email: email,
@@ -143,14 +131,20 @@ document.getElementById('registerForm').addEventListener('submit', async (event)
       return;
     }
 
+    // ดึงข้อมูลผู้ใช้งานที่เพิ่งสร้างขึ้นมา
     const insertedUser = rows[0];
 
+    // บันทึกข้อมูลลงใน localStorage เพื่อทำ Auto-Login เข้าสู่ระบบทันที
     localStorage.setItem('userId', insertedUser.user_id);
     localStorage.setItem('userEmail', insertedUser.email);
     localStorage.setItem('userName', insertedUser.full_name);
+    localStorage.setItem('userRole', insertedUser.role || 'user');
+    localStorage.setItem('isLoggedIn', 'true');
 
-    alert('ลงทะเบียนสำเร็จ! กรุณาเข้าสู่ระบบ');
-    window.location.href = 'login.html';
+    alert('ลงทะเบียนและเข้าสู่ระบบสำเร็จ!');
+    
+    // เปลี่ยนเส้นทางไปยังหน้าหลักทันที
+    window.location.href = 'home.html';
 
   } catch (err) {
     console.error('Registration error:', err);

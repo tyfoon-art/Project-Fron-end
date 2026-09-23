@@ -1,9 +1,3 @@
-// ==============================================================
-// forgotpassword.js — ตรรกะของหน้า "ลืมรหัสผ่าน"
-// ตรวจกับ schema.sql แล้ว: .select('email').eq('email', email') ใช้ชื่อ
-// คอลัมน์ตรงกับตาราง user_account อยู่แล้ว ไม่ต้องแก้อะไร
-// ==============================================================
-
 import { supabaseClient } from '/src/supabaseClient.js';
 
 function clearAlert() {

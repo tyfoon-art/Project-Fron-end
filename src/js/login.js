@@ -1,8 +1,3 @@
-// ==============================================================
-// login.js — เข้าสู่ระบบด้วยการเช็ค password_hash ผ่าน RPC verify_login
-// ไม่ใช้ Supabase Auth (auth.users) อีกต่อไป
-// ==============================================================
-
 import { supabaseClient } from './supabaseClient.js';
 
 const STAFF_DOMAIN = 'staff.com';

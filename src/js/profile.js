@@ -1,16 +1,3 @@
-// ==============================================================
-// profile.js — ตรรกะของหน้า "ข้อมูลส่วนตัว"
-// แก้ไขให้ตรงกับ schema.sql:
-//   - ตาราง user_account ใช้คอลัมน์ "role" (enum user_role_enum: user/staff/admin)
-//     ไม่ใช่ "user_type" อย่างที่โค้ดเดิมอ้างถึง
-//   - enum report_type_enum เก็บค่าเป็นตัวพิมพ์เล็ก ('lost' / 'found')
-//     ไม่ใช่ 'Lost' / 'Found'
-//   - enum claim_status_enum เก็บค่าเป็นตัวพิมพ์เล็ก ('approved' ฯลฯ)
-//     ไม่ใช่ 'Approved'
-//   - ตาราง user_account ไม่มีคอลัมน์ gender จึงตัดช่อง "เพศ" ออกจากฟอร์ม
-//     และตัดการอ่าน/บันทึกค่านี้ออกทั้งหมดแล้ว
-// ==============================================================
-
 import { supabaseClient } from './supabaseClient.js';
 
 // กติกาโดเมนอีเมลเดียวกับหน้า login.html: เจ้าหน้าที่ต้องใช้ @staff.com เท่านั้น
@@ -36,27 +23,33 @@ let pendingAvatarDataUrl = null;
 
 // ============================================================
 // โหลดข้อมูลผู้ใช้จริงจาก Supabase (ตาราง user_account)
-// ใช้ session ที่ยืนยันแล้วจาก Supabase Auth เป็นแหล่งความจริง
-// (ไม่อ่าน localStorage มาระบุตัวตนตรงๆ เพราะแก้ไขผ่าน DevTools ได้)
+// ระบบนี้ใช้ custom auth เอง (ไม่ใช่ Supabase Auth) — ตัวตนผู้ใช้ที่ login
+// อยู่แล้วเก็บไว้ใน localStorage ('userId') ตอน login.html/register.js
+// เรียก RPC verify_login / register_user สำเร็จ ให้ใช้ค่านี้เป็นแหล่งความจริงแทน
+// supabaseClient.auth.getSession() ซึ่งเป็นคนละระบบและจะไม่มี session ให้เลย
 // ============================================================
 async function loadUserData() {
-  const { data: { session } } = await supabaseClient.auth.getSession();
+  const userId = localStorage.getItem('userId');
 
-  if (!session) {
+  if (!userId) {
     window.location.href = 'login.html';
     return;
   }
 
-  const email = session.user.email;
-
   const { data: user, error } = await supabaseClient
     .from('user_account')
     .select('*')
-    .eq('email', email)
+    .eq('user_id', userId)
+    .is('deleted_at', null)
     .single();
 
   if (error || !user) {
     console.error('โหลดข้อมูลผู้ใช้ไม่สำเร็จ:', error);
+    // userId ใน localStorage อาจเก่า/ไม่ถูกต้องแล้ว เคลียร์ทิ้งแล้วให้ล็อกอินใหม่
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userRole');
     window.location.href = 'login.html';
     return;
   }
@@ -67,7 +60,6 @@ async function loadUserData() {
   document.getElementById('nameInput').value = user.full_name || '';
   document.getElementById('emailInput').value = user.email || '';
   document.getElementById('phoneInput').value = user.phone_number || '';
-  // แก้ไข: user_account.role (ไม่ใช่ user_type) คือคอลัมน์จริงตาม schema
   document.getElementById('userRoleDisplay').textContent =
     user.role === 'staff' ? 'เจ้าหน้าที่ (Staff)' : user.role === 'admin' ? 'ผู้ดูแลระบบ (Admin)' : 'ผู้ใช้งานทั่วไป';
 
@@ -77,13 +69,14 @@ async function loadUserData() {
   localStorage.setItem('userId', user.user_id);
   localStorage.setItem('userEmail', user.email);
   localStorage.setItem('userName', user.full_name);
+  localStorage.setItem('userRole', user.role || 'user');
 
   await loadStats(user.user_id);
 }
 
 // ============================================================
 // สถิติการใช้งาน: นับจากตาราง report (แจ้งหาย/แจ้งพบ) และ claim (รับคืนสำเร็จ)
-// แก้ไข: ค่า enum ใน DB เป็นตัวพิมพ์เล็กทั้งหมด ('lost' / 'found' / 'approved')
+// ค่า enum ใน DB เป็นตัวพิมพ์เล็กทั้งหมด ('lost' / 'found' / 'approved')
 // ============================================================
 async function loadStats(userId) {
   try {
@@ -139,7 +132,10 @@ function clearError(inputId, errorId) {
 }
 
 // ============================================================
-// บันทึกข้อมูลโปรไฟล์: UPDATE ตาราง user_account จริง
+// บันทึกข้อมูลโปรไฟล์: ต้องผ่าน RPC update_user_profile เท่านั้น
+// เพราะตาราง user_account ปิด RLS ไว้ ไม่มี UPDATE policy ให้ client
+// เขียนตรงได้เลย (มีแค่ policy อ่านอย่างเดียว) — RPC นี้เป็น SECURITY DEFINER
+// จึงข้าม RLS ไปอัปเดตให้แทน พร้อมเช็คโดเมนอีเมล/อีเมลซ้ำในฝั่ง DB ให้ด้วย
 // ============================================================
 async function handleSave(event) {
   event.preventDefault();
@@ -186,46 +182,48 @@ async function handleSave(event) {
 
   const updatedName = nameInput.value.trim();
   const updatedPhone = phoneInput.value.trim();
-  const emailChanged = updatedEmail !== (currentUser.email || '').toLowerCase();
 
   const saveBtn = document.getElementById('saveBtn');
   saveBtn.disabled = true;
 
   try {
-    if (emailChanged) {
-      const { error: authUpdateError } = await supabaseClient.auth.updateUser({ email: updatedEmail });
-      if (authUpdateError) throw authUpdateError;
+    const { data: rows, error } = await supabaseClient.rpc('update_user_profile', {
+      p_user_id: currentUser.user_id,
+      p_full_name: updatedName,
+      p_email: updatedEmail,
+      p_phone_number: updatedPhone,
+      p_avatar_url: pendingAvatarDataUrl || null
+    });
+
+    if (error) {
+      if (error.message.includes('EMAIL_ALREADY_EXISTS')) {
+        document.getElementById('emailError').textContent = 'อีเมลนี้ถูกใช้งานโดยบัญชีอื่นแล้ว';
+        document.getElementById('emailError').style.display = 'block';
+        emailInput.classList.add('error');
+      } else if (error.message.includes('INVALID_EMAIL_DOMAIN')) {
+        document.getElementById('emailError').textContent =
+          currentUser.role === 'staff'
+            ? 'บัญชีเจ้าหน้าที่ต้องใช้อีเมล @staff.com เท่านั้น'
+            : 'ผู้ใช้ทั่วไปต้องใช้อีเมล @gmail.com หรือ @up.ac.th เท่านั้น';
+        document.getElementById('emailError').style.display = 'block';
+        emailInput.classList.add('error');
+      } else {
+        throw error;
+      }
+      return;
     }
 
-    const updatePayload = {
-      full_name: updatedName,
-      email: updatedEmail,
-      phone_number: updatedPhone
-    };
-
-    if (pendingAvatarDataUrl) {
-      updatePayload.avatar_url = pendingAvatarDataUrl;
-    }
-
-    const { error } = await supabaseClient
-      .from('user_account')
-      .update(updatePayload)
-      .eq('user_id', currentUser.user_id);
-
-    if (error) throw error;
-
-    localStorage.setItem('userEmail', updatedEmail);
-    localStorage.setItem('userName', updatedName);
-
-    currentUser = { ...currentUser, ...updatePayload };
+    const updatedUser = rows[0];
+    currentUser = { ...currentUser, ...updatedUser };
     pendingAvatarDataUrl = null;
 
-    document.getElementById('displayName').textContent = updatedName;
+    localStorage.setItem('userEmail', updatedUser.email);
+    localStorage.setItem('userName', updatedUser.full_name);
+
+    document.getElementById('displayName').textContent = updatedUser.full_name;
 
     const successText = document.getElementById('saveSuccessText');
-    successText.textContent = emailChanged
-      ? 'บันทึกข้อมูลเรียบร้อยแล้ว! กรุณายืนยันอีเมลใหม่ตามลิงก์ที่ระบบส่งไปให้'
-      : 'บันทึกข้อมูลเรียบร้อยแล้ว!';
+    successText.textContent = 'บันทึกข้อมูลเรียบร้อยแล้ว!';
     successText.style.display = 'block';
     setTimeout(() => {
       successText.style.display = 'none';
@@ -247,8 +245,9 @@ function closeLogoutModal() {
   document.getElementById('logoutModal').classList.remove('active');
 }
 
+// ออกจากระบบ: ระบบนี้เป็น custom auth ไม่มี Supabase Auth session ให้ signOut()
+// จริง แค่เคลียร์ localStorage ที่ใช้ระบุตัวตนก็พอ
 async function confirmLogout() {
-  await supabaseClient.auth.signOut();
   localStorage.removeItem('userId');
   localStorage.removeItem('userEmail');
   localStorage.removeItem('userName');

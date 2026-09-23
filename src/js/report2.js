@@ -1,5 +1,3 @@
-// หมายเหตุสำคัญ: public.report.incident_location เป็นคอลัมน์ text ธรรมดาที่ให้พิมพ์อิสระ
-
 let maxDateStr = '';
 let maxTimeStr = '';
 

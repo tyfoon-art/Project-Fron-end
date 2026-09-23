@@ -1,7 +1,3 @@
-// ==============================================================================
-// detail.js — ตรงกับ schema จริง (public.item / report / category / storage_point / user_account)
-// ==============================================================================
-
 import { supabaseClient } from './supabaseClient.js';
 
 let currentImagesList = [];
@@ -88,6 +84,7 @@ async function loadItemDetail() {
       category ( category_name ),
       storage_point ( storage_name, room, description ),
       report (
+        report_id,
         report_type,
         incident_location,
         incident_datetime,
@@ -206,9 +203,9 @@ async function loadItemDetail() {
     thumbContainer.appendChild(thumb);
   });
 
-  const currentUserId = localStorage.getItem('currentUserId') || '';
-  const currentUserName = localStorage.getItem('currentUserName') || '';
-  const currentUserRole = localStorage.getItem('currentUserRole') || 'user';
+  const currentUserId = localStorage.getItem('userId') || '';
+  const currentUserName = localStorage.getItem('userName') || '';
+  const currentUserRole = localStorage.getItem('userRole') || 'user';
 
   const reporterUserId = report0 ? report0.user_id : null;
   const isOwner = currentUserId
@@ -267,60 +264,103 @@ function handleClaim(event) {
   window.location.href = `claim.html?id=${itemId}`;
 }
 
+// 🟢 ฟังก์ชันสำหรับเปิดหน้าแก้ไขโพสต์
+// ใช้หน้า report.html เดิม (หน้าเดียวกับตอนโพสต์ใหม่) แต่ส่ง id + mode=edit ไปด้วย
+// เพื่อให้ report.html รู้ว่าต้องโหลดข้อมูลเดิมมา prefill และอัปเดตแทนการสร้างใหม่
+function editCurrentItem() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const itemId = urlParams.get('id');
+
+  if (!itemId) {
+    alert('ไม่พบรหัสรายการที่ต้องการแก้ไข');
+    return;
+  }
+
+  window.location.href = `report.html?id=${itemId}&mode=edit`;
+}
+
 async function deleteCurrentItem() {
-  if (confirm('คุณต้องการลบโพสต์นี้ออกจากระบบใช่หรือไม่?')) {
-    const urlParams = new URLSearchParams(window.location.search);
-    const itemId = urlParams.get('id');
+  if (!confirm('คุณต้องการลบโพสต์นี้ออกจากระบบใช่หรือไม่?')) return;
 
-    const { error } = await supabaseClient
-      .from('item')
-      .update({ deleted_at: new Date().toISOString() })
-      .eq('item_id', itemId);
+  const userId = localStorage.getItem('userId');
+  if (!userId) {
+    alert('กรุณาเข้าสู่ระบบก่อน');
+    window.location.href = 'login.html';
+    return;
+  }
 
-    if (error) {
-      alert('เกิดข้อผิดพลาดในการลบ: ' + error.message);
+  const report0 = (currentLoadedItem && currentLoadedItem.report && currentLoadedItem.report[0])
+    ? currentLoadedItem.report[0]
+    : null;
+
+  if (!report0 || !report0.report_id) {
+    alert('ไม่พบข้อมูลใบแจ้งของโพสต์นี้ ไม่สามารถลบได้');
+    return;
+  }
+
+  const { error } = await supabaseClient.rpc('delete_report', {
+    p_report_id: report0.report_id,
+    p_user_id: userId
+  });
+
+  if (error) {
+    if (error.message.includes('NOT_OWNER')) {
+      alert('คุณไม่ใช่เจ้าของโพสต์นี้ จึงไม่สามารถลบได้');
     } else {
-      alert('ลบโพสต์เรียบร้อยแล้ว');
-      window.location.href = 'browse.html';
+      alert('เกิดข้อผิดพลาดในการลบ: ' + error.message);
     }
+  } else {
+    alert('ลบโพสต์เรียบร้อยแล้ว');
+    window.location.href = 'browse.html';
   }
 }
 
 async function saveItemToStaffStorage() {
   if (!currentLoadedItem) return;
 
-  if (confirm('คุณต้องการบันทึกสิ่งของนี้เข้าสู่จุดรับฝากของเจ้าหน้าที่ใช่หรือไม่?')) {
-    const { error } = await supabaseClient
-      .from('item')
-      .update({ status: 'อยู่ที่จุดรับฝาก' })
-      .eq('item_id', currentLoadedItem.item_id);
-
-    if (error) {
-      alert('บันทึกไม่สำเร็จ: ' + error.message);
-      return;
-    }
-
-    const currentUserId = localStorage.getItem('currentUserId') || null;
-    const { error: logError } = await supabaseClient
-      .from('item_history_log')
-      .insert({
-        item_id: currentLoadedItem.item_id,
-        user_id: currentUserId,
-        storage_point_id: currentLoadedItem.current_storage_id || null,
-        action_type: 'registered',
-        description: 'เจ้าหน้าที่นำสิ่งของเข้าจุดรับฝาก'
-      });
-
-    if (logError) {
-      console.error('บันทึก item_history_log ไม่สำเร็จ:', logError);
-    }
-
-    alert('บันทึกสิ่งของเข้าคลังเรียบร้อยแล้ว');
-    location.reload();
+  const userId = localStorage.getItem('userId');
+  if (!userId) {
+    alert('กรุณาเข้าสู่ระบบก่อน');
+    window.location.href = 'login.html';
+    return;
   }
+
+  if (!confirm('คุณต้องการบันทึกสิ่งของนี้เข้าสู่จุดรับฝากของเจ้าหน้าที่ใช่หรือไม่?')) return;
+
+  const { error } = await supabaseClient.rpc('save_item_to_storage', {
+    p_item_id: currentLoadedItem.item_id,
+    p_user_id: userId
+  });
+
+  if (error) {
+    if (error.message.includes('NOT_STAFF')) {
+      alert('เฉพาะเจ้าหน้าที่เท่านั้นที่ทำรายการนี้ได้');
+    } else {
+      alert('บันทึกไม่สำเร็จ: ' + error.message);
+    }
+    return;
+  }
+
+  alert('บันทึกสิ่งของเข้าคลังเรียบร้อยแล้ว');
+  location.reload();
 }
 
-document.addEventListener('DOMContentLoaded', loadItemDetail);
+document.addEventListener('DOMContentLoaded', () => {
+  loadItemDetail();
+
+  // ผูกปุ่ม "แก้ไขโพสต์" ด้วย JS โดยตรง กันกรณี HTML ไม่มี onclick กำกับไว้
+  const btnEdit = document.getElementById('btnEditPost');
+  console.log('[DEBUG] btnEditPost element:', btnEdit); // ชั่วคราวสำหรับ debug
+  if (btnEdit) {
+    btnEdit.addEventListener('click', (e) => {
+      console.log('[EDIT BUTTON CLICKED]'); // ชั่วคราวสำหรับ debug
+      e.preventDefault();
+      editCurrentItem();
+    });
+  } else {
+    console.log('[DEBUG] ไม่พบปุ่ม btnEditPost ใน DOM เลย'); // ชั่วคราวสำหรับ debug
+  }
+});
 
 // Export Functions for Onclick Events
 window.openFullscreenModal = openFullscreenModal;
@@ -329,5 +369,6 @@ window.prevModalImage = prevModalImage;
 window.nextModalImage = nextModalImage;
 window.changeImage = changeImage;
 window.handleClaim = handleClaim;
+window.editCurrentItem = editCurrentItem; // 🟢 เพิ่ม Export ฟังก์ชันสำหรับแก้ไขโพสต์
 window.deleteCurrentItem = deleteCurrentItem;
 window.saveItemToStaffStorage = saveItemToStaffStorage;

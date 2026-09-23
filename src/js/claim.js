@@ -1,27 +1,3 @@
-// ==============================================================
-// claim.js — ตรรกะของหน้า "แบบฟอร์มขอรับคืนสิ่งของ"
-//
-// แก้ไขให้ตรงกับ schema.sql จริง (โค้ดเดิมมีคอมเมนต์อ้างอิง schema แบบ
-// CamelCase ที่ไม่ตรงกับ schema.sql ที่ใช้งานจริงเลย):
-//
-//   1. ตาราง item ไม่มีคอลัมน์ "item_date", "image", หรือความสัมพันธ์ชื่อ
-//      "location" — คอลัมน์รูปภาพจริงชื่อ image_url และ item ไม่ได้เก็บ
-//      "วันที่พบ" ไว้ในตัวเอง ข้อมูลนั้นอยู่ในตาราง report
-//      (report_type = 'found', incident_datetime, incident_location)
-//      ที่ผูกกับ item ผ่าน item_id แทน จึงต้อง query แยกอีกตาราง
-//   2. ที่เก็บของปัจจุบัน (ถ้าต้องใช้ในอนาคต) อยู่ในตาราง storage_point
-//      ผ่าน item.current_storage_id ไม่ใช่ตาราง/คอลัมน์ชื่อ "location"
-//   3. claim.claim_id เป็นชนิด uuid (DEFAULT gen_random_uuid()) ห้าม
-//      กำหนดเองเป็นสตริงแบบ "CLM-<timestamp>" เพราะจะ insert ไม่ผ่าน
-//      (invalid input syntax for type uuid) ปล่อยให้ฐานข้อมูล generate
-//   4. claim_status enum ในฐานข้อมูลเป็นตัวพิมพ์เล็ก ('pending' ไม่ใช่
-//      'Pending') — ไม่ได้ตั้งค่าเองอยู่แล้วจึงใช้ค่า default ได้ปกติ
-//   5. หน้า login.js / profile.js เก็บอีเมลผู้ใช้ที่ล็อกอินอยู่ใน
-//      localStorage คีย์ "userEmail" ไม่ใช่ "currentUserEmail" ตามที่
-//      โค้ดเดิมของหน้านี้อ่าน — ถ้าไม่แก้คีย์ให้ตรงกัน หน้านี้จะเข้าใจว่า
-//      ยังไม่ได้ล็อกอินเสมอ แล้วเด้งกลับไปหน้า login.html ทุกครั้ง
-// ==============================================================
-
 import { supabaseClient } from './supabaseClient.js';
 
 const CLAIMABLE_STATUS = 'อยู่ที่จุดรับฝาก';
@@ -88,7 +64,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   try {
     // แก้ไข: ดึงเฉพาะคอลัมน์ที่มีอยู่จริงในตาราง item (item_date, image,
-    // location ไม่มีอยู่จริง — ใช้ image_url แทน image)
     const { data: item, error } = await supabaseClient
       .from('item')
       .select('item_id, item_name, status, description, image_url')
@@ -111,8 +86,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     currentItem = item;
 
-    // แก้ไข: "วันที่พบ" และ "สถานที่พบ" ไม่ได้เก็บอยู่ใน item เลย แต่มาจาก
-    // ใบแจ้งพบของ (report_type = 'found') ของสิ่งของชิ้นนี้ใน report แทน
     let foundDateText = '-';
     let foundLocationText = 'ไม่ระบุ';
 
@@ -146,9 +119,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function uploadEvidenceFile(file, prefix) {
   const fileExt = file.name.split('.').pop();
   const filePath = `${currentUserId}/${prefix}-${Date.now()}.${fileExt}`;
-
-  // ต้องมี Storage bucket ชื่อ "claim-evidence" (public) อยู่แล้วในโปรเจกต์
-  // Supabase — เรื่องนี้เป็นการตั้งค่า Storage ไม่ใช่ส่วนหนึ่งของ schema.sql
   const { error: uploadError } = await supabaseClient
     .storage
     .from('claim-evidence')
@@ -193,17 +163,14 @@ async function submitClaim() {
       uploadEvidenceFile(idFile, 'idcard')
     ]);
 
-    // claim.ownership_evidence เป็นคอลัมน์ TEXT เดี่ยว (NOT NULL) จึงรวม
-    // คำอธิบาย + URL ไฟล์หลักฐานทั้งสองไว้ในสตริง JSON เดียว
+    // รวมคำอธิบาย + URL ไฟล์หลักฐานทั้งสองไว้ในสตริง JSON เดียว
     const ownershipEvidence = JSON.stringify({
       description: evidenceText,
       proof_image_url: proofUrl,
       id_card_url: idUrl
     });
 
-    // แก้ไข: ไม่กำหนด claim_id เอง (คอลัมน์เป็น uuid + DEFAULT
-    // gen_random_uuid() อยู่แล้ว) และ claim_status จะได้ค่า default
-    // 'pending' (ตัวพิมพ์เล็ก) จากฐานข้อมูลโดยอัตโนมัติ
+    // แก้ไข: ไม่กำหนด claim_id เอง
     const { error } = await supabaseClient
       .from('claim')
       .insert([{

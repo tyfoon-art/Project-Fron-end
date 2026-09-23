@@ -1,6 +1,6 @@
 import { supabaseClient } from './supabaseClient.js';
 
-// ผู้ใช้ปัจจุบันต้อง login ไว้ก่อน (เก็บ user_id ไว้ใน localStorage)
+// ผู้ใช้ปัจจุบันต้อง login ไว้ก่อน
 function getCurrentUserId() {
   return localStorage.getItem('currentUserId')
       || localStorage.getItem('userId')

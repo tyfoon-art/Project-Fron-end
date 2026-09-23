@@ -1,9 +1,5 @@
 import { supabaseClient } from './supabaseClient.js';
 
-// ---------- โหลดหมวดหมู่จริงจากตาราง category ใน Supabase ----------
-// หมายเหตุ: ชื่อตาราง/คอลัมน์ที่สร้างด้วย SQL แบบไม่ใส่ "" จะถูก Postgres
-// แปลงเป็นตัวพิมพ์เล็กทั้งหมดเสมอ (CATEGORY -> category, Category_ID -> category_id)
-// จึงต้องเรียกด้วยชื่อตัวพิมพ์เล็กแบบนี้ ไม่ใช่ตามที่เขียนไว้ใน .sql
 document.addEventListener('DOMContentLoaded', async () => {
   await loadCategories();
   restoreFromSessionStorage();
