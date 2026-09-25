@@ -244,4 +244,3 @@ export const supabase = createClient(
 1. Database
 2. Table Editor
 3. สร้าง Table
-
