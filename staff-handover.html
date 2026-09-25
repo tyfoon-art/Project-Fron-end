@@ -461,65 +461,75 @@
 
 
                         <!-- ================================================= -->
-                        <!-- FILE UPLOAD -->
-                        <!-- ================================================= -->
+<!-- FILE UPLOAD -->
+<!-- ================================================= -->
 
-                        <div class="space-y-2">
+<div class="space-y-2">
 
-                            <div class="flex justify-between items-center text-xs">
+    <div class="flex justify-between items-center text-xs">
 
-                                <label class="font-bold text-gray-700">
+        <label class="font-bold text-gray-900 text-sm">
 
-                                    ภาพถ่าย/วิดีโอ ขณะส่งมอบ (หลักฐาน)
+            ภาพถ่าย / วิดีโอสิ่งของ
 
-                                    <span id="fileCountText"
-                                          class="text-ict-blue font-semibold ml-1">
-                                        (0/5)
-                                    </span>
+            <span id="fileCountText"
+                  class="text-ict-blue font-bold ml-1">
+                (0/5)
+            </span>
 
-                                </label>
-
-
-                                <button type="button"
-                                        id="clearAllBtn"
-                                        onclick="clearAllFiles()"
-                                        class="text-[10px] text-red-500 hover:underline hidden font-semibold">
-
-                                    ยกเลิกทั้งหมด
-
-                                </button>
-
-                            </div>
+        </label>
 
 
-                            <input type="file"
-                                   id="photoInput"
-                                   accept="image/*,video/*"
-                                   multiple
-                                   class="hidden"
-                                   onchange="previewFiles(event)">
+        <button type="button"
+                id="clearAllBtn"
+                onclick="clearAllFiles()"
+                class="text-[10px] text-red-500 hover:underline hidden font-semibold">
+
+            ยกเลิกทั้งหมด
+
+        </button>
+
+    </div>
 
 
-                            <label id="uploadLabel"
-                                   for="photoInput"
-                                   class="border-2 border-dashed border-gray-200 rounded-xl p-4 text-center hover:border-ict-blue transition cursor-pointer bg-gray-50/50 flex flex-col items-center justify-center space-y-1 block">
-
-                                <p class="font-bold text-gray-800 text-xs">
-                                    คลิกเพื่อถ่ายภาพ หรือ อัปโหลดวิดีโอ
-                                </p>
-
-                                <p class="text-[10px] text-gray-400">
-                                    รองรับรูปภาพและวิดีโอ สูงสุด 5 ไฟล์
-                                </p>
-
-                            </label>
+    <input type="file"
+           id="photoInput"
+           accept="image/*,video/*"
+           multiple
+           class="hidden"
+           onchange="previewFiles(event)">
 
 
-                            <div id="previewContainer"
-                                 class="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-1">
-                            </div>
+    <label id="uploadLabel"
+           for="photoInput"
+           class="border-2 border-dashed border-ict-blue/80 rounded-2xl p-6 text-center hover:bg-blue-50/50 transition cursor-pointer bg-white flex flex-col items-center justify-center space-y-2 block shadow-sm">
 
-                        </div>
+        <!-- ไอคอนรูปกล้อง -->
+        <div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-ict-blue">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+        </div>
+
+        <!-- ข้อความหลัก -->
+        <p class="font-bold text-ict-blue text-sm">
+            อัปโหลดรูปภาพ หรือ วิดีโอ
+        </p>
+
+        <!-- ข้อความย่อย -->
+        <p class="text-xs text-gray-400">
+            อัปโหลดอย่างน้อย 1 ไฟล์ และสูงสุด 5 ไฟล์
+        </p>
+
+    </label>
+
+
+    <div id="previewContainer"
+         class="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-1">
+    </div>
+
+</div>
 
 
                         <!-- ================================================= -->
