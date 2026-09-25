@@ -7,64 +7,153 @@
 
     <title>ดำเนินการจำหน่ายสิ่งของ - Lost & Found ICT</title>
 
-    <!-- Tailwind CSS -->
+    <!-- ============================================= -->
+    <!-- TAILWIND CSS -->
+    <!-- ============================================= -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Google Fonts -->
+
+    <!-- ============================================= -->
+    <!-- GOOGLE FONT -->
+    <!-- ============================================= -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
     <link
         href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap"
         rel="stylesheet"
     >
 
-    <!-- Tailwind Configuration -->
+
+    <!-- ============================================= -->
+    <!-- TAILWIND CONFIGURATION -->
+    <!-- ============================================= -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
+
                     fontFamily: {
                         sans: ['"Prompt"', 'sans-serif'],
                         brand: ['"Prompt"', 'sans-serif'],
                     },
+
                     colors: {
                         ict: {
                             blue: '#034383',
+                            btnBlue: '#0062cc',
                             hover: '#022e5b',
-                            lightBg: '#F8F9FC',
+                            lightBg: '#F4F7F9',
                         }
                     }
+
                 }
             }
         }
     </script>
 
-    <!-- Custom CSS -->
+
+    <!-- ============================================= -->
+    <!-- CUSTOM CSS -->
+    <!-- ============================================= -->
     <style>
+
         body {
             font-family: 'Prompt', sans-serif;
         }
+
+        .modal-overlay {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: all 0.2s ease;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .modal-box {
+            transform: translateY(15px) scale(0.97);
+            opacity: 0;
+            transition: all 0.2s ease;
+        }
+
+        .modal-overlay.show .modal-box {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        .loading-spinner {
+            width: 15px;
+            height: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .page-disabled {
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .radio-card {
+            transition:
+                border-color 0.2s ease,
+                background-color 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .radio-card:has(input:checked) {
+            border-color: #034383;
+            background-color: rgba(239, 246, 255, 0.7);
+            box-shadow: 0 0 0 1px rgba(3, 67, 131, 0.08);
+        }
+
+        .radio-card:has(input:checked) .radio-title {
+            color: #034383;
+        }
+
     </style>
+
 </head>
 
+
 <body class="bg-ict-lightBg text-gray-800 min-h-screen flex flex-col text-xs font-sans">
+
 
     <!-- ============================================= -->
     <!-- TOP NAVIGATION BAR -->
     <!-- ============================================= -->
+
     <header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
 
-            <!-- โลโก้ระบบ -->
+
+            <!-- ========================================= -->
+            <!-- LOGO -->
+            <!-- ========================================= -->
+
             <a
                 href="staff-dashboard.html"
                 class="flex items-center gap-2.5 flex-shrink-0 hover:opacity-80 transition pr-2"
             >
+
                 <svg
                     class="w-7 h-7 text-ict-blue flex-shrink-0"
                     viewBox="0 0 24 24"
                     fill="currentColor"
+                    aria-hidden="true"
                 >
                     <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z" />
                     <path d="M3.8 12.8v3.7c0 2.2 3.7 4 8.2 4s8.2-1.8 8.2-4v-3.7l-8.2 4.5-8.2-4.5z" />
@@ -73,12 +162,19 @@
                 <span class="text-xl font-extrabold text-ict-blue tracking-tight whitespace-nowrap">
                     Lost &amp; Found ICT
                 </span>
+
             </a>
 
-            <!-- Navigation Menu -->
+
+            <!-- ========================================= -->
+            <!-- NAVIGATION -->
+            <!-- ========================================= -->
+
             <nav class="hidden md:flex items-center space-x-1 lg:space-x-5 text-sm font-semibold text-gray-600 h-full">
 
+
                 <!-- Dashboard -->
+
                 <a
                     href="staff-dashboard.html"
                     class="h-full flex items-center border-b-4 border-transparent hover:text-ict-blue transition whitespace-nowrap px-1"
@@ -86,15 +182,19 @@
                     แดชบอร์ดภาพรวม
                 </a>
 
-                <!-- รายการสิ่งของทั้งหมด -->
+
+                <!-- บันทึกสิ่งของเข้าคลัง -->
+
                 <a
                     href="staff-inventory-add.html"
                     class="h-full flex items-center border-b-4 border-transparent hover:text-ict-blue transition whitespace-nowrap px-1"
                 >
-                    รายการสิ่งของทั้งหมด
+                    บันทึกสิ่งของเข้าคลัง
                 </a>
 
+
                 <!-- ตรวจสอบคำร้อง -->
+
                 <a
                     href="staff-verify-claims.html"
                     class="h-full flex items-center border-b-4 border-transparent hover:text-ict-blue transition whitespace-nowrap px-1"
@@ -102,7 +202,9 @@
                     ตรวจสอบคำร้อง
                 </a>
 
+
                 <!-- ส่งคืนเจ้าของ -->
+
                 <a
                     href="staff-handover.html"
                     class="h-full flex items-center border-b-4 border-transparent hover:text-ict-blue transition whitespace-nowrap px-1"
@@ -110,7 +212,9 @@
                     ส่งคืนเจ้าของ
                 </a>
 
-                <!-- รายการสิ่งของตกค้าง - Active -->
+
+                <!-- รายการสิ่งของตกค้าง -->
+
                 <a
                     href="staff-overdue-list.html"
                     class="h-full flex items-center border-b-4 border-ict-blue text-ict-blue font-bold transition whitespace-nowrap px-1"
@@ -120,19 +224,27 @@
 
             </nav>
 
-            <!-- Search + Post + Profile -->
+
+            <!-- ========================================= -->
+            <!-- SEARCH / POST / PROFILE -->
+            <!-- ========================================= -->
+
             <div class="flex items-center gap-3 ml-auto md:ml-0">
 
-                <!-- Search Box -->
+
+                <!-- Search -->
+
                 <div class="relative hidden sm:block w-44 lg:w-56">
 
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-gray-400">
+
                         <svg
                             class="w-4 h-4"
                             fill="none"
                             stroke="currentColor"
                             stroke-width="2"
                             viewBox="0 0 24 24"
+                            aria-hidden="true"
                         >
                             <path
                                 stroke-linecap="round"
@@ -140,36 +252,53 @@
                                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                             />
                         </svg>
+
                     </span>
 
+
                     <input
+                        id="topSearchInput"
                         type="text"
                         placeholder="ค้นหารายการ..."
+                        autocomplete="off"
                         class="w-full bg-slate-50 border border-slate-200 text-xs rounded-full pl-9 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-ict-blue/20 transition"
                     >
 
                 </div>
 
-                <!-- ปุ่มโพสต์ -->
+
+                <!-- Post -->
+
                 <a
                     href="staff-inventory-add.html"
                     class="bg-ict-blue hover:bg-ict-hover text-white text-xs font-bold px-4 py-2 rounded-full flex items-center gap-1.5 shadow-sm transition whitespace-nowrap"
                 >
-                    <span class="text-sm font-bold">+</span>
-                    <span>โพสต์</span>
+
+                    <span class="text-sm font-bold">
+                        +
+                    </span>
+
+                    <span>
+                        โพสต์
+                    </span>
+
                 </a>
 
+
                 <!-- Profile -->
+
                 <a
                     href="staff-profile.html"
                     class="h-16 flex items-center gap-1.5 text-sm text-gray-700 hover:text-ict-blue font-bold px-2 border-b-4 border-transparent transition whitespace-nowrap"
                 >
+
                     <svg
-                        class="w-5 h-5 text-gray-600 hover:text-ict-blue transition"
+                        class="w-5 h-5 text-gray-600"
                         fill="none"
                         stroke="currentColor"
                         stroke-width="2"
                         viewBox="0 0 24 24"
+                        aria-hidden="true"
                     >
                         <path
                             stroke-linecap="round"
@@ -178,36 +307,47 @@
                         />
                     </svg>
 
-                    <span>Profile</span>
+                    <span>
+                        Profile
+                    </span>
+
                 </a>
 
             </div>
 
         </div>
+
     </header>
+
 
 
     <!-- ============================================= -->
     <!-- MAIN CONTENT -->
     <!-- ============================================= -->
+
     <main class="flex-1 p-6 md:p-8 overflow-y-auto">
 
         <div class="max-w-4xl mx-auto space-y-6">
 
-            <!-- Page Header -->
+
+            <!-- ========================================= -->
+            <!-- PAGE HEADER -->
+            <!-- ========================================= -->
+
             <div>
 
-                <!-- ปุ่มย้อนกลับ -->
                 <a
                     href="staff-overdue-list.html"
                     class="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-500 hover:text-ict-blue mb-2 transition"
                 >
+
                     <svg
                         class="w-4 h-4"
                         fill="none"
                         stroke="currentColor"
                         stroke-width="2"
                         viewBox="0 0 24 24"
+                        aria-hidden="true"
                     >
                         <path
                             stroke-linecap="round"
@@ -217,12 +357,14 @@
                     </svg>
 
                     ย้อนกลับไปรายการของเกินกำหนด
+
                 </a>
 
-                <!-- หัวข้อหน้า -->
+
                 <h2 class="text-2xl font-bold text-gray-900 tracking-tight">
                     บันทึกการดำเนินการจำหน่ายสิ่งของ
                 </h2>
+
 
                 <p class="text-xs text-gray-500 font-medium mt-0.5">
                     กรอกรายละเอียดเพื่อเปลี่ยนสถานะสิ่งของตกค้างเกินกำหนดในระบบ
@@ -231,14 +373,18 @@
             </div>
 
 
+
             <!-- ============================================= -->
             <!-- ITEM INFORMATION -->
             <!-- ============================================= -->
+
             <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex items-center justify-between">
 
-                <div class="flex items-center gap-4">
+                <div class="flex items-center gap-4 min-w-0">
+
 
                     <!-- รูปสิ่งของ -->
+
                     <div class="w-16 h-16 rounded-xl bg-gray-100 overflow-hidden flex-shrink-0 border border-gray-100">
 
                         <img
@@ -250,10 +396,12 @@
 
                     </div>
 
-                    <!-- รายละเอียดสิ่งของ -->
-                    <div class="space-y-1">
 
-                        <div class="flex items-center gap-2">
+                    <!-- รายละเอียด -->
+
+                    <div class="space-y-1 min-w-0">
+
+                        <div class="flex items-center gap-2 flex-wrap">
 
                             <span
                                 id="item-id-display"
@@ -261,6 +409,7 @@
                             >
                                 ...
                             </span>
+
 
                             <span
                                 id="item-overdue-display"
@@ -271,21 +420,33 @@
 
                         </div>
 
+
                         <h3
                             id="item-name-display"
-                            class="text-base font-bold text-gray-900"
+                            class="text-base font-bold text-gray-900 truncate"
                         >
                             กำลังโหลด...
                         </h3>
 
-                        <p class="text-xs text-gray-500 font-medium">
-                            หมวดหมู่:
-                            <span id="item-category-display">-</span>
 
-                            |
+                        <p class="text-xs text-gray-500 font-medium leading-relaxed">
+
+                            หมวดหมู่:
+
+                            <span id="item-category-display">
+                                -
+                            </span>
+
+                            <span class="mx-1">
+                                |
+                            </span>
 
                             สถานที่จัดเก็บ:
-                            <span id="item-location-display">-</span>
+
+                            <span id="item-location-display">
+                                -
+                            </span>
+
                         </p>
 
                     </div>
@@ -295,10 +456,15 @@
             </div>
 
 
+
             <!-- ============================================= -->
             <!-- DISPOSAL FORM -->
             <!-- ============================================= -->
-            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+
+            <div
+                id="disposeFormCard"
+                class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6"
+            >
 
                 <form
                     id="dispose-form"
@@ -306,7 +472,9 @@
                     onsubmit="handleDisposeSubmit(event)"
                 >
 
-                    <!-- Hidden Item ID -->
+
+                    <!-- Hidden ID -->
+
                     <input
                         type="hidden"
                         id="input-item-id"
@@ -314,18 +482,30 @@
                     >
 
 
-                    <!-- เลือกรูปแบบการจำหน่าย -->
+
+                    <!-- ========================================= -->
+                    <!-- DISPOSAL TYPE -->
+                    <!-- ========================================= -->
+
                     <div>
 
                         <label class="block text-xs font-bold text-gray-700 mb-2">
+
                             รูปแบบการจำหน่าย
-                            <span class="text-red-500">*</span>
+
+                            <span class="text-red-500">
+                                *
+                            </span>
+
                         </label>
+
 
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
 
-                            <!-- บริจาค -->
-                            <label class="border border-gray-200 rounded-xl p-3.5 flex items-start gap-3 cursor-pointer hover:border-ict-blue transition bg-gray-50/50 has-[:checked]:border-ict-blue has-[:checked]:bg-blue-50/30">
+
+                            <!-- Donate -->
+
+                            <label class="radio-card border border-gray-200 rounded-xl p-3.5 flex items-start gap-3 cursor-pointer hover:border-ict-blue transition bg-gray-50/50">
 
                                 <input
                                     type="radio"
@@ -335,9 +515,10 @@
                                     required
                                 >
 
+
                                 <div>
 
-                                    <div class="font-bold text-gray-800 text-xs">
+                                    <div class="radio-title font-bold text-gray-800 text-xs transition">
                                         บริจาคสาธารณะ
                                     </div>
 
@@ -350,8 +531,10 @@
                             </label>
 
 
-                            <!-- ทำลาย / รีไซเคิล -->
-                            <label class="border border-gray-200 rounded-xl p-3.5 flex items-start gap-3 cursor-pointer hover:border-ict-blue transition bg-gray-50/50 has-[:checked]:border-ict-blue has-[:checked]:bg-blue-50/30">
+
+                            <!-- Destroy -->
+
+                            <label class="radio-card border border-gray-200 rounded-xl p-3.5 flex items-start gap-3 cursor-pointer hover:border-ict-blue transition bg-gray-50/50">
 
                                 <input
                                     type="radio"
@@ -360,9 +543,10 @@
                                     class="mt-0.5 text-ict-blue focus:ring-ict-blue"
                                 >
 
+
                                 <div>
 
-                                    <div class="font-bold text-gray-800 text-xs">
+                                    <div class="radio-title font-bold text-gray-800 text-xs transition">
                                         ทำลาย / รีไซเคิล
                                     </div>
 
@@ -375,8 +559,10 @@
                             </label>
 
 
-                            <!-- อื่นๆ -->
-                            <label class="border border-gray-200 rounded-xl p-3.5 flex items-start gap-3 cursor-pointer hover:border-ict-blue transition bg-gray-50/50 has-[:checked]:border-ict-blue has-[:checked]:bg-blue-50/30">
+
+                            <!-- Other -->
+
+                            <label class="radio-card border border-gray-200 rounded-xl p-3.5 flex items-start gap-3 cursor-pointer hover:border-ict-blue transition bg-gray-50/50">
 
                                 <input
                                     type="radio"
@@ -385,9 +571,10 @@
                                     class="mt-0.5 text-ict-blue focus:ring-ict-blue"
                                 >
 
+
                                 <div>
 
-                                    <div class="font-bold text-gray-800 text-xs">
+                                    <div class="radio-title font-bold text-gray-800 text-xs transition">
                                         อื่นๆ
                                     </div>
 
@@ -404,28 +591,47 @@
                     </div>
 
 
-                    <!-- รายละเอียดการดำเนินการ -->
+
+                    <!-- ========================================= -->
+                    <!-- NOTE -->
+                    <!-- ========================================= -->
+
                     <div>
 
-                        <label class="block text-xs font-bold text-gray-700 mb-1">
+                        <label
+                            for="dispose-note"
+                            class="block text-xs font-bold text-gray-700 mb-1"
+                        >
+
                             รายละเอียดเพิ่มเติม / หมายเหตุ
-                            <span class="text-red-500">*</span>
+
+                            <span class="text-red-500">
+                                *
+                            </span>
+
                         </label>
 
+
                         <textarea
+                            id="dispose-note"
+                            name="dispose_note"
                             rows="3"
                             required
                             placeholder="ระบุหน่วยงานที่รับมอบ หรือสาเหตุในการทำลาย..."
-                            class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-xs text-gray-800 focus:outline-none focus:ring-2 focus:ring-ict-blue/20 transition"
+                            class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-xs text-gray-800 focus:outline-none focus:ring-2 focus:ring-ict-blue/20 transition resize-none"
                         ></textarea>
 
                     </div>
 
 
-                    <!-- ปุ่มดำเนินการ -->
+
+                    <!-- ========================================= -->
+                    <!-- BUTTONS -->
+                    <!-- ========================================= -->
+
                     <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
 
-                        <!-- ยกเลิก -->
+
                         <a
                             href="staff-overdue-list.html"
                             class="px-5 py-2.5 rounded-xl border border-gray-200 text-xs font-semibold text-gray-600 hover:bg-gray-50 transition"
@@ -433,8 +639,9 @@
                             ยกเลิก
                         </a>
 
-                        <!-- ยืนยัน -->
+
                         <button
+                            id="submitDisposeButton"
                             type="submit"
                             class="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-semibold shadow-sm transition"
                         >
@@ -447,109 +654,2139 @@
 
             </div>
 
+
+
+            <!-- ============================================= -->
+            <!-- NOT ELIGIBLE MESSAGE -->
+            <!-- ============================================= -->
+
+            <div
+                id="notEligibleCard"
+                class="hidden bg-white rounded-2xl border border-amber-200 shadow-sm p-6"
+            >
+
+                <div class="flex items-start gap-4">
+
+                    <div class="w-11 h-11 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center flex-shrink-0">
+
+                        <svg
+                            class="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M12 9v4m0 4h.01M10.29 3.86L2.1 18.1A2 2 0 003.81 21h16.38a2 2 0 001.71-2.9L13.71 3.86a2 2 0 00-3.42 0z"
+                            />
+                        </svg>
+
+                    </div>
+
+
+                    <div>
+
+                        <h3 class="font-bold text-gray-900 text-sm">
+                            ยังไม่สามารถจำหน่ายสิ่งของรายการนี้ได้
+                        </h3>
+
+
+                        <p
+                            id="notEligibleMessage"
+                            class="text-xs text-gray-500 mt-1 leading-relaxed"
+                        >
+                            สิ่งของจะสามารถจำหน่ายได้เมื่อเก็บรักษาครบ 30 วัน
+                        </p>
+
+
+                        <a
+                            href="staff-overdue-list.html"
+                            class="inline-flex items-center mt-3 text-xs font-bold text-ict-blue hover:text-ict-hover transition"
+                        >
+                            กลับไปรายการสิ่งของตกค้าง
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ============================================= -->
+            <!-- ERROR CARD -->
+            <!-- ============================================= -->
+
+            <div
+                id="errorCard"
+                class="hidden bg-white rounded-2xl border border-red-200 shadow-sm p-6"
+            >
+
+                <div class="flex items-start gap-4">
+
+                    <div class="w-11 h-11 rounded-full bg-red-50 text-red-600 flex items-center justify-center flex-shrink-0">
+
+                        <svg
+                            class="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M12 9v4m0 4h.01M10.29 3.86L2.1 18.1A2 2 0 003.81 21h16.38a2 2 0 001.71-2.9L13.71 3.86a2 2 0 00-3.42 0z"
+                            />
+                        </svg>
+
+                    </div>
+
+
+                    <div>
+
+                        <h3 class="font-bold text-gray-900 text-sm">
+                            ไม่สามารถดำเนินการได้
+                        </h3>
+
+
+                        <p
+                            id="errorMessage"
+                            class="text-xs text-gray-500 mt-1 leading-relaxed"
+                        >
+                            ไม่พบข้อมูลรายการสิ่งของ
+                        </p>
+
+
+                        <a
+                            href="staff-overdue-list.html"
+                            class="inline-flex items-center mt-3 text-xs font-bold text-ict-blue hover:text-ict-hover transition"
+                        >
+                            กลับไปรายการสิ่งของตกค้าง
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
 
     </main>
 
 
+
+    <!-- ============================================= -->
+    <!-- CONFIRMATION MODAL -->
+    <!-- ============================================= -->
+
+    <div
+        id="disposeConfirmModal"
+        class="modal-overlay fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-[2px] px-4"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="disposeConfirmTitle"
+    >
+
+        <div
+            class="modal-box bg-white w-full max-w-md rounded-2xl shadow-2xl border border-gray-100 overflow-hidden"
+        >
+
+
+            <!-- Modal Header -->
+
+            <div class="px-6 pt-6 pb-4 text-center">
+
+                <div class="mx-auto w-14 h-14 rounded-full bg-red-50 flex items-center justify-center text-red-600 mb-4">
+
+                    <svg
+                        class="w-7 h-7"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 9v4m0 4h.01M10.29 3.86L2.1 18.1A2 2 0 003.81 21h16.38a2 2 0 001.71-2.9L13.71 3.86a2 2 0 00-3.42 0z"
+                        />
+                    </svg>
+
+                </div>
+
+
+                <h3
+                    id="disposeConfirmTitle"
+                    class="text-lg font-bold text-gray-900"
+                >
+                    ยืนยันการจำหน่ายสิ่งของ
+                </h3>
+
+
+                <p class="text-xs text-gray-500 mt-1">
+                    กรุณาตรวจสอบข้อมูลก่อนยืนยันการดำเนินการ
+                </p>
+
+            </div>
+
+
+
+            <!-- Summary -->
+
+            <div class="mx-6 mb-5 rounded-xl bg-gray-50 border border-gray-100 p-4 space-y-2.5">
+
+                <div class="flex justify-between gap-4">
+
+                    <span class="text-xs text-gray-500">
+                        รหัสสิ่งของ
+                    </span>
+
+                    <span
+                        id="confirmItemId"
+                        class="text-xs font-mono font-bold text-gray-800 text-right"
+                    >
+                        -
+                    </span>
+
+                </div>
+
+
+                <div class="flex justify-between gap-4">
+
+                    <span class="text-xs text-gray-500">
+                        รายการ
+                    </span>
+
+                    <span
+                        id="confirmItemName"
+                        class="text-xs font-bold text-gray-800 text-right max-w-[230px]"
+                    >
+                        -
+                    </span>
+
+                </div>
+
+
+                <div class="flex justify-between gap-4">
+
+                    <span class="text-xs text-gray-500">
+                        รูปแบบการจำหน่าย
+                    </span>
+
+                    <span
+                        id="confirmDisposeType"
+                        class="text-xs font-bold text-gray-800 text-right max-w-[230px]"
+                    >
+                        -
+                    </span>
+
+                </div>
+
+
+                <div class="flex justify-between gap-4">
+
+                    <span class="text-xs text-gray-500">
+                        ระยะเวลาตกค้าง
+                    </span>
+
+                    <span
+                        id="confirmOverdueDays"
+                        class="text-xs font-bold text-red-600 text-right"
+                    >
+                        -
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Modal Buttons -->
+
+            <div class="px-6 pb-6 flex items-center justify-end gap-3">
+
+                <button
+                    id="cancelDisposeButton"
+                    type="button"
+                    onclick="closeDisposeConfirmModal()"
+                    class="px-5 py-2.5 rounded-xl border border-gray-200 text-xs font-semibold text-gray-600 hover:bg-gray-50 transition"
+                >
+                    ยกเลิก
+                </button>
+
+
+                <button
+                    id="confirmDisposeButton"
+                    type="button"
+                    onclick="confirmDisposeItem()"
+                    class="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-sm transition"
+                >
+                    ยืนยันการจำหน่าย
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ============================================= -->
+    <!-- SUCCESS MODAL -->
+    <!-- ============================================= -->
+
+    <div
+        id="successModal"
+        class="modal-overlay fixed inset-0 z-[110] flex items-center justify-center bg-black/40 backdrop-blur-[2px] px-4"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="successModalTitle"
+    >
+
+        <div
+            class="modal-box bg-white w-full max-w-sm rounded-2xl shadow-2xl border border-gray-100 overflow-hidden"
+        >
+
+            <div class="px-6 pt-7 pb-5 text-center">
+
+                <div class="mx-auto w-14 h-14 rounded-full bg-green-50 text-green-600 flex items-center justify-center mb-4">
+
+                    <svg
+                        class="w-7 h-7"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M5 13l4 4L19 7"
+                        />
+                    </svg>
+
+                </div>
+
+                <h3
+                    id="successModalTitle"
+                    class="text-lg font-bold text-gray-900"
+                >
+                    จำหน่ายสิ่งของเรียบร้อยแล้ว
+                </h3>
+
+                <p class="text-xs text-gray-500 mt-2 leading-relaxed">
+                    ระบบบันทึกข้อมูลการจำหน่ายเรียบร้อยแล้ว
+                    และรายการนี้จะถูกนำออกจากรายการสิ่งของตกค้าง
+                </p>
+
+            </div>
+
+            <div class="px-6 pb-6">
+
+                <button
+                    id="successContinueButton"
+                    type="button"
+                    onclick="goBackToOverdueList()"
+                    class="w-full px-5 py-2.5 rounded-xl bg-ict-blue hover:bg-ict-hover text-white text-xs font-bold shadow-sm transition"
+                >
+                    กลับไปรายการสิ่งของตกค้าง
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ============================================= -->
+    <!-- ERROR MODAL -->
+    <!-- ============================================= -->
+
+    <div
+        id="errorModal"
+        class="modal-overlay fixed inset-0 z-[120] flex items-center justify-center bg-black/40 backdrop-blur-[2px] px-4"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="errorModalTitle"
+    >
+
+        <div
+            class="modal-box bg-white w-full max-w-sm rounded-2xl shadow-2xl border border-gray-100 overflow-hidden"
+        >
+
+            <div class="px-6 pt-7 pb-5 text-center">
+
+                <div class="mx-auto w-14 h-14 rounded-full bg-red-50 text-red-600 flex items-center justify-center mb-4">
+
+                    <svg
+                        class="w-7 h-7"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 9v4m0 4h.01M10.29 3.86L2.1 18.1A2 2 0 003.81 21h16.38a2 2 0 001.71-2.9L13.71 3.86a2 2 0 00-3.42 0z"
+                        />
+                    </svg>
+
+                </div>
+
+                <h3
+                    id="errorModalTitle"
+                    class="text-lg font-bold text-gray-900"
+                >
+                    ไม่สามารถบันทึกข้อมูลได้
+                </h3>
+
+                <p
+                    id="errorModalMessage"
+                    class="text-xs text-gray-500 mt-2 leading-relaxed"
+                >
+                    กรุณาลองใหม่อีกครั้ง
+                </p>
+
+            </div>
+
+            <div class="px-6 pb-6">
+
+                <button
+                    type="button"
+                    onclick="closeErrorModal()"
+                    class="w-full px-5 py-2.5 rounded-xl bg-ict-blue hover:bg-ict-hover text-white text-xs font-bold shadow-sm transition"
+                >
+                    ตกลง
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
     <!-- ============================================= -->
     <!-- JAVASCRIPT -->
     <!-- ============================================= -->
+
     <script>
 
         /* =================================================
-           MOCK DATA
+           CONFIGURATION
            ================================================= */
 
-        const mockItems = {
+        const STORAGE_KEY = 'lostFoundItems';
 
-            "ITM-2024-0012": {
-                name: "โน้ตบุ๊ก Asus สีเทา",
-                category: "อุปกรณ์ไอที",
-                location: "ตู้เก็บของห้องสโมสร ICT (A1)",
-                overdueDays: "ตกค้าง 63 วัน",
-                image: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=300&q=80"
-            },
+        const DISPOSAL_MIN_DAYS = 30;
 
-            "ITM-2024-0045": {
-                name: "นาฬิกาข้อมือสายหนังสีน้ำตาล",
-                category: "เครื่องแต่งกาย / เครื่องประดับ",
-                location: "ลิ้นชักธุรการ ชั้น 1",
-                overdueDays: "ตกค้าง 41 วัน",
-                image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&q=80"
-            },
+        let currentItem = null;
 
-            "ITM-2024-0089": {
-                name: "กระเป๋าสตางค์หนังสีดำ",
-                category: "เอกสาร / บัตร",
-                location: "ตู้เซฟวิชาการ ICT",
-                overdueDays: "ตกค้าง 30 วัน",
-                image: "https://images.unsplash.com/photo-1627123424574-724758594e93?w=300&q=80"
-            }
+        let isSaving = false;
 
-        };
 
 
         /* =================================================
-           PAGE INITIALIZATION
+           GET INVENTORY ITEMS
            ================================================= */
 
-        window.addEventListener('DOMContentLoaded', () => {
+        function getInventoryItems() {
 
-            const urlParams = new URLSearchParams(window.location.search);
-            const selectedId = urlParams.get('id');
+            try {
+
+                const data =
+                    localStorage.getItem(
+                        STORAGE_KEY
+                    );
+
+                if (!data) {
+                    return [];
+                }
+
+                const items =
+                    JSON.parse(data);
+
+                return Array.isArray(items)
+                    ? items
+                    : [];
+
+            } catch (error) {
+
+                console.error(
+                    'ไม่สามารถอ่านข้อมูลจาก localStorage ได้:',
+                    error
+                );
+
+                return [];
+
+            }
+
+        }
 
 
-            /* ---------------------------------------------
-               แสดงข้อมูลรายการที่เลือก
-               --------------------------------------------- */
 
-            if (selectedId && mockItems[selectedId]) {
+        /* =================================================
+           SAVE INVENTORY ITEMS
+           ================================================= */
 
-                const item = mockItems[selectedId];
+        function saveInventoryItems(items) {
 
-                document.getElementById('item-id-display').innerText = selectedId;
-                document.getElementById('item-name-display').innerText = item.name;
-                document.getElementById('item-category-display').innerText = item.category;
-                document.getElementById('item-location-display').innerText = item.location;
-                document.getElementById('item-overdue-display').innerText = item.overdueDays;
-                document.getElementById('item-image').src = item.image;
-                document.getElementById('input-item-id').value = selectedId;
+            try {
+
+                localStorage.setItem(
+                    STORAGE_KEY,
+                    JSON.stringify(items)
+                );
+
+                return true;
+
+            } catch (error) {
+
+                console.error(
+                    'ไม่สามารถบันทึกข้อมูลลง localStorage ได้:',
+                    error
+                );
+
+                return false;
+
+            }
+
+        }
+
+
+
+        /* =================================================
+           CALCULATE STORAGE DAYS
+           ================================================= */
+
+        function calculateStorageDays(item) {
+
+            if (!item) {
+                return 0;
+            }
+
+
+            /*
+             * createdAt = วันที่บันทึกสิ่งของเข้าคลัง
+             *
+             * ใช้ createdAt เป็นลำดับแรก
+             * เพราะระยะเวลาตกค้างควรเริ่มนับจาก
+             * วันที่สิ่งของถูกบันทึกเข้าคลัง
+             */
+
+            const dateValue =
+                item.createdAt ||
+                item.storageDate ||
+                item.foundDateTime ||
+                item.foundDate ||
+                item.date;
+
+
+            if (!dateValue) {
+                return 0;
+            }
+
+
+            const createdDate =
+                new Date(dateValue);
+
+
+            if (
+                Number.isNaN(
+                    createdDate.getTime()
+                )
+            ) {
+                return 0;
+            }
+
+
+            /*
+             * ใช้วันปฏิทิน
+             * เพื่อให้ตรงกับหน้า staff-overdue-list.html
+             */
+
+            const createdDay =
+                new Date(
+                    createdDate.getFullYear(),
+                    createdDate.getMonth(),
+                    createdDate.getDate()
+                );
+
+
+            const today =
+                new Date();
+
+
+            const todayDay =
+                new Date(
+                    today.getFullYear(),
+                    today.getMonth(),
+                    today.getDate()
+                );
+
+
+            const difference =
+                todayDay.getTime() -
+                createdDay.getTime();
+
+
+            return Math.max(
+                0,
+                Math.floor(
+                    difference /
+                    (1000 * 60 * 60 * 24)
+                )
+            );
+
+        }
+
+
+
+        /* =================================================
+           CATEGORY DISPLAY
+           ================================================= */
+
+        function getCategoryDisplay(item) {
+
+            if (!item) {
+                return '-';
+            }
+
+
+            const rawCategory =
+                String(
+                    item.category || ''
+                ).trim();
+
+
+            const categoryMap = {
+
+                electronics: 'อุปกรณ์ไอที',
+
+                bags: 'เครื่องแต่งกาย / เครื่องประดับ',
+
+                clothing: 'เครื่องแต่งกาย / เครื่องประดับ',
+
+                documents: 'เอกสาร / บัตร',
+
+                personal: 'อื่นๆ'
+
+            };
+
+
+            const rawCategoryMap = {
+
+                'อุปกรณ์ไอที':
+                    'อุปกรณ์ไอที',
+
+                'เครื่องแต่งกาย / เครื่องประดับ':
+                    'เครื่องแต่งกาย / เครื่องประดับ',
+
+                'กระเป๋า':
+                    'เครื่องแต่งกาย / เครื่องประดับ',
+
+                'เครื่องแต่งกาย':
+                    'เครื่องแต่งกาย / เครื่องประดับ',
+
+                'เอกสาร / บัตร':
+                    'เอกสาร / บัตร',
+
+                'เอกสาร':
+                    'เอกสาร / บัตร',
+
+                'อื่น':
+                    'อื่นๆ',
+
+                'อื่นๆ':
+                    'อื่นๆ'
+
+            };
+
+
+            if (
+                rawCategory &&
+                rawCategoryMap[rawCategory]
+            ) {
+
+                return rawCategoryMap[
+                    rawCategory
+                ];
+
+            }
+
+
+            return (
+                categoryMap[
+                    item.categoryKey
+                ] ||
+                rawCategory ||
+                'อื่นๆ'
+            );
+
+        }
+
+
+
+        /* =================================================
+           GET ITEM IMAGE
+           ================================================= */
+
+        function getItemImage(item) {
+
+            if (!item) {
+                return '';
+            }
+
+
+            if (
+                Array.isArray(item.media) &&
+                item.media.length > 0
+            ) {
+
+                const firstMedia =
+                    item.media[0];
+
+
+                if (
+                    typeof firstMedia === 'string'
+                ) {
+
+                    return firstMedia;
+
+                }
+
+
+                if (
+                    firstMedia &&
+                    firstMedia.dataUrl
+                ) {
+
+                    return firstMedia.dataUrl;
+
+                }
+
+
+                if (
+                    firstMedia &&
+                    firstMedia.url
+                ) {
+
+                    return firstMedia.url;
+
+                }
+
+            }
+
+
+            return '';
+
+        }
+
+
+
+        /* =================================================
+           DEFAULT IMAGE
+           ================================================= */
+
+        function getDefaultImage() {
+
+            return (
+                'data:image/svg+xml;charset=UTF-8,' +
+                encodeURIComponent(`
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="200"
+                        height="200"
+                        viewBox="0 0 200 200"
+                    >
+
+                        <rect
+                            width="200"
+                            height="200"
+                            fill="#f3f4f6"
+                        />
+
+                        <path
+                            d="M55 145l34-42 25 29 17-20 35 33H55z"
+                            fill="#d1d5db"
+                        />
+
+                        <circle
+                            cx="82"
+                            cy="73"
+                            r="13"
+                            fill="#d1d5db"
+                        />
+
+                    </svg>
+                `)
+            );
+
+        }
+
+
+
+        /* =================================================
+           LOCATION
+           ================================================= */
+
+        function getItemLocation(item) {
+
+            if (!item) {
+                return '-';
+            }
+
+
+            if (item.location) {
+                return item.location;
+            }
+
+
+            const locationParts = [];
+
+
+            if (item.storageRoom) {
+
+                locationParts.push(
+                    item.storageRoom
+                );
+
+            }
+
+
+            if (item.shelfId) {
+
+                locationParts.push(
+                    item.shelfId
+                );
+
+            }
+
+
+            if (item.binId) {
+
+                locationParts.push(
+                    item.binId
+                );
+
+            }
+
+
+            return locationParts.length > 0
+                ? locationParts.join(' / ')
+                : '-';
+
+        }
+
+
+
+        /* =================================================
+           DISPOSAL TYPE LABEL
+           ================================================= */
+
+        function getDisposeTypeLabel(type) {
+
+            const labels = {
+
+                donate:
+                    'บริจาคสาธารณะ',
+
+                destroy:
+                    'ทำลาย / รีไซเคิล',
+
+                other:
+                    'อื่นๆ'
+
+            };
+
+
+            return (
+                labels[type] ||
+                '-'
+            );
+
+        }
+
+
+
+        /* =================================================
+           INACTIVE STATUS
+           ================================================= */
+
+        function isInactiveStatus(status) {
+
+            if (!status) {
+                return false;
+            }
+
+
+            const normalized =
+                String(status)
+                    .trim()
+                    .toLowerCase();
+
+
+            return [
+                'disposed',
+                'dispose_completed',
+                'disposed_out',
+                'returned',
+                'handed_over',
+                'claimed'
+            ].includes(
+                normalized
+            );
+
+        }
+
+
+
+        /* =================================================
+           LOAD SELECTED ITEM
+           ================================================= */
+
+        function loadSelectedItem() {
+
+            const urlParams =
+                new URLSearchParams(
+                    window.location.search
+                );
+
+
+            const selectedId =
+                urlParams.get('id');
+
+
+            if (!selectedId) {
+
+                showInvalidItem(
+                    'ไม่พบรหัสสิ่งของที่ต้องการจำหน่าย'
+                );
+
+                return;
+
+            }
+
+
+            const items =
+                getInventoryItems();
+
+
+            const item =
+                items.find(
+                    current =>
+                        String(
+                            current.id
+                        ) ===
+                        String(
+                            selectedId
+                        )
+                );
+
+
+            if (!item) {
+
+                showInvalidItem(
+                    'ไม่พบข้อมูลสิ่งของรายการนี้ในระบบ'
+                );
+
+                return;
+
+            }
+
+
+            currentItem = item;
+
+
+
+            /* -----------------------------------------
+               ตรวจสอบสถานะ
+               ----------------------------------------- */
+
+            if (
+                isInactiveStatus(
+                    item.status
+                ) ||
+                item.disposedAt
+            ) {
+
+                showInvalidItem(
+                    'สิ่งของรายการนี้ไม่สามารถจำหน่ายได้ เนื่องจากถูกจำหน่ายหรือส่งคืนออกจากระบบแล้ว'
+                );
+
+                return;
+
+            }
+
+
+
+            /* -----------------------------------------
+               คำนวณจำนวนวัน
+               ----------------------------------------- */
+
+            const days =
+                calculateStorageDays(
+                    item
+                );
+
+
+            currentItem.storageDays =
+                days;
+
+
+
+            /* -----------------------------------------
+               แสดงข้อมูล
+               ----------------------------------------- */
+
+            document.getElementById(
+                'item-id-display'
+            ).innerText =
+                item.id || '-';
+
+
+            document.getElementById(
+                'item-name-display'
+            ).innerText =
+                item.name || '-';
+
+
+            document.getElementById(
+                'item-category-display'
+            ).innerText =
+                getCategoryDisplay(
+                    item
+                );
+
+
+            document.getElementById(
+                'item-location-display'
+            ).innerText =
+                getItemLocation(
+                    item
+                );
+
+
+            document.getElementById(
+                'input-item-id'
+            ).value =
+                item.id || '';
+
+
+
+            /* -----------------------------------------
+               BADGE
+               ----------------------------------------- */
+
+            const overdueBadge =
+                document.getElementById(
+                    'item-overdue-display'
+                );
+
+
+            overdueBadge.innerText =
+                `ตกค้าง ${days} วัน`;
+
+
+            if (
+                days >=
+                DISPOSAL_MIN_DAYS
+            ) {
+
+                overdueBadge.className =
+                    'text-[10px] bg-red-50 text-red-600 px-2.5 py-0.5 rounded-full font-bold border border-red-100';
 
             } else {
 
-                /* ---------------------------------------------
-                   ใช้รายการเริ่มต้นเมื่อไม่มี ID
-                   --------------------------------------------- */
-
-                const defaultItem = mockItems["ITM-2024-0012"];
-
-                document.getElementById('item-id-display').innerText = "ITM-2024-0012";
-                document.getElementById('item-name-display').innerText = defaultItem.name;
-                document.getElementById('item-category-display').innerText = defaultItem.category;
-                document.getElementById('item-location-display').innerText = defaultItem.location;
-                document.getElementById('item-overdue-display').innerText = defaultItem.overdueDays;
-                document.getElementById('item-image').src = defaultItem.image;
-                document.getElementById('input-item-id').value = "ITM-2024-0012";
+                overdueBadge.className =
+                    'text-[10px] bg-amber-50 text-amber-600 px-2.5 py-0.5 rounded-full font-bold border border-amber-100';
 
             }
 
-        });
+
+
+            /* -----------------------------------------
+               IMAGE
+               ----------------------------------------- */
+
+            const imageElement =
+                document.getElementById(
+                    'item-image'
+                );
+
+
+            imageElement.src =
+                getItemImage(item) ||
+                getDefaultImage();
+
+
+            imageElement.onerror =
+                function () {
+
+                    this.onerror = null;
+
+                    this.src =
+                        getDefaultImage();
+
+                };
+
+
+
+            /* -----------------------------------------
+               ตรวจสอบสิทธิ์
+               ----------------------------------------- */
+
+            if (
+                days >=
+                DISPOSAL_MIN_DAYS
+            ) {
+
+                enableDisposalForm();
+
+            } else {
+
+                disableDisposalForm(
+                    days
+                );
+
+            }
+
+        }
+
 
 
         /* =================================================
-           FORM SUBMISSION
+           ENABLE DISPOSAL FORM
+           ================================================= */
+
+        function enableDisposalForm() {
+
+            const formCard =
+                document.getElementById(
+                    'disposeFormCard'
+                );
+
+
+            const notEligibleCard =
+                document.getElementById(
+                    'notEligibleCard'
+                );
+
+
+            const errorCard =
+                document.getElementById(
+                    'errorCard'
+                );
+
+
+            formCard.classList.remove(
+                'hidden'
+            );
+
+            notEligibleCard.classList.add(
+                'hidden'
+            );
+
+            errorCard.classList.add(
+                'hidden'
+            );
+
+
+            const button =
+                document.getElementById(
+                    'submitDisposeButton'
+                );
+
+
+            button.disabled = false;
+
+            button.classList.remove(
+                'opacity-50',
+                'cursor-not-allowed'
+            );
+
+        }
+
+
+
+        /* =================================================
+           DISABLE DISPOSAL FORM
+           ================================================= */
+
+        function disableDisposalForm(days) {
+
+            const formCard =
+                document.getElementById(
+                    'disposeFormCard'
+                );
+
+
+            const notEligibleCard =
+                document.getElementById(
+                    'notEligibleCard'
+                );
+
+
+            formCard.classList.add(
+                'hidden'
+            );
+
+            notEligibleCard.classList.remove(
+                'hidden'
+            );
+
+
+            const remaining =
+                Math.max(
+                    0,
+                    DISPOSAL_MIN_DAYS - days
+                );
+
+
+            let message = '';
+
+
+            if (remaining === 1) {
+
+                message =
+                    `รายการนี้เก็บรักษาอยู่ ${days} วัน ` +
+                    `จึงยังไม่สามารถจำหน่ายได้ ` +
+                    `ต้องเก็บรักษาอีก 1 วัน ` +
+                    `จึงจะสามารถดำเนินการจำหน่ายได้`;
+
+            } else {
+
+                message =
+                    `รายการนี้เก็บรักษาอยู่ ${days} วัน ` +
+                    `จึงยังไม่สามารถจำหน่ายได้ ` +
+                    `ต้องเก็บรักษาอีก ${remaining} วัน ` +
+                    `จึงจะสามารถดำเนินการจำหน่ายได้`;
+
+            }
+
+
+            document.getElementById(
+                'notEligibleMessage'
+            ).innerText =
+                message;
+
+        }
+
+
+
+        /* =================================================
+           SHOW INVALID ITEM
+           ================================================= */
+
+        function showInvalidItem(message) {
+
+            currentItem = null;
+
+
+            document.getElementById(
+                'item-id-display'
+            ).innerText =
+                '-';
+
+
+            document.getElementById(
+                'item-name-display'
+            ).innerText =
+                'ไม่สามารถโหลดรายการได้';
+
+
+            document.getElementById(
+                'item-category-display'
+            ).innerText =
+                '-';
+
+
+            document.getElementById(
+                'item-location-display'
+            ).innerText =
+                '-';
+
+
+            document.getElementById(
+                'item-overdue-display'
+            ).innerText =
+                'ไม่พบข้อมูล';
+
+
+            document.getElementById(
+                'item-image'
+            ).src =
+                getDefaultImage();
+
+
+            document.getElementById(
+                'disposeFormCard'
+            ).classList.add(
+                'hidden'
+            );
+
+
+            document.getElementById(
+                'notEligibleCard'
+            ).classList.add(
+                'hidden'
+            );
+
+
+            document.getElementById(
+                'errorCard'
+            ).classList.remove(
+                'hidden'
+            );
+
+
+            document.getElementById(
+                'errorMessage'
+            ).innerText =
+                message;
+
+        }
+
+
+
+        /* =================================================
+           HANDLE FORM SUBMIT
            ================================================= */
 
         function handleDisposeSubmit(event) {
 
             event.preventDefault();
 
-            alert('บันทึกการจำหน่ายสิ่งของเรียบร้อยแล้ว');
 
-            window.location.href = 'staff-overdue-list.html';
+            if (
+                isSaving ||
+                !currentItem
+            ) {
+                return;
+            }
+
+
+            /*
+             * ตรวจสอบจำนวนวันอีกครั้ง
+             */
+
+            const days =
+                calculateStorageDays(
+                    currentItem
+                );
+
+
+            if (
+                days <
+                DISPOSAL_MIN_DAYS
+            ) {
+
+                disableDisposalForm(
+                    days
+                );
+
+                return;
+
+            }
+
+
+
+            /* -----------------------------------------
+               ประเภทการจำหน่าย
+               ----------------------------------------- */
+
+            const selectedType =
+                document.querySelector(
+                    'input[name="dispose_type"]:checked'
+                );
+
+
+            const noteElement =
+                document.getElementById(
+                    'dispose-note'
+                );
+
+
+            const note =
+                noteElement.value.trim();
+
+
+            if (!selectedType) {
+
+                showErrorModal(
+                    'กรุณาเลือกรูปแบบการจำหน่ายก่อนดำเนินการ'
+                );
+
+                return;
+
+            }
+
+
+            if (!note) {
+
+                showErrorModal(
+                    'กรุณาระบุรายละเอียดเพิ่มเติม / หมายเหตุ'
+                );
+
+                noteElement.focus();
+
+                return;
+
+            }
+
+
+
+            /* -----------------------------------------
+               เตรียมข้อมูล Confirmation Modal
+               ----------------------------------------- */
+
+            document.getElementById(
+                'confirmItemId'
+            ).innerText =
+                currentItem.id || '-';
+
+
+            document.getElementById(
+                'confirmItemName'
+            ).innerText =
+                currentItem.name || '-';
+
+
+            document.getElementById(
+                'confirmDisposeType'
+            ).innerText =
+                getDisposeTypeLabel(
+                    selectedType.value
+                );
+
+
+            document.getElementById(
+                'confirmOverdueDays'
+            ).innerText =
+                `${days} วัน`;
+
+
+            openDisposeConfirmModal();
 
         }
+
+
+
+        /* =================================================
+           OPEN CONFIRMATION MODAL
+           ================================================= */
+
+        function openDisposeConfirmModal() {
+
+            const modal =
+                document.getElementById(
+                    'disposeConfirmModal'
+                );
+
+
+            modal.classList.add(
+                'show'
+            );
+
+
+            document.body.classList.add(
+                'overflow-hidden'
+            );
+
+
+            setTimeout(
+                function () {
+
+                    document.getElementById(
+                        'cancelDisposeButton'
+                    ).focus();
+
+                },
+                50
+            );
+
+        }
+
+
+
+        /* =================================================
+           CLOSE CONFIRMATION MODAL
+           ================================================= */
+
+        function closeDisposeConfirmModal() {
+
+            if (isSaving) {
+                return;
+            }
+
+
+            const modal =
+                document.getElementById(
+                    'disposeConfirmModal'
+                );
+
+
+            modal.classList.remove(
+                'show'
+            );
+
+
+            document.body.classList.remove(
+                'overflow-hidden'
+            );
+
+        }
+
+
+
+        /* =================================================
+           CONFIRM DISPOSAL
+           ================================================= */
+
+        function confirmDisposeItem() {
+
+            if (
+                isSaving ||
+                !currentItem
+            ) {
+                return;
+            }
+
+
+            isSaving = true;
+
+
+            const confirmButton =
+                document.getElementById(
+                    'confirmDisposeButton'
+                );
+
+
+            const cancelButton =
+                document.getElementById(
+                    'cancelDisposeButton'
+                );
+
+
+            const originalButtonText =
+                confirmButton.innerHTML;
+
+
+            confirmButton.disabled = true;
+
+            cancelButton.disabled = true;
+
+
+            confirmButton.classList.add(
+                'opacity-60',
+                'cursor-not-allowed'
+            );
+
+
+            cancelButton.classList.add(
+                'opacity-60',
+                'cursor-not-allowed'
+            );
+
+
+            confirmButton.innerHTML = `
+                <span class="inline-flex items-center gap-2">
+                    <span class="loading-spinner"></span>
+                    กำลังบันทึก...
+                </span>
+            `;
+
+
+
+            try {
+
+                /* -----------------------------------------
+                   โหลดข้อมูลล่าสุดจาก localStorage
+                   ----------------------------------------- */
+
+                const items =
+                    getInventoryItems();
+
+
+                const itemIndex =
+                    items.findIndex(
+                        item =>
+                            String(
+                                item.id
+                            ) ===
+                            String(
+                                currentItem.id
+                            )
+                    );
+
+
+                if (
+                    itemIndex === -1
+                ) {
+
+                    throw new Error(
+                        'ไม่พบรายการสิ่งของในระบบ'
+                    );
+
+                }
+
+
+
+                /* -----------------------------------------
+                   ตรวจสอบสถานะล่าสุด
+                   ----------------------------------------- */
+
+                if (
+                    isInactiveStatus(
+                        items[itemIndex].status
+                    ) ||
+                    items[itemIndex].disposedAt
+                ) {
+
+                    throw new Error(
+                        'สิ่งของรายการนี้ถูกจำหน่ายหรือส่งคืนออกจากระบบแล้ว'
+                    );
+
+                }
+
+
+
+                /* -----------------------------------------
+                   ตรวจสอบจำนวนวันล่าสุด
+                   ----------------------------------------- */
+
+                const currentDays =
+                    calculateStorageDays(
+                        items[itemIndex]
+                    );
+
+
+                if (
+                    currentDays <
+                    DISPOSAL_MIN_DAYS
+                ) {
+
+                    throw new Error(
+                        `รายการนี้ยังเก็บรักษาไม่ครบ ${DISPOSAL_MIN_DAYS} วัน`
+                    );
+
+                }
+
+
+
+                /* -----------------------------------------
+                   อ่านประเภทการจำหน่าย
+                   ----------------------------------------- */
+
+                const selectedType =
+                    document.querySelector(
+                        'input[name="dispose_type"]:checked'
+                    );
+
+
+                if (!selectedType) {
+
+                    throw new Error(
+                        'กรุณาเลือกรูปแบบการจำหน่าย'
+                    );
+
+                }
+
+
+
+                /* -----------------------------------------
+                   อ่านหมายเหตุ
+                   ----------------------------------------- */
+
+                const note =
+                    document.getElementById(
+                        'dispose-note'
+                    ).value.trim();
+
+
+                if (!note) {
+
+                    throw new Error(
+                        'กรุณาระบุรายละเอียดเพิ่มเติม / หมายเหตุ'
+                    );
+
+                }
+
+
+
+                /* -----------------------------------------
+                   วันที่และเวลาปัจจุบัน
+                   ----------------------------------------- */
+
+                const now =
+                    new Date().toISOString();
+
+
+
+                /* -----------------------------------------
+                   เปลี่ยนสถานะ
+                   ----------------------------------------- */
+
+                items[itemIndex].status =
+                    'disposed';
+
+
+                items[itemIndex].disposedAt =
+                    now;
+
+
+                items[itemIndex].disposalDate =
+                    now;
+
+
+                items[itemIndex].updatedAt =
+                    now;
+
+
+
+                /* -----------------------------------------
+                   ประเภทการจำหน่าย
+                   ----------------------------------------- */
+
+                items[itemIndex].disposeType =
+                    selectedType.value;
+
+
+                items[itemIndex].disposalType =
+                    selectedType.value;
+
+
+                items[itemIndex].disposalTypeLabel =
+                    getDisposeTypeLabel(
+                        selectedType.value
+                    );
+
+
+
+                /* -----------------------------------------
+                   รายละเอียดการจำหน่าย
+                   ----------------------------------------- */
+
+                items[itemIndex].disposalNote =
+                    note;
+
+
+                items[itemIndex].disposalReason =
+                    note;
+
+
+
+                /* -----------------------------------------
+                   จำนวนวันที่เก็บก่อนจำหน่าย
+                   ----------------------------------------- */
+
+                items[itemIndex].disposalDays =
+                    currentDays;
+
+
+
+                /* -----------------------------------------
+                   บันทึกข้อมูล
+                   ----------------------------------------- */
+
+                const saved =
+                    saveInventoryItems(
+                        items
+                    );
+
+
+                if (!saved) {
+
+                    throw new Error(
+                        'ไม่สามารถบันทึกข้อมูลการจำหน่ายได้'
+                    );
+
+                }
+
+
+
+                /* -----------------------------------------
+                   อัปเดต currentItem
+                   ----------------------------------------- */
+
+                currentItem =
+                    items[itemIndex];
+
+
+
+                /* -----------------------------------------
+                   ปิด Confirmation Modal
+                   ----------------------------------------- */
+
+                const confirmModal =
+                    document.getElementById(
+                        'disposeConfirmModal'
+                    );
+
+
+                confirmModal.classList.remove(
+                    'show'
+                );
+
+
+
+                /*
+                 * เปิด Success Modal หลังจากปิด
+                 * Confirmation Modal เล็กน้อย
+                 */
+
+                setTimeout(
+                    function () {
+
+                        document.body.classList.add(
+                            'overflow-hidden'
+                        );
+
+
+                        const successModal =
+                            document.getElementById(
+                                'successModal'
+                            );
+
+
+                        successModal.classList.add(
+                            'show'
+                        );
+
+
+                        isSaving = false;
+
+                    },
+                    150
+                );
+
+            } catch (error) {
+
+                console.error(
+                    'เกิดข้อผิดพลาดในการจำหน่าย:',
+                    error
+                );
+
+
+                isSaving = false;
+
+
+                confirmButton.disabled = false;
+
+                cancelButton.disabled = false;
+
+
+                confirmButton.classList.remove(
+                    'opacity-60',
+                    'cursor-not-allowed'
+                );
+
+
+                cancelButton.classList.remove(
+                    'opacity-60',
+                    'cursor-not-allowed'
+                );
+
+
+                confirmButton.innerHTML =
+                    originalButtonText;
+
+
+                document.getElementById(
+                    'disposeConfirmModal'
+                ).classList.remove(
+                    'show'
+                );
+
+
+                document.body.classList.remove(
+                    'overflow-hidden'
+                );
+
+
+                showErrorModal(
+                    error.message ||
+                    'ไม่สามารถบันทึกการจำหน่ายได้'
+                );
+
+            }
+
+        }
+
+
+
+        /* =================================================
+           SHOW ERROR MODAL
+           ================================================= */
+
+        function showErrorModal(message) {
+
+            document.getElementById(
+                'errorModalMessage'
+            ).innerText =
+                message;
+
+
+            document.getElementById(
+                'errorModal'
+            ).classList.add(
+                'show'
+            );
+
+
+            document.body.classList.add(
+                'overflow-hidden'
+            );
+
+
+            setTimeout(
+                function () {
+
+                    const button =
+                        document.querySelector(
+                            '#errorModal button'
+                        );
+
+
+                    if (button) {
+                        button.focus();
+                    }
+
+                },
+                50
+            );
+
+        }
+
+
+
+        /* =================================================
+           CLOSE ERROR MODAL
+           ================================================= */
+
+        function closeErrorModal() {
+
+            document.getElementById(
+                'errorModal'
+            ).classList.remove(
+                'show'
+            );
+
+
+            document.body.classList.remove(
+                'overflow-hidden'
+            );
+
+        }
+
+
+
+        /* =================================================
+           GO BACK TO OVERDUE LIST
+           ================================================= */
+
+        function goBackToOverdueList() {
+
+            window.location.href =
+                'staff-overdue-list.html?disposed=success';
+
+        }
+
+
+
+        /* =================================================
+           CONFIRM MODAL BACKDROP
+           ================================================= */
+
+        document
+            .getElementById(
+                'disposeConfirmModal'
+            )
+            .addEventListener(
+                'click',
+                function (event) {
+
+                    if (
+                        event.target === this &&
+                        !isSaving
+                    ) {
+
+                        closeDisposeConfirmModal();
+
+                    }
+
+                }
+            );
+
+
+
+        /* =================================================
+           ERROR MODAL BACKDROP
+           ================================================= */
+
+        document
+            .getElementById(
+                'errorModal'
+            )
+            .addEventListener(
+                'click',
+                function (event) {
+
+                    if (
+                        event.target === this
+                    ) {
+
+                        closeErrorModal();
+
+                    }
+
+                }
+            );
+
+
+
+        /* =================================================
+           ESC KEY
+           ================================================= */
+
+        document.addEventListener(
+            'keydown',
+            function (event) {
+
+                if (
+                    event.key !== 'Escape'
+                ) {
+                    return;
+                }
+
+
+                if (isSaving) {
+                    return;
+                }
+
+
+                const confirmModal =
+                    document.getElementById(
+                        'disposeConfirmModal'
+                    );
+
+
+                if (
+                    confirmModal.classList.contains(
+                        'show'
+                    )
+                ) {
+
+                    closeDisposeConfirmModal();
+
+                    return;
+
+                }
+
+
+                const errorModal =
+                    document.getElementById(
+                        'errorModal'
+                    );
+
+
+                if (
+                    errorModal.classList.contains(
+                        'show'
+                    )
+                ) {
+
+                    closeErrorModal();
+
+                }
+
+            }
+        );
+
+
+
+        /* =================================================
+           TOP SEARCH
+           ================================================= */
+
+        function setupTopSearch() {
+
+            const searchInput =
+                document.getElementById(
+                    'topSearchInput'
+                );
+
+
+            if (!searchInput) {
+                return;
+            }
+
+
+            searchInput.addEventListener(
+                'keydown',
+                function (event) {
+
+                    if (
+                        event.key !== 'Enter'
+                    ) {
+                        return;
+                    }
+
+
+                    const keyword =
+                        this.value.trim();
+
+
+                    if (!keyword) {
+
+                        window.location.href =
+                            'staff-overdue-list.html';
+
+                        return;
+
+                    }
+
+
+                    window.location.href =
+                        `staff-overdue-list.html?search=${encodeURIComponent(keyword)}`;
+
+                }
+            );
+
+        }
+
+
+
+        /* =================================================
+           INITIALIZE
+           ================================================= */
+
+        document.addEventListener(
+            'DOMContentLoaded',
+            function () {
+
+                setupTopSearch();
+
+                loadSelectedItem();
+
+            }
+        );
 
     </script>
 
