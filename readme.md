@@ -172,6 +172,8 @@ npm run preview
 
 ### Supabase Configuration
 
+---
+
 ### 1. สร้างโปรเจกต์ Supabase
 
 1. เข้าเว็บไซต์ [supabase.com](https://supabase.com)
