@@ -1,15 +1,20 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>รายละเอียดการตรวจสอบคำร้อง - Lost & Found ICT</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap"
+        rel="stylesheet">
 
     <script>
         tailwind.config = {
@@ -20,9 +25,11 @@
                         body: ['"Prompt"', 'sans-serif'],
                         sans: ['"Prompt"', 'sans-serif'],
                     },
+
                     colors: {
                         ict: {
                             blue: '#034383',
+                            btnBlue: '#0062cc',
                             hover: '#022e5b',
                             lightBg: '#F4F7F9',
                         }
@@ -41,85 +48,167 @@
             font-family: 'Prompt', sans-serif;
             letter-spacing: -0.02em;
         }
+
+        .modal-backdrop {
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        .modal-card {
+            animation: modalIn 0.25s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px) scale(0.97);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 </head>
 
+
 <body class="bg-ict-lightBg text-gray-800 min-h-screen flex flex-col font-sans text-xs">
 
-    <!-- TOP NAVBAR -->
+
+    <!-- =========================================================
+         TOP NAVBAR
+    ========================================================== -->
+
     <header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+
+        <div
+            class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
 
             <!-- Logo -->
+
             <a href="staff-dashboard.html"
-               class="flex items-center gap-2.5 flex-shrink-0 hover:opacity-80 transition pr-2">
+                class="flex items-center gap-2.5 flex-shrink-0 hover:opacity-80 transition pr-2">
 
                 <svg class="w-7 h-7 text-ict-blue flex-shrink-0"
-                     viewBox="0 0 24 24"
-                     fill="currentColor">
+                    viewBox="0 0 24 24"
+                    fill="currentColor">
 
-                    <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
-                    <path d="M3.8 12.8v3.7c0 2.2 3.7 4 8.2 4s8.2-1.8 8.2-4v-3.7l-8.2 4.5-8.2-4.5z"/>
+                    <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z" />
+
+                    <path
+                        d="M3.8 12.8v3.7c0 2.2 3.7 4 8.2 4s8.2-1.8 8.2-4v-3.7l-8.2 4.5-8.2-4.5z" />
 
                 </svg>
 
-                <span class="text-xl font-extrabold text-ict-blue tracking-tight whitespace-nowrap">
+                <span
+                    class="text-xl font-extrabold text-ict-blue tracking-tight whitespace-nowrap">
+
                     Lost &amp; Found ICT
+
                 </span>
+
             </a>
 
 
             <!-- Navigation -->
-            <nav class="hidden md:flex items-center space-x-1 lg:space-x-5 text-sm font-semibold text-gray-600 h-full">
+
+            <nav
+                class="hidden md:flex items-center space-x-1 lg:space-x-5 text-sm font-semibold text-gray-600 h-full">
 
                 <a href="staff-dashboard.html"
-                   class="h-full flex items-center border-b-4 border-transparent hover:text-ict-blue transition whitespace-nowrap px-1">
+                    class="h-full flex items-center border-b-4 border-transparent hover:text-ict-blue transition whitespace-nowrap px-1">
+
                     แดชบอร์ดภาพรวม
+
                 </a>
+
 
                 <a href="staff-inventory-add.html"
-                   class="h-full flex items-center border-b-4 border-transparent hover:text-ict-blue transition whitespace-nowrap px-1">
-                    รายการสิ่งของทั้งหมด
+                    class="h-full flex items-center border-b-4 border-transparent hover:text-ict-blue transition whitespace-nowrap px-1">
+
+                    บันทึกสิ่งของเข้าคลัง
+
                 </a>
+
 
                 <!-- ACTIVE -->
+
                 <a href="staff-verify-claims.html"
-                   class="h-full flex items-center border-b-4 border-ict-blue text-ict-blue font-bold transition whitespace-nowrap px-1">
+                    class="h-full flex items-center border-b-4 border-ict-blue text-ict-blue font-bold transition whitespace-nowrap px-1">
+
                     ตรวจสอบคำร้อง
+
                 </a>
+
 
                 <a href="staff-handover.html"
-                   class="h-full flex items-center border-b-4 border-transparent hover:text-ict-blue transition whitespace-nowrap px-1">
+                    class="h-full flex items-center border-b-4 border-transparent hover:text-ict-blue transition whitespace-nowrap px-1">
+
                     ส่งคืนเจ้าของ
+
                 </a>
 
+
                 <a href="staff-overdue-list.html"
-                   class="h-full flex items-center border-b-4 border-transparent hover:text-ict-blue transition whitespace-nowrap px-1">
+                    class="h-full flex items-center border-b-4 border-transparent hover:text-ict-blue transition whitespace-nowrap px-1">
+
                     รายการสิ่งของตกค้าง
+
                 </a>
 
             </nav>
 
 
             <!-- Right Side -->
+
             <div class="flex items-center gap-3 ml-auto md:ml-0">
 
                 <!-- Search -->
+
                 <div class="relative hidden sm:block w-44 lg:w-56">
 
-                    <svg class="w-4 h-4 text-gray-500 absolute left-3.5 top-2.5"
-                         fill="none"
-                         stroke="currentColor"
-                         stroke-width="2"
-                         viewBox="0 0 24 24">
+                    <svg
+                        class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        viewBox="0 0 24 24">
 
-                        <path stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0a7 7 0 0114 0z" />
 
                     </svg>
 
+
                     <input
+                        id="topSearchInput"
                         type="text"
                         placeholder="ค้นหารายการ..."
                         class="w-full bg-slate-50 border border-slate-200 text-xs rounded-full pl-9 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-ict-blue/20 transition">
@@ -128,28 +217,33 @@
 
 
                 <!-- Post Button -->
+
                 <a href="staff-inventory-add.html"
-                   class="bg-ict-blue hover:bg-ict-hover text-white text-xs font-bold px-4 py-2 rounded-full flex items-center gap-1.5 shadow-sm transition whitespace-nowrap">
+                    class="bg-ict-blue hover:bg-ict-hover text-white text-xs font-bold px-4 py-2 rounded-full flex items-center gap-1.5 shadow-sm transition whitespace-nowrap">
 
                     <span class="text-sm font-bold">+</span>
+
                     <span>โพสต์</span>
 
                 </a>
 
 
                 <!-- Profile -->
+
                 <a href="staff-profile.html"
-                   class="h-16 flex items-center gap-1.5 text-sm text-gray-700 hover:text-ict-blue font-bold px-2 border-b-4 border-transparent transition whitespace-nowrap">
+                    class="h-16 flex items-center gap-1.5 text-sm text-gray-700 hover:text-ict-blue font-bold px-2 border-b-4 border-transparent transition whitespace-nowrap">
 
-                    <svg class="w-5 h-5 text-gray-600 hover:text-ict-blue transition"
-                         fill="none"
-                         stroke="currentColor"
-                         stroke-width="2"
-                         viewBox="0 0 24 24">
+                    <svg
+                        class="w-5 h-5 text-gray-600 hover:text-ict-blue transition"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        viewBox="0 0 24 24">
 
-                        <path stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M16 7a4 4 0 11-8 0a4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
 
                     </svg>
 
@@ -160,31 +254,40 @@
             </div>
 
         </div>
+
     </header>
 
 
-    <!-- Main Content Container -->
+
+    <!-- =========================================================
+         MAIN CONTENT
+    ========================================================== -->
+
     <main class="flex-1 p-6 md:p-8">
 
         <div class="max-w-7xl mx-auto space-y-6 w-full pb-16">
 
-            <!-- Back Button & Page Header -->
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+
+            <!-- Page Header -->
+
+            <div
+                class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
 
                 <div>
 
                     <a href="staff-verify-claims.html"
-                       class="text-ict-blue font-semibold hover:underline inline-flex items-center gap-1 text-xs mb-1 transition">
+                        class="text-ict-blue font-semibold hover:underline inline-flex items-center gap-1 text-xs mb-1 transition">
 
                         <svg class="w-4 h-4"
-                             fill="none"
-                             stroke="currentColor"
-                             stroke-width="2"
-                             viewBox="0 0 24 24">
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            viewBox="0 0 24 24">
 
-                            <path stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  d="M15 19l-7-7 7-7"/>
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M15 19l-7-7 7-7" />
 
                         </svg>
 
@@ -192,13 +295,18 @@
 
                     </a>
 
-                    <h1 class="text-2xl font-bold text-gray-900 flex items-center gap-3">
+
+                    <h1
+                        class="text-2xl font-bold text-gray-900 flex items-center gap-3">
 
                         รายละเอียดการตรวจสอบคำร้อง
 
-                        <span id="displayClaimId"
-                              class="font-mono text-base font-semibold text-gray-500">
+                        <span
+                            id="displayClaimId"
+                            class="font-mono text-base font-semibold text-gray-500">
+
                             #CLM-24-0891
+
                         </span>
 
                     </h1>
@@ -206,10 +314,12 @@
                 </div>
 
 
-                <div class="flex items-center gap-2"
-                     id="statusBadgeContainer">
+                <div
+                    class="flex items-center gap-2"
+                    id="statusBadgeContainer">
 
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium bg-amber-50 text-amber-700 rounded-full border border-amber-200">
+                    <span
+                        class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium bg-amber-50 text-amber-700 rounded-full border border-amber-200">
 
                         <span class="w-2 h-2 bg-amber-500 rounded-full"></span>
 
@@ -222,29 +332,40 @@
             </div>
 
 
-            <!-- Content Grid Layout -->
-            <div id="contentGrid"
-                 class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+
+            <!-- =========================================================
+                 CONTENT GRID
+            ========================================================== -->
+
+            <div
+                id="contentGrid"
+                class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
 
 
-                <!-- Left Column -->
+                <!-- LEFT -->
+
                 <div class="lg:col-span-2 space-y-6">
 
 
                     <!-- Card 1 -->
-                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-5">
 
-                        <h2 class="font-bold text-sm text-gray-900 border-b border-gray-100 pb-3 flex items-center gap-2">
+                    <div
+                        class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-5">
 
-                            <svg class="w-4 h-4 text-ict-blue"
-                                 fill="none"
-                                 stroke="currentColor"
-                                 stroke-width="2"
-                                 viewBox="0 0 24 24">
+                        <h2
+                            class="font-bold text-sm text-gray-900 border-b border-gray-100 pb-3 flex items-center gap-2">
 
-                                <path stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            <svg
+                                class="w-4 h-4 text-ict-blue"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                viewBox="0 0 24 24">
+
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
 
                             </svg>
 
@@ -253,40 +374,64 @@
                         </h2>
 
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div
+                            class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
-                            <!-- สิ่งของในระบบ -->
-                            <div class="bg-gray-50 p-4 rounded-xl border border-gray-100 space-y-2">
 
-                                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">
+                            <!-- Inventory -->
+
+                            <div
+                                class="bg-gray-50 p-4 rounded-xl border border-gray-100 space-y-2">
+
+                                <span
+                                    class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">
+
                                     ข้อมูลสิ่งของในระบบ (Inventory)
+
                                 </span>
 
-                                <p id="itemTitle"
-                                   class="font-bold text-gray-900 text-sm pb-1 border-b border-gray-200/60">
+
+                                <p
+                                    id="itemTitle"
+                                    class="font-bold text-gray-900 text-sm pb-1 border-b border-gray-200/60">
+
                                     MacBook Pro 16" (Silver)
+
                                 </p>
 
-                                <div class="space-y-1 text-gray-600 pt-1">
+
+                                <div
+                                    class="space-y-1 text-gray-600 pt-1">
 
                                     <p>
                                         <span class="text-gray-400">หมวดหมู่:</span>
-                                        <span id="itemCategory">อุปกรณ์อิเล็กทรอนิกส์</span>
+                                        <span id="itemCategory">
+                                            อุปกรณ์อิเล็กทรอนิกส์
+                                        </span>
                                     </p>
+
 
                                     <p>
                                         <span class="text-gray-400">สถานที่พบ:</span>
-                                        <span id="itemLocation">ห้องปฏิบัติการคอมพิวเตอร์</span>
+                                        <span id="itemLocation">
+                                            ห้องปฏิบัติการคอมพิวเตอร์
+                                        </span>
                                     </p>
+
 
                                     <p>
                                         <span class="text-gray-400">วันที่พบ:</span>
-                                        <span id="itemFoundDate">20 ต.ค. 2024 (14:30 น.)</span>
+                                        <span id="itemFoundDate">
+                                            20 ต.ค. 2024 (14:30 น.)
+                                        </span>
                                     </p>
+
 
                                     <p>
                                         <span class="text-gray-400">ผู้บันทึก:</span>
-                                        <span id="itemRecorder">เจ้าหน้าที่ somying (Staff)</span>
+                                        <span id="itemRecorder">
+                                            เจ้าหน้าที่ somying (Staff)
+                                        </span>
                                     </p>
 
                                 </div>
@@ -294,38 +439,59 @@
                             </div>
 
 
-                            <!-- ผู้ขอรับคืน -->
-                            <div class="bg-blue-50/40 p-4 rounded-xl border border-blue-100/60 space-y-2">
 
-                                <span class="text-[10px] font-bold text-ict-blue uppercase tracking-wider block mb-1">
+                            <!-- Claimant -->
+
+                            <div
+                                class="bg-blue-50/40 p-4 rounded-xl border border-blue-100/60 space-y-2">
+
+                                <span
+                                    class="text-[10px] font-bold text-ict-blue uppercase tracking-wider block mb-1">
+
                                     ข้อมูลผู้ยื่นคำร้อง (Claimant)
+
                                 </span>
 
-                                <p id="claimantName"
-                                   class="font-bold text-gray-900 text-sm pb-1 border-b border-blue-100">
+
+                                <p
+                                    id="claimantName"
+                                    class="font-bold text-gray-900 text-sm pb-1 border-b border-blue-100">
+
                                     นายสมชาย ใจดี
+
                                 </p>
 
-                                <div class="space-y-1 text-gray-600 pt-1">
+
+                                <div
+                                    class="space-y-1 text-gray-600 pt-1">
 
                                     <p>
                                         <span class="text-gray-400">รหัสนิสิต:</span>
                                         <span id="claimantId">6501091223</span>
                                     </p>
 
+
                                     <p>
                                         <span class="text-gray-400">คณะ/สาขา:</span>
-                                        <span id="claimantFaculty">เทคโนโลยีสารสนเทศและการสื่อสาร</span>
+                                        <span id="claimantFaculty">
+                                            เทคโนโลยีสารสนเทศและการสื่อสาร
+                                        </span>
                                     </p>
+
 
                                     <p>
                                         <span class="text-gray-400">เบอร์โทรศัพท์:</span>
-                                        <span id="claimantPhone">081-234-5678</span>
+                                        <span id="claimantPhone">
+                                            081-234-5678
+                                        </span>
                                     </p>
+
 
                                     <p>
                                         <span class="text-gray-400">อีเมล:</span>
-                                        <span id="claimantEmail">somchai.j@up.ac.th</span>
+                                        <span id="claimantEmail">
+                                            somchai.j@up.ac.th
+                                        </span>
                                     </p>
 
                                 </div>
@@ -335,17 +501,22 @@
                         </div>
 
 
-                        <!-- รายละเอียดคำอธิบาย -->
+                        <!-- Description -->
+
                         <div class="space-y-2 pt-2">
 
                             <p class="font-semibold text-gray-800">
                                 รายละเอียดคำอธิบายยืนยันตัวตนจากผู้ยื่นคำร้อง:
                             </p>
 
-                            <div id="claimDescription"
-                                 class="bg-gray-50 p-4 rounded-xl border border-gray-100 text-gray-700 leading-relaxed">
 
-                                "ทำเครื่องหายไว้ช่วงบารมีคาเฟ่ ครับ ตัวเครื่องเป็น MacBook Pro 16 นิ้ว สีเงิน ติดสติ๊กเกอร์ React สีฟ้าที่มุมขวาบนของฝาหลัง รหัสผ่านปลดล็อกหน้าจอขึ้นต้นด้วยเลข 95xx ครับ มีรอยถลอกเล็กน้อยที่มุมเครื่องด้านซ้าย"
+                            <div
+                                id="claimDescription"
+                                class="bg-gray-50 p-4 rounded-xl border border-gray-100 text-gray-700 leading-relaxed">
+
+                                "ทำเครื่องหายไว้ช่วงบารมีคาเฟ่/แล็บ 402 ครับ
+                                ตัวเครื่องเป็น MacBook Pro 16 นิ้ว สีเงิน
+                                ติดสติ๊กเกอร์ React สีฟ้าที่มุมขวาบนของฝาหลัง"
 
                             </div>
 
@@ -354,30 +525,64 @@
                     </div>
 
 
+
                     <!-- Card 2 -->
-                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
 
-                        <h2 class="font-bold text-sm text-gray-900 border-b border-gray-100 pb-3 flex items-center gap-2">
+                    <div
+                        class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
 
-                            <svg class="w-4 h-4 text-ict-blue"
-                                 fill="none"
-                                 stroke="currentColor"
-                                 stroke-width="2"
-                                 viewBox="0 0 24 24">
+                        <div
+                            class="flex items-center justify-between border-b border-gray-100 pb-3">
 
-                                <path stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            <h2
+                                class="font-bold text-sm text-gray-900 flex items-center gap-2">
 
-                            </svg>
+                                <svg
+                                    class="w-4 h-4 text-ict-blue"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    viewBox="0 0 24 24">
 
-                            หลักฐานแนบยืนยัน (Uploaded Proof Files)
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 002-2v12a2 2 0 002 2z" />
 
-                        </h2>
+                                </svg>
+
+                                หลักฐานแนบยืนยัน (Uploaded Proof Files)
+
+                            </h2>
 
 
-                        <div id="proofFilesContainer"
-                             class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                            <span
+                                class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-200">
+
+                                <svg
+                                    class="w-3 h-3 text-amber-600"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    viewBox="0 0 24 24">
+
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+
+                                </svg>
+
+                                สิทธิ์มองเห็นเฉพาะเจ้าหน้าที่
+
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            id="proofFilesContainer"
+                            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                         </div>
 
                     </div>
@@ -385,24 +590,31 @@
                 </div>
 
 
-                <!-- Right Column -->
+
+                <!-- RIGHT -->
+
                 <div class="space-y-6 lg:sticky lg:top-20">
 
 
-                    <!-- Card 3 -->
-                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
+                    <!-- Decision -->
 
-                        <h2 class="font-bold text-sm text-gray-900 border-b border-gray-100 pb-3 flex items-center gap-2">
+                    <div
+                        class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
 
-                            <svg class="w-4 h-4 text-ict-blue"
-                                 fill="none"
-                                 stroke="currentColor"
-                                 stroke-width="2"
-                                 viewBox="0 0 24 24">
+                        <h2
+                            class="font-bold text-sm text-gray-900 border-b border-gray-100 pb-3 flex items-center gap-2">
 
-                                <path stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            <svg
+                                class="w-4 h-4 text-ict-blue"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                viewBox="0 0 24 24">
+
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0a9 9 0 0118 0z" />
 
                             </svg>
 
@@ -415,9 +627,13 @@
 
                             <div>
 
-                                <label class="block text-gray-600 font-semibold mb-1 text-[11px]">
+                                <label
+                                    class="block text-gray-600 font-semibold mb-1 text-[11px]">
+
                                     เจ้าหน้าที่ผู้ตรวจสอบ:
+
                                 </label>
+
 
                                 <input
                                     type="text"
@@ -430,9 +646,13 @@
 
                             <div>
 
-                                <label class="block text-gray-600 font-semibold mb-1 text-[11px]">
+                                <label
+                                    class="block text-gray-600 font-semibold mb-1 text-[11px]">
+
                                     หมายเหตุ / ข้อความถึงผู้ยื่นคำร้อง:
+
                                 </label>
+
 
                                 <textarea
                                     id="reviewerNote"
@@ -445,18 +665,23 @@
 
                             <div class="pt-2 space-y-2">
 
+                                <!-- APPROVE -->
+
                                 <button
-                                    onclick="alert('อนุมัติคำร้องเรียบร้อยแล้ว'); location.href='staff-handover.html';"
+                                    onclick="handleDecision('approve')"
                                     class="w-full bg-ict-blue hover:bg-ict-hover text-white font-semibold py-2.5 px-4 rounded-xl shadow-sm transition flex items-center justify-center gap-2 text-xs">
 
                                     <span>✓</span>
+
                                     อนุมัติคำร้อง (Approve)
 
                                 </button>
 
 
+                                <!-- MORE INFO -->
+
                                 <button
-                                    onclick="alert('ส่งคำขอข้อมูลเพิ่มเติมแล้ว');"
+                                    onclick="handleDecision('more_info')"
                                     class="w-full bg-amber-50 hover:bg-amber-100 text-amber-700 font-semibold py-2.5 px-4 rounded-xl border border-amber-200 transition text-xs">
 
                                     ขอข้อมูลเพิ่มเติม (Request Info)
@@ -464,8 +689,10 @@
                                 </button>
 
 
+                                <!-- REJECT -->
+
                                 <button
-                                    onclick="if(confirm('ยืนยันที่จะปฏิเสธคำร้องนี้หรือไม่?')) { alert('ปฏิเสธคำร้องเรียบร้อยแล้ว'); location.href='staff-verify-claims.html'; }"
+                                    onclick="handleDecision('reject')"
                                     class="w-full text-red-500 hover:bg-red-50 font-semibold py-2.5 px-4 rounded-xl border border-red-100 transition text-xs">
 
                                     ปฏิเสธคำร้อง (Reject)
@@ -479,15 +706,23 @@
                     </div>
 
 
-                    <!-- Card 4 -->
-                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-3">
 
-                        <h2 class="font-bold text-xs text-gray-900 border-b border-gray-100 pb-2">
+                    <!-- Activity -->
+
+                    <div
+                        class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-3">
+
+                        <h2
+                            class="font-bold text-xs text-gray-900 border-b border-gray-100 pb-2">
+
                             ประวัติกิจกรรม (Activity Log)
+
                         </h2>
 
-                        <div id="activityLogContainer"
-                             class="space-y-3 text-[11px]">
+
+                        <div
+                            id="activityLogContainer"
+                            class="space-y-3 text-[11px]">
                         </div>
 
                     </div>
@@ -497,13 +732,20 @@
             </div>
 
 
-            <!-- Not Found -->
-            <div id="notFoundState"
-                 class="hidden bg-white rounded-2xl border border-gray-100 shadow-sm p-12 text-center space-y-4 max-w-lg mx-auto">
 
-                <div class="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto text-2xl">
+            <!-- Not Found -->
+
+            <div
+                id="notFoundState"
+                class="hidden bg-white rounded-2xl border border-gray-100 shadow-sm p-12 text-center space-y-4 max-w-lg mx-auto">
+
+                <div
+                    class="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto text-2xl">
+
                     ⚠️
+
                 </div>
+
 
                 <div>
 
@@ -511,14 +753,17 @@
                         ไม่พบข้อมูลคำร้องนี้ในระบบ
                     </h3>
 
+
                     <p class="text-gray-500 text-xs mt-1">
-                        รหัสคำร้องที่คุณเรียกดูอาจไม่มีอยู่ หรือถูกลบออกจากระบบแล้ว
+                        รหัสคำร้องที่คุณเรียกดูอาจไม่มีอยู่
+                        หรือถูกลบออกจากระบบแล้ว
                     </p>
 
                 </div>
 
+
                 <a href="staff-verify-claims.html"
-                   class="inline-block bg-ict-blue hover:bg-ict-hover text-white font-semibold text-xs px-5 py-2.5 rounded-xl transition">
+                    class="inline-block bg-ict-blue hover:bg-ict-hover text-white font-semibold text-xs px-5 py-2.5 rounded-xl transition">
 
                     กลับไปหน้ารายการคำร้อง
 
@@ -531,35 +776,410 @@
     </main>
 
 
-    <!-- JavaScript -->
+
+    <!-- =========================================================
+         IMAGE MODAL
+    ========================================================== -->
+
+    <div
+        id="imageModal"
+        class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-[60] hidden items-center justify-center p-4">
+
+        <div
+            class="bg-white rounded-2xl max-w-2xl w-full p-6 relative space-y-4 shadow-2xl border border-gray-100">
+
+            <div
+                class="flex items-center justify-between border-b border-gray-100 pb-3">
+
+                <div>
+
+                    <h3
+                        class="font-bold text-sm text-gray-900 flex items-center gap-2"
+                        id="modalFileName">
+
+                        รูปภาพหลักฐาน
+
+                    </h3>
+
+
+                    <p class="text-[10px] text-gray-400 mt-0.5">
+                        ภาพหลักฐานจากผู้ยื่นคำร้องเพื่อเปรียบเทียบตรวจสอบ
+                    </p>
+
+                </div>
+
+
+                <button
+                    onclick="closeModal()"
+                    class="text-gray-400 hover:text-gray-600 bg-gray-100 hover:bg-gray-200 w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs transition">
+
+                    ✕
+
+                </button>
+
+            </div>
+
+
+            <div
+                class="bg-slate-950 rounded-xl overflow-hidden min-h-[300px] max-h-[500px] flex items-center justify-center relative">
+
+                <img
+                    id="modalImagePreview"
+                    src=""
+                    alt="Proof Preview"
+                    class="max-h-[480px] w-auto object-contain">
+
+            </div>
+
+
+            <div
+                class="flex justify-between items-center pt-1 text-xs text-gray-500">
+
+                <span
+                    class="flex items-center gap-1.5 text-amber-600 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-100">
+
+                    <svg
+                        class="w-3.5 h-3.5"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        viewBox="0 0 24 24">
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3.732 1.732 3z" />
+
+                    </svg>
+
+                    ข้อมูลลับเฉพาะเจ้าหน้าที่
+                    ห้ามเผยแพร่สู่ภายนอก
+
+                </span>
+
+
+                <button
+                    onclick="closeModal()"
+                    class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-xl transition">
+
+                    ปิดหน้าต่าง
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================================================
+         APPROVE CONFIRMATION MODAL
+    ========================================================== -->
+
+    <div
+        id="approveConfirmModal"
+        class="fixed inset-0 z-[70] hidden items-center justify-center p-4 bg-slate-950/50 backdrop-blur-sm modal-backdrop">
+
+        <div
+            class="modal-card bg-white w-full max-w-md rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
+
+            <div class="px-6 pt-6 pb-4 text-center">
+
+                <div
+                    id="approveModalIcon"
+                    class="mx-auto w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-4">
+
+                    <div
+                        class="w-11 h-11 rounded-xl bg-emerald-500 text-white flex items-center justify-center shadow-sm">
+
+                        <svg
+                            class="w-6 h-6"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                            viewBox="0 0 24 24">
+
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M5 13l4 4L19 7" />
+
+                        </svg>
+
+                    </div>
+
+                </div>
+
+
+                <h3
+                    id="approveModalTitle"
+                    class="text-lg font-bold text-gray-900">
+
+                    ยืนยันการอนุมัติคำร้อง
+
+                </h3>
+
+
+                <p
+                    id="approveModalDescription"
+                    class="text-xs text-gray-500 mt-2 leading-relaxed">
+
+                    คุณกำลังจะอนุมัติคำร้องนี้
+
+                    <br>
+
+                    กรุณาตรวจสอบข้อมูลก่อนยืนยันการดำเนินการ
+
+                </p>
+
+            </div>
+
+
+            <div
+                class="mx-6 bg-gray-50 border border-gray-100 rounded-2xl p-4 space-y-3">
+
+                <div
+                    class="flex items-center justify-between gap-3">
+
+                    <span class="text-[10px] text-gray-400 font-semibold">
+                        รหัสคำร้อง
+                    </span>
+
+                    <span
+                        id="approveModalClaimId"
+                        class="font-mono text-xs font-bold text-ict-blue">
+
+                        #CLM-24-0891
+
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="flex items-center justify-between gap-3">
+
+                    <span class="text-[10px] text-gray-400 font-semibold">
+                        ผู้ยื่นคำร้อง
+                    </span>
+
+                    <span
+                        id="approveModalClaimant"
+                        class="text-xs font-semibold text-gray-800 text-right">
+
+                        นายสมชาย ใจดี
+
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="flex items-center justify-between gap-3">
+
+                    <span class="text-[10px] text-gray-400 font-semibold">
+                        สิ่งของ
+                    </span>
+
+                    <span
+                        id="approveModalItem"
+                        class="text-xs font-semibold text-gray-800 text-right max-w-[220px] truncate">
+
+                        MacBook Pro 16"
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="approveModalInfo"
+                class="mx-6 mt-4 bg-blue-50 border border-blue-100 rounded-xl px-4 py-3 flex gap-3">
+
+                <svg
+                    class="w-4 h-4 text-ict-blue mt-0.5 flex-shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    viewBox="0 0 24 24">
+
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M13 16h-1v-4h-1m1-4h.01M12 22a10 10 0 100-20 10 10 0 000-20z" />
+
+                </svg>
+
+
+                <p
+                    id="approveModalInfoText"
+                    class="text-[10px] text-blue-800 leading-relaxed">
+
+                    เมื่อยืนยันแล้ว ระบบจะเปลี่ยนสถานะคำร้องเป็น
+                    <strong>อนุมัติแล้ว</strong>
+                    และนำข้อมูลไปยังหน้า
+                    <strong>ส่งคืนเจ้าของ</strong>
+
+                </p>
+
+            </div>
+
+
+            <div
+                class="p-6 pt-5 flex flex-col-reverse sm:flex-row gap-2.5">
+
+                <button
+                    id="cancelApproveButton"
+                    type="button"
+                    onclick="closeApproveModal()"
+                    class="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 text-gray-600 font-semibold text-xs transition">
+
+                    ยกเลิก
+
+                </button>
+
+
+                <button
+                    id="confirmApproveButton"
+                    type="button"
+                    onclick="confirmApproval()"
+                    class="flex-1 px-4 py-2.5 rounded-xl bg-ict-blue hover:bg-ict-hover text-white font-semibold text-xs transition shadow-sm flex items-center justify-center gap-2">
+
+                    <span id="confirmApproveIcon">✓</span>
+
+                    <span id="confirmApproveText">
+                        ยืนยันการอนุมัติ
+                    </span>
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================================================
+         SUCCESS MODAL
+    ========================================================== -->
+
+    <div
+        id="approvalSuccessModal"
+        class="fixed inset-0 z-[80] hidden items-center justify-center p-4 bg-slate-950/50 backdrop-blur-sm">
+
+        <div
+            class="bg-white w-full max-w-sm rounded-3xl shadow-2xl border border-gray-100 p-7 text-center">
+
+            <div
+                class="mx-auto w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-4">
+
+                <div
+                    class="w-11 h-11 rounded-xl bg-emerald-500 text-white flex items-center justify-center">
+
+                    <svg
+                        class="w-6 h-6"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        viewBox="0 0 24 24">
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M5 13l4 4L19 7" />
+
+                    </svg>
+
+                </div>
+
+            </div>
+
+
+            <h3
+                id="approvalSuccessTitle"
+                class="text-lg font-bold text-gray-900">
+
+                อนุมัติคำร้องสำเร็จ
+
+            </h3>
+
+
+            <p
+                id="approvalSuccessDescription"
+                class="text-xs text-gray-500 mt-2 leading-relaxed">
+
+                ระบบกำลังนำคุณไปยังหน้าส่งคืนเจ้าของ
+
+            </p>
+
+
+            <div
+                class="mt-5 flex items-center justify-center gap-2 text-[10px] text-gray-400">
+
+                <span
+                    class="spinner"
+                    style="border-color:#e5e7eb;border-top-color:#034383;">
+                </span>
+
+                กำลังดำเนินการ...
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================================================
+         JAVASCRIPT
+    ========================================================== -->
+
     <script>
+
+        /* =========================================================
+           MOCK CLAIM DATA
+        ========================================================== */
 
         const mockClaimsData = {
 
             'CLM-24-0891': {
-
                 id: 'CLM-24-0891',
                 status: 'pending',
                 statusText: 'รอการตรวจสอบ',
-
                 itemTitle: 'MacBook Pro 16" (Silver)',
                 category: 'อุปกรณ์อิเล็กทรอนิกส์',
                 location: 'ห้องปฏิบัติการคอมพิวเตอร์ 402',
                 foundDate: '20 ต.ค. 2024 (14:30 น.)',
                 recorder: 'เจ้าหน้าที่ สมศักดิ์ (Staff)',
-
                 claimantName: 'นายสมชาย ใจดี',
                 claimantId: '6501091223',
                 faculty: 'เทคโนโลยีสารสนเทศและการสื่อสาร',
                 phone: '081-234-5678',
                 email: 'somchai.j@up.ac.th',
 
-                description: '"ทำเครื่องหายไว้ช่วงบารมีคาเฟ่/แล็บ 402 ครับ ตัวเครื่องเป็น MacBook Pro 16 นิ้ว สีเงิน ติดสติ๊กเกอร์ React สีฟ้าที่มุมขวาบนของฝาหลัง รหัสผ่านปลดล็อกหน้าจอขึ้นต้นด้วยเลข 95xx ครับ มีรอยถลอกเล็กน้อยที่มุมเครื่องด้านซ้าย"',
+                description:
+                    '"ทำเครื่องหายไว้ช่วงบารมีคาเฟ่/แล็บ 402 ครับ ตัวเครื่องเป็น MacBook Pro 16 นิ้ว สีเงิน ติดสติ๊กเกอร์ React สีฟ้าที่มุมขวาบนของฝาหลัง รหัสผ่านปลดล็อกหน้าจอขึ้นต้นด้วยเลข 95xx ครับ มีรอยถลอกเล็กน้อยที่มุมเครื่องด้านซ้าย"',
+
+                itemImage:
+                    'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=800&q=80',
 
                 proofs: [
                     {
-                        icon: '📸',
-                        name: 'รูปถ่ายของสิ่งของ.jpg'
+                        name: 'รูปถ่ายฝาหลัง_สติ๊กเกอร์React.jpg',
+                        url:
+                            'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=800&q=80'
+                    },
+                    {
+                        name: 'รูปถ่ายจุดถลอกมุมเครื่อง.jpg',
+                        url:
+                            'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?auto=format&fit=crop&w=800&q=80'
                     }
                 ],
 
@@ -575,34 +1195,35 @@
                         active: false
                     }
                 ]
-
             },
 
 
             'CLM-24-0890': {
-
                 id: 'CLM-24-0890',
                 status: 'pending',
                 statusText: 'รอการตรวจสอบ',
-
                 itemTitle: 'กระเป๋าสตางค์หนังสีดำ (Gucci)',
                 category: 'กระเป๋า / กระเป๋าสตางค์',
                 location: 'โรงอาหารคณะ ICT',
                 foundDate: '23 ต.ค. 2024 (12:10 น.)',
                 recorder: 'เจ้าหน้าที่ นภา (Staff)',
-
                 claimantName: 'นางสาววิไลภรณ์ ศรีสุข',
                 claimantId: '6601054412',
                 faculty: 'เทคโนโลยีสารสนเทศและการสื่อสาร',
                 phone: '089-987-6543',
                 email: 'wilaiporn.s@up.ac.th',
 
-                description: '"กระเป๋าสตางค์สั้นสีดำยี่ห้อ Gucci ด้านในมีบัตรนิสิต UP ชื่อวิไลภรณ์ พร้อมเงินสดประมาณ 450 บาท และบัตรเครดิตธนาคารกสิกรไทยค่ะ"',
+                description:
+                    '"กระเป๋าสตางค์สั้นสีดำยี่ห้อ Gucci ด้านในมีบัตรนิสิต UP ชื่อวิไลภรณ์ พร้อมเงินสดประมาณ 450 บาท และบัตรเครดิตธนาคารกสิกรไทยค่ะ"',
+
+                itemImage:
+                    'https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=800&q=80',
 
                 proofs: [
                     {
-                        icon: '📸',
-                        name: 'รูปถ่ายของสิ่งของ.jpg'
+                        name: 'รูปถ่ายกระเป๋าสตางค์.jpg',
+                        url:
+                            'https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=800&q=80'
                     }
                 ],
 
@@ -618,34 +1239,35 @@
                         active: false
                     }
                 ]
-
             },
 
 
             'CLM-24-0885': {
-
                 id: 'CLM-24-0885',
                 status: 'more_info',
                 statusText: 'ขอข้อมูลเพิ่มเติม',
-
                 itemTitle: 'iPhone 15 Pro (เคสใส)',
                 category: 'อุปกรณ์อิเล็กทรอนิกส์',
                 location: 'ห้องสมุดชั้น 2',
                 foundDate: '21 ต.ค. 2024 (16:00 น.)',
                 recorder: 'เจ้าหน้าที่ ณัฐพล (Staff)',
-
                 claimantName: 'Mr. John Doe',
                 claimantId: '6401088921',
                 faculty: 'วิทยาลัยนานาชาติ',
                 phone: '095-111-2233',
                 email: 'john.d@up.ac.th',
 
-                description: '"iPhone 15 Pro Natural Titanium in a clear MagSafe case. Wallpaper is a picture of a golden retriever."',
+                description:
+                    '"iPhone 15 Pro Natural Titanium in a clear MagSafe case. Wallpaper is a picture of a golden retriever."',
+
+                itemImage:
+                    'https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?auto=format&fit=crop&w=800&q=80',
 
                 proofs: [
                     {
-                        icon: '📸',
-                        name: 'รูปถ่ายของสิ่งของ.jpg'
+                        name: 'Screenshot_Device_Info.png',
+                        url:
+                            'https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?auto=format&fit=crop&w=800&q=80'
                     }
                 ],
 
@@ -666,173 +1288,2743 @@
                         active: false
                     }
                 ]
-
             }
 
         };
 
 
-        document.addEventListener('DOMContentLoaded', function() {
+        /* =========================================================
+           GLOBAL STATE
+        ========================================================== */
 
-            const urlParams =
-                new URLSearchParams(window.location.search);
-
-            const claimId =
-                urlParams.get('id') || 'CLM-24-0891';
-
-            const data =
-                mockClaimsData[claimId];
+        let currentClaim = null;
 
 
-            if (!data) {
+        /* =========================================================
+           STORAGE KEYS
+        ========================================================== */
 
-                document
-                    .getElementById('contentGrid')
-                    .classList.add('hidden');
+        const APPROVED_CLAIM_KEY = 'approvedClaim';
+        const APPROVED_CLAIMS_KEY = 'approvedClaims';
+        const HANDOVER_TARGET_KEY = 'handoverTargetClaim';
 
-                document
-                    .getElementById('statusBadgeContainer')
-                    .classList.add('hidden');
+        /*
+         * ใช้ร่วมกับหน้า staff-verify-claims.html
+         *
+         * โครงสร้าง:
+         *
+         * claimStatuses = {
+         *   "clm-24-0891": {
+         *       claimId: "CLM-24-0891",
+         *       status: "approved",
+         *       statusText: "อนุมัติแล้ว",
+         *       reviewerNote: "",
+         *       updatedAt: "..."
+         *   }
+         * }
+         */
 
-                document
-                    .getElementById('notFoundState')
-                    .classList.remove('hidden');
+        const CLAIM_STATUS_KEY = 'claimStatuses';
 
-                document
-                    .getElementById('displayClaimId')
-                    .innerText = `#${claimId}`;
 
+        /* =========================================================
+           CLAIM STATUS STORAGE
+        ========================================================== */
+
+        function normalizeClaimId(value) {
+
+            return String(value ?? '')
+                .trim()
+                .toLowerCase();
+
+        }
+
+
+        function getClaimStatuses() {
+
+            try {
+
+                const stored =
+                    localStorage.getItem(
+                        CLAIM_STATUS_KEY
+                    );
+
+                if (!stored) {
+                    return {};
+                }
+
+                const parsed =
+                    JSON.parse(stored);
+
+                if (
+                    !parsed ||
+                    typeof parsed !== 'object' ||
+                    Array.isArray(parsed)
+                ) {
+                    return {};
+                }
+
+                return parsed;
+
+            }
+            catch (error) {
+
+                console.warn(
+                    'ไม่สามารถอ่าน claimStatuses ได้:',
+                    error
+                );
+
+                return {};
+
+            }
+
+        }
+
+
+        function getSavedClaimStatus(claimId) {
+
+            const statuses =
+                getClaimStatuses();
+
+            const key =
+                normalizeClaimId(claimId);
+
+            return statuses[key] || null;
+
+        }
+
+
+        function saveClaimStatus(
+            claimId,
+            status,
+            statusText,
+            note = ''
+        ) {
+
+            const id =
+                String(claimId ?? '').trim();
+
+            if (!id) {
+                return false;
+            }
+
+            try {
+
+                const statuses =
+                    getClaimStatuses();
+
+                const key =
+                    normalizeClaimId(id);
+
+                statuses[key] = {
+
+                    claimId: id,
+
+                    status: status,
+
+                    statusText: statusText,
+
+                    reviewerNote: note,
+
+                    updatedAt:
+                        new Date().toISOString()
+
+                };
+
+                localStorage.setItem(
+                    CLAIM_STATUS_KEY,
+                    JSON.stringify(statuses)
+                );
+
+                /*
+                 * ตรวจสอบว่าบันทึกจริง
+                 */
+
+                const verify =
+                    getSavedClaimStatus(id);
+
+                return !!(
+                    verify &&
+                    verify.status === status
+                );
+
+            }
+            catch (error) {
+
+                console.error(
+                    'ไม่สามารถบันทึก claimStatuses ได้:',
+                    error
+                );
+
+                return false;
+
+            }
+
+        }
+
+
+        /* =========================================================
+           INITIALIZE
+        ========================================================== */
+
+        document.addEventListener(
+            'DOMContentLoaded',
+            function () {
+
+                const urlParams =
+                    new URLSearchParams(
+                        window.location.search
+                    );
+
+
+                const claimId =
+                    urlParams.get('id') ||
+                    'CLM-24-0891';
+
+
+                const sourceClaim =
+                    mockClaimsData[claimId];
+
+
+                if (!sourceClaim) {
+
+                    document
+                        .getElementById('contentGrid')
+                        .classList.add('hidden');
+
+                    document
+                        .getElementById('statusBadgeContainer')
+                        .classList.add('hidden');
+
+                    document
+                        .getElementById('notFoundState')
+                        .classList.remove('hidden');
+
+                    document
+                        .getElementById('displayClaimId')
+                        .innerText =
+                        `#${claimId}`;
+
+                    return;
+
+                }
+
+
+                currentClaim = {
+
+                    ...sourceClaim,
+
+                    proofs:
+                        Array.isArray(
+                            sourceClaim.proofs
+                        )
+                            ? sourceClaim.proofs.map(
+                                proof => ({
+                                    ...proof
+                                })
+                            )
+                            : [],
+
+                    logs:
+                        Array.isArray(
+                            sourceClaim.logs
+                        )
+                            ? sourceClaim.logs.map(
+                                log => ({
+                                    ...log
+                                })
+                            )
+                            : []
+
+                };
+
+
+                /* =====================================================
+                   LOAD SAVED STATUS
+                ====================================================== */
+
+                const savedStatus =
+                    getSavedClaimStatus(
+                        currentClaim.id
+                    );
+
+
+                if (savedStatus) {
+
+                    currentClaim.status =
+                        savedStatus.status ||
+                        currentClaim.status;
+
+                    currentClaim.statusText =
+                        savedStatus.statusText ||
+                        currentClaim.statusText;
+
+                    currentClaim.reviewerNote =
+                        savedStatus.reviewerNote ||
+                        '';
+
+                }
+
+
+                /* =====================================================
+                   LOAD APPROVED CLAIM DATA
+                ====================================================== */
+
+                const savedApprovedClaim =
+                    getApprovedClaimById(
+                        currentClaim.id
+                    );
+
+
+                if (savedApprovedClaim) {
+
+                    currentClaim = {
+
+                        ...currentClaim,
+
+                        ...savedApprovedClaim,
+
+                        proofs:
+                            Array.isArray(
+                                savedApprovedClaim.proofs
+                            )
+                                ? savedApprovedClaim.proofs
+                                : currentClaim.proofs,
+
+                        logs:
+                            currentClaim.logs
+
+                    };
+
+                }
+
+
+                /*
+                 * claimStatuses ต้องเป็นแหล่งสถานะล่าสุด
+                 * เพราะ approvedClaims มีไว้สำหรับข้อมูล
+                 * การส่งคืนเจ้าของด้วย
+                 */
+
+                const latestStatus =
+                    getSavedClaimStatus(
+                        currentClaim.id
+                    );
+
+
+                if (latestStatus) {
+
+                    currentClaim.status =
+                        latestStatus.status ||
+                        currentClaim.status;
+
+                    currentClaim.statusText =
+                        latestStatus.statusText ||
+                        currentClaim.statusText;
+
+                    currentClaim.reviewerNote =
+                        latestStatus.reviewerNote ??
+                        currentClaim.reviewerNote ??
+                        '';
+
+                }
+
+
+                renderClaimPage();
+
+            }
+        );
+
+
+        /* =========================================================
+           RENDER CLAIM PAGE
+        ========================================================== */
+
+        function renderClaimPage() {
+
+            if (!currentClaim) {
                 return;
             }
 
 
             document
                 .getElementById('displayClaimId')
-                .innerText = `#${data.id}`;
+                .innerText =
+                `#${currentClaim.id}`;
 
 
-            const statusContainer =
-                document.getElementById('statusBadgeContainer');
+            renderStatusBadge(
+                currentClaim.status,
+                currentClaim.statusText
+            );
 
 
-            if (data.status === 'more_info') {
+            /* ITEM DATA */
 
-                statusContainer.innerHTML = `
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full border border-gray-200">
-                        <span class="w-2 h-2 bg-gray-500 rounded-full"></span>
-                        ${data.statusText}
-                    </span>
-                `;
+            document
+                .getElementById('itemTitle')
+                .innerText =
+                currentClaim.itemTitle;
 
-            } else {
 
-                statusContainer.innerHTML = `
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium bg-amber-50 text-amber-700 rounded-full border border-amber-200">
-                        <span class="w-2 h-2 bg-amber-500 rounded-full"></span>
-                        ${data.statusText}
-                    </span>
-                `;
+            document
+                .getElementById('itemCategory')
+                .innerText =
+                currentClaim.category;
+
+
+            document
+                .getElementById('itemLocation')
+                .innerText =
+                currentClaim.location;
+
+
+            document
+                .getElementById('itemFoundDate')
+                .innerText =
+                currentClaim.foundDate;
+
+
+            document
+                .getElementById('itemRecorder')
+                .innerText =
+                currentClaim.recorder;
+
+
+            /* CLAIMANT DATA */
+
+            document
+                .getElementById('claimantName')
+                .innerText =
+                currentClaim.claimantName;
+
+
+            document
+                .getElementById('claimantId')
+                .innerText =
+                currentClaim.claimantId;
+
+
+            document
+                .getElementById('claimantFaculty')
+                .innerText =
+                currentClaim.faculty;
+
+
+            document
+                .getElementById('claimantPhone')
+                .innerText =
+                currentClaim.phone;
+
+
+            document
+                .getElementById('claimantEmail')
+                .innerText =
+                currentClaim.email;
+
+
+            document
+                .getElementById('claimDescription')
+                .innerText =
+                currentClaim.description;
+
+
+            const noteElement =
+                document.getElementById(
+                    'reviewerNote'
+                );
+
+
+            if (
+                noteElement &&
+                currentClaim.reviewerNote
+            ) {
+
+                noteElement.value =
+                    currentClaim.reviewerNote;
 
             }
 
 
-            document.getElementById('itemTitle').innerText =
-                data.itemTitle;
+            renderProofFiles();
 
-            document.getElementById('itemCategory').innerText =
-                data.category;
+            renderLogs(
+                currentClaim.logs || []
+            );
 
-            document.getElementById('itemLocation').innerText =
-                data.location;
-
-            document.getElementById('itemFoundDate').innerText =
-                data.foundDate;
-
-            document.getElementById('itemRecorder').innerText =
-                data.recorder;
+        }
 
 
-            document.getElementById('claimantName').innerText =
-                data.claimantName;
+        /* =========================================================
+           STATUS BADGE
+        ========================================================== */
 
-            document.getElementById('claimantId').innerText =
-                data.claimantId;
+        function renderStatusBadge(
+            status,
+            text
+        ) {
 
-            document.getElementById('claimantFaculty').innerText =
-                data.faculty;
-
-            document.getElementById('claimantPhone').innerText =
-                data.phone;
-
-            document.getElementById('claimantEmail').innerText =
-                data.email;
-
-            document.getElementById('claimDescription').innerText =
-                data.description;
+            const statusContainer =
+                document.getElementById(
+                    'statusBadgeContainer'
+                );
 
 
-            // Render Proof Files
+            let colorClass =
+                'bg-amber-50 text-amber-700 border-amber-200';
+
+
+            let dotClass =
+                'bg-amber-500';
+
+
+            if (status === 'approved') {
+
+                colorClass =
+                    'bg-emerald-50 text-emerald-700 border-emerald-200';
+
+                dotClass =
+                    'bg-emerald-500';
+
+            }
+
+            else if (status === 'rejected') {
+
+                colorClass =
+                    'bg-rose-50 text-rose-700 border-rose-200';
+
+                dotClass =
+                    'bg-rose-500';
+
+            }
+
+            else if (status === 'more_info') {
+
+                colorClass =
+                    'bg-amber-50 text-amber-700 border-amber-200';
+
+                dotClass =
+                    'bg-amber-500';
+
+            }
+
+
+            statusContainer.innerHTML = `
+
+                <span
+                    class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium ${colorClass} rounded-full border">
+
+                    <span
+                        class="w-2 h-2 ${dotClass} rounded-full">
+                    </span>
+
+                    ${escapeHTML(text)}
+
+                </span>
+
+            `;
+
+        }
+
+
+        /* =========================================================
+           RENDER PROOF FILES
+        ========================================================== */
+
+        function renderProofFiles() {
+
             const proofContainer =
-                document.getElementById('proofFilesContainer');
+                document.getElementById(
+                    'proofFilesContainer'
+                );
+
+
+            if (
+                !Array.isArray(
+                    currentClaim.proofs
+                ) ||
+                currentClaim.proofs.length === 0
+            ) {
+
+                proofContainer.innerHTML = `
+
+                    <div
+                        class="col-span-full bg-gray-50 border border-gray-100 rounded-xl p-6 text-center">
+
+                        <div
+                            class="w-10 h-10 mx-auto rounded-xl bg-gray-100 text-gray-400 flex items-center justify-center mb-2">
+
+                            📄
+
+                        </div>
+
+                        <p
+                            class="text-xs font-semibold text-gray-500">
+
+                            ไม่มีไฟล์หลักฐานแนบ
+
+                        </p>
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
 
             proofContainer.innerHTML =
-                data.proofs.map(proof => `
+                currentClaim.proofs
+                    .map(
+                        (proof, index) => {
 
-                    <div class="group relative aspect-[4/3] bg-gray-50/80 rounded-2xl border border-gray-200/80 flex items-center justify-center cursor-pointer hover:border-ict-blue hover:shadow-sm transition p-6 text-center">
+                            const safeName =
+                                escapeHTML(
+                                    proof.name
+                                );
 
-                        <div>
+                            const safeUrl =
+                                escapeHTML(
+                                    proof.url
+                                );
 
-                            <p class="text-3xl mb-2">
-                                ${proof.icon}
-                            </p>
+                            const attributeName =
+                                escapeAttribute(
+                                    proof.name
+                                );
 
-                            <p class="text-xs text-gray-700 font-semibold">
-                                ${proof.name}
-                            </p>
-
-                        </div>
-
-                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition rounded-2xl flex items-center justify-center text-white font-medium text-xs">
-
-                            คลิกเพื่อดูรูปภาพเต็ม
-
-                        </div>
-
-                    </div>
-
-                `).join('');
+                            const attributeUrl =
+                                escapeAttribute(
+                                    proof.url
+                                );
 
 
-            // Render Activity Log
+                            return `
+
+                                <div
+                                    onclick="openModal('${attributeName}', '${attributeUrl}')"
+                                    class="group relative bg-gray-900 rounded-xl overflow-hidden border border-gray-200 cursor-pointer shadow-sm hover:shadow-md transition-all">
+
+                                    <div
+                                        class="aspect-[4/3] w-full overflow-hidden bg-slate-100 flex items-center justify-center">
+
+                                        <img
+                                            src="${safeUrl}"
+                                            alt="${safeName}"
+                                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                            onerror="this.style.display='none';">
+
+                                    </div>
+
+
+                                    <div
+                                        class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent p-3 flex flex-col justify-between opacity-90 group-hover:opacity-100 transition-opacity">
+
+                                        <div class="flex justify-between items-start">
+
+                                            <span
+                                                class="bg-black/50 backdrop-blur-sm text-white px-2 py-1 rounded-lg text-[9px]">
+
+                                                หลักฐาน ${index + 1}
+
+                                            </span>
+
+
+                                            <span
+                                                class="bg-black/50 backdrop-blur-sm text-white p-1.5 rounded-full">
+
+                                                <svg
+                                                    class="w-3.5 h-3.5"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    stroke-width="2"
+                                                    viewBox="0 0 24 24">
+
+                                                    <path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+
+                                                </svg>
+
+                                            </span>
+
+                                        </div>
+
+
+                                        <div>
+
+                                            <p
+                                                class="text-[11px] font-medium text-white truncate">
+
+                                                ${safeName}
+
+                                            </p>
+
+
+                                            <p
+                                                class="text-[9px] text-gray-300 mt-0.5">
+
+                                                คลิกเพื่อดูภาพขยาย
+
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            `;
+
+                        }
+                    )
+                    .join('');
+
+        }
+
+
+        /* =========================================================
+           ACTIVITY LOG
+        ========================================================== */
+
+        function renderLogs(logs) {
+
             const logContainer =
-                document.getElementById('activityLogContainer');
+                document.getElementById(
+                    'activityLogContainer'
+                );
+
+
+            if (
+                !Array.isArray(logs) ||
+                logs.length === 0
+            ) {
+
+                logContainer.innerHTML = `
+
+                    <p class="text-gray-400 text-[11px]">
+                        ยังไม่มีประวัติกิจกรรม
+                    </p>
+
+                `;
+
+                return;
+
+            }
+
 
             logContainer.innerHTML =
-                data.logs.map(log => `
+                logs
+                    .map(
+                        log => `
 
-                    <div class="flex gap-2.5 ${log.active ? '' : 'opacity-60'}">
+                            <div
+                                class="flex gap-2.5 ${log.active ? '' : 'opacity-60'}">
 
-                        <span class="w-2 h-2 rounded-full ${log.active ? 'bg-ict-blue' : 'bg-gray-300'} mt-1 flex-shrink-0"></span>
+                                <span
+                                    class="w-2 h-2 rounded-full ${log.active ? 'bg-ict-blue' : 'bg-gray-300'} mt-1 flex-shrink-0">
+                                </span>
 
-                        <div>
 
-                            <p class="font-semibold text-gray-800">
-                                ${log.title}
-                            </p>
+                                <div>
 
-                            <p class="text-[10px] text-gray-400">
-                                ${log.date}
-                            </p>
+                                    <p
+                                        class="font-semibold text-gray-800">
 
-                        </div>
+                                        ${escapeHTML(log.title)}
 
-                    </div>
+                                    </p>
 
-                `).join('');
 
-        });
+                                    <p
+                                        class="text-[10px] text-gray-400">
+
+                                        ${escapeHTML(log.date)}
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        `
+                    )
+                    .join('');
+
+        }
+
+
+        /* =========================================================
+           IMAGE MODAL
+        ========================================================== */
+
+        function openModal(
+            fileName,
+            fileUrl
+        ) {
+
+            document
+                .getElementById('modalFileName')
+                .innerText =
+                fileName;
+
+
+            document
+                .getElementById('modalImagePreview')
+                .src =
+                fileUrl;
+
+
+            document
+                .getElementById('imageModal')
+                .classList.remove('hidden');
+
+
+            document
+                .getElementById('imageModal')
+                .classList.add('flex');
+
+
+            document.body.classList.add(
+                'overflow-hidden'
+            );
+
+        }
+
+
+        function closeModal() {
+
+            document
+                .getElementById('imageModal')
+                .classList.add('hidden');
+
+
+            document
+                .getElementById('imageModal')
+                .classList.remove('flex');
+
+
+            document.body.classList.remove(
+                'overflow-hidden'
+            );
+
+        }
+
+
+        /* =========================================================
+           APPROVE CONFIRMATION MODAL
+        ========================================================== */
+
+        function openApproveModal() {
+
+            if (!currentClaim) {
+                return;
+            }
+
+
+            document
+                .getElementById('approveModalClaimId')
+                .innerText =
+                `#${currentClaim.id}`;
+
+
+            document
+                .getElementById('approveModalClaimant')
+                .innerText =
+                currentClaim.claimantName;
+
+
+            document
+                .getElementById('approveModalItem')
+                .innerText =
+                currentClaim.itemTitle;
+
+
+            const modalTitle =
+                document.getElementById(
+                    'approveModalTitle'
+                );
+
+
+            const modalDescription =
+                document.getElementById(
+                    'approveModalDescription'
+                );
+
+
+            const modalInfoText =
+                document.getElementById(
+                    'approveModalInfoText'
+                );
+
+
+            const confirmText =
+                document.getElementById(
+                    'confirmApproveText'
+                );
+
+
+            const confirmIcon =
+                document.getElementById(
+                    'confirmApproveIcon'
+                );
+
+
+            const confirmButton =
+                document.getElementById(
+                    'confirmApproveButton'
+                );
+
+
+            if (
+                currentClaim.status ===
+                'approved'
+            ) {
+
+                modalTitle.innerText =
+                    'คำร้องนี้ได้รับการอนุมัติแล้ว';
+
+
+                modalDescription.innerHTML =
+                    'คำร้องนี้ได้รับการอนุมัติเรียบร้อยแล้ว<br>คุณสามารถไปยังหน้าส่งคืนเจ้าของได้ทันที';
+
+
+                modalInfoText.innerHTML =
+                    'ข้อมูลคำร้องนี้ถูกบันทึกไว้ในระบบแล้ว และพร้อมสำหรับขั้นตอน <strong>ส่งคืนเจ้าของ</strong>';
+
+
+                confirmText.innerText =
+                    'ไปหน้าส่งคืนเจ้าของ';
+
+
+                confirmIcon.innerHTML =
+                    '→';
+
+
+                confirmButton.classList.remove(
+                    'bg-ict-blue',
+                    'hover:bg-ict-hover'
+                );
+
+
+                confirmButton.classList.add(
+                    'bg-emerald-600',
+                    'hover:bg-emerald-700'
+                );
+
+            }
+
+            else {
+
+                modalTitle.innerText =
+                    'ยืนยันการอนุมัติคำร้อง';
+
+
+                modalDescription.innerHTML =
+                    'คุณกำลังจะอนุมัติคำร้องนี้<br>กรุณาตรวจสอบข้อมูลก่อนยืนยันการดำเนินการ';
+
+
+                modalInfoText.innerHTML =
+                    'เมื่อยืนยันแล้ว ระบบจะเปลี่ยนสถานะคำร้องเป็น <strong>อนุมัติแล้ว</strong> และนำข้อมูลไปยังหน้า <strong>ส่งคืนเจ้าของ</strong>';
+
+
+                confirmText.innerText =
+                    'ยืนยันการอนุมัติ';
+
+
+                confirmIcon.innerHTML =
+                    '✓';
+
+
+                confirmButton.classList.remove(
+                    'bg-emerald-600',
+                    'hover:bg-emerald-700'
+                );
+
+
+                confirmButton.classList.add(
+                    'bg-ict-blue',
+                    'hover:bg-ict-hover'
+                );
+
+            }
+
+
+            resetApproveButton();
+
+
+            /*
+             * resetApproveButton() จะคืนค่าปุ่มเป็นค่าเริ่มต้น
+             * ดังนั้นถ้า approved ต้องตั้งค่ากลับอีกครั้ง
+             */
+
+            if (
+                currentClaim.status ===
+                'approved'
+            ) {
+
+                confirmText.innerText =
+                    'ไปหน้าส่งคืนเจ้าของ';
+
+                confirmIcon.innerHTML =
+                    '→';
+
+                confirmButton.classList.remove(
+                    'bg-ict-blue',
+                    'hover:bg-ict-hover'
+                );
+
+                confirmButton.classList.add(
+                    'bg-emerald-600',
+                    'hover:bg-emerald-700'
+                );
+
+            }
+
+
+            const modal =
+                document.getElementById(
+                    'approveConfirmModal'
+                );
+
+
+            modal.classList.remove('hidden');
+
+            modal.classList.add('flex');
+
+            document.body.classList.add(
+                'overflow-hidden'
+            );
+
+        }
+
+
+        function closeApproveModal() {
+
+            const modal =
+                document.getElementById(
+                    'approveConfirmModal'
+                );
+
+
+            modal.classList.add('hidden');
+
+            modal.classList.remove('flex');
+
+            document.body.classList.remove(
+                'overflow-hidden'
+            );
+
+
+            resetApproveButton();
+
+        }
+
+
+        /* =========================================================
+           GET ITEM IMAGE
+        ========================================================== */
+
+        function getItemImage(claim) {
+
+            if (
+                claim &&
+                claim.itemImage &&
+                String(claim.itemImage).trim()
+            ) {
+
+                return String(
+                    claim.itemImage
+                ).trim();
+
+            }
+
+
+            if (
+                claim &&
+                claim.inventoryImage &&
+                String(claim.inventoryImage).trim()
+            ) {
+
+                return String(
+                    claim.inventoryImage
+                ).trim();
+
+            }
+
+
+            if (
+                claim &&
+                claim.image &&
+                String(claim.image).trim()
+            ) {
+
+                return String(
+                    claim.image
+                ).trim();
+
+            }
+
+
+            if (
+                claim &&
+                claim.item_image &&
+                String(claim.item_image).trim()
+            ) {
+
+                return String(
+                    claim.item_image
+                ).trim();
+
+            }
+
+
+            if (
+                claim &&
+                claim.itemImageUrl &&
+                String(claim.itemImageUrl).trim()
+            ) {
+
+                return String(
+                    claim.itemImageUrl
+                ).trim();
+
+            }
+
+
+            if (
+                claim &&
+                Array.isArray(claim.proofs) &&
+                claim.proofs.length > 0
+            ) {
+
+                const firstProof =
+                    claim.proofs[0];
+
+
+                if (firstProof) {
+
+                    const proofImage =
+                        firstProof.url ||
+                        firstProof.src ||
+                        firstProof.image ||
+                        firstProof.imageUrl ||
+                        '';
+
+
+                    if (
+                        String(
+                            proofImage
+                        ).trim()
+                    ) {
+
+                        return String(
+                            proofImage
+                        ).trim();
+
+                    }
+
+                }
+
+            }
+
+
+            return '';
+
+        }
+
+
+        /* =========================================================
+           GET APPROVED CLAIMS
+        ========================================================== */
+
+        function getApprovedClaims() {
+
+            try {
+
+                const stored =
+                    localStorage.getItem(
+                        APPROVED_CLAIMS_KEY
+                    );
+
+
+                if (!stored) {
+                    return [];
+                }
+
+
+                const parsed =
+                    JSON.parse(stored);
+
+
+                if (!Array.isArray(parsed)) {
+                    return [];
+                }
+
+
+                return parsed;
+
+            }
+            catch (error) {
+
+                console.warn(
+                    'ไม่สามารถอ่าน approvedClaims ได้:',
+                    error
+                );
+
+
+                return [];
+
+            }
+
+        }
+
+
+        /* =========================================================
+           GET ONE APPROVED CLAIM
+        ========================================================== */
+
+        function getApprovedClaimById(
+            claimId
+        ) {
+
+            const approvedClaims =
+                getApprovedClaims();
+
+
+            const found =
+                approvedClaims.find(
+                    item => {
+
+                        if (!item) {
+                            return false;
+                        }
+
+
+                        const id =
+                            item.claimId ||
+                            item.id ||
+                            item.claimID ||
+                            item.claim_id ||
+                            '';
+
+
+                        return normalizeClaimId(id) ===
+                            normalizeClaimId(claimId);
+
+                    }
+                );
+
+
+            return found || null;
+
+        }
+
+
+        /* =========================================================
+           SAVE APPROVED CLAIMS
+        ========================================================== */
+
+        function saveApprovedClaims(
+            claims
+        ) {
+
+            try {
+
+                localStorage.setItem(
+                    APPROVED_CLAIMS_KEY,
+                    JSON.stringify(claims)
+                );
+
+
+                return true;
+
+            }
+            catch (error) {
+
+                console.error(
+                    'ไม่สามารถบันทึก approvedClaims ได้:',
+                    error
+                );
+
+
+                return false;
+
+            }
+
+        }
+
+
+        /* =========================================================
+           SAVE LATEST APPROVED CLAIM
+        ========================================================== */
+
+        function saveLatestApprovedClaim(
+            approvalData
+        ) {
+
+            try {
+
+                localStorage.setItem(
+                    APPROVED_CLAIM_KEY,
+                    JSON.stringify(approvalData)
+                );
+
+
+                return true;
+
+            }
+            catch (error) {
+
+                console.error(
+                    'ไม่สามารถบันทึก approvedClaim ได้:',
+                    error
+                );
+
+
+                return false;
+
+            }
+
+        }
+
+
+        /* =========================================================
+           SAVE HANDOVER TARGET
+        ========================================================== */
+
+        function saveHandoverTarget(
+            approvalData
+        ) {
+
+            try {
+
+                sessionStorage.setItem(
+                    HANDOVER_TARGET_KEY,
+                    JSON.stringify(approvalData)
+                );
+
+
+                const verifyTarget =
+                    sessionStorage.getItem(
+                        HANDOVER_TARGET_KEY
+                    );
+
+
+                if (!verifyTarget) {
+
+                    console.warn(
+                        'ไม่สามารถยืนยัน handoverTargetClaim ได้'
+                    );
+
+                    return false;
+
+                }
+
+
+                const parsedTarget =
+                    JSON.parse(
+                        verifyTarget
+                    );
+
+
+                const savedId =
+                    parsedTarget.claimId ||
+                    parsedTarget.id ||
+                    '';
+
+
+                const targetId =
+                    approvalData.claimId ||
+                    approvalData.id ||
+                    '';
+
+
+                if (
+                    normalizeClaimId(savedId) !==
+                    normalizeClaimId(targetId)
+                ) {
+
+                    console.warn(
+                        'handoverTargetClaim มี Claim ID ไม่ตรงกัน'
+                    );
+
+                    return false;
+
+                }
+
+
+                return true;
+
+            }
+            catch (error) {
+
+                console.error(
+                    'ไม่สามารถบันทึก handoverTargetClaim ได้:',
+                    error
+                );
+
+
+                return false;
+
+            }
+
+        }
+
+
+        /* =========================================================
+           CONFIRM APPROVAL
+        ========================================================== */
+
+        function confirmApproval() {
+
+            if (!currentClaim) {
+                return;
+            }
+
+
+            const confirmButton =
+                document.getElementById(
+                    'confirmApproveButton'
+                );
+
+
+            const confirmText =
+                document.getElementById(
+                    'confirmApproveText'
+                );
+
+
+            const confirmIcon =
+                document.getElementById(
+                    'confirmApproveIcon'
+                );
+
+
+            if (confirmButton.disabled) {
+                return;
+            }
+
+
+            /*
+             * ถ้าอนุมัติไปแล้ว
+             * เปิด Handover ได้ทันที
+             */
+
+            if (
+                currentClaim.status ===
+                'approved'
+            ) {
+
+                const existingApprovalData = {
+
+                    claimId:
+                        currentClaim.id,
+
+                    id:
+                        currentClaim.id,
+
+                    itemName:
+                        currentClaim.itemName ||
+                        currentClaim.itemTitle ||
+                        '',
+
+                    recipientName:
+                        currentClaim.recipientName ||
+                        currentClaim.claimantName ||
+                        '',
+
+                    itemImage:
+                        getItemImage(currentClaim),
+
+                    itemTitle:
+                        currentClaim.itemTitle ||
+                        currentClaim.itemName ||
+                        '',
+
+                    claimantName:
+                        currentClaim.claimantName ||
+                        currentClaim.recipientName ||
+                        '',
+
+                    inventoryImage:
+                        getItemImage(currentClaim),
+
+                    category:
+                        currentClaim.category ||
+                        '',
+
+                    location:
+                        currentClaim.location ||
+                        '',
+
+                    foundDate:
+                        currentClaim.foundDate ||
+                        '',
+
+                    recorder:
+                        currentClaim.recorder ||
+                        '',
+
+                    claimantId:
+                        currentClaim.claimantId ||
+                        '',
+
+                    faculty:
+                        currentClaim.faculty ||
+                        '',
+
+                    phone:
+                        currentClaim.phone ||
+                        '',
+
+                    email:
+                        currentClaim.email ||
+                        '',
+
+                    description:
+                        currentClaim.description ||
+                        '',
+
+                    proofs:
+                        Array.isArray(
+                            currentClaim.proofs
+                        )
+                            ? currentClaim.proofs.map(
+                                proof => ({
+                                    name:
+                                        proof.name || '',
+                                    url:
+                                        proof.url ||
+                                        proof.src ||
+                                        proof.image ||
+                                        proof.imageUrl ||
+                                        ''
+                                })
+                            )
+                            : [],
+
+                    approvedAt:
+                        currentClaim.approvedAt ||
+                        new Date().toISOString(),
+
+                    status:
+                        'approved',
+
+                    statusText:
+                        'อนุมัติแล้ว',
+
+                    reviewerNote:
+                        currentClaim.reviewerNote ||
+                        ''
+
+                };
+
+
+                const targetSaved =
+                    saveHandoverTarget(
+                        existingApprovalData
+                    );
+
+
+                if (!targetSaved) {
+
+                    showSimpleMessage(
+                        'ไม่สามารถเตรียมข้อมูลสำหรับหน้าส่งคืนเจ้าของได้',
+                        'warning'
+                    );
+
+                    return;
+
+                }
+
+
+                confirmButton.disabled =
+                    true;
+
+
+                confirmButton.classList.add(
+                    'opacity-80',
+                    'cursor-not-allowed'
+                );
+
+
+                confirmIcon.innerHTML =
+                    '<span class="spinner"></span>';
+
+
+                confirmText.innerText =
+                    'กำลังเปิดหน้าส่งคืน...';
+
+
+                setTimeout(
+                    () => {
+
+                        window.location.href =
+                            'staff-handover.html?id=' +
+                            encodeURIComponent(
+                                currentClaim.id
+                            );
+
+                    },
+                    400
+                );
+
+
+                return;
+
+            }
+
+
+            /*
+             * ป้องกันการกดซ้ำ
+             */
+
+            confirmButton.disabled =
+                true;
+
+
+            confirmButton.classList.add(
+                'opacity-80',
+                'cursor-not-allowed'
+            );
+
+
+            confirmIcon.innerHTML =
+                '<span class="spinner"></span>';
+
+
+            confirmText.innerText =
+                'กำลังบันทึก...';
+
+
+            /* GET IMAGE */
+
+            const itemImage =
+                getItemImage(
+                    currentClaim
+                );
+
+
+            /* GET NOTE */
+
+            const reviewerNoteElement =
+                document.getElementById(
+                    'reviewerNote'
+                );
+
+
+            const reviewerNote =
+                reviewerNoteElement
+                    ? reviewerNoteElement.value.trim()
+                    : '';
+
+
+            /* CREATE APPROVAL DATA */
+
+            const approvalData = {
+
+                claimId:
+                    currentClaim.id,
+
+                id:
+                    currentClaim.id,
+
+                itemName:
+                    currentClaim.itemTitle,
+
+                recipientName:
+                    currentClaim.claimantName,
+
+                itemImage:
+                    itemImage,
+
+                itemTitle:
+                    currentClaim.itemTitle,
+
+                claimantName:
+                    currentClaim.claimantName,
+
+                inventoryImage:
+                    itemImage,
+
+                category:
+                    currentClaim.category,
+
+                location:
+                    currentClaim.location,
+
+                foundDate:
+                    currentClaim.foundDate,
+
+                recorder:
+                    currentClaim.recorder,
+
+                claimantId:
+                    currentClaim.claimantId,
+
+                faculty:
+                    currentClaim.faculty,
+
+                phone:
+                    currentClaim.phone,
+
+                email:
+                    currentClaim.email,
+
+                description:
+                    currentClaim.description,
+
+                proofs:
+                    Array.isArray(
+                        currentClaim.proofs
+                    )
+                        ? currentClaim.proofs.map(
+                            proof => ({
+                                name:
+                                    proof.name || '',
+                                url:
+                                    proof.url ||
+                                    proof.src ||
+                                    proof.image ||
+                                    proof.imageUrl ||
+                                    ''
+                            })
+                        )
+                        : [],
+
+                approvedAt:
+                    new Date().toISOString(),
+
+                status:
+                    'approved',
+
+                statusText:
+                    'อนุมัติแล้ว',
+
+                reviewerNote:
+                    reviewerNote
+
+            };
+
+
+            /* =====================================================
+               SAVE SHARED CLAIM STATUS
+            ====================================================== */
+
+            const statusSaved =
+                saveClaimStatus(
+                    currentClaim.id,
+                    'approved',
+                    'อนุมัติแล้ว',
+                    reviewerNote
+                );
+
+
+            if (!statusSaved) {
+
+                resetApproveButton();
+
+                showSimpleMessage(
+                    'ไม่สามารถบันทึกสถานะคำร้องได้ กรุณาลองใหม่อีกครั้ง',
+                    'warning'
+                );
+
+                return;
+
+            }
+
+
+            /* SAVE LATEST APPROVAL */
+
+            const latestSaveSuccess =
+                saveLatestApprovedClaim(
+                    approvalData
+                );
+
+
+            if (!latestSaveSuccess) {
+
+                resetApproveButton();
+
+                showSimpleMessage(
+                    'ไม่สามารถบันทึกข้อมูลการอนุมัติได้ กรุณาลองใหม่อีกครั้ง',
+                    'warning'
+                );
+
+                return;
+
+            }
+
+
+            /* UPDATE APPROVED ARRAY */
+
+            let approvedClaims =
+                getApprovedClaims();
+
+
+            const existingIndex =
+                approvedClaims.findIndex(
+                    item => {
+
+                        if (!item) {
+                            return false;
+                        }
+
+
+                        const existingId =
+                            item.claimId ||
+                            item.id ||
+                            item.claimID ||
+                            item.claim_id ||
+                            '';
+
+
+                        return normalizeClaimId(
+                            existingId
+                        ) === normalizeClaimId(
+                            currentClaim.id
+                        );
+
+                    }
+                );
+
+
+            if (existingIndex >= 0) {
+
+                approvedClaims[
+                    existingIndex
+                ] =
+                    approvalData;
+
+            }
+            else {
+
+                approvedClaims.unshift(
+                    approvalData
+                );
+
+            }
+
+
+            const arraySaveSuccess =
+                saveApprovedClaims(
+                    approvedClaims
+                );
+
+
+            if (!arraySaveSuccess) {
+
+                resetApproveButton();
+
+                showSimpleMessage(
+                    'ไม่สามารถบันทึกรายการอนุมัติได้ กรุณาลองใหม่อีกครั้ง',
+                    'warning'
+                );
+
+                return;
+
+            }
+
+
+            /* SAVE EXACT HANDOVER TARGET */
+
+            const handoverTargetSaved =
+                saveHandoverTarget(
+                    approvalData
+                );
+
+
+            if (!handoverTargetSaved) {
+
+                resetApproveButton();
+
+                showSimpleMessage(
+                    'บันทึกคำร้องสำเร็จ แต่ไม่สามารถเตรียมข้อมูลสำหรับหน้าส่งคืนเจ้าของได้ กรุณาลองอีกครั้ง',
+                    'warning'
+                );
+
+                return;
+
+            }
+
+
+            /* VERIFY STORAGE */
+
+            const verifyLatest =
+                localStorage.getItem(
+                    APPROVED_CLAIM_KEY
+                );
+
+
+            const verifyArray =
+                getApprovedClaims();
+
+
+            const verifyFound =
+                verifyArray.find(
+                    item => {
+
+                        if (!item) {
+                            return false;
+                        }
+
+
+                        const id =
+                            item.claimId ||
+                            item.id ||
+                            item.claimID ||
+                            item.claim_id ||
+                            '';
+
+
+                        return normalizeClaimId(id) ===
+                            normalizeClaimId(
+                                currentClaim.id
+                            );
+
+                    }
+                );
+
+
+            const verifyHandoverTarget =
+                sessionStorage.getItem(
+                    HANDOVER_TARGET_KEY
+                );
+
+
+            const verifyStatus =
+                getSavedClaimStatus(
+                    currentClaim.id
+                );
+
+
+            if (
+                !verifyLatest ||
+                !verifyFound ||
+                !verifyHandoverTarget ||
+                !verifyStatus ||
+                verifyStatus.status !== 'approved'
+            ) {
+
+                resetApproveButton();
+
+                showSimpleMessage(
+                    'ระบบไม่สามารถยืนยันการบันทึกข้อมูลได้',
+                    'warning'
+                );
+
+                return;
+
+            }
+
+
+            /* UPDATE CURRENT CLAIM */
+
+            currentClaim.status =
+                'approved';
+
+
+            currentClaim.statusText =
+                'อนุมัติแล้ว';
+
+
+            currentClaim.reviewerNote =
+                reviewerNote;
+
+
+            currentClaim.itemImage =
+                approvalData.itemImage;
+
+
+            currentClaim.itemName =
+                approvalData.itemName;
+
+
+            currentClaim.recipientName =
+                approvalData.recipientName;
+
+
+            currentClaim.inventoryImage =
+                approvalData.inventoryImage;
+
+
+            if (
+                !Array.isArray(
+                    currentClaim.logs
+                )
+            ) {
+
+                currentClaim.logs = [];
+
+            }
+
+
+            currentClaim.logs.unshift({
+
+                title:
+                    'เจ้าหน้าที่อนุมัติคำร้อง',
+
+                date:
+                    'เมื่อครู่นี้',
+
+                active:
+                    true
+
+            });
+
+
+            renderStatusBadge(
+                'approved',
+                'อนุมัติแล้ว'
+            );
+
+
+            renderLogs(
+                currentClaim.logs
+            );
+
+
+            /* DISABLE DECISION BUTTONS */
+
+            const decisionButtons =
+                document.querySelectorAll(
+                    'button[onclick^="handleDecision"]'
+                );
+
+
+            decisionButtons.forEach(
+                button => {
+
+                    button.disabled =
+                        true;
+
+                    button.classList.add(
+                        'opacity-50',
+                        'cursor-not-allowed'
+                    );
+
+                }
+            );
+
+
+            /* SUCCESS MODAL */
+
+            setTimeout(
+                () => {
+
+                    document
+                        .getElementById(
+                            'approveConfirmModal'
+                        )
+                        .classList.add(
+                            'hidden'
+                        );
+
+
+                    document
+                        .getElementById(
+                            'approveConfirmModal'
+                        )
+                        .classList.remove(
+                            'flex'
+                        );
+
+
+                    document
+                        .getElementById(
+                            'approvalSuccessTitle'
+                        )
+                        .innerText =
+                        'อนุมัติคำร้องสำเร็จ';
+
+
+                    document
+                        .getElementById(
+                            'approvalSuccessDescription'
+                        )
+                        .innerText =
+                        'ระบบกำลังนำคุณไปยังหน้าส่งคืนเจ้าของ';
+
+
+                    document
+                        .getElementById(
+                            'approvalSuccessModal'
+                        )
+                        .classList.remove(
+                            'hidden'
+                        );
+
+
+                    document
+                        .getElementById(
+                            'approvalSuccessModal'
+                        )
+                        .classList.add(
+                            'flex'
+                        );
+
+
+                    document.body.classList.remove(
+                        'overflow-hidden'
+                    );
+
+
+                    setTimeout(
+                        () => {
+
+                            window.location.href =
+                                'staff-handover.html?id=' +
+                                encodeURIComponent(
+                                    approvalData.claimId
+                                );
+
+                        },
+                        1000
+                    );
+
+                },
+                450
+            );
+
+        }
+
+
+        /* =========================================================
+           RESET APPROVE BUTTON
+        ========================================================== */
+
+        function resetApproveButton() {
+
+            const confirmButton =
+                document.getElementById(
+                    'confirmApproveButton'
+                );
+
+
+            const confirmText =
+                document.getElementById(
+                    'confirmApproveText'
+                );
+
+
+            const confirmIcon =
+                document.getElementById(
+                    'confirmApproveIcon'
+                );
+
+
+            if (!confirmButton) {
+                return;
+            }
+
+
+            confirmButton.disabled =
+                false;
+
+
+            confirmButton.classList.remove(
+                'opacity-80',
+                'cursor-not-allowed'
+            );
+
+
+            confirmIcon.innerHTML =
+                '✓';
+
+
+            confirmText.innerText =
+                'ยืนยันการอนุมัติ';
+
+
+            confirmButton.classList.remove(
+                'bg-emerald-600',
+                'hover:bg-emerald-700'
+            );
+
+
+            confirmButton.classList.add(
+                'bg-ict-blue',
+                'hover:bg-ict-hover'
+            );
+
+        }
+
+
+        /* =========================================================
+           DECISION HANDLER
+        ========================================================== */
+
+        function handleDecision(
+            type
+        ) {
+
+            if (!currentClaim) {
+                return;
+            }
+
+
+            const noteElement =
+                document.getElementById(
+                    'reviewerNote'
+                );
+
+
+            const note =
+                noteElement
+                    ? noteElement.value.trim()
+                    : '';
+
+
+            /* =====================================================
+               APPROVE
+            ====================================================== */
+
+            if (
+                type === 'approve'
+            ) {
+
+                openApproveModal();
+
+                return;
+
+            }
+
+
+            /* =====================================================
+               MORE INFO
+            ====================================================== */
+
+            if (
+                type === 'more_info'
+            ) {
+
+                if (!note) {
+
+                    showSimpleMessage(
+                        'กรุณาระบุข้อความขอข้อมูลเพิ่มเติมก่อนส่ง',
+                        'warning'
+                    );
+
+                    return;
+
+                }
+
+
+                /*
+                 * บันทึกสถานะลง localStorage
+                 * เพื่อให้หน้า claims เห็นสถานะทันที
+                 */
+
+                const statusSaved =
+                    saveClaimStatus(
+                        currentClaim.id,
+                        'more_info',
+                        'ขอข้อมูลเพิ่มเติม',
+                        note
+                    );
+
+
+                if (!statusSaved) {
+
+                    showSimpleMessage(
+                        'ไม่สามารถบันทึกสถานะคำร้องได้ กรุณาลองใหม่อีกครั้ง',
+                        'warning'
+                    );
+
+                    return;
+
+                }
+
+
+                currentClaim.status =
+                    'more_info';
+
+
+                currentClaim.statusText =
+                    'ขอข้อมูลเพิ่มเติม';
+
+
+                currentClaim.reviewerNote =
+                    note;
+
+
+                if (
+                    !Array.isArray(
+                        currentClaim.logs
+                    )
+                ) {
+
+                    currentClaim.logs = [];
+
+                }
+
+
+                currentClaim.logs.unshift({
+
+                    title:
+                        'เจ้าหน้าที่ส่งคำขอข้อมูลเพิ่มเติม',
+
+                    date:
+                        'เมื่อครู่นี้',
+
+                    active:
+                        true
+
+                });
+
+
+                renderStatusBadge(
+                    'more_info',
+                    'ขอข้อมูลเพิ่มเติม'
+                );
+
+
+                renderLogs(
+                    currentClaim.logs
+                );
+
+
+                showSimpleMessage(
+                    'ส่งคำขอข้อมูลเพิ่มเติมเรียบร้อยแล้ว',
+                    'success'
+                );
+
+
+                return;
+
+            }
+
+
+            /* =====================================================
+               REJECT
+            ====================================================== */
+
+            if (
+                type === 'reject'
+            ) {
+
+                if (!note) {
+
+                    showSimpleMessage(
+                        'กรุณาระบุเหตุผลก่อนปฏิเสธคำร้อง',
+                        'warning'
+                    );
+
+                    return;
+
+                }
+
+
+                const result =
+                    window.confirm(
+                        'ยืนยันที่จะปฏิเสธคำร้องนี้หรือไม่?'
+                    );
+
+
+                if (!result) {
+                    return;
+                }
+
+
+                /*
+                 * บันทึกสถานะ rejected
+                 * ลง localStorage ก่อนเปลี่ยนหน้า
+                 */
+
+                const statusSaved =
+                    saveClaimStatus(
+                        currentClaim.id,
+                        'rejected',
+                        'ปฏิเสธคำร้อง',
+                        note
+                    );
+
+
+                if (!statusSaved) {
+
+                    showSimpleMessage(
+                        'ไม่สามารถบันทึกสถานะการปฏิเสธได้ กรุณาลองใหม่อีกครั้ง',
+                        'warning'
+                    );
+
+                    return;
+
+                }
+
+
+                currentClaim.status =
+                    'rejected';
+
+
+                currentClaim.statusText =
+                    'ปฏิเสธคำร้อง';
+
+
+                currentClaim.reviewerNote =
+                    note;
+
+
+                if (
+                    !Array.isArray(
+                        currentClaim.logs
+                    )
+                ) {
+
+                    currentClaim.logs = [];
+
+                }
+
+
+                currentClaim.logs.unshift({
+
+                    title:
+                        'เจ้าหน้าที่ปฏิเสธคำร้อง',
+
+                    date:
+                        'เมื่อครู่นี้',
+
+                    active:
+                        true
+
+                });
+
+
+                renderStatusBadge(
+                    'rejected',
+                    'ปฏิเสธคำร้อง'
+                );
+
+
+                renderLogs(
+                    currentClaim.logs
+                );
+
+
+                showSimpleMessage(
+                    'ปฏิเสธคำร้องเรียบร้อยแล้ว',
+                    'success'
+                );
+
+
+                /*
+                 * กลับหน้ารายการ
+                 */
+
+                setTimeout(
+                    () => {
+
+                        window.location.href =
+                            'staff-verify-claims.html';
+
+                    },
+                    700
+                );
+
+            }
+
+        }
+
+
+        /* =========================================================
+           SIMPLE MESSAGE
+        ========================================================== */
+
+        function showSimpleMessage(
+            message,
+            type
+        ) {
+
+            const existing =
+                document.getElementById(
+                    'simpleMessage'
+                );
+
+
+            if (existing) {
+                existing.remove();
+            }
+
+
+            const wrapper =
+                document.createElement(
+                    'div'
+                );
+
+
+            wrapper.id =
+                'simpleMessage';
+
+
+            const isSuccess =
+                type === 'success';
+
+
+            wrapper.className = `
+
+                fixed
+                top-20
+                right-5
+                z-[100]
+                max-w-sm
+                bg-white
+                border
+                ${isSuccess
+                    ? 'border-emerald-100'
+                    : 'border-amber-100'}
+                rounded-2xl
+                shadow-xl
+                px-4
+                py-3
+                flex
+                items-center
+                gap-3
+
+            `;
+
+
+            wrapper.innerHTML = `
+
+                <div
+                    class="w-9 h-9 rounded-xl
+                    ${isSuccess
+                        ? 'bg-emerald-50 text-emerald-600'
+                        : 'bg-amber-50 text-amber-600'}
+                    flex items-center justify-center flex-shrink-0">
+
+                    ${isSuccess ? '✓' : '!'}
+
+                </div>
+
+
+                <p
+                    class="text-xs font-semibold text-gray-700">
+
+                    ${escapeHTML(message)}
+
+                </p>
+
+            `;
+
+
+            document.body.appendChild(
+                wrapper
+            );
+
+
+            setTimeout(
+                () => {
+
+                    if (wrapper) {
+                        wrapper.remove();
+                    }
+
+                },
+                2500
+            );
+
+        }
+
+
+        /* =========================================================
+           TOP SEARCH
+        ========================================================== */
+
+        document.addEventListener(
+            'DOMContentLoaded',
+            function () {
+
+                const topSearchInput =
+                    document.getElementById(
+                        'topSearchInput'
+                    );
+
+
+                if (!topSearchInput) {
+                    return;
+                }
+
+
+                topSearchInput.addEventListener(
+                    'keydown',
+                    function (event) {
+
+                        if (
+                            event.key !== 'Enter'
+                        ) {
+
+                            return;
+
+                        }
+
+
+                        const query =
+                            this.value.trim();
+
+
+                        if (!query) {
+                            return;
+                        }
+
+
+                        window.location.href =
+                            `staff-verify-claims.html?search=${encodeURIComponent(query)}`;
+
+                    }
+                );
+
+            }
+        );
+
+
+        /* =========================================================
+           KEYBOARD / BACKDROP
+        ========================================================== */
+
+        document.addEventListener(
+            'keydown',
+            function (event) {
+
+                if (
+                    event.key !== 'Escape'
+                ) {
+
+                    return;
+
+                }
+
+
+                closeModal();
+
+                closeApproveModal();
+
+            }
+        );
+
+
+        document.addEventListener(
+            'DOMContentLoaded',
+            function () {
+
+                const approveModal =
+                    document.getElementById(
+                        'approveConfirmModal'
+                    );
+
+
+                if (approveModal) {
+
+                    approveModal.addEventListener(
+                        'click',
+                        function (event) {
+
+                            if (
+                                event.target === this
+                            ) {
+
+                                closeApproveModal();
+
+                            }
+
+                        }
+                    );
+
+                }
+
+
+                const imageModal =
+                    document.getElementById(
+                        'imageModal'
+                    );
+
+
+                if (imageModal) {
+
+                    imageModal.addEventListener(
+                        'click',
+                        function (event) {
+
+                            if (
+                                event.target === this
+                            ) {
+
+                                closeModal();
+
+                            }
+
+                        }
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* =========================================================
+           ESCAPE HTML
+        ========================================================== */
+
+        function escapeHTML(
+            value
+        ) {
+
+            return String(
+                value ?? ''
+            )
+                .replace(
+                    /&/g,
+                    '&amp;'
+                )
+                .replace(
+                    /</g,
+                    '&lt;'
+                )
+                .replace(
+                    />/g,
+                    '&gt;'
+                )
+                .replace(
+                    /"/g,
+                    '&quot;'
+                )
+                .replace(
+                    /'/g,
+                    '&#039;'
+                );
+
+        }
+
+
+        function escapeAttribute(
+            value
+        ) {
+
+            return String(
+                value ?? ''
+            )
+                .replace(
+                    /\\/g,
+                    '\\\\'
+                )
+                .replace(
+                    /'/g,
+                    "\\'"
+                )
+                .replace(
+                    /\n/g,
+                    '\\n'
+                )
+                .replace(
+                    /\r/g,
+                    '\\r'
+                );
+
+        }
 
     </script>
 
 </body>
+
 </html>
