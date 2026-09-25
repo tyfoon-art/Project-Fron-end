@@ -219,6 +219,7 @@ VITE_SUPABASE_ANON_KEY=your_anon_key
 
 ### 4. ติดตั้ง Supabase Client
 เปิด Terminal ภายในโฟลเดอร์
+
 ```bash
 npm install @supabase/supabase-js
 ```
