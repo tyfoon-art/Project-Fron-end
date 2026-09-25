@@ -121,7 +121,7 @@
 - รองรับการใช้งานบนคอมพิวเตอร์
 - รองรับแท็บเล็ต
 - รองรับสมาร์ตโฟน
---
+  
 
 ## 4. วิธีการติดตั้งและรันระบบ
 ### Prerequisites
@@ -132,7 +132,7 @@
 - Git
 - Web Browser เช่น Google Chrome หรือ Microsoft Edge
 
---
+
 
 ### 1. Clone Repository
 
@@ -169,9 +169,8 @@ npm run build
 ```bash
 npm run preview
 ```
---
+
 ### Supabase Configuration
----
 
 ### 1. สร้างโปรเจกต์ Supabase
 
