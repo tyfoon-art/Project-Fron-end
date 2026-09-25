@@ -172,7 +172,6 @@ npm run preview
 
 ### Supabase Configuration
 
----
 
 ### 1. สร้างโปรเจกต์ Supabase
 
