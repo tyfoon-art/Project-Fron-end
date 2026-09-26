@@ -1,18 +1,29 @@
+/* ==========================================================================
+   Staff — Post List page
+   ใช้โทนสี/มุมโค้ง/เงาเดียวกับ components.css, staff-dashboard.css
+   main ไม่มี padding-top แล้ว ย้ายระยะห่างไปไว้ที่ margin-top ของ .pl-header แทน
+   เหมือนที่ staff-dashboard.css ทำกับ .dash-header (main.container-fluid ควบคุมความกว้างอยู่แล้ว)
+   ========================================================================== */
+
 main {
   flex: 1;
-  padding: 32px 0 48px;
+  padding-bottom: 48px;
 }
 
 .hidden {
   display: none !important;
 }
 
+/* --------------------------------------------------------------------------
+   Page header
+   -------------------------------------------------------------------------- */
 .pl-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 16px;
+  margin-top: 32px;
   margin-bottom: 24px;
 }
 

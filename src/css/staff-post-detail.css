@@ -2,11 +2,13 @@
    Staff Item Detail — uses the same design tokens as home.css / components.css
    (สี #003b7a, ตัวอักษร Prompt, มุมโค้ง 16px, เงาแบบเดียวกัน)
    ปรับขนาดและโครงสร้างให้เท่ากับหน้า staff-dashboard.css และ overdue-list เป๊ะๆ
+   (main ไม่มี padding-top แล้ว ย้ายระยะห่างไปไว้ที่ margin-top ของ .pd-breadcrumb แทน
+   เหมือนที่ staff-dashboard.css ทำกับ .dash-header)
    ========================================================================== */
 
 main {
   flex: 1;
-  padding: 32px 0 48px;
+  padding-bottom: 48px;
 }
 
 .hidden {
@@ -27,6 +29,7 @@ main {
   gap: 10px;
   font-size: 13px;
   color: #94a3b8;
+  margin-top: 32px;
   margin-bottom: 24px;
 }
 

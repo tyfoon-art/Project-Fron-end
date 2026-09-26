@@ -1,11 +1,13 @@
 /* ==========================================================================
    Staff Profile — uses the same design tokens as home.css / components.css
    (สี #003b7a, ตัวอักษร Prompt, มุมโค้ง 16px, เงาแบบเดียวกัน)
+   main ไม่มี padding-top แล้ว ย้ายระยะห่างไปไว้ที่ margin-top ของ .profile-header แทน
+   เหมือนที่ staff-dashboard.css ทำกับ .dash-header
    ========================================================================== */
 
 main {
   flex: 1;
-  padding: 32px 0 48px;
+  padding-bottom: 48px;
 }
 
 .hidden {
@@ -23,6 +25,10 @@ main {
 /* --------------------------------------------------------------------------
    Page header
    -------------------------------------------------------------------------- */
+.profile-header {
+  margin-top: 32px;
+}
+
 .profile-header h1 {
   font-size: 24px;
   font-weight: 700;

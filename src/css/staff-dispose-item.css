@@ -10,7 +10,7 @@ body {
 
 main {
   flex: 1;
-  padding: 32px 0 48px;
+  padding-bottom: 48px;
 }
 
 .page-wrapper {
@@ -23,24 +23,41 @@ main {
 }
 
 /* --------------------------------------------------------------------------
-   Page header
+   Breadcrumb
    -------------------------------------------------------------------------- */
-.back-link {
-  display: inline-flex;
+.breadcrumb {
+  display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #64748b;
-  text-decoration: none;
-  margin-bottom: 8px;
-  transition: color 0.2s ease;
+  gap: 10px;
+  font-size: 13px;
+  color: #94a3b8;
+  margin-top: 32px;
 }
 
-.back-link:hover {
+.breadcrumb a {
+  color: #64748b;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+
+.breadcrumb a:hover {
   color: #003b7a;
 }
 
+.breadcrumb i {
+  font-size: 10px;
+  color: #cbd5e1;
+}
+
+.breadcrumb span {
+  color: #003b7a;
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   Page header
+   -------------------------------------------------------------------------- */
 .page-title {
   font-size: 24px;
   font-weight: 700;
