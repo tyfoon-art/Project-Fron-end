@@ -258,15 +258,17 @@ export const supabase = createClient(
  เปิด
 1. Email Provider
 
-ระบบฟีเจอร์
+จะแสดงระบบฟีเจอร์
 * Register
 * Login
 * Reset Password
 
-ตำแหน่งไฟล์
+สำหรับหน้า
+```bash
 1. `login.html`
 2. `register.html`
 3. `forgotpassword.html`
+```
 
 ### 8. เปิดใช้งาน Storage
 ไปที่
@@ -291,15 +293,19 @@ export const supabase = createClient(
 2. Required
 
 และเปิด
-1. Enable Row Level Security
+```bash
+Enable Row Level Security
+```
+สำหรับทุกตาราง
 
 ### ตัวอย่างคำสั่ง SQL สำหรับตั้งค่า
 ```sql
 CREATE POLICY "Users can read all items"
 ON lost_items
 FOR SELECT
-USING (true);[cite: 2]
-
+USING (true);
+```
+```sql
 CREATE POLICY "Users can create items"
 ON lost_items
 FOR INSERT
