@@ -237,9 +237,88 @@ export const supabase = createClient(
   supabaseKey
 );
 ```
-### 6. ตารางใน Supabase
+### 6. สร้างฐานข้อมูล
 ไปที่
+เข้าสู่เมนู **SQL Editor** แล้วรันคำสั่งเพื่อสร้างตารางดังต่อไปนี้:
 
-1. Database
-2. Table Editor
-3. สร้าง Table
+* **ตาราง `user_account`**: เกี่ยวกับข้อมูลผู้ใช้งาน
+* **ตาราง `category`**: เกี่ยวกับหมวดหมู่ของของ
+* **ตาราง `storage_point`**: เกี่ยวกับจุดเก็บของ
+* **ตาราง `item`**: เกี่ยวกับข้อมูลของที่หายและของที่พบ
+* **ตาราง `report`**: เกี่ยวกับรายงานของ/ของที่พบ
+* **ตาราง `claim`**: เกี่ยวกับคำขอรับของคืน
+* **ตาราง `notification`**: เกี่ยวกับข้อมูลการแจ้งเตือนผู้ใช้งาน
+* **ตาราง `item_history_log`**: เกี่ยวกับประวัติการเปลี่ยนแปลงข้อมูลของ
+
+### 7. เปิดใช้งาน Authentication
+ไปที่
+1. Authentication
+2. Providers
+
+ เปิด
+1. Email Provider
+
+ระบบฟีเจอร์
+* Register
+* Login
+* Reset Password
+
+ตำแหน่งไฟล์
+1. `login.html`
+2. `register.html`
+3. `forgotpassword.html`
+
+### 8. เปิดใช้งาน Storage
+ไปที่
+1. Storage
+2. New Bucket
+
+สร้าง Bucket
+1. `lost-items`
+
+กำหนด
+1. Public = Enabled
+
+ใช้เก็บ
+* รูปของหาย
+* รูปหลักฐาน
+* รูปโปรไฟล์
+
+
+### 9. RLS (Row Level Security)
+เปิด
+1. Authentication
+2. Required
+
+และเปิด
+1. Enable Row Level Security
+
+### ตัวอย่างคำสั่ง SQL สำหรับตั้งค่า
+```sql
+CREATE POLICY "Users can read all items"
+ON lost_items
+FOR SELECT
+USING (true);[cite: 2]
+
+CREATE POLICY "Users can create items"
+ON lost_items
+FOR INSERT
+TO authenticated
+WITH CHECK (true);
+```
+
+### 10. Run Project
+
+เริ่มต้นทำการรันระบบ:
+
+```bash
+npm run dev
+```
+ระบบจะเปิดใช้งานที่
+```bash
+http://localhost:5173
+```
+
+---
+
+## 5. คู่มือการใช้งานระบบสำหรับผู้ใช้
