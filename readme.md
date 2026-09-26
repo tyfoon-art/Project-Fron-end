@@ -237,7 +237,7 @@ export const supabase = createClient(
   supabaseKey
 );
 ```
-### 6. สร้างตาราง Users
+### 6. ตารางใน Supabase
 ไปที่
 
 1. Database
