@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>แดชบอร์ดเจ้าหน้าที่ - Lost &amp; Found ICT</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- โหลด CSS แยกส่วน: components.css ใช้ร่วมกันทุกหน้า, staff-dashboard.css เฉพาะหน้านี้ -->
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/staff-dashboard.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="nav-left">
+        <a href="staff-dashboard.html" class="nav-brand">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Lost & Found ICT</span>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="staff-dashboard.html" class="nav-link active">แดชบอร์ดภาพรวม</a></li>
+          <li><a href="staff-post-list.html" class="nav-link">บันทึกสิ่งของเข้าคลัง</a></li>
+          <li><a href="staff-verify-claims.html" class="nav-link">ตรวจสอบคำร้อง</a></li>
+          <li><a href="staff-overdue-list.html" class="nav-link">รายการสิ่งของตกค้าง</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-actions">
+        <a href="staff-profile.html" class="nav-profile">
+          <i class="fa-regular fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container-fluid">
+
+    <div class="dash-header">
+      <div>
+        <div class="dash-title-row">
+          <h1>ภาพรวมแดชบอร์ด</h1>
+          <span id="system-status-badge" class="status-badge on">
+            <span class="status-dot pulse"></span>
+            เปิดรับแจ้งความ
+          </span>
+        </div>
+        <p class="dash-subtitle">สรุปข้อมูลปัจจุบันจากระบบจัดการของหายและประวัติการส่งคืนเจ้าของ</p>
+      </div>
+
+      <div class="dash-actions">
+        <button type="button" id="refresh-btn" class="btn-outline refresh-btn" title="รีเฟรชข้อมูลล่าสุด">
+          <i class="fa-solid fa-rotate"></i>
+          <span>รีเฟรชข้อมูล</span>
+        </button>
+
+        <button type="button" id="toggle-system-btn" class="btn-outline">
+          <i class="fa-solid fa-gear"></i>
+          <span id="toggle-btn-text">ระงับรับแจ้งชั่วคราว</span>
+        </button>
+      </div>
+    </div>
+
+    <section class="dash-stats-grid">
+      <div class="dash-stat-card">
+        <div class="dash-stat-top">
+          <div class="dash-stat-icon blue"><i class="fa-solid fa-box-archive"></i></div>
+          <span class="dash-stat-tag blue">ทั้งหมด</span>
+        </div>
+        <div class="dash-stat-body">
+          <p class="dash-stat-label">พบของหายทั้งหมด</p>
+          <p id="stat-total" class="dash-stat-number">0</p>
+        </div>
+      </div>
+
+      <div class="dash-stat-card">
+        <div class="dash-stat-top">
+          <div class="dash-stat-icon amber"><i class="fa-solid fa-hourglass-half"></i></div>
+          <span class="dash-stat-tag amber">รอตรวจ</span>
+        </div>
+        <div class="dash-stat-body">
+          <p class="dash-stat-label">คำร้องรอการตรวจสอบ</p>
+          <p id="stat-pending" class="dash-stat-number amber-text">0</p>
+        </div>
+      </div>
+
+      <div class="dash-stat-card">
+        <div class="dash-stat-top">
+          <div class="dash-stat-icon green"><i class="fa-regular fa-circle-check"></i></div>
+          <span class="dash-stat-tag green">สำเร็จแล้ว</span>
+        </div>
+        <div class="dash-stat-body">
+          <p class="dash-stat-label">ส่งมอบคืนสำเร็จแล้ว</p>
+          <p id="stat-handover-success" class="dash-stat-number green-text">0</p>
+        </div>
+      </div>
+
+      <div class="dash-stat-card">
+        <div class="dash-stat-top">
+          <div class="dash-stat-icon red"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <span class="dash-stat-tag red">≥ 90 วัน</span>
+        </div>
+        <div class="dash-stat-body">
+          <p class="dash-stat-label red-text">ของตกค้างเกินกำหนด</p>
+          <p id="stat-overdue" class="dash-stat-number red-text">0</p>
+        </div>
+      </div>
+
+      <div class="dash-stat-card">
+        <div class="dash-stat-top">
+          <div class="dash-stat-icon slate"><i class="fa-solid fa-trash"></i></div>
+          <span class="dash-stat-tag slate">จำหน่ายแล้ว</span>
+        </div>
+        <div class="dash-stat-body">
+          <p class="dash-stat-label">รายการที่จำหน่ายออก</p>
+          <p id="stat-disposed" class="dash-stat-number slate-text">0</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="dash-panel">
+      <div class="dash-panel-header">
+        <div>
+          <h2 class="dash-panel-title">
+            <span class="dot"></span>
+            รายการที่ส่งมอบคืนเสร็จสมบูรณ์แล้ว
+            <span class="en"></span>
+          </h2>
+          <p class="dash-panel-sub">ประวัติการคืนของให้แก่เจ้าของพร้อมหลักฐานการส่งมอบในระบบ</p>
+        </div>
+      </div>
+
+      <div class="dash-table-wrapper">
+        <table class="dash-table">
+          <thead>
+            <tr>
+              <th>รหัสรายการ</th>
+              <th>สิ่งของ</th>
+              <th>ผู้รับคืน (เจ้าของ)</th>
+              <th>วันที่ส่งมอบ</th>
+              <th>เจ้าหน้าที่ผู้ส่งมอบ</th>
+              <th>สถานะ</th>
+              <th>หลักฐานการคืน</th>
+            </tr>
+          </thead>
+          <tbody id="completed-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Proof Modal -->
+  <div id="proof-modal" class="proof-modal-overlay hidden">
+    <div class="proof-modal-box">
+      <div class="proof-modal-head">
+        <div class="proof-modal-head-left">
+          <div class="proof-modal-icon"><i class="fa-solid fa-check"></i></div>
+          <div>
+            <h3>หลักฐานการส่งคืนเจ้าของ</h3>
+            <p>ตรวจสอบข้อมูลและหลักฐานการส่งมอบรายการ</p>
+          </div>
+        </div>
+        <button type="button" id="proof-modal-close" class="proof-modal-close" aria-label="ปิดหน้าต่าง" title="ปิด">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="proof-modal-body">
+        <div class="proof-success-banner">
+          <i class="fa-solid fa-check"></i>
+          <div>
+            <p class="title">การส่งคืนเสร็จสมบูรณ์</p>
+            <p class="desc">รายการนี้ได้รับการบันทึกเป็นประวัติการส่งคืนในระบบแล้ว</p>
+          </div>
+        </div>
+
+        <div class="proof-section-title"><span class="bar"></span>ข้อมูลการส่งคืน</div>
+        <div class="proof-info-grid">
+          <div class="proof-info-box">
+            <p class="k">รหัสรายการ</p>
+            <p id="modal-item-id" class="v">-</p>
+          </div>
+          <div class="proof-info-box">
+            <p class="k">สิ่งของ</p>
+            <p id="modal-item-name" class="v">-</p>
+          </div>
+          <div class="proof-info-box">
+            <p class="k">ผู้รับคืน / เจ้าของ</p>
+            <p id="modal-recipient" class="v blue">-</p>
+          </div>
+          <div class="proof-info-box">
+            <p class="k">วันที่ส่งมอบ</p>
+            <p id="modal-date" class="v">-</p>
+          </div>
+        </div>
+
+        <div class="proof-section-title"><span class="bar"></span>หลักฐานการรับคืน</div>
+        <div class="proof-image-wrapper">
+          <img id="modal-proof-img" src="" alt="หลักฐานการคืน" class="hidden">
+          <div id="modal-no-img" class="proof-no-image">
+            <div class="icon-box"><i class="fa-regular fa-image"></i></div>
+            <p id="modal-img-name" class="name">ไม่พบไฟล์รูปถ่ายหลักฐาน</p>
+            <p class="hint">รายการนี้ไม่มีรูปภาพหลักฐานแนบในระบบ</p>
+          </div>
+        </div>
+
+        <div class="proof-section-title"><span class="bar"></span>บันทึกเพิ่มเติม</div>
+        <div class="proof-note-box">
+          <div class="icon"><i class="fa-regular fa-note-sticky"></i></div>
+          <p id="modal-note">-</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <strong>Lost & Found ICT</strong> &copy; 2026 Lost & Found System. All rights reserved.
+      </div>
+      <div class="footer-links">
+        <a href="#">Contact Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="js/staff-dashboard.js"></script>
+</body>
+</html>

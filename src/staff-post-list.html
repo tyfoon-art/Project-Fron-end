@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>รายการแจ้งพบสิ่งของ - Lost &amp; Found ICT</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/staff-post-list.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="nav-left">
+        <a href="staff-dashboard.html" class="nav-brand">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Lost & Found ICT</span>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="staff-dashboard.html" class="nav-link">แดชบอร์ดภาพรวม</a></li>
+          <li><a href="staff-post-list.html" class="nav-link active">บันทึกสิ่งของเข้าคลัง</a></li>
+          <li><a href="staff-verify-claims.html" class="nav-link">ตรวจสอบคำร้อง</a></li>
+          <li><a href="staff-overdue-list.html" class="nav-link">รายการสิ่งของตกค้าง</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-actions">
+        <a href="staff-profile.html" class="nav-profile">
+          <i class="fa-regular fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container-fluid">
+
+    <div class="pl-header">
+      <div>
+        <h1>รายการแจ้งพบสิ่งของ</h1>
+        <p class="pl-subtitle">รายการที่รอตรวจสอบและบันทึกเข้าคลัง</p>
+      </div>
+    </div>
+
+    <div id="postGrid" class="pl-grid"></div>
+
+    <div id="emptyState" class="pl-empty hidden">
+      <i class="fa-regular fa-folder-open"></i>
+      <p>ยังไม่มีรายการแจ้งพบสิ่งของในสถานะนี้</p>
+    </div>
+
+    <div id="loadingState" class="pl-loading">
+      <i class="fa-solid fa-spinner fa-spin-custom"></i>
+      <span>กำลังโหลดรายการ...</span>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <strong>Lost & Found ICT</strong> &copy; 2026 Lost & Found System. All rights reserved.
+      </div>
+      <div class="footer-links">
+        <a href="#">Contact Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="js/staff-post-list.js"></script>
+</body>
+</html>

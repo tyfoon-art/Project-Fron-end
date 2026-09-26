@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>บันทึกของหายเข้าคลัง - Lost &amp; Found ICT</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- โหลด CSS แยกส่วน: components.css ใช้ร่วมกันทุกหน้า, staff-inventory-add.css เฉพาะหน้านี้ -->
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/staff-inventory-add.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="nav-left">
+        <a href="staff-dashboard.html" class="nav-brand">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Lost & Found ICT</span>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="staff-dashboard.html" class="nav-link">แดชบอร์ดภาพรวม</a></li>
+          <li><a href="staff-post-list.html" class="nav-link active">บันทึกสิ่งของเข้าคลัง</a></li>
+          <li><a href="staff-verify-claims.html" class="nav-link">ตรวจสอบคำร้อง</a></li>
+          <li><a href="staff-overdue-list.html" class="nav-link">รายการสิ่งของตกค้าง</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-actions">
+        <a href="staff-profile.html" class="nav-profile">
+          <i class="fa-regular fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container-fluid">
+
+    <form id="lostFoundForm" novalidate>
+
+      <div class="inv-header">
+        <div>
+          <h1>บันทึกของหายเข้าคลัง</h1>
+          <p class="inv-subtitle" id="pageSubtitle">กรอกรายละเอียดเพื่อลงทะเบียนสิ่งของที่พบเจอเข้าระบบ</p>
+        </div>
+
+        <div class="inv-ref-badge">
+          Reference ID:
+          <span id="refId" class="mono">#INV-2026-001</span>
+        </div>
+      </div>
+
+      <!-- แสดงเฉพาะเมื่อมาจากหน้ารายละเอียดโพสต์ (มี ?id= ต่อท้าย URL) -->
+      <div id="fromPostBanner" class="inv-from-post hidden">
+        <i class="fa-solid fa-circle-info"></i>
+        <span>ข้อมูลด้านล่างดึงมาจากโพสต์แจ้งพบสิ่งของแล้ว หากต้องการแก้ไขข้อมูลสิ่งของ กรุณากลับไปที่ <a id="backToPostLink" href="#">หน้ารายละเอียดโพสต์</a> — ในหน้านี้กรอกได้เฉพาะตำแหน่งจัดเก็บ</span>
+      </div>
+
+      <div class="inv-grid">
+
+        <!-- ============================== LEFT COLUMN ============================== -->
+        <div class="inv-col-main">
+
+          <!-- SECTION 1 -->
+          <section class="inv-card" id="section1Card">
+            <div class="inv-card-head">
+              <span class="inv-step-num">1</span>
+              <h2>ข้อมูลเบื้องต้น</h2>
+            </div>
+
+            <div class="inv-field">
+              <label for="itemName">ชื่อสิ่งของ / หัวข้อ <span class="req">*</span></label>
+              <input type="text" id="itemName" required placeholder="เช่น กระเป๋าสตางค์สีดำ, iPad Air 5">
+            </div>
+
+            <div class="inv-field-group">
+              <div class="inv-field">
+                <label for="mainCategory">หมวดหมู่หลัก <span class="req">*</span></label>
+                <select id="mainCategory" required>
+                  <option value="">เลือกหมวดหมู่</option>
+                  <option value="electronics">อุปกรณ์อิเล็กทรอนิกส์</option>
+                  <option value="bags">กระเป๋า / เป้</option>
+                  <option value="documents">เอกสาร / บัตร</option>
+                  <option value="personal">ของใช้ส่วนตัว</option>
+                </select>
+              </div>
+
+              <div class="inv-field">
+                <label for="subCategory">หมวดหมู่อย่อย</label>
+                <select id="subCategory">
+                  <option value="">เลือกหมวดหมู่อย่อย</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="inv-field">
+              <label for="itemDescription">รายละเอียดเพิ่มเติมลักษณะเด่น (สี, ยี่ห้อ, ตำหนิ)</label>
+              <textarea id="itemDescription" rows="3" placeholder="ระบุลักษณะที่ชัดเจนเพื่อการตรวจสอบที่ง่ายขึ้น..."></textarea>
+            </div>
+          </section>
+
+          <!-- SECTION 2 -->
+          <section class="inv-card" id="section2Card">
+            <div class="inv-card-head">
+              <span class="inv-step-num">2</span>
+              <h2>สถานที่ที่พบ (คณะ ICT มหาวิทยาลัยพะเยา)</h2>
+            </div>
+
+            <div class="inv-field-group">
+              <div class="inv-field">
+                <label for="locationType">โซน / พื้นที่ <span class="req">*</span></label>
+                <select id="locationType" required>
+                  <option value="">เลือกโซน / พื้นที่</option>
+                  <option value="โรงอาหาร">โรงอาหาร</option>
+                  <option value="โรงจอดรถ">โรงจอดรถ</option>
+                  <option value="ห้องเรียน">ห้องเรียน</option>
+                  <option value="ห้องสาขา">ห้องสาขา</option>
+                  <option value="อื่นๆ">อื่น ๆ</option>
+                </select>
+              </div>
+
+              <div class="inv-field hidden" id="locationDetailWrapper">
+                <label id="locationDetailLabel" for="locationDetail">รายละเอียดสถานที่ <span class="req">*</span></label>
+                <input type="text" id="locationDetail">
+                <p id="locationDetailHint" class="inv-hint"></p>
+              </div>
+
+              <div class="inv-field">
+                <label for="locationLandmark">จุดอ้างอิงเพิ่มเติม</label>
+                <input type="text" id="locationLandmark" placeholder="เช่น หน้าลิฟต์, ข้างโต๊ะประชาสัมพันธ์">
+              </div>
+
+              <div class="inv-field">
+                <label for="foundDateTime">วันที่และเวลาที่พบ <span class="req">*</span></label>
+                <input type="datetime-local" id="foundDateTime" required>
+              </div>
+            </div>
+          </section>
+
+          <!-- SECTION 3 -->
+          <section class="inv-card">
+            <div class="inv-card-head">
+              <span class="inv-step-num" id="section3StepNum">3</span>
+              <h2>ตำแหน่งจัดเก็บในคลัง</h2>
+            </div>
+
+            <div class="inv-field-group cols-3">
+              <div class="inv-field">
+                <label for="storageRoom">ห้องเก็บของ <span class="req">*</span></label>
+                <select id="storageRoom" required>
+                  <option value="">เลือกห้องเก็บของ</option>
+                  <option value="ห้องศูนย์ประสานงาน ICT">ห้องศูนย์ประสานงาน ICT</option>
+                  <option value="ตู้เก็บของ A (สำนักงานคณะ)">ตู้เก็บของ A (สำนักงานคณะ)</option>
+                </select>
+              </div>
+
+              <div class="inv-field">
+                <label for="shelfId">ชั้นวาง (Shelf ID) <span class="req">*</span></label>
+                <input type="text" id="shelfId" required placeholder="เช่น A-12">
+              </div>
+
+              <div class="inv-field">
+                <label for="binId">กล่อง / Bin (Bin ID)</label>
+                <input type="text" id="binId" placeholder="เช่น B-045">
+              </div>
+            </div>
+          </section>
+
+        </div>
+
+        <!-- ============================== RIGHT COLUMN ============================== -->
+        <div class="inv-col-side">
+
+          <!-- MEDIA -->
+          <section class="inv-card" id="mediaCard">
+            <div class="inv-card-head between">
+              <h2 class="no-icon">
+                ภาพถ่าย / วิดีโอสิ่งของ
+                <span id="fileCountText" class="count-text">(0/5)</span>
+              </h2>
+              <button type="button" id="clearAllBtn" class="link-danger hidden">ยกเลิกทั้งหมด</button>
+            </div>
+
+            <input type="file" id="imageInput" multiple accept="image/*,video/*" class="hidden">
+
+            <label for="imageInput" class="upload-box" id="uploadBox">
+              <div class="upload-icon"><i class="fa-solid fa-camera"></i></div>
+              <div>
+                <p class="upload-title">อัปโหลดรูปภาพ หรือ วิดีโอ</p>
+                <p class="upload-hint" id="uploadHint">อัปโหลดอย่างน้อย 1 ไฟล์ และสูงสุด 5 ไฟล์</p>
+              </div>
+            </label>
+
+            <div id="existingMediaContainer" class="preview-grid"></div>
+            <div id="previewContainer" class="preview-grid"></div>
+          </section>
+
+          <!-- QR CODE / SUBMIT -->
+          <section class="inv-card center">
+            <div id="qrExtra">
+              <h2 class="left">QR Code &amp; Label</h2>
+
+              <div class="qr-box">
+                <div class="qr-icon"><i class="fa-solid fa-qrcode"></i></div>
+                <span id="qrReference" class="mono qr-ref">#INV-2026-001</span>
+              </div>
+
+              <p class="qr-note">
+                ระบบจะสร้าง QR Code อัตโนมัติหลังบันทึกข้อมูลสำเร็จ เพื่อนำไปพิมพ์และติดที่สิ่งของ
+              </p>
+            </div>
+
+            <button type="submit" id="submitButton" class="btn-block">บันทึกข้อมูลเข้าคลัง</button>
+          </section>
+
+        </div>
+
+      </div>
+    </form>
+
+  </main>
+
+  <!-- ============================== CONFIRM MODAL ============================== -->
+  <div id="confirmSaveModal" class="confirm-modal-overlay hidden">
+    <div class="confirm-modal-box">
+      <div class="confirm-modal-head">
+        <div class="confirm-modal-icon"><i class="fa-solid fa-circle-check"></i></div>
+        <div>
+          <h3>ยืนยันการบันทึกข้อมูล</h3>
+          <p>กรุณาตรวจสอบข้อมูลก่อนยืนยันการนำสิ่งของเข้าคลัง</p>
+        </div>
+      </div>
+
+      <div class="confirm-modal-body">
+        <div class="confirm-info-box">
+          <div class="confirm-row"><span>สิ่งของ</span><span id="confirmItemName">-</span></div>
+          <div class="confirm-row"><span>หมวดหมู่</span><span id="confirmCategory">-</span></div>
+          <div class="confirm-row"><span>สถานที่พบ</span><span id="confirmLocation">-</span></div>
+          <div class="confirm-row"><span>ตำแหน่งจัดเก็บ</span><span id="confirmStorage">-</span></div>
+        </div>
+
+        <p class="confirm-note">
+          <i class="fa-solid fa-circle-info"></i>
+          เมื่อยืนยันแล้ว ข้อมูลจะถูกบันทึกเข้าสู่ระบบคลังสิ่งของ และนำไปแสดงในหน้ารายการสิ่งของตกค้าง
+        </p>
+      </div>
+
+      <div class="confirm-modal-foot">
+        <button type="button" id="cancelSaveButton" class="btn-outline">ยกเลิก</button>
+        <button type="button" id="confirmSaveButton" class="btn-primary">ยืนยันบันทึกเข้าคลัง</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================== ERROR TOAST ============================== -->
+  <div id="errorToast" class="inv-toast">
+    <div class="inv-toast-box">
+      <div class="inv-toast-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+      <div>
+        <p class="inv-toast-title">ไม่สามารถบันทึกข้อมูลได้</p>
+        <p id="errorToastMessage" class="inv-toast-msg">กรุณาลองใหม่อีกครั้ง</p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <strong>Lost & Found ICT</strong> &copy; 2026 Lost & Found System. All rights reserved.
+      </div>
+      <div class="footer-links">
+        <a href="#">Contact Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="js/staff-inventory-add.js"></script>
+</body>
+</html>

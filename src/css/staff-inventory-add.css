@@ -1,0 +1,701 @@
+/* ==========================================================================
+   Staff Inventory Add — uses the same design tokens as home.css / components.css
+   (สี #003b7a, ตัวอักษร Prompt, มุมโค้ง 16px, เงาแบบเดียวกัน)
+   ========================================================================== */
+
+main {
+  flex: 1;
+  padding: 32px 0 48px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* --------------------------------------------------------------------------
+   Page header
+   -------------------------------------------------------------------------- */
+.inv-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.inv-header h1 {
+  font-size: 26px;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -0.5px;
+}
+
+.inv-subtitle {
+  font-size: 14px;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+.inv-ref-badge {
+  background: #e0f2fe;
+  border: 1px solid #bae6fd;
+  color: #003b7a;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 7px 14px;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+.mono {
+  font-family: monospace;
+  font-weight: 700;
+}
+
+/* --------------------------------------------------------------------------
+   From-post banner
+   -------------------------------------------------------------------------- */
+.inv-from-post {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: #e0f2fe;
+  border: 1px solid #bae6fd;
+  color: #003b7a;
+  font-size: 12px;
+  line-height: 1.6;
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.inv-from-post i {
+  margin-top: 2px;
+}
+
+.inv-from-post a {
+  color: #003b7a;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+/* --------------------------------------------------------------------------
+   Grid layout
+   -------------------------------------------------------------------------- */
+.inv-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.inv-col-main,
+.inv-col-side {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* --------------------------------------------------------------------------
+   Cards
+   -------------------------------------------------------------------------- */
+.inv-card {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 10px rgba(0, 30, 80, 0.03);
+  padding: 24px;
+}
+
+.inv-card.center {
+  text-align: center;
+}
+
+.inv-card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 14px;
+  margin-bottom: 18px;
+}
+
+.inv-card-head.between {
+  justify-content: space-between;
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 14px;
+}
+
+.inv-card-head h2 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.inv-card h2.no-icon {
+  font-size: 14px;
+  color: #003b7a;
+}
+
+.inv-card h2.left {
+  text-align: left;
+  font-size: 13px;
+  color: #0f172a;
+  margin-bottom: 14px;
+}
+
+.count-text {
+  color: #003b7a;
+  font-weight: 600;
+}
+
+.inv-step-num {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #e0f2fe;
+  color: #003b7a;
+  font-size: 11px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Form fields
+   -------------------------------------------------------------------------- */
+.inv-field {
+  margin-bottom: 16px;
+}
+
+.inv-field:last-child {
+  margin-bottom: 0;
+}
+
+.inv-field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 6px;
+}
+
+.req {
+  color: #dc2626;
+}
+
+.inv-field input,
+.inv-field select,
+.inv-field textarea {
+  width: 100%;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-family: inherit;
+  color: #1e293b;
+  background: #f8fafc;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.inv-field select {
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.inv-field textarea {
+  resize: none;
+}
+
+.inv-field input:focus,
+.inv-field select:focus,
+.inv-field textarea:focus {
+  outline: none;
+  border-color: #003b7a;
+  box-shadow: 0 0 0 3px rgba(0, 59, 122, 0.1);
+}
+
+.inv-field input:disabled,
+.inv-field select:disabled,
+.inv-field textarea:disabled {
+  background: #f1f5f9;
+  color: #64748b;
+  cursor: not-allowed;
+}
+
+.inv-hint {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 4px;
+}
+
+.inv-field-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.inv-field-group.cols-3 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+/* --------------------------------------------------------------------------
+   Media upload
+   -------------------------------------------------------------------------- */
+.upload-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 150px;
+  text-align: center;
+  border: 2px dashed #e2e8f0;
+  border-radius: 16px;
+  padding: 24px;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.upload-box:hover {
+  border-color: #003b7a;
+}
+
+.upload-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #e0f2fe;
+  color: #003b7a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.upload-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #003b7a;
+}
+
+.upload-hint {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+.preview-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.preview-item {
+  position: relative;
+  height: 80px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f1f5f9;
+}
+
+.preview-item img,
+.preview-item video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.preview-item .file-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  text-align: center;
+  color: #94a3b8;
+}
+
+.preview-item .file-fallback span {
+  font-size: 9px;
+  margin-top: 4px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.preview-item.existing::after {
+  content: 'จากโพสต์';
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  font-size: 8px;
+  font-weight: 700;
+  background: rgba(0, 59, 122, 0.85);
+  color: #fff;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+.preview-remove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: none;
+  background: #dc2626;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.preview-remove:hover {
+  background: #b91c1c;
+}
+
+.link-danger {
+  background: none;
+  border: none;
+  color: #dc2626;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.link-danger:hover {
+  text-decoration: underline;
+}
+
+/* --------------------------------------------------------------------------
+   QR panel
+   -------------------------------------------------------------------------- */
+.qr-box {
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+  border-radius: 16px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.qr-icon {
+  width: 88px;
+  height: 88px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  color: #1e293b;
+}
+
+.qr-ref {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.qr-note {
+  font-size: 10px;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+/* --------------------------------------------------------------------------
+   Buttons
+   -------------------------------------------------------------------------- */
+.btn-primary,
+.btn-block {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #003b7a;
+  color: #ffffff;
+  border: none;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 10px 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.btn-primary:hover,
+.btn-block:hover {
+  background: #002a5c;
+  box-shadow: 0 4px 12px rgba(0, 59, 122, 0.2);
+}
+
+.btn-primary:disabled,
+.btn-block:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-outline:hover {
+  background: #f8fafc;
+  border-color: #003b7a;
+  color: #003b7a;
+}
+
+.btn-outline:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.fa-spin-custom {
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* --------------------------------------------------------------------------
+   Confirm modal
+   -------------------------------------------------------------------------- */
+.confirm-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  background: rgba(2, 6, 23, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.confirm-modal-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.confirm-modal-overlay.hidden {
+  display: none;
+}
+
+.confirm-modal-box {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+  max-width: 460px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  transform: translateY(15px) scale(0.98);
+  opacity: 0;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.confirm-modal-overlay.show .confirm-modal-box {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.confirm-modal-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 22px 24px 16px;
+}
+
+.confirm-modal-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: #e0f2fe;
+  color: #003b7a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.confirm-modal-head h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.confirm-modal-head p {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 3px;
+  line-height: 1.5;
+}
+
+.confirm-modal-body {
+  padding: 0 24px 20px;
+  overflow-y: auto;
+}
+
+.confirm-info-box {
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+.confirm-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 12px;
+  padding: 6px 0;
+}
+
+.confirm-row span:first-child {
+  color: #94a3b8;
+}
+
+.confirm-row span:last-child {
+  color: #1e293b;
+  font-weight: 700;
+  text-align: right;
+}
+
+.confirm-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 11px;
+  color: #64748b;
+  line-height: 1.6;
+  margin-top: 14px;
+}
+
+.confirm-note i {
+  color: #003b7a;
+  margin-top: 2px;
+}
+
+.confirm-modal-foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 24px;
+  background: #f8fafc;
+  border-top: 1px solid #f1f5f9;
+}
+
+/* --------------------------------------------------------------------------
+   Toast
+   -------------------------------------------------------------------------- */
+.inv-toast {
+  position: fixed;
+  top: 80px;
+  right: 16px;
+  z-index: 1200;
+  width: min(92vw, 400px);
+  transform: translateY(-12px);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.25s ease;
+}
+
+.inv-toast.show {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+.inv-toast-box {
+  background: #ffffff;
+  border: 1px solid #fecaca;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  padding: 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.inv-toast-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: #fee2e2;
+  color: #dc2626;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.inv-toast-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.inv-toast-msg {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 2px;
+  line-height: 1.5;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .inv-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .inv-field-group,
+  .inv-field-group.cols-3 {
+    grid-template-columns: 1fr;
+  }
+}

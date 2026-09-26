@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ดำเนินการจำหน่ายสิ่งของ - Lost &amp; Found ICT</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- โหลด CSS แยกส่วน: components.css ใช้ร่วมกันทุกหน้า, staff-dispose-item.css เฉพาะหน้านี้ -->
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/staff-dispose-item.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="nav-left">
+        <a href="staff-dashboard.html" class="nav-brand">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Lost & Found ICT</span>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="staff-dashboard.html" class="nav-link">แดชบอร์ดภาพรวม</a></li>
+          <li><a href="staff-post-list.html" class="nav-link">บันทึกสิ่งของเข้าคลัง</a></li>
+          <li><a href="staff-verify-claims.html" class="nav-link">ตรวจสอบคำร้อง</a></li>
+          <li><a href="staff-overdue-list.html" class="nav-link active">รายการสิ่งของตกค้าง</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-actions">
+        <a href="staff-profile.html" class="nav-profile">
+          <i class="fa-regular fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-wrapper">
+
+      <div>
+        <a href="staff-overdue-list.html" class="back-link">
+          <i class="fa-solid fa-arrow-left"></i>
+          ย้อนกลับไปรายการของเกินกำหนด
+        </a>
+
+        <h1 class="page-title">บันทึกการดำเนินการจำหน่ายสิ่งของ</h1>
+        <p class="page-subtitle">กรอกรายละเอียดเพื่อเปลี่ยนสถานะสิ่งของตกค้างเกินกำหนดในระบบ</p>
+      </div>
+
+      <!-- ITEM INFORMATION -->
+      <div class="item-info-card">
+        <div class="item-thumb">
+          <img id="item-image" src="" alt="รูปสิ่งของ">
+        </div>
+
+        <div class="item-info-body">
+          <div class="item-tags">
+            <span id="item-id-display" class="item-id-tag">...</span>
+            <span id="item-overdue-display" class="overdue-tag danger">...</span>
+          </div>
+
+          <h3 id="item-name-display" class="item-name">กำลังโหลด...</h3>
+
+          <p class="item-meta">
+            หมวดหมู่: <span id="item-category-display">-</span>
+            <span class="sep">|</span>
+            สถานที่จัดเก็บ: <span id="item-location-display">-</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- DISPOSAL FORM -->
+      <div id="disposeFormCard" class="dispose-form-card">
+        <form id="dispose-form">
+
+          <input type="hidden" id="input-item-id" name="itemId">
+
+          <div class="form-group">
+            <label class="form-label">
+              รูปแบบการจำหน่าย <span class="required-mark">*</span>
+            </label>
+
+            <div class="radio-grid">
+              <label class="radio-card">
+                <input type="radio" name="dispose_type" value="donate" required>
+                <div>
+                  <div class="radio-title">บริจาคสาธารณะ</div>
+                  <div class="radio-desc">มอบให้มูลนิธิหรือหน่วยงานการศึกษา</div>
+                </div>
+              </label>
+
+              <label class="radio-card">
+                <input type="radio" name="dispose_type" value="destroy">
+                <div>
+                  <div class="radio-title">ทำลาย / รีไซเคิล</div>
+                  <div class="radio-desc">กำจัดเนื่องจากชำรุดหรือไม่สามารถใช้งานได้</div>
+                </div>
+              </label>
+
+              <label class="radio-card">
+                <input type="radio" name="dispose_type" value="other">
+                <div>
+                  <div class="radio-title">อื่นๆ</div>
+                  <div class="radio-desc">ส่งต่อหน่วยงานกลาง หรือจัดการตามระเบียบ</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="dispose-note" class="form-label">
+              รายละเอียดเพิ่มเติม / หมายเหตุ <span class="required-mark">*</span>
+            </label>
+
+            <textarea
+              id="dispose-note"
+              name="dispose_note"
+              rows="3"
+              required
+              placeholder="ระบุหน่วยงานที่รับมอบ หรือสาเหตุในการทำลาย..."
+              class="form-textarea"
+            ></textarea>
+          </div>
+
+          <div class="form-actions">
+            <a href="staff-overdue-list.html" class="btn-secondary">ยกเลิก</a>
+            <button id="submitDisposeButton" type="submit" class="btn-danger">ยืนยันการจำหน่ายสิ่งของ</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- NOT ELIGIBLE MESSAGE -->
+      <div id="notEligibleCard" class="notice-card warning hidden">
+        <div class="notice-body">
+          <div class="notice-icon warning"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <div>
+            <h3 class="notice-title">ยังไม่สามารถจำหน่ายสิ่งของรายการนี้ได้</h3>
+            <p id="notEligibleMessage" class="notice-desc">สิ่งของจะสามารถจำหน่ายได้เมื่อเก็บรักษาครบ 30 วัน</p>
+            <a href="staff-overdue-list.html" class="notice-link">กลับไปรายการสิ่งของตกค้าง</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ERROR CARD -->
+      <div id="errorCard" class="notice-card error hidden">
+        <div class="notice-body">
+          <div class="notice-icon error"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <div>
+            <h3 class="notice-title">ไม่สามารถดำเนินการได้</h3>
+            <p id="errorMessage" class="notice-desc">ไม่พบข้อมูลรายการสิ่งของ</p>
+            <a href="staff-overdue-list.html" class="notice-link">กลับไปรายการสิ่งของตกค้าง</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- CONFIRMATION MODAL -->
+  <div id="disposeConfirmModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="disposeConfirmTitle">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-icon-circle danger"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        <h3 id="disposeConfirmTitle" class="modal-title">ยืนยันการจำหน่ายสิ่งของ</h3>
+        <p class="modal-desc">กรุณาตรวจสอบข้อมูลก่อนยืนยันการดำเนินการ</p>
+      </div>
+
+      <div class="modal-summary">
+        <div class="summary-row">
+          <span class="summary-label">รหัสสิ่งของ</span>
+          <span id="confirmItemId" class="summary-value">-</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">รายการ</span>
+          <span id="confirmItemName" class="summary-value">-</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">รูปแบบการจำหน่าย</span>
+          <span id="confirmDisposeType" class="summary-value">-</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">ระยะเวลาตกค้าง</span>
+          <span id="confirmOverdueDays" class="summary-value danger">-</span>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button id="cancelDisposeButton" type="button" class="btn-secondary">ยกเลิก</button>
+        <button id="confirmDisposeButton" type="button" class="btn-danger">ยืนยันการจำหน่าย</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUCCESS MODAL -->
+  <div id="successModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="successModalTitle">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-icon-circle success"><i class="fa-solid fa-check"></i></div>
+        <h3 id="successModalTitle" class="modal-title">จำหน่ายสิ่งของเรียบร้อยแล้ว</h3>
+        <p class="modal-desc">ระบบบันทึกข้อมูลการจำหน่ายเรียบร้อยแล้ว และรายการนี้จะถูกนำออกจากรายการสิ่งของตกค้าง</p>
+      </div>
+
+      <div class="modal-actions stacked">
+        <button id="successContinueButton" type="button" class="btn-primary">กลับไปรายการสิ่งของตกค้าง</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ERROR MODAL -->
+  <div id="errorModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="errorModalTitle">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-icon-circle danger"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        <h3 id="errorModalTitle" class="modal-title">ไม่สามารถบันทึกข้อมูลได้</h3>
+        <p id="errorModalMessage" class="modal-desc">กรุณาลองใหม่อีกครั้ง</p>
+      </div>
+
+      <div class="modal-actions stacked">
+        <button type="button" class="btn-primary">ตกลง</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <strong>Lost & Found ICT</strong> &copy; 2026 Lost & Found System. All rights reserved.
+      </div>
+      <div class="footer-links">
+        <a href="#">Contact Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="js/staff-dispose-item.js"></script>
+</body>
+</html>

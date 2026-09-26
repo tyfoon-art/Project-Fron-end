@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ตรวจสอบคำร้อง - Lost &amp; Found ICT</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- โหลด CSS แยกส่วน: components.css ใช้ร่วมกันทุกหน้า, staff-verify-claims.css เฉพาะหน้านี้ -->
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/staff-verify-claims.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="nav-left">
+        <a href="staff-dashboard.html" class="nav-brand">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Lost & Found ICT</span>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="staff-dashboard.html" class="nav-link">แดชบอร์ดภาพรวม</a></li>
+          <li><a href="staff-post-list.html" class="nav-link">บันทึกสิ่งของเข้าคลัง</a></li>
+          <li><a href="staff-verify-claims.html" class="nav-link active">ตรวจสอบคำร้อง</a></li>
+          <li><a href="staff-overdue-list.html" class="nav-link">รายการสิ่งของตกค้าง</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-actions">
+        <a href="staff-profile.html" class="nav-profile">
+          <i class="fa-regular fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container-fluid">
+
+    <div class="vc-header">
+      <div>
+        <h1>ตรวจสอบคำร้อง</h1>
+        <p class="vc-subtitle">ตรวจสอบและจัดการคำร้องขอรับคืนสิ่งของ</p>
+      </div>
+
+      <div class="vc-search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchInput" placeholder="ค้นหารหัสคำร้อง ชื่อ หรือสิ่งของ...">
+      </div>
+    </div>
+
+    <!-- FILTER CARD -->
+    <section class="vc-filter-card">
+
+      <div class="vc-filter-left">
+
+        <select id="categoryFilter">
+          <option value="all">หมวดหมู่ทั้งหมด</option>
+          <option value="electronics">อุปกรณ์อิเล็กทรอนิกส์</option>
+          <option value="wallet">กระเป๋า / กระเป๋าสตางค์</option>
+          <option value="documents">เอกสาร / บัตรสำคัญ</option>
+        </select>
+
+        <select id="dateFilter">
+          <option value="all">วันที่ทั้งหมด</option>
+        </select>
+
+        <div class="status-tabs">
+          <button id="btnAllStatus" class="status-tab active" data-status="all">ทั้งหมด</button>
+          <button id="btnPending" class="status-tab" data-status="pending">รอตรวจสอบ</button>
+          <button id="btnApproved" class="status-tab" data-status="approved">อนุมัติแล้ว</button>
+          <button id="btnRejected" class="status-tab" data-status="rejected">ปฏิเสธคำร้อง</button>
+          <button id="btnMoreInfo" class="status-tab" data-status="more_info">ขอข้อมูลเพิ่มเติม</button>
+        </div>
+
+      </div>
+
+      <div class="vc-filter-right">
+        <span class="sort-label">เรียงตาม</span>
+
+        <select id="sortFilter">
+          <option value="latest">วันที่ล่าสุด</option>
+          <option value="oldest">วันที่เก่าสุด</option>
+        </select>
+
+        <button type="button" id="resetFiltersBtn" class="link-reset">รีเซ็ต</button>
+      </div>
+
+    </section>
+
+    <!-- TABLE -->
+    <section class="vc-panel">
+      <div class="vc-table-wrapper">
+        <table class="vc-table">
+          <thead>
+            <tr>
+              <th>รหัสคำร้อง</th>
+              <th>รายการสิ่งของ</th>
+              <th>ผู้ขอรับคืน</th>
+              <th>วันที่ยื่นคำร้อง</th>
+              <th>สถานะ</th>
+              <th class="center">การจัดการ</th>
+            </tr>
+          </thead>
+          <tbody id="claimTableBody"></tbody>
+        </table>
+      </div>
+
+      <div id="emptyState" class="vc-empty hidden">
+        <div class="vc-empty-icon"><i class="fa-regular fa-folder-open"></i></div>
+        <p class="title">ไม่พบรายการคำร้อง</p>
+        <p class="desc">ลองเปลี่ยนตัวกรองหรือคำค้นหา</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <strong>Lost & Found ICT</strong> &copy; 2026 Lost & Found System. All rights reserved.
+      </div>
+      <div class="footer-links">
+        <a href="#">Contact Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="js/staff-verify-claims.js"></script>
+</body>
+</html>

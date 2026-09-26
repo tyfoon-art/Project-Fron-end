@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>บันทึกการส่งมอบ (Handover Record) - Lost &amp; Found ICT</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- โหลด CSS แยกส่วน: components.css ใช้ร่วมกันทุกหน้า, staff-handover.css เฉพาะหน้านี้ -->
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/staff-handover.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="nav-left">
+        <a href="staff-dashboard.html" class="nav-brand">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Lost & Found ICT</span>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="staff-dashboard.html" class="nav-link">แดชบอร์ดภาพรวม</a></li>
+          <li><a href="staff-post-list.html" class="nav-link">บันทึกสิ่งของเข้าคลัง</a></li>
+          <li><a href="staff-verify-claims.html" class="nav-link">ตรวจสอบคำร้อง</a></li>
+          <li><a href="staff-overdue-list.html" class="nav-link">รายการสิ่งของตกค้าง</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-actions">
+        <a href="staff-profile.html" class="nav-profile">
+          <i class="fa-regular fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-wrapper-wide">
+
+      <div class="page-header">
+        <h1 class="page-title">บันทึกการส่งมอบ (Handover Record)</h1>
+        <p class="page-subtitle">ส่งคืนสิ่งของให้เจ้าของและบันทึกหลักฐานการรับคืนในระบบ</p>
+      </div>
+
+      <form id="handoverForm" class="handover-grid">
+
+        <!-- LEFT -->
+        <div class="handover-left">
+
+          <!-- รายละเอียดสิ่งของ -->
+          <div class="panel-card">
+            <div class="panel-header">
+              <i class="fa-solid fa-box-open"></i>
+              <h2>รายละเอียดสิ่งของ</h2>
+            </div>
+
+            <div id="itemPhotoFrame" class="item-photo-frame">
+              <img id="itemImage" src="" alt="สิ่งของที่พบ">
+
+              <div id="noImagePlaceholder" class="no-image-placeholder">
+                <i class="fa-regular fa-image"></i>
+                <span>ไม่พบรูปสิ่งของ</span>
+              </div>
+
+              <span class="photo-status-tag"><span class="dot"></span>อนุมัติแล้ว</span>
+            </div>
+
+            <div class="detail-block">
+              <p class="detail-label">รหัสการเคลม</p>
+              <p id="claimIdText" class="detail-value mono">-</p>
+            </div>
+
+            <div class="detail-block">
+              <p class="detail-label">ชื่อสิ่งของ</p>
+              <p id="itemNameText" class="detail-value">-</p>
+            </div>
+          </div>
+
+          <!-- ข้อมูลผู้รับคืน -->
+          <div class="panel-card">
+            <div class="panel-header">
+              <i class="fa-solid fa-user"></i>
+              <h2>ข้อมูลผู้รับคืน</h2>
+            </div>
+
+            <div class="detail-block" style="margin-top:0;">
+              <p class="detail-label">ชื่อ-นามสกุล</p>
+              <p id="recipientNameText" class="detail-value">-</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT -->
+        <div>
+          <div class="form-card">
+            <h2 class="form-card-title">แบบฟอร์มยืนยันการส่งมอบ</h2>
+
+            <div class="form-group">
+              <div class="verify-box">
+                <input type="checkbox" id="verifyCheck" required>
+                <label for="verifyCheck">ยืนยันตัวตนผู้รับคืน (Verification Check)</label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="upload-header">
+                <label class="form-label" style="margin-bottom:0;">
+                  ภาพถ่าย/วิดีโอ ขณะส่งมอบ (หลักฐาน)
+                  <span id="fileCountText" class="file-count">(0/5)</span>
+                </label>
+
+                <button type="button" id="clearAllBtn" class="btn-clear-all">ยกเลิกทั้งหมด</button>
+              </div>
+
+              <input type="file" id="photoInput" accept="image/*,video/*" multiple class="hidden">
+
+              <label id="uploadLabel" for="photoInput" class="upload-dropzone">
+                <p>คลิกเพื่อถ่ายภาพ หรือ อัปโหลดวิดีโอ</p>
+                <p>รองรับรูปภาพและวิดีโอ สูงสุด 5 ไฟล์</p>
+              </label>
+
+              <div id="previewContainer" class="preview-grid"></div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">ลายเซ็นผู้รับคืน (Digital Signature)</label>
+
+              <div class="signature-frame">
+                <canvas id="signaturePad"></canvas>
+                <button type="button" id="clearSignatureBtn" class="btn-clear-signature">ล้างลายเซ็น</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">ชื่อเจ้าหน้าที่ผู้ส่งมอบ</label>
+              <input type="text" id="staffNameInput" value="somying (Staff)" readonly class="form-input-readonly">
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" id="openSummaryBtn" class="btn-primary">ยืนยันการส่งมอบ</button>
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </main>
+
+  <!-- IMAGE MODAL -->
+  <div id="imageModal" class="modal-overlay">
+    <div class="modal-box wide">
+      <div class="image-modal-header">
+        <h3>รูปภาพขนาดเต็ม</h3>
+        <button type="button" id="closeImageModalBtn" class="image-modal-close">✕</button>
+      </div>
+
+      <div class="image-modal-body">
+        <img id="modalImage" src="" alt="รูปขยาย">
+      </div>
+    </div>
+  </div>
+
+  <!-- CONFIRM SUMMARY MODAL -->
+  <div id="confirmSummaryModal" class="modal-overlay">
+    <div class="modal-box medium">
+      <div class="confirm-modal-head">
+        <div class="confirm-modal-icon"><i class="fa-solid fa-clipboard-check"></i></div>
+        <div>
+          <h3>สรุปรายละเอียดการส่งมอบ</h3>
+          <p>กรุณาตรวจสอบข้อมูลก่อนบันทึก</p>
+        </div>
+      </div>
+
+      <div class="summary-box">
+        <div class="summary-row">
+          <span class="summary-label">รหัสการเคลม:</span>
+          <span id="summaryClaimId" class="summary-value">-</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">สิ่งของที่ส่งมอบ:</span>
+          <span id="summaryItemName" class="summary-value">-</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">ชื่อผู้รับคืน:</span>
+          <span id="summaryRecipient" class="summary-value">-</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">เจ้าหน้าที่ผู้ส่งมอบ:</span>
+          <span id="summaryStaff" class="summary-value">-</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">หลักฐานที่แนบ:</span>
+          <span id="summaryFileCount" class="summary-value blue">0 ไฟล์</span>
+        </div>
+        <div>
+          <span class="summary-label" style="display:block; margin-bottom:6px;">ลายเซ็นดิจิทัลผู้รับ:</span>
+          <div class="summary-sign-frame">
+            <img id="summarySignatureImg" src="" alt="ลายเซ็นผู้รับ">
+          </div>
+        </div>
+      </div>
+
+      <div class="confirm-note">
+        เมื่อกด <strong>"ยืนยันบันทึกสำเร็จ"</strong> ระบบจะบันทึกประวัติการส่งมอบและเปลี่ยนสถานะคำร้องเป็น <strong>ส่งคืนแล้ว</strong>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" id="closeConfirmSummaryBtn" class="btn-secondary">แก้ไขข้อมูล</button>
+        <button type="button" id="finalSubmitBtn" class="btn-primary">ยืนยันบันทึกสำเร็จ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUCCESS MODAL -->
+  <div id="successModal" class="modal-overlay">
+    <div class="modal-box small">
+      <div class="success-icon-circle"><i class="fa-solid fa-check"></i></div>
+
+      <h3 class="success-title">บันทึกการส่งมอบสำเร็จ</h3>
+      <p class="success-desc">
+        ระบบบันทึกข้อมูลการส่งคืนสิ่งของเรียบร้อยแล้ว<br>
+        สถานะคำร้องถูกเปลี่ยนเป็น "ส่งคืนแล้ว"
+      </p>
+
+      <div class="success-summary">
+        <div class="row"><span>รหัสคำร้อง</span><span id="successClaimId">-</span></div>
+        <div class="row"><span>ผู้รับคืน</span><span id="successRecipient">-</span></div>
+      </div>
+
+      <button type="button" id="goToDashboardBtn" class="btn-primary full-width">กลับสู่แดชบอร์ด</button>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <strong>Lost & Found ICT</strong> &copy; 2026 Lost & Found System. All rights reserved.
+      </div>
+      <div class="footer-links">
+        <a href="#">Contact Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="js/staff-handover.js"></script>
+</body>
+</html>

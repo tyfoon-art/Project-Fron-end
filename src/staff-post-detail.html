@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>รายละเอียดโพสต์ - Lost &amp; Found ICT</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/staff-post-detail.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="nav-left">
+        <a href="staff-dashboard.html" class="nav-brand">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Lost & Found ICT</span>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="staff-dashboard.html" class="nav-link">แดชบอร์ดภาพรวม</a></li>
+          <li><a href="staff-post-list.html" class="nav-link active">บันทึกสิ่งของเข้าคลัง</a></li>
+          <li><a href="staff-verify-claims.html" class="nav-link">ตรวจสอบคำร้อง</a></li>
+          <li><a href="staff-overdue-list.html" class="nav-link">รายการสิ่งของตกค้าง</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-actions">
+        <a href="staff-profile.html" class="nav-profile">
+          <i class="fa-regular fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container-fluid">
+
+    <nav class="pd-breadcrumb">
+      <a href="staff-post-list.html">รายการแจ้งพบสิ่งของ</a>
+      <i class="fa-solid fa-chevron-right"></i>
+      <span>รายละเอียด</span>
+    </nav>
+
+    <div id="loadingState" class="pd-loading">
+      <i class="fa-solid fa-spinner fa-spin-custom"></i>
+      <span>กำลังโหลดข้อมูล...</span>
+    </div>
+
+    <div id="notFoundState" class="pd-loading hidden">
+      <i class="fa-regular fa-folder-open"></i>
+      <span>ไม่พบรายการที่ต้องการ</span>
+    </div>
+
+    <div id="detailContent" class="pd-grid hidden">
+
+      <!-- IMAGE VIEWER -->
+      <section class="pd-image-panel">
+        <button type="button" id="expandBtn" class="pd-expand-btn"><i class="fa-solid fa-expand"></i></button>
+        <img id="mainImage" src="" alt="" class="pd-main-image hidden">
+        <div id="noImagePlaceholder" class="pd-no-image">
+          <i class="fa-regular fa-image"></i>
+          <span>ไม่มีรูปภาพ</span>
+        </div>
+        <div id="thumbStrip" class="pd-thumb-strip"></div>
+      </section>
+
+      <!-- INFO PANEL -->
+      <section class="pd-info-panel">
+
+        <div class="pd-reporter">
+          <div class="pd-reporter-avatar"><i class="fa-solid fa-user"></i></div>
+          <div>
+            <p class="pd-reporter-name" id="reporterName">เจ้าหน้าที่ระบบ</p>
+            <p class="pd-reporter-role" id="reporterRole">ผู้แจ้งประกาศ</p>
+          </div>
+          <span class="pd-posted-ago" id="postedAgo">-</span>
+        </div>
+
+        <div class="pd-tags" id="tagRow"></div>
+
+        <h1 class="pd-title" id="itemName">-</h1>
+
+        <p class="pd-refid">รหัสอ้างอิง: <span class="mono" id="referenceId">-</span></p>
+
+        <div class="pd-meta-grid">
+          <div class="pd-meta-item">
+            <p class="pd-meta-label"><i class="fa-regular fa-calendar"></i> วันที่พบ</p>
+            <p class="pd-meta-value" id="foundDate">-</p>
+          </div>
+          <div class="pd-meta-item">
+            <p class="pd-meta-label"><i class="fa-regular fa-clock"></i> เวลาที่พบโดยประมาณ</p>
+            <p class="pd-meta-value" id="foundTime">-</p>
+          </div>
+        </div>
+
+        <div class="pd-meta-item full">
+          <p class="pd-meta-label"><i class="fa-solid fa-location-dot"></i> สถานที่พบ</p>
+          <p class="pd-meta-value" id="foundLocation">-</p>
+        </div>
+
+        <div class="pd-section">
+          <h2>รายละเอียดเพิ่มเติม</h2>
+          <div class="pd-box" id="publicDescription">-</div>
+        </div>
+
+        <div class="pd-section pd-staff-only">
+          <h2><i class="fa-solid fa-lock"></i> ตำหนิเฉพาะ <span class="pd-staff-tag">เห็นได้เฉพาะเจ้าหน้าที่</span></h2>
+          <div class="pd-box staff" id="staffDefectNote">-</div>
+        </div>
+
+        <button type="button" id="storeButton" class="btn-block pd-store-btn">
+          <i class="fa-solid fa-box-archive"></i> บันทึกสิ่งของเข้าคลัง (Staff Storage)
+        </button>
+
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox" class="pd-lightbox hidden">
+    <button type="button" id="closeLightbox" class="pd-lightbox-close"><i class="fa-solid fa-xmark"></i></button>
+    <img id="lightboxImage" src="" alt="">
+  </div>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <strong>Lost & Found ICT</strong> &copy; 2026 Lost & Found System. All rights reserved.
+      </div>
+      <div class="footer-links">
+        <a href="#">Contact Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="js/staff-post-detail.js"></script>
+</body>
+</html>

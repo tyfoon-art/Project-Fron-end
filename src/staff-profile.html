@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>โปรไฟล์เจ้าหน้าที่ - Lost &amp; Found ICT</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- โหลด CSS แยกส่วน: components.css ใช้ร่วมกันทุกหน้า, staff-profile.css เฉพาะหน้านี้ -->
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/staff-profile.css">
+</head>
+<body>
+
+  <!-- TOAST -->
+  <div id="toast-success" class="profile-toast">
+    <div class="profile-toast-icon"><i class="fa-solid fa-check"></i></div>
+    <div>
+      <p class="title">บันทึกข้อมูลเรียบร้อย!</p>
+      <p class="desc">อัปเดตข้อมูลส่วนตัวของคุณแล้ว</p>
+    </div>
+  </div>
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="nav-left">
+        <a href="staff-dashboard.html" class="nav-brand">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Lost & Found ICT</span>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="staff-dashboard.html" class="nav-link">แดชบอร์ดภาพรวม</a></li>
+          <li><a href="staff-post-list.html" class="nav-link">บันทึกสิ่งของเข้าคลัง</a></li>
+          <li><a href="staff-verify-claims.html" class="nav-link">ตรวจสอบคำร้อง</a></li>
+          <li><a href="staff-overdue-list.html" class="nav-link">รายการสิ่งของตกค้าง</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-actions">
+        <a href="staff-profile.html" class="nav-profile active">
+          <i class="fa-solid fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container-fluid">
+    <div class="profile-wrap">
+
+      <div class="profile-header">
+        <h1>ข้อมูลส่วนตัวเจ้าหน้าที่</h1>
+        <p class="profile-subtitle">จัดการรายละเอียดบัญชีและการตั้งค่าของคุณ</p>
+      </div>
+
+      <!-- PROFILE CARD -->
+      <section class="profile-card">
+
+        <div class="profile-card-head">
+          <div class="avatar-wrap">
+            <div class="avatar-ring">
+              <img id="main-avatar" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80" alt="รูปโปรไฟล์">
+            </div>
+
+            <input type="file" id="profile-image-input" accept="image/*" class="hidden">
+
+            <button id="change-photo-btn" type="button" class="avatar-edit-btn" title="เปลี่ยนรูปโปรไฟล์">
+              <i class="fa-solid fa-camera"></i>
+            </button>
+          </div>
+
+          <div>
+            <h2 id="display-fullname">-</h2>
+            <span class="role-badge">เจ้าหน้าที่ (Staff)</span>
+          </div>
+        </div>
+
+        <form id="profile-form" class="profile-form">
+
+          <div class="profile-field">
+            <label for="input-fullname">ชื่อ - นามสกุล <span class="req">*</span></label>
+            <input type="text" id="input-fullname" required>
+          </div>
+
+          <div class="profile-field">
+            <label for="input-email">อีเมล <span class="req">*</span></label>
+            <input type="email" id="input-email" required>
+          </div>
+
+          <div class="profile-field">
+            <label for="input-phone">เบอร์โทรศัพท์ <span class="req">*</span></label>
+            <input type="text" id="input-phone" required>
+          </div>
+
+          <div class="profile-form-foot">
+            <button type="submit" id="save-btn" class="btn-primary">
+              <i class="fa-regular fa-floppy-disk"></i>
+              <span>บันทึกข้อมูล</span>
+            </button>
+          </div>
+
+        </form>
+
+      </section>
+
+      <!-- LOGOUT -->
+      <div class="profile-logout-row">
+        <button type="button" id="open-logout-modal-btn" class="btn-danger">ออกจากระบบ</button>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- LOGOUT MODAL -->
+  <div id="logout-modal" class="logout-modal-overlay hidden">
+    <div id="logout-modal-content" class="logout-modal-box">
+
+      <div class="logout-icon"><i class="fa-solid fa-right-from-bracket"></i></div>
+
+      <div class="logout-text">
+        <h3>ยืนยันการออกจากระบบ</h3>
+        <p>คุณต้องการออกจากระบบ Lost & Found ICT ใช่หรือไม่?</p>
+      </div>
+
+      <div class="logout-actions">
+        <button type="button" id="cancel-logout-btn" class="btn-outline">ยกเลิก</button>
+        <button type="button" id="confirm-logout-btn" class="btn-danger">ยืนยัน</button>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <strong>Lost & Found ICT</strong> &copy; 2026 Lost & Found System. All rights reserved.
+      </div>
+      <div class="footer-links">
+        <a href="#">Contact Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="js/staff-profile.js"></script>
+</body>
+</html>

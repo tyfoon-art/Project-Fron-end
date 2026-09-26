@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>รายละเอียดการตรวจสอบคำร้อง - Lost &amp; Found ICT</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- โหลด CSS แยกส่วน: components.css ใช้ร่วมกันทุกหน้า, staff-verify-detail.css เฉพาะหน้านี้ -->
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/staff-verify-detail.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="nav-left">
+        <a href="staff-dashboard.html" class="nav-brand">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Lost & Found ICT</span>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="staff-dashboard.html" class="nav-link">แดชบอร์ดภาพรวม</a></li>
+          <li><a href="staff-post-list.html" class="nav-link">บันทึกสิ่งของเข้าคลัง</a></li>
+          <li><a href="staff-verify-claims.html" class="nav-link active">ตรวจสอบคำร้อง</a></li>
+          <li><a href="staff-overdue-list.html" class="nav-link">รายการสิ่งของตกค้าง</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-actions">
+        <a href="staff-profile.html" class="nav-profile">
+          <i class="fa-regular fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container-fluid">
+
+    <!-- PAGE HEADER -->
+    <div class="vd-header">
+      <div>
+        <a href="staff-verify-claims.html" class="vd-back-link">
+          <i class="fa-solid fa-arrow-left"></i>
+          ย้อนกลับไปรายการคำร้อง
+        </a>
+
+        <h1>
+          รายละเอียดการตรวจสอบคำร้อง
+          <span id="displayClaimId" class="mono">#-</span>
+        </h1>
+      </div>
+
+      <div id="statusBadgeContainer"></div>
+    </div>
+
+    <!-- CONTENT GRID -->
+    <div id="contentGrid" class="vd-grid">
+
+      <!-- LEFT COLUMN -->
+      <div class="vd-col-main">
+
+        <!-- COMPARE CARD -->
+        <section class="vd-card">
+          <h2 class="vd-card-head"><i class="fa-regular fa-file-lines"></i> เปรียบเทียบข้อมูลคำร้อง</h2>
+
+          <div class="compare-grid">
+
+            <div class="compare-box inventory">
+              <span class="compare-label">ข้อมูลสิ่งของในระบบ (Inventory)</span>
+              <p id="itemTitle" class="compare-title">-</p>
+
+              <div class="compare-rows">
+                <p><span>หมวดหมู่:</span> <span id="itemCategory">-</span></p>
+                <p><span>สถานที่พบ:</span> <span id="itemLocation">-</span></p>
+                <p><span>วันที่พบ:</span> <span id="itemFoundDate">-</span></p>
+                <p><span>ผู้บันทึก:</span> <span id="itemRecorder">-</span></p>
+              </div>
+            </div>
+
+            <div class="compare-box claimant">
+              <span class="compare-label">ข้อมูลผู้ยื่นคำร้อง (Claimant)</span>
+              <p id="claimantName" class="compare-title">-</p>
+
+              <div class="compare-rows">
+                <p><span>รหัสนิสิต:</span> <span id="claimantId">-</span></p>
+                <p><span>คณะ/สาขา:</span> <span id="claimantFaculty">-</span></p>
+                <p><span>เบอร์โทรศัพท์:</span> <span id="claimantPhone">-</span></p>
+                <p><span>อีเมล:</span> <span id="claimantEmail">-</span></p>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="description-block">
+            <p class="description-label">รายละเอียดคำอธิบายยืนยันตัวตนจากผู้ยื่นคำร้อง:</p>
+            <div id="claimDescription" class="description-box">-</div>
+          </div>
+        </section>
+
+        <!-- PROOF FILES CARD -->
+        <section class="vd-card">
+          <div class="proof-head">
+            <h2 class="vd-card-head no-border"><i class="fa-regular fa-image"></i> หลักฐานแนบยืนยัน (Uploaded Proof Files)</h2>
+            <span class="confidential-badge"><i class="fa-solid fa-lock"></i> สิทธิ์มองเห็นเฉพาะเจ้าหน้าที่</span>
+          </div>
+
+          <div id="proofFilesContainer" class="proof-grid"></div>
+        </section>
+
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div class="vd-col-side">
+
+        <!-- DECISION CARD -->
+        <section class="vd-card">
+          <h2 class="vd-card-head"><i class="fa-regular fa-circle-check"></i> ผลการพิจารณาคำร้อง</h2>
+
+          <div class="decision-field">
+            <label>เจ้าหน้าที่ผู้ตรวจสอบ:</label>
+            <input type="text" id="reviewerName" disabled>
+          </div>
+
+          <div class="decision-field">
+            <label>หมายเหตุ / ข้อความถึงผู้ยื่นคำร้อง:</label>
+            <textarea id="reviewerNote" rows="4" placeholder="ระบุเหตุผลในการอนุมัติ ปฏิเสธ หรือขอข้อมูลเพิ่มเติม..."></textarea>
+          </div>
+
+          <div class="decision-actions">
+            <button type="button" id="approveBtn" class="btn-decision approve">
+              <i class="fa-solid fa-check"></i> อนุมัติคำร้อง (Approve)
+            </button>
+
+            <button type="button" id="goToHandoverBtn" class="btn-decision go-handover hidden">
+              <i class="fa-solid fa-box-open"></i> ส่งคืนเจ้าของ
+            </button>
+
+            <button type="button" id="moreInfoBtn" class="btn-decision more-info">
+              ขอข้อมูลเพิ่มเติม (Request Info)
+            </button>
+
+            <button type="button" id="rejectBtn" class="btn-decision reject">
+              ปฏิเสธคำร้อง (Reject)
+            </button>
+          </div>
+        </section>
+
+        <!-- ACTIVITY LOG -->
+        <section class="vd-card">
+          <h2 class="vd-card-head small">ประวัติกิจกรรม (Activity Log)</h2>
+          <div id="activityLogContainer" class="activity-log"></div>
+        </section>
+
+      </div>
+
+    </div>
+
+    <!-- NOT FOUND STATE -->
+    <div id="notFoundState" class="not-found hidden">
+      <div class="not-found-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+      <h3>ไม่พบข้อมูลคำร้องนี้ในระบบ</h3>
+      <p>รหัสคำร้องที่คุณเรียกดูอาจไม่มีอยู่ หรือถูกลบออกจากระบบแล้ว</p>
+      <a href="staff-verify-claims.html" class="btn-primary">กลับไปหน้ารายการคำร้อง</a>
+    </div>
+
+  </main>
+
+  <!-- IMAGE MODAL -->
+  <div id="imageModal" class="image-modal-overlay hidden">
+    <div class="image-modal-box">
+      <div class="image-modal-head">
+        <div>
+          <h3 id="modalFileName">รูปภาพหลักฐาน</h3>
+          <p>ภาพหลักฐานจากผู้ยื่นคำร้องเพื่อเปรียบเทียบตรวจสอบ</p>
+        </div>
+        <button type="button" id="closeImageModalBtn" class="modal-close-btn">✕</button>
+      </div>
+
+      <div class="image-modal-preview">
+        <img id="modalImagePreview" src="" alt="Proof Preview">
+      </div>
+
+      <div class="image-modal-foot">
+        <span class="confidential-badge"><i class="fa-solid fa-triangle-exclamation"></i> ข้อมูลลับเฉพาะเจ้าหน้าที่ ห้ามเผยแพร่สู่ภายนอก</span>
+        <button type="button" id="closeImageModalBtn2" class="btn-outline">ปิดหน้าต่าง</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- APPROVE CONFIRMATION MODAL -->
+  <div id="approveConfirmModal" class="confirm-modal-overlay hidden">
+    <div class="confirm-modal-box">
+
+      <div class="confirm-modal-head">
+        <div id="approveModalIcon" class="confirm-icon"><i class="fa-solid fa-check"></i></div>
+        <h3 id="approveModalTitle">ยืนยันการอนุมัติคำร้อง</h3>
+        <p id="approveModalDescription">คุณกำลังจะอนุมัติคำร้องนี้<br>กรุณาตรวจสอบข้อมูลก่อนยืนยันการดำเนินการ</p>
+      </div>
+
+      <div class="confirm-info-box">
+        <div class="confirm-row"><span>รหัสคำร้อง</span><span id="approveModalClaimId" class="mono">-</span></div>
+        <div class="confirm-row"><span>ผู้ยื่นคำร้อง</span><span id="approveModalClaimant">-</span></div>
+        <div class="confirm-row"><span>สิ่งของ</span><span id="approveModalItem">-</span></div>
+      </div>
+
+      <div class="confirm-info-note">
+        <i class="fa-solid fa-circle-info"></i>
+        <p id="approveModalInfoText">เมื่อยืนยันแล้ว ระบบจะเปลี่ยนสถานะคำร้องเป็น <strong>อนุมัติแล้ว</strong> และนำข้อมูลไปยังหน้า <strong>ส่งคืนเจ้าของ</strong></p>
+      </div>
+
+      <div class="confirm-modal-foot">
+        <button type="button" id="cancelApproveButton" class="btn-outline">ยกเลิก</button>
+        <button type="button" id="confirmApproveButton" class="btn-primary">
+          <span id="confirmApproveIcon">✓</span>
+          <span id="confirmApproveText">ยืนยันการอนุมัติ</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SUCCESS MODAL -->
+  <div id="approvalSuccessModal" class="success-modal-overlay hidden">
+    <div class="success-modal-box">
+      <div class="success-icon"><i class="fa-solid fa-check"></i></div>
+      <h3 id="approvalSuccessTitle">อนุมัติคำร้องสำเร็จ</h3>
+      <p id="approvalSuccessDescription">ระบบกำลังนำคุณไปยังหน้าส่งคืนเจ้าของ</p>
+      <div class="success-loading"><span class="spinner"></span> กำลังดำเนินการ...</div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <strong>Lost & Found ICT</strong> &copy; 2026 Lost & Found System. All rights reserved.
+      </div>
+      <div class="footer-links">
+        <a href="#">Contact Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="js/staff-verify-detail.js"></script>
+</body>
+</html>
