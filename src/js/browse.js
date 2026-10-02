@@ -1,5 +1,11 @@
 import { supabaseClient } from './supabaseClient.js';
 
+// ค่าพิเศษสำหรับรายการที่ไม่มีหมวดหมู่ หรือหมวดหมู่ไม่อยู่ในตัวกรอง (เช่นถูกปิดใช้งาน)
+const NO_CATEGORY_VALUE = '__none__';
+
+// เก็บ category_id ทั้งหมดที่มีเป็นช่องติ๊กในตัวกรอง
+let knownCategoryIds = new Set();
+
 async function loadUserProfile() {
   const { data: { user: authUser }, error: authError } = await supabaseClient.auth.getUser();
   if (authError || !authUser) return;
@@ -49,6 +55,8 @@ async function loadCategoryFilters() {
   }
 
   container.innerHTML = '';
+  knownCategoryIds = new Set(data.map(cat => String(cat.category_id)));
+
   data.forEach(cat => {
     const label = document.createElement('label');
     label.className = 'checkbox-item';
@@ -58,6 +66,15 @@ async function loadCategoryFilters() {
     `;
     container.appendChild(label);
   });
+
+  // ช่องติ๊กสำหรับรายการที่ไม่มีหมวดหมู่ / หมวดหมู่ไม่อยู่ในรายการด้านบน
+  const noneLabel = document.createElement('label');
+  noneLabel.className = 'checkbox-item';
+  noneLabel.innerHTML = `
+    <input type="checkbox" name="category" value="${NO_CATEGORY_VALUE}" checked onchange="applyFilter()">
+    <span>ไม่ระบุหมวดหมู่</span>
+  `;
+  container.appendChild(noneLabel);
 }
 
 async function fetchItemsFromSupabase() {
@@ -92,7 +109,7 @@ async function fetchItemsFromSupabase() {
       title: item.item_name || 'ไม่ระบุชื่อสิ่งของ',
       description: item.description,
       categoryName: (item.category && item.category.category_name) || 'หมวดหมู่ทั่วไป',
-      categoryId: item.category_id || '',
+      categoryId: item.category_id ? String(item.category_id) : '',
       storageName: (item.storage && item.storage.storage_name) || '',
       locationText: (rep && rep.incident_location) || item.storage?.storage_name || 'ไม่ระบุสถานที่',
       image_url: item.image_url,
@@ -149,7 +166,11 @@ async function renderBrowseItems() {
         badgeIcon = 'fa-solid fa-clock';
     }
 
-    const badgeHtml = `<span class="item-badge ${badgeClass}"><i class="${badgeIcon}"></i> ${item.status}</span>`;
+    // โพสต์แจ้งหายมีสถานะเดียว คือ "แจ้งหาย" (ป้ายสีแดง)
+    const isLost = item.type === 'lost';
+    const badgeHtml = isLost
+      ? '<span class="item-badge badge-lost"><i class="fa-solid fa-magnifying-glass"></i> แจ้งหาย</span>'
+      : `<span class="item-badge ${badgeClass}"><i class="${badgeIcon}"></i> ${item.status}</span>`;
 
     const imageContent = item.image_url 
       ? `<img src="${item.image_url}" alt="${item.title}">`
@@ -158,13 +179,18 @@ async function renderBrowseItems() {
            <span>ไม่มีรูปภาพ</span>
          </div>`;
 
+    // ถ้าไม่มีหมวดหมู่ หรือหมวดหมู่ไม่อยู่ในตัวกรอง ให้จัดอยู่กลุ่ม "ไม่ระบุหมวดหมู่"
+    const filterCategoryValue = knownCategoryIds.has(item.categoryId)
+      ? item.categoryId
+      : NO_CATEGORY_VALUE;
+
     const card = document.createElement('div');
     card.className = 'item-card';
     card.setAttribute('data-type', item.type);
-    card.setAttribute('data-category', item.categoryId);
+    card.setAttribute('data-category', filterCategoryValue);
     card.setAttribute('data-location-name', item.locationText);
     card.setAttribute('data-date', item.timestamp.split('T')[0]);
-    card.setAttribute('data-status', item.status);
+    card.setAttribute('data-status', isLost ? 'แจ้งหาย' : item.status);
     card.setAttribute('data-title', item.title);
 
     card.innerHTML = `

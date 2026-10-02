@@ -38,7 +38,7 @@ async function getRecentItems() {
         created_at,
         category:category_id ( category_name ),
         storage_point:current_storage_id ( storage_name ),
-        report ( incident_location, incident_datetime )
+        report ( report_type, incident_location, incident_datetime )
       `)
       .is('deleted_at', null);
 
@@ -157,7 +157,13 @@ async function renderHomePage() {
           badgeIcon = 'fa-solid fa-clock';
       }
 
-      const badgeHtml = `<span class="item-badge ${badgeClass}"><i class="${badgeIcon}"></i> ${item.status}</span>`;
+      // โพสต์แจ้งหายมีสถานะเดียว คือ "แจ้งหาย" (ป้ายสีแดง)
+      const reportType = Array.isArray(item.report) ? (item.report[0]?.report_type ?? 'found') : (item.report?.report_type ?? 'found');
+      const isLost = reportType === 'lost';
+
+      const badgeHtml = isLost
+        ? '<span class="item-badge badge-lost"><i class="fa-solid fa-magnifying-glass"></i> แจ้งหาย</span>'
+        : `<span class="item-badge ${badgeClass}"><i class="${badgeIcon}"></i> ${item.status}</span>`;
       
       const reportData = Array.isArray(item.report) ? item.report[0] : item.report;
       const locationText = reportData?.incident_location || item.storage_point?.storage_name || 'ไม่ระบุสถานที่';

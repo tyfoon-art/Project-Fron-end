@@ -59,6 +59,36 @@ function getStatusBadgeMeta(status) {
   }
 }
 
+// แสดงตำหนิลับ (ข้อความ หรือ URL รูป) — เรียกเฉพาะเมื่อเป็นเจ้าของโพสต์/เจ้าหน้าที่
+function renderDefect(defectNote) {
+  const section = document.getElementById('defectSection');
+  const imgEl = document.getElementById('defectImage');
+  const noteEl = document.getElementById('defectNote');
+  const emptyEl = document.getElementById('defectEmpty');
+  if (!section) return;
+
+  section.style.display = 'block';
+  imgEl.style.display = 'none';
+  noteEl.style.display = 'none';
+  emptyEl.style.display = 'none';
+
+  if (!defectNote) {
+    emptyEl.style.display = 'block';
+    return;
+  }
+
+  // รูปที่แนบตอนโพสต์ถูกเก็บเป็น data URL (base64) ส่วนรูปจาก Storage เป็น URL ปกติ
+  const isImageUrl = /^data:image\//i.test(defectNote)
+    || /^https?:\/\/.+\.(jpg|jpeg|png|gif|webp|bmp|svg)(\?.*)?$/i.test(defectNote);
+  if (isImageUrl) {
+    imgEl.src = defectNote;
+    imgEl.style.display = 'block';
+  } else {
+    noteEl.textContent = defectNote;
+    noteEl.style.display = 'block';
+  }
+}
+
 async function loadItemDetail() {
   const urlParams = new URLSearchParams(window.location.search);
   const itemId = urlParams.get('id');
@@ -69,6 +99,7 @@ async function loadItemDetail() {
     return;
   }
 
+  // ตำหนิลับไม่ได้อยู่ในตาราง item — ดึงผ่าน RPC get_staff_defect_note (ดู loadDefectNote)
   let { data: item, error } = await supabaseClient
     .from('item')
     .select(`
@@ -106,7 +137,26 @@ async function loadItemDetail() {
 
   const report0 = (item.report && item.report[0]) ? item.report[0] : null;
   const isLostType = report0 ? report0.report_type === 'lost' : false;
-  const canClaim = item.status === 'อยู่ที่จุดรับฝาก';
+
+  const currentUserRole0 = localStorage.getItem('userRole') || 'user';
+  const isStaffUser = currentUserRole0 === 'staff' || currentUserRole0 === 'admin';
+
+  // สถานะ "คืนสำเร็จ / หมดอายุ" มีเฉพาะเจ้าหน้าที่ที่เห็น
+  const CLOSED_STATUSES = ['คืนสำเร็จ', 'หมดอายุ/ทำลายทิ้ง'];
+  if (!isStaffUser && CLOSED_STATUSES.includes(item.status)) {
+    alert('รายการนี้ถูกปิดแล้ว (คืนสำเร็จ/หมดอายุ) ผู้ใช้ทั่วไปไม่สามารถดูได้');
+    window.location.href = 'browse.html';
+    return;
+  }
+
+  // ยื่นอ้างสิทธิ์ได้เฉพาะโพสต์แจ้งพบที่สถานะ "อยู่ที่จุดรับฝาก"
+  const canClaim = !isLostType && item.status === 'อยู่ที่จุดรับฝาก';
+
+  // แก้ไข: เจ้าของแก้ไขได้ — แจ้งพบเฉพาะตอนรอตรวจสอบ, แจ้งหายได้ทุกสถานะ
+  const canEdit = isLostType || item.status === 'รอตรวจสอบ';
+
+  // ลบ: เจ้าของลบได้ — แจ้งพบเฉพาะสถานะ "รอตรวจสอบ", แจ้งหายลบได้ทุกสถานะ
+  const canDelete = isLostType || item.status === 'รอตรวจสอบ';
 
   if (isLostType) {
     document.getElementById('dateLabelText').textContent = 'วันที่หาย';
@@ -146,17 +196,23 @@ async function loadItemDetail() {
   posterAvatarImg.src = reporterAvatarUrl || `https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(reporterName)}`;
 
   const storageWrapper = document.getElementById('storageWrapper');
-  const showStorage = ['อยู่ที่จุดรับฝาก', 'กำลังดำเนินการเคลม', 'คืนสำเร็จ'].includes(item.status);
+  const showStorage = !isLostType && ['อยู่ที่จุดรับฝาก', 'กำลังดำเนินการเคลม', 'คืนสำเร็จ'].includes(item.status);
   storageWrapper.style.display = showStorage ? 'flex' : 'none';
   if (showStorage) {
     document.getElementById('detailStorage').textContent = formatStorageText(item.storage_point);
   }
 
-  const statusText = item.status || 'รอตรวจสอบ';
-  const { cls: statusClass, icon: badgeIcon } = getStatusBadgeMeta(item.status);
+  // โพสต์แจ้งหายมีสถานะเดียว คือ "แจ้งหาย" (ป้ายสีแดง)
   const statusEl = document.getElementById('detailStatus');
-  statusEl.className = `badge-status ${statusClass}`;
-  statusEl.innerHTML = `<i class="${badgeIcon}"></i> <span id="statusText">สถานะ: ${statusText}</span>`;
+  if (isLostType) {
+    statusEl.className = 'badge-status badge-lost';
+    statusEl.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i> <span id="statusText">สถานะ: แจ้งหาย</span>';
+  } else {
+    const statusText = item.status || 'รอตรวจสอบ';
+    const { cls: statusClass, icon: badgeIcon } = getStatusBadgeMeta(item.status);
+    statusEl.className = `badge-status ${statusClass}`;
+    statusEl.innerHTML = `<i class="${badgeIcon}"></i> <span id="statusText">สถานะ: ${statusText}</span>`;
+  }
 
   const typeEl = document.getElementById('detailReportType');
   if (typeEl) {
@@ -189,7 +245,14 @@ async function loadItemDetail() {
   currentModalIndex = 0;
 
   const mainImg = document.getElementById('mainDisplayImg');
-  mainImg.src = currentImagesList[0];
+  if (currentImagesList.length > 0) {
+    mainImg.src = currentImagesList[0];
+    mainImg.style.display = '';
+  } else {
+    // ไม่มีรูป: อย่าตั้ง src เป็น undefined
+    mainImg.removeAttribute('src');
+    mainImg.style.display = 'none';
+  }
   mainImg.alt = item.item_name;
 
   const thumbContainer = document.getElementById('thumbnailContainer');
@@ -204,22 +267,61 @@ async function loadItemDetail() {
   });
 
   const currentUserId = localStorage.getItem('userId') || '';
-  const currentUserName = localStorage.getItem('userName') || '';
-  const currentUserRole = localStorage.getItem('userRole') || 'user';
 
+  // เจ้าของโพสต์ = ผู้ที่ล็อกอินด้วย user_id เดียวกับผู้แจ้ง (ไม่เทียบจากชื่อ เพราะชื่อซ้ำกันได้)
   const reporterUserId = report0 ? report0.user_id : null;
-  const isOwner = currentUserId
-    ? currentUserId === reporterUserId
-    : (!!currentUserName && reporterName.trim() === currentUserName.trim());
-  const isStaff = currentUserRole === 'staff' || currentUserRole === 'admin';
+  const isOwner = !!currentUserId && currentUserId === reporterUserId;
 
   const ownerActionsBox = document.getElementById('ownerActionsBox');
-  const staffStorageBox = document.getElementById('staffStorageActionBox');
   const claimBox = document.getElementById('claimActionBox');
+  const btnEditPost = document.getElementById('btnEditPost');
+  const btnDeletePost = document.getElementById('btnDeletePost');
 
-  ownerActionsBox.style.display = isOwner ? 'flex' : 'none';
-  staffStorageBox.style.display = (isStaff && !showStorage) ? 'block' : 'none';
-  claimBox.style.display = (!isOwner && canClaim) ? 'flex' : 'none';
+  // ปุ่มแก้ไข / ลบ แยกสิทธิ์กัน (เผยแต่ละปุ่มเฉพาะกรณีที่ทำได้จริง)
+  const isOwnerUser = !!isOwner;
+
+  ownerActionsBox.style.display = (isOwnerUser && (canEdit || canDelete)) ? 'flex' : 'none';
+  if (btnEditPost) btnEditPost.style.display = (isOwnerUser && canEdit) ? '' : 'none';
+  if (btnDeletePost) btnDeletePost.style.display = (isOwnerUser && canDelete) ? '' : 'none';
+
+  claimBox.style.display = (!isOwnerUser && canClaim) ? 'flex' : 'none';
+
+  // ตำหนิลับ: มีเฉพาะโพสต์แจ้งพบ และเห็นเฉพาะเจ้าของโพสต์กับเจ้าหน้าที่
+  // (ฝั่ง server เก็บแยกในตาราง item_secret อ่านได้ทาง RPC get_staff_defect_note เท่านั้น)
+  loadDefectNote(item.item_id, !isLostType && isOwnerUser, !isLostType && isStaffUser);
+}
+
+// ดึงรูปตำหนิลับผ่าน RPC (ตรวจสิทธิ์ซ้ำฝั่ง server)
+async function loadDefectNote(itemId, isOwner, isStaff) {
+  // โพสต์แจ้งหาย และผู้ใช้อื่น ไม่เห็นแม้แต่หัวข้อตำหนิลับ
+  if (!isOwner && !isStaff) {
+    const section = document.getElementById('defectSection');
+    if (section) section.style.display = 'none';
+    return;
+  }
+
+  // บอกเหตุผลที่ผู้ใช้คนนี้เห็นตำหนิลับ (เจ้าของโพสต์ หรือ เจ้าหน้าที่)
+  const badge = document.getElementById('defectViewerBadge');
+  if (badge) {
+    badge.textContent = isOwner
+      ? 'คุณเห็นเพราะเป็นเจ้าของโพสต์'
+      : 'คุณเห็นเพราะเข้าสู่ระบบด้วยบัญชีเจ้าหน้าที่';
+  }
+
+  const userId = localStorage.getItem('userId') || null;
+
+  const { data, error } = await supabaseClient.rpc('get_staff_defect_note', {
+    p_item_id: itemId,
+    p_user_id: userId
+  });
+
+  if (error) {
+    console.error('โหลดตำหนิลับไม่สำเร็จ:', error);
+    renderDefect('');
+    return;
+  }
+
+  renderDefect(data || '');
 }
 
 function changeImage(element, src, index) {
@@ -264,9 +366,7 @@ function handleClaim(event) {
   window.location.href = `claim.html?id=${itemId}`;
 }
 
-// 🟢 ฟังก์ชันสำหรับเปิดหน้าแก้ไขโพสต์
-// ใช้หน้า report.html เดิม (หน้าเดียวกับตอนโพสต์ใหม่) แต่ส่ง id + mode=edit ไปด้วย
-// เพื่อให้ report.html รู้ว่าต้องโหลดข้อมูลเดิมมา prefill และอัปเดตแทนการสร้างใหม่
+// เปิดหน้าแก้ไขโพสต์: ใช้ report.html เดิม ส่ง id + mode=edit
 function editCurrentItem() {
   const urlParams = new URLSearchParams(window.location.search);
   const itemId = urlParams.get('id');
@@ -280,6 +380,16 @@ function editCurrentItem() {
 }
 
 async function deleteCurrentItem() {
+  const item = currentLoadedItem;
+  const reportMeta = (item && item.report && item.report[0]) ? item.report[0] : null;
+  const isLostType = reportMeta ? reportMeta.report_type === 'lost' : false;
+
+  // แจ้งพบลบได้เฉพาะสถานะรอตรวจสอบ / แจ้งหายลบได้ทุกสถานะ
+  if (item && !isLostType && item.status !== 'รอตรวจสอบ') {
+    alert('โพสต์แจ้งพบสามารถลบได้เฉพาะตอนสถานะ "รอตรวจสอบ" เท่านั้น');
+    return;
+  }
+
   if (!confirm('คุณต้องการลบโพสต์นี้ออกจากระบบใช่หรือไม่?')) return;
 
   const userId = localStorage.getItem('userId');
@@ -289,25 +399,27 @@ async function deleteCurrentItem() {
     return;
   }
 
-  const report0 = (currentLoadedItem && currentLoadedItem.report && currentLoadedItem.report[0])
-    ? currentLoadedItem.report[0]
-    : null;
-
-  if (!report0 || !report0.report_id) {
+  if (!reportMeta || !reportMeta.report_id) {
     alert('ไม่พบข้อมูลใบแจ้งของโพสต์นี้ ไม่สามารถลบได้');
     return;
   }
 
   const { error } = await supabaseClient.rpc('delete_report', {
-    p_report_id: report0.report_id,
+    p_report_id: reportMeta.report_id,
     p_user_id: userId
   });
 
   if (error) {
-    if (error.message.includes('NOT_OWNER')) {
+    const msg = error.message || '';
+    if (msg.includes('NOT_OWNER')) {
       alert('คุณไม่ใช่เจ้าของโพสต์นี้ จึงไม่สามารถลบได้');
+    } else if (msg.includes('EDIT_NOT_ALLOWED')) {
+      alert('โพสต์แจ้งพบสามารถลบได้เฉพาะตอนสถานะ "รอตรวจสอบ" เท่านั้น');
+    } else if (msg.includes('REPORT_NOT_FOUND')) {
+      alert('ไม่พบโพสต์นี้ในระบบ อาจถูกลบไปแล้ว');
+      window.location.href = 'browse.html';
     } else {
-      alert('เกิดข้อผิดพลาดในการลบ: ' + error.message);
+      alert('เกิดข้อผิดพลาดในการลบ: ' + msg);
     }
   } else {
     alert('ลบโพสต์เรียบร้อยแล้ว');
@@ -315,50 +427,16 @@ async function deleteCurrentItem() {
   }
 }
 
-async function saveItemToStaffStorage() {
-  if (!currentLoadedItem) return;
-
-  const userId = localStorage.getItem('userId');
-  if (!userId) {
-    alert('กรุณาเข้าสู่ระบบก่อน');
-    window.location.href = 'login.html';
-    return;
-  }
-
-  if (!confirm('คุณต้องการบันทึกสิ่งของนี้เข้าสู่จุดรับฝากของเจ้าหน้าที่ใช่หรือไม่?')) return;
-
-  const { error } = await supabaseClient.rpc('save_item_to_storage', {
-    p_item_id: currentLoadedItem.item_id,
-    p_user_id: userId
-  });
-
-  if (error) {
-    if (error.message.includes('NOT_STAFF')) {
-      alert('เฉพาะเจ้าหน้าที่เท่านั้นที่ทำรายการนี้ได้');
-    } else {
-      alert('บันทึกไม่สำเร็จ: ' + error.message);
-    }
-    return;
-  }
-
-  alert('บันทึกสิ่งของเข้าคลังเรียบร้อยแล้ว');
-  location.reload();
-}
-
 document.addEventListener('DOMContentLoaded', () => {
   loadItemDetail();
 
-  // ผูกปุ่ม "แก้ไขโพสต์" ด้วย JS โดยตรง กันกรณี HTML ไม่มี onclick กำกับไว้
+  // ผูกปุ่ม "แก้ไขโพสต์" ด้วย JS โดยตรง
   const btnEdit = document.getElementById('btnEditPost');
-  console.log('[DEBUG] btnEditPost element:', btnEdit); // ชั่วคราวสำหรับ debug
   if (btnEdit) {
     btnEdit.addEventListener('click', (e) => {
-      console.log('[EDIT BUTTON CLICKED]'); // ชั่วคราวสำหรับ debug
       e.preventDefault();
       editCurrentItem();
     });
-  } else {
-    console.log('[DEBUG] ไม่พบปุ่ม btnEditPost ใน DOM เลย'); // ชั่วคราวสำหรับ debug
   }
 });
 
@@ -369,6 +447,5 @@ window.prevModalImage = prevModalImage;
 window.nextModalImage = nextModalImage;
 window.changeImage = changeImage;
 window.handleClaim = handleClaim;
-window.editCurrentItem = editCurrentItem; // 🟢 เพิ่ม Export ฟังก์ชันสำหรับแก้ไขโพสต์
+window.editCurrentItem = editCurrentItem;
 window.deleteCurrentItem = deleteCurrentItem;
-window.saveItemToStaffStorage = saveItemToStaffStorage;

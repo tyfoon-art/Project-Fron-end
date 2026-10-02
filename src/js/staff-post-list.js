@@ -1,3 +1,4 @@
+import './staff-auth.js';
 import { supabaseClient } from './supabaseClient.js';
 
 const ITEM_TABLE = 'item';
@@ -71,8 +72,9 @@ async function loadItems() {
   try {
     const { data: items, error } = await supabaseClient
       .from(ITEM_TABLE)
-      .select('item_id, reference_id, item_name, category, status, found_location, found_date_time, created_at')
+      .select('item_id, reference_id, item_name, category, status, found_location, found_date_time, created_at, report!inner(report_type)')
       .eq('status', PENDING_STATUS)
+      .eq('report.report_type', 'found')
       .is('deleted_at', null)
       .order('created_at', { ascending: false });
 

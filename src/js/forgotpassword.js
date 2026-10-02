@@ -1,4 +1,4 @@
-import { supabaseClient } from '/src/supabaseClient.js';
+import { supabaseClient } from './supabaseClient.js';
 
 function clearAlert() {
   document.getElementById('email').classList.remove('input-error');

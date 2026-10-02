@@ -1,7 +1,10 @@
 import { supabaseClient } from './supabaseClient.js';
 
-// กติกาโดเมนอีเมลเดียวกับหน้า login.html: เจ้าหน้าที่ต้องใช้ @staff.com เท่านั้น
-// ผู้ใช้ทั่วไปต้องใช้ @gmail.com หรือ @up.ac.th เท่านั้น ใช้ตรวจตอนผู้ใช้แก้ไขอีเมลในหน้านี้
+// กติกาโดเมนอีเมลเดียวกับหน้า login.html:
+//   ผู้ดูแลระบบ : admin1@admin.com เท่านั้น
+//   เจ้าหน้าที่ : *@staff.com
+//   ผู้ใช้ทั่วไป : *@gmail.com หรือ *@up.ac.th
+const ADMIN_EMAIL = 'admin1@admin.com';
 const STAFF_DOMAIN = 'staff.com';
 const USER_DOMAINS = ['gmail.com', 'up.ac.th'];
 const DEFAULT_AVATAR_URL = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=250&auto=format&fit=crop';
@@ -12,7 +15,9 @@ function getEmailDomain(email) {
 }
 
 function isDomainAllowedForRole(email, role) {
-  const domain = getEmailDomain(email);
+  const normalized = (email || '').trim().toLowerCase();
+  const domain = getEmailDomain(normalized);
+  if (role === 'admin') return normalized === ADMIN_EMAIL;
   return role === 'staff' ? domain === STAFF_DOMAIN : USER_DOMAINS.includes(domain);
 }
 
@@ -38,7 +43,7 @@ async function loadUserData() {
 
   const { data: user, error } = await supabaseClient
     .from('user_account')
-    .select('*')
+    .select('user_id, email, full_name, phone_number, avatar_url, role')
     .eq('user_id', userId)
     .is('deleted_at', null)
     .single();
@@ -95,7 +100,7 @@ async function loadStats(userId) {
         .from('claim')
         .select('*', { count: 'exact', head: true })
         .eq('user_id', userId)
-        .eq('claim_status', 'approved')
+        .eq('status', 'approved')
     ]);
 
     document.getElementById('statLostCount').textContent = lostRes.count ?? 0;

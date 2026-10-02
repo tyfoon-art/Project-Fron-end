@@ -1,3 +1,4 @@
+import './staff-auth.js';
 import { supabaseClient } from './supabaseClient.js';
 
 /* ============================================================================
@@ -27,8 +28,15 @@ const statusDisplayMap = {
   pending: { text: 'รอตรวจสอบ', action: 'ตรวจสอบ' },
 };
 
+// แปลงค่า status จากฐานข้อมูลให้เป็นหนึ่งใน 4 ค่าที่รู้จักเสมอ
+// (กันกรณี null, ตัวพิมพ์ใหญ่, มีช่องว่าง หรือค่าที่ไม่รู้จัก)
+function normalizeStatus(status) {
+  const key = String(status ?? '').trim().toLowerCase();
+  return statusDisplayMap[key] ? key : 'pending';
+}
+
 function getStatusDisplay(status) {
-  return statusDisplayMap[status] || statusDisplayMap.pending;
+  return statusDisplayMap[normalizeStatus(status)];
 }
 
 /* ============================================================================
@@ -116,7 +124,7 @@ function renderRow(claim) {
   const itemDesc = item.description || '';
   const category = item.category_key || item.category || '';
   const claimId = claim.claim_id || '-';
-  const status = claim.status || 'pending';
+  const status = normalizeStatus(claim.status);
   const display = getStatusDisplay(status);
   const dateKey = toDateKey(claim.created_at);
 

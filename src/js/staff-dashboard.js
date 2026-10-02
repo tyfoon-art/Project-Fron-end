@@ -1,3 +1,4 @@
+import './staff-auth.js';
 import { supabaseClient } from './supabaseClient.js';
 
 /* ============================================================================
@@ -16,7 +17,7 @@ import { supabaseClient } from './supabaseClient.js';
 const ITEM_TABLE = 'item';
 const HANDOVER_TABLE = 'handover';
 
-const OVERDUE_DAYS = 30;
+const OVERDUE_DAYS = 90;
 
 const OPEN_STATUSES = ['รอตรวจสอบ', 'อยู่ที่จุดรับฝาก', 'กำลังดำเนินการเคลม'];
 const PENDING_STATUSES = ['รอตรวจสอบ'];
@@ -319,6 +320,11 @@ function handleModalBackgroundClick(event) {
 document.addEventListener('DOMContentLoaded', () => {
   const isAccepting = localStorage.getItem('system_accepting_reports') !== 'false';
   updateSystemStatusUI(isAccepting);
+
+  // ลิงก์จัดการสถานที่เก็บ แสดงเฉพาะผู้ดูแลระบบ (role='admin')
+  if (localStorage.getItem('userRole') === 'admin') {
+    document.getElementById('admin-nav-item')?.classList.remove('hidden');
+  }
 
   document.getElementById('toggle-system-btn')?.addEventListener('click', toggleSystemStatus);
   document.getElementById('refresh-btn')?.addEventListener('click', fetchRealtimeDashboardData);

@@ -1,3 +1,5 @@
+import './staff-auth.js';
+import { staffSession } from './staff-auth.js';
 import { supabaseClient } from './supabaseClient.js';
 
 /* ============================================================================
@@ -65,7 +67,7 @@ async function fetchClaimById(claimId) {
     .from(CLAIM_TABLE)
     .select(`
       claim_id,
-      recipient_name,
+      claimant_name,
       status,
       item:item_id ( item_id, item_name, image_url )
     `)
@@ -148,7 +150,7 @@ function clearClaimDisplay() {
 function applyClaimData(claim) {
   document.getElementById('claimIdText').textContent = claim.claim_id || '-';
   document.getElementById('itemNameText').textContent = claim.item?.item_name || '-';
-  document.getElementById('recipientNameText').textContent = claim.recipient_name || '-';
+  document.getElementById('recipientNameText').textContent = claim.claimant_name || '-';
 
   setItemImage(claim.item?.image_url || '');
 
@@ -512,9 +514,7 @@ async function submitFinalHandover() {
     if (isCompletedStatus(latestClaim.status)) throw new Error('คำร้องนี้มีประวัติการส่งมอบแล้ว');
 
     const claimId = latestClaim.claim_id;
-    const itemId = latestClaim.item?.item_id;
-    const itemName = latestClaim.item?.item_name || '-';
-    const recipientName = latestClaim.recipient_name || '-';
+    const recipientName = latestClaim.claimant_name || '-';
     const staffName = document.getElementById('staffNameInput').value;
 
     // 1) อัปโหลดหลักฐาน (ถ้ามี) และลายเซ็น
@@ -522,41 +522,17 @@ async function submitFinalHandover() {
     const signatureDataUrl = canvas.toDataURL('image/png');
     const signatureUrl = await uploadSignature(claimId, signatureDataUrl);
 
-    const now = new Date().toISOString();
-
-    // 2) บันทึกประวัติการส่งมอบ
-    const { error: insertError } = await supabaseClient.from(HANDOVER_TABLE).insert({
-      claim_id: claimId,
-      item_id: itemId,
-      recipient_name: recipientName,
-      handover_date: now,
-      staff_name: staffName,
-      proof_image_url: proofUrls[0] || null,
-      proof_urls: proofUrls,
-      signature_image_url: signatureUrl,
-      proof_file_count: selectedFiles.length,
-      note: 'ส่งมอบคืนเจ้าของพร้อมลงลายเซ็นเรียบร้อยแล้ว',
+    // 2) บันทึกการส่งมอบผ่าน RPC เท่านั้น (anon ไม่มีสิทธิ์เขียนตารางโดยตรง)
+    //    RPC record_handover จะบันทึกตาราง handover + เปลี่ยนสถานะ claim/item ให้เอง
+    const { error: handoverError } = await supabaseClient.rpc('record_handover', {
+      p_claim_id: claimId,
+      p_note: 'ส่งมอบคืนเจ้าของพร้อมลงลายเซ็นเรียบร้อยแล้ว',
+      p_proof_urls: proofUrls,
+      p_signature_image_url: signatureUrl,
+      p_staff_id: staffSession.userId || null,
     });
 
-    if (insertError) throw insertError;
-
-    // 3) อัปเดตสถานะคำร้อง
-    const { error: claimUpdateError } = await supabaseClient
-      .from(CLAIM_TABLE)
-      .update({ status: 'completed' })
-      .eq('claim_id', claimId);
-
-    if (claimUpdateError) throw claimUpdateError;
-
-    // 4) อัปเดตสถานะสิ่งของเป็น "คืนสำเร็จ"
-    if (itemId) {
-      const { error: itemUpdateError } = await supabaseClient
-        .from(ITEM_TABLE)
-        .update({ status: RETURNED_ITEM_STATUS, updated_at: now })
-        .eq('item_id', itemId);
-
-      if (itemUpdateError) throw itemUpdateError;
-    }
+    if (handoverError) throw handoverError;
 
     document.getElementById('confirmSummaryModal').classList.remove('show');
     document.getElementById('successClaimId').textContent = claimId;

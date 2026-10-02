@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ค้นหารายการ - Lost & Found ICT</title>
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- ไฟล์ CSS ส่วนกลาง (มี Font, Reset, Navbar, Footer, Breadcrumb) -->
+  
+  <!-- ไฟล์ CSS เฉพาะหน้าค้นหา -->
+  <script type="module" crossorigin src="/assets/browse-CWFlpaO3.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/components-WiGMM9E5.js">
+  <link rel="modulepreload" crossorigin href="/assets/supabaseClient-D8YZZJnc.js">
+  <link rel="stylesheet" crossorigin href="/assets/components-C7WZxfJv.css">
+  <link rel="stylesheet" crossorigin href="/assets/browse-CQ9NZy6G.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="nav-left">
+        <a href="home.html" class="nav-brand">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Lost & Found ICT</span>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="home.html" class="nav-link">Home</a></li>
+          <li><a href="activity.html" class="nav-link">My Activity</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-actions">
+        <form class="nav-search-form" onsubmit="event.preventDefault(); applyFilter();">
+          <div class="nav-search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="ค้นหารายการ..." oninput="applyFilter()">
+          </div>
+        </form>
+
+        <a href="report.html" class="btn-post">
+          <i class="fa-solid fa-plus"></i>
+          <span>โพสต์</span>
+        </a>
+
+        <a href="profile.html" class="nav-profile" id="navProfileBtn">
+          <i class="fa-regular fa-user"></i>
+          <span id="navProfileName">Profile</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumb Navigation -->
+  <div class="breadcrumb-container">
+    <ul class="breadcrumb-list">
+      <li><a href="home.html">หน้าหลัก</a></li>
+      <li class="separator"><i class="fa-solid fa-chevron-right"></i></li>
+      <li class="current">ค้นหาสิ่งของ</li>
+    </ul>
+  </div>
+
+  <!-- Main Layout -->
+  <main class="browse-main">
+
+    <!-- Sidebar Filter -->
+    <aside class="sidebar-filter">
+      <h2 class="filter-title">ตัวกรองการค้นหา</h2>
+
+      <div class="filter-group">
+        <label class="filter-label">สถานะ</label>
+        <div class="checkbox-list">
+          <label class="checkbox-item">
+            <input type="checkbox" name="type_status" value="found" checked onchange="applyFilter()">
+            <span>ตามหาเจ้าของ</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="type_status" value="lost" checked onchange="applyFilter()">
+            <span>แจ้งหาย</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- หมวดหมู่โหลดไดนามิกผ่าน JavaScript จากตาราง category -->
+      <div class="filter-group">
+        <label class="filter-label">หมวดหมู่</label>
+        <div class="checkbox-list" id="categoryCheckboxList">
+          <span style="font-size: 13px; color: #94a3b8;">กำลังโหลดหมวดหมู่...</span>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">สถานะรายการ</label>
+        <div class="select-wrapper">
+<select name="status_filter" id="statusFilter" onchange="applyFilter()">
+              <option value="all">ทั้งหมดทุกสถานะ</option>
+              <option value="รอตรวจสอบ">รอตรวจสอบ</option>
+              <option value="อยู่ที่จุดรับฝาก">อยู่ที่จุดรับฝาก</option>
+              <option value="กำลังดำเนินการเคลม">กำลังดำเนินการเคลม</option>
+              <option value="แจ้งหาย">แจ้งหาย</option>
+            </select>
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">วันที่</label>
+        <div class="select-wrapper">
+          <select name="date_filter" id="dateFilter" onchange="applyFilter()">
+            <option value="all">ทั้งหมด</option>
+            <option value="today">วันนี้</option>
+            <option value="yesterday">เมื่อวานนี้</option>
+            <option value="7days">7 วันที่ผ่านมา</option>
+            <option value="30days">30 วันที่ผ่านมา</option>
+          </select>
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">สถานที่เกิดเหตุ</label>
+        <div class="input-custom-wrapper">
+          <input type="text" id="locationSearchInput" placeholder="เช่น ห้องเรียน, โรงอาหาร, ICT1102/1" oninput="applyFilter()">
+        </div>
+      </div>
+
+      <button type="button" class="btn-apply-filter" onclick="renderBrowseItems()">รีเฟรชข้อมูล</button>
+    </aside>
+
+    <!-- Content Area -->
+    <section class="content-area">
+      <div class="results-summary-bar">
+        <span id="resultCountText">กำลังโหลดข้อมูล...</span>
+      </div>
+
+      <div class="items-grid" id="itemsGrid">
+        <!-- Rendered via JS -->
+      </div>
+
+      <div class="no-results" id="noResults" style="display: none;">
+        <i class="fa-solid fa-box-open"></i>
+        <div>ไม่พบรายการที่ตรงกับเงื่อนไขการค้นหา</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <strong>Lost & Found ICT</strong> &copy; 2026 Lost & Found System. All rights reserved.
+      </div>
+      <div class="footer-links">
+        <a href="#">Contact Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Script Logic -->
+
+</body>
+</html>

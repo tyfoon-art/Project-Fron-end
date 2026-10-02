@@ -1,3 +1,5 @@
+import './staff-auth.js';
+import { staffSession } from './staff-auth.js';
 import { supabaseClient } from './supabaseClient.js';
 
 /* ============================================================================
@@ -118,20 +120,19 @@ async function fetchActivityLogs(claimId, claim, item) {
 }
 
 async function fetchReviewerName() {
-  try {
-    const { data } = await supabaseClient.auth.getUser();
-    return data?.user?.user_metadata?.full_name || data?.user?.email || 'เจ้าหน้าที่';
-  } catch {
-    return 'เจ้าหน้าที่';
-  }
+  return staffSession.fullName || staffSession.email || 'เจ้าหน้าที่';
 }
 
-async function insertActivityLog(claimId, title) {
-  try {
-    await supabaseClient.from(ACTIVITY_LOG_TABLE).insert({ claim_id: claimId, title });
-  } catch (error) {
-    console.warn('ไม่สามารถบันทึกประวัติกิจกรรมได้:', error);
-  }
+async function reviewClaim(status, title) {
+  const { error } = await supabaseClient.rpc('staff_review_claim', {
+    p_claim_id: currentClaim.claim_id,
+    p_status: status,
+    p_reviewer_note: document.getElementById('reviewerNote').value.trim(),
+    p_reviewer_name: currentReviewerName,
+    p_staff_id: staffSession.userId || null,
+  });
+
+  if (error) throw error;
 }
 
 /* ============================================================================
@@ -397,20 +398,7 @@ async function confirmApproval() {
   const nowIso = new Date().toISOString();
 
   try {
-    const { error } = await supabaseClient
-      .from(CLAIM_TABLE)
-      .update({
-        status: 'approved',
-        reviewer_note: note,
-        reviewer_name: currentReviewerName,
-        approved_at: nowIso,
-        updated_at: nowIso,
-      })
-      .eq('claim_id', currentClaim.claim_id);
-
-    if (error) throw error;
-
-    await insertActivityLog(currentClaim.claim_id, 'เจ้าหน้าที่อนุมัติคำร้อง');
+    await reviewClaim('approved', 'เจ้าหน้าที่อนุมัติคำร้อง');
 
     currentClaim.status = 'approved';
     currentClaim.reviewer_note = note;
@@ -458,14 +446,7 @@ async function handleDecision(type) {
 
     try {
       const nowIso = new Date().toISOString();
-      const { error } = await supabaseClient
-        .from(CLAIM_TABLE)
-        .update({ status: 'more_info', reviewer_note: note, reviewer_name: currentReviewerName, updated_at: nowIso })
-        .eq('claim_id', currentClaim.claim_id);
-
-      if (error) throw error;
-
-      await insertActivityLog(currentClaim.claim_id, 'เจ้าหน้าที่ส่งคำขอข้อมูลเพิ่มเติม');
+      await reviewClaim('more_info', 'เจ้าหน้าที่ส่งคำขอข้อมูลเพิ่มเติม');
 
       currentClaim.status = 'more_info';
       currentClaim.reviewer_note = note;
@@ -492,15 +473,7 @@ async function handleDecision(type) {
     if (!window.confirm('ยืนยันที่จะปฏิเสธคำร้องนี้หรือไม่?')) return;
 
     try {
-      const nowIso = new Date().toISOString();
-      const { error } = await supabaseClient
-        .from(CLAIM_TABLE)
-        .update({ status: 'rejected', reviewer_note: note, reviewer_name: currentReviewerName, updated_at: nowIso })
-        .eq('claim_id', currentClaim.claim_id);
-
-      if (error) throw error;
-
-      await insertActivityLog(currentClaim.claim_id, 'เจ้าหน้าที่ปฏิเสธคำร้อง');
+      await reviewClaim('rejected', 'เจ้าหน้าที่ปฏิเสธคำร้อง');
 
       showSimpleMessage('ปฏิเสธคำร้องเรียบร้อยแล้ว', 'success');
       setTimeout(() => { window.location.href = 'staff-verify-claims.html'; }, 700);

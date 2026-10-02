@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>จัดการสถานที่เก็บ - Lost &amp; Found ICT</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- โหลด CSS แยกส่วน: components.css ใช้ร่วมกันทุกหน้า, admin-storage-points.css เฉพาะหน้านี้ -->
+  <script type="module" crossorigin src="/assets/admin-storage-points-BKE3TDA2.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/components-WiGMM9E5.js">
+  <link rel="modulepreload" crossorigin href="/assets/staff-auth-Bx19Ogze.js">
+  <link rel="modulepreload" crossorigin href="/assets/supabaseClient-D8YZZJnc.js">
+  <link rel="stylesheet" crossorigin href="/assets/components-C7WZxfJv.css">
+  <link rel="stylesheet" crossorigin href="/assets/admin-storage-points-D484AviG.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="nav-left">
+        <a href="staff-dashboard.html" class="nav-brand">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Lost & Found ICT</span>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="staff-dashboard.html" class="nav-link">แดชบอร์ดภาพรวม</a></li>
+          <li><a href="staff-post-list.html" class="nav-link">บันทึกสิ่งของเข้าคลัง</a></li>
+          <li><a href="staff-verify-claims.html" class="nav-link">ตรวจสอบคำร้อง</a></li>
+          <li><a href="staff-overdue-list.html" class="nav-link">รายการสิ่งของตกค้าง</a></li>
+          <li><a href="admin-storage-points.html" class="nav-link active">สถานที่เก็บ</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-actions">
+        <a href="staff-profile.html" class="nav-profile">
+          <i class="fa-regular fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container-fluid">
+
+    <div class="asp-header">
+      <div>
+        <h1>จัดการสถานที่เก็บ</h1>
+        <p class="asp-subtitle">เพิ่ม แก้ไข และลบจุดจัดเก็บสิ่งของ (เฉพาะผู้ดูแลระบบ)</p>
+      </div>
+      <span id="admin-badge" class="asp-admin-badge">
+        <i class="fa-solid fa-shield-halved"></i>
+        <span>ผู้ดูแลระบบ</span>
+      </span>
+    </div>
+
+    <div id="asp-alert" class="asp-alert">
+      <i class="fa-solid fa-circle-info"></i>
+      <span id="asp-alert-text"></span>
+    </div>
+
+    <section class="asp-card">
+      <div class="asp-card-head">
+        <h2 id="asp-form-title">เพิ่มสถานที่เก็บ</h2>
+        <button type="button" id="asp-cancel-btn" class="asp-btn ghost hidden">
+          <i class="fa-solid fa-xmark"></i>
+          <span>ยกเลิกการแก้ไข</span>
+        </button>
+      </div>
+
+      <form id="asp-form" novalidate>
+        <input type="hidden" id="asp-storage-id">
+
+        <div class="asp-grid">
+          <div class="asp-field">
+            <label for="asp-name">ชื่อสถานที่เก็บ <span class="req">*</span></label>
+            <input type="text" id="asp-name" required placeholder="เช่น จุดรับฝาก ห้องส่วนกลาง">
+          </div>
+
+          <div class="asp-field">
+            <label for="asp-room">ห้อง / ตำแหน่ง</label>
+            <input type="text" id="asp-room" placeholder="เช่น อาคาร A ชั้น 1">
+          </div>
+        </div>
+
+        <div class="asp-field">
+          <label for="asp-description">รายละเอียด</label>
+          <input type="text" id="asp-description" placeholder="เช่น จุดรับฝากหลัก ประจำวัน">
+        </div>
+
+        <div class="asp-form-actions">
+          <button type="submit" id="asp-submit-btn" class="asp-btn primary">
+            <i class="fa-solid fa-floppy-disk"></i>
+            <span>เพิ่มสถานที่เก็บ</span>
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <section class="asp-card">
+      <div class="asp-card-head">
+        <h2>สถานที่เก็บทั้งหมด</h2>
+        <span class="asp-count">(<span id="asp-count">0</span> จุด)</span>
+      </div>
+
+      <div class="asp-table-wrap">
+        <table class="asp-table">
+          <thead>
+            <tr>
+              <th style="width: 56px;">ลำดับ</th>
+              <th>ชื่อสถานที่เก็บ</th>
+              <th>ห้อง / ตำแหน่ง</th>
+              <th>รายละเอียด</th>
+              <th style="width: 90px;">สิ่งของ</th>
+              <th style="width: 170px;">จัดการ</th>
+            </tr>
+          </thead>
+          <tbody id="asp-tbody">
+            <tr class="asp-empty">
+              <td colspan="6"><i class="fa-solid fa-spinner fa-spin"></i> กำลังโหลดข้อมูล...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL ยืนยันการลบ -->
+  <div id="asp-delete-modal" class="asp-modal hidden">
+    <div class="asp-modal-box">
+      <h3><i class="fa-solid fa-triangle-exclamation"></i> ยืนยันการลบสถานที่เก็บ</h3>
+      <p id="asp-delete-text"></p>
+      <div class="asp-modal-actions">
+        <button type="button" id="asp-delete-cancel" class="asp-btn ghost">ยกเลิก</button>
+        <button type="button" id="asp-delete-confirm" class="asp-btn danger">
+          <i class="fa-solid fa-trash"></i>
+          <span>ลบสถานที่เก็บ</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

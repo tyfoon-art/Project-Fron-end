@@ -372,6 +372,13 @@
   border: 1px solid #fecaca;
 }
 
+/* ป้ายสีแดงของโพสต์แจ้งหาย (สถานะเดียว ไม่มีสถานะอื่น) */
+.item-badge.badge-lost {
+  background-color: #dc2626;
+  color: #ffffff;
+  border: 1px solid #b91c1c;
+}
+
 /* type-tag แสดง lost/found */
 .type-tag {
   display: inline-flex;

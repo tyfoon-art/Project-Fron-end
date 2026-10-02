@@ -3,6 +3,20 @@ import { supabaseClient } from './supabaseClient.js';
 let selectedImageBase64 = '';
 let secretImageBase64 = '';
 
+// รูปตำหนิลับมีเฉพาะโพสต์แจ้งพบ — โพสต์แจ้งหายซ่อนช่องอัปโหลดและไม่ส่งรูปลับ
+const isLostReport = sessionStorage.getItem('report_type') === 'lost';
+
+if (isLostReport) {
+  document.getElementById('secretUploadBox')?.remove();
+  const setText = (id, text) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = text;
+  };
+  setText('reportSubtitle', 'เพิ่มรูปถ่ายสิ่งของที่หาย เพื่อให้ผู้พบเห็นจำได้ง่ายขึ้น');
+  setText('stepTitle', 'รูปภาพสิ่งของ');
+  setText('stepLabel3', 'รูปภาพ');
+}
+
 function handleFiles(files) {
   if (!files || files.length === 0) return;
   const file = files[0];
@@ -130,7 +144,7 @@ async function handleSubmit() {
       p_image_url: selectedImageBase64,
       p_incident_location: incidentLocation,
       p_incident_datetime: incidentDatetime,
-      p_secret_image: secretImageBase64 || null
+      p_secret_image: isLostReport ? null : (secretImageBase64 || null)
     });
 
     if (createError) throw createError;

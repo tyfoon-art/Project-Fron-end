@@ -78,7 +78,6 @@ async function renderReportedItems(userId) {
       item:item_id ( item_name, description, status, image_url, deleted_at )
     `)
     .eq('user_id', userId)
-    .is('deleted_at', null)
     .order('incident_datetime', { ascending: false });
 
   if (error) {

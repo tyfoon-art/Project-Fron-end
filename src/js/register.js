@@ -140,11 +140,20 @@ document.getElementById('registerForm').addEventListener('submit', async (event)
     localStorage.setItem('userName', insertedUser.full_name);
     localStorage.setItem('userRole', insertedUser.role || 'user');
     localStorage.setItem('isLoggedIn', 'true');
+    if (insertedUser.role === 'staff' || insertedUser.role === 'admin') {
+      localStorage.setItem('isStaff', 'true');
+    } else {
+      localStorage.removeItem('isStaff');
+    }
 
     alert('ลงทะเบียนและเข้าสู่ระบบสำเร็จ!');
     
     // เปลี่ยนเส้นทางไปยังหน้าหลักทันที
-    window.location.href = 'home.html';
+    if (insertedUser.role === 'staff' || insertedUser.role === 'admin') {
+      window.location.href = 'staff-dashboard.html';
+    } else {
+      window.location.href = 'home.html';
+    }
 
   } catch (err) {
     console.error('Registration error:', err);

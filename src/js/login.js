@@ -1,6 +1,7 @@
 import { supabaseClient } from './supabaseClient.js';
 
 const STAFF_DOMAIN = 'staff.com';
+const ADMIN_EMAIL = 'admin1@admin.com'; // ผู้ดูแลระบบมีเพียงคนเดียว
 const USER_DOMAINS = ['gmail.com', 'up.ac.th'];
 
 function getEmailDomain(email) {
@@ -112,8 +113,8 @@ async function handleLogin(event) {
     localStorage.setItem('userEmail', profile.email);
     localStorage.setItem('userName', profile.full_name);
 
-    if (profile.role === 'staff') {
-      localStorage.setItem('userRole', 'staff');
+    if (profile.role === 'staff' || profile.role === 'admin') {
+      localStorage.setItem('userRole', profile.role);
       localStorage.setItem('isStaff', 'true');
       window.location.href = 'staff-dashboard.html';
     } else {

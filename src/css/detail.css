@@ -348,6 +348,12 @@
   color: #0369a1;
 }
 
+/* ป้ายสีแดงของโพสต์แจ้งหาย (สถานะเดียว) */
+.badge-status.badge-lost {
+  background: #dc2626;
+  color: #ffffff;
+}
+
 .badge-status.badge-progress {
   background: #fef3c7;
   color: #b45309;

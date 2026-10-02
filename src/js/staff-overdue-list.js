@@ -1,3 +1,4 @@
+import './staff-auth.js';
 import { supabaseClient } from './supabaseClient.js';
 
 /* ============================================================================
@@ -17,7 +18,7 @@ import { supabaseClient } from './supabaseClient.js';
 const ITEM_TABLE = 'item';
 const MEDIA_TABLE = 'item_media';
 
-const DISPOSAL_DAYS = 30;
+const DISPOSAL_DAYS = 90;
 
 const OPEN_STATUSES = ['รอตรวจสอบ', 'อยู่ที่จุดรับฝาก', 'กำลังดำเนินการเคลม'];
 const DISPOSED_STATUS = 'หมดอายุ/ทำลายทิ้ง';
@@ -78,10 +79,14 @@ function calculateDaysInStorage(item) {
   return Math.max(0, Math.floor((end.getTime() - start.getTime()) / 86400000));
 }
 
+// ใช้ค่าจากคอลัมน์ category (ชื่อหมวดภาษาไทย) ก่อน
+// ถ้าว่างค่อยแปลงจาก category_key และสุดท้ายค่อย fallback เป็น 'อื่นๆ'
 function getCategory(item) {
-  const key = String(item.category_key || '').trim().toLowerCase();
-  if (categoryFilterMap[key]) return categoryFilterMap[key];
-  return item.category || 'อื่นๆ';
+  const category = String(item.category ?? '').trim();
+  if (category) return category;
+
+  const key = String(item.category_key ?? '').trim().toLowerCase();
+  return categoryFilterMap[key] || 'อื่นๆ';
 }
 
 function getStorageLocation(item) {
@@ -182,11 +187,11 @@ function createDisposalButton(item, days) {
   }
 
   if (days >= DISPOSAL_DAYS) {
-    return `<a href="staff-dispose-process.html?id=${encodeURIComponent(itemId)}" class="disposal-btn active" title="ดำเนินการจำหน่ายสิ่งของ"><i class="fa-solid fa-box-archive"></i> จำหน่ายออก</a>`;
+    return `<a href="staff-dispose-item.html?id=${encodeURIComponent(itemId)}" class="disposal-btn active" title="ดำเนินการจำหน่ายสิ่งของ"><i class="fa-solid fa-box-archive"></i> จำหน่ายออก</a>`;
   }
 
   const remaining = Math.max(0, DISPOSAL_DAYS - days);
-  return `<button type="button" disabled class="disposal-btn disabled" title="ยังไม่ครบ 30 วัน ไม่สามารถจำหน่ายได้"><i class="fa-solid fa-lock"></i> รออีก ${remaining} วัน</button>`;
+  return `<button type="button" disabled class="disposal-btn disabled" title="ยังไม่ครบ 90 วัน ไม่สามารถจำหน่ายได้"><i class="fa-solid fa-lock"></i> รออีก ${remaining} วัน</button>`;
 }
 
 /* ============================================================================
@@ -258,7 +263,7 @@ function updateStatCards(items, disposedThisMonth) {
   const over30 = items.filter((item) => calculateDaysInStorage(item) >= DISPOSAL_DAYS).length;
 
   document.getElementById('totalOverdue').textContent = total;
-  document.getElementById('over30Days').textContent = over30;
+  document.getElementById('over90Days').textContent = over30;
   document.getElementById('disposedThisMonth').textContent = disposedThisMonth;
 }
 
@@ -287,8 +292,8 @@ function filterTable() {
     const matchesCategory = categoryValue === '' || rowCategory.includes(categoryValue);
 
     let matchesTime = true;
-    if (timeValue === '30') matchesTime = days >= 30;
     if (timeValue === '60') matchesTime = days >= 60;
+    if (timeValue === '90') matchesTime = days >= 90;
 
     const visible = matchesSearch && matchesCategory && matchesTime;
     row.style.display = visible ? '' : 'none';

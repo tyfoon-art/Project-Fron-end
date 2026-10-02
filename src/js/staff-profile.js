@@ -1,16 +1,18 @@
+import './staff-auth.js';
+import { staffSession } from './staff-auth.js';
 import { supabaseClient } from './supabaseClient.js';
 
 /* ============================================================================
    ข้อสมมติฐานเรื่องโครงสร้างตาราง/สตอเรจ (แก้ชื่อ table/column/bucket ให้ตรงกับของจริงได้ที่นี่)
    ----------------------------------------------------------------------------
-   - auth.users               : ผู้ใช้ที่ล็อกอินอยู่ ดึงผ่าน supabaseClient.auth.getUser()
-   - public.staff_profile     : id (uuid, FK -> auth.users.id, PK),
-                                 full_name, email, phone, avatar_url, updated_at
-     (ถ้าชื่อ table จริงไม่ตรง ให้แก้ค่าคงที่ PROFILE_TABLE ด้านล่าง)
+   - localStorage session     : userId, userEmail, userName (จาก RPC verify_login)
+   - public.user_account      : เก็บโปรไฟล์เจ้าหน้าที่ร่วมกับผู้ใช้ทั่วไป
+                                 (user_id, full_name, email, phone_number,
+                                  avatar_url, role) แยกด้วย role = 'staff'
    - storage bucket "avatars" : เก็บรูปโปรไฟล์ path = `${userId}/avatar-${timestamp}.${ext}`
    ============================================================================ */
 
-const PROFILE_TABLE = 'staff_profile';
+const PROFILE_TABLE = 'user_account';
 const AVATAR_BUCKET = 'avatars';
 
 const DEFAULT_AVATAR_URL =
@@ -37,29 +39,27 @@ function showToast() {
    ============================================================================ */
 
 async function loadProfile() {
-  const { data: userData, error: userError } = await supabaseClient.auth.getUser();
+  currentUserId = staffSession.userId;
 
-  if (userError || !userData?.user) {
-    console.error('ไม่พบผู้ใช้ที่เข้าสู่ระบบ:', userError);
-    window.location.href = 'login.html';
+  if (!currentUserId) {
+    window.location.replace('login.html');
     return;
   }
 
-  currentUserId = userData.user.id;
-
   const { data: profile, error: profileError } = await supabaseClient
     .from(PROFILE_TABLE)
-    .select('full_name, email, phone, avatar_url')
-    .eq('id', currentUserId)
+    .select('full_name, email, phone_number, avatar_url')
+    .eq('user_id', currentUserId)
+    .eq('role', 'staff')
     .maybeSingle();
 
   if (profileError) {
     console.error('ไม่สามารถโหลดข้อมูลโปรไฟล์ได้:', profileError);
   }
 
-  const fullName = profile?.full_name || userData.user.user_metadata?.full_name || '';
-  const email = profile?.email || userData.user.email || '';
-  const phone = profile?.phone || '';
+  const fullName = profile?.full_name || staffSession.fullName || '';
+  const email = profile?.email || staffSession.email || '';
+  const phone = profile?.phone_number || '';
   const avatarUrl = profile?.avatar_url || DEFAULT_AVATAR_URL;
 
   document.getElementById('input-fullname').value = fullName;
@@ -97,15 +97,12 @@ async function handleProfileSubmit(event) {
   setSavingUI(true);
 
   try {
-    const { error } = await supabaseClient
-      .from(PROFILE_TABLE)
-      .upsert({
-        id: currentUserId,
-        full_name: fullname,
-        email,
-        phone,
-        updated_at: new Date().toISOString(),
-      });
+    const { error } = await supabaseClient.rpc('staff_upsert_profile', {
+      p_staff_id: currentUserId,
+      p_full_name: fullname,
+      p_email: email,
+      p_phone: phone,
+    });
 
     if (error) throw error;
 
@@ -148,13 +145,10 @@ async function handleAvatarChange(event) {
 
     const avatarUrl = publicUrlData?.publicUrl || '';
 
-    const { error: updateError } = await supabaseClient
-      .from(PROFILE_TABLE)
-      .upsert({
-        id: currentUserId,
-        avatar_url: avatarUrl,
-        updated_at: new Date().toISOString(),
-      });
+    const { error: updateError } = await supabaseClient.rpc('staff_update_avatar', {
+      p_staff_id: currentUserId,
+      p_avatar_url: avatarUrl,
+    });
 
     if (updateError) throw updateError;
 
@@ -190,12 +184,15 @@ async function handleLogoutConfirm() {
   confirmBtn.textContent = 'กำลังออกจากระบบ...';
 
   try {
-    const { error } = await supabaseClient.auth.signOut();
-    if (error) throw error;
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('isStaff');
   } catch (error) {
     console.error('เกิดข้อผิดพลาดขณะออกจากระบบ:', error);
   } finally {
-    window.location.href = 'login.html';
+    window.location.replace('login.html');
   }
 }
 

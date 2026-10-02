@@ -1,3 +1,5 @@
+import './staff-auth.js';
+import { staffSession } from './staff-auth.js';
 import { supabaseClient } from './supabaseClient.js';
 
 /* ============================================================================
@@ -19,7 +21,7 @@ import { supabaseClient } from './supabaseClient.js';
 const ITEM_TABLE = 'item';
 const DISPOSAL_TABLE = 'disposal';
 
-const DISPOSAL_MIN_DAYS = 30;
+const DISPOSAL_MIN_DAYS = 90;
 const DISPOSED_STATUS = 'หมดอายุ/ทำลายทิ้ง';
 const INACTIVE_STATUSES = ['หมดอายุ/ทำลายทิ้ง', 'คืนสำเร็จ'];
 
@@ -304,26 +306,16 @@ async function confirmDisposeItem() {
       throw new Error('กรุณาระบุรายละเอียดเพิ่มเติม / หมายเหตุ');
     }
 
-    const now = new Date().toISOString();
-
-    // 1) อัปเดตสถานะสิ่งของหลัก
-    const { error: updateError } = await supabaseClient
-      .from(ITEM_TABLE)
-      .update({ status: DISPOSED_STATUS, updated_at: now })
-      .eq('item_id', currentItem.item_id);
-
-    if (updateError) throw updateError;
-
-    // 2) บันทึกประวัติการจำหน่าย
-    const { error: insertError } = await supabaseClient.from(DISPOSAL_TABLE).insert({
-      item_id: currentItem.item_id,
-      dispose_type: selectedType.value,
-      note,
-      disposed_at: now,
-      days_in_storage: currentDays,
+    // เขียนผ่าน RPC เท่านั้น (anon ไม่มีสิทธิ์เขียนตารางโดยตรง)
+    // RPC จะอัปเดตสถานะสิ่งของเป็น "หมดอายุ/ทำลายทิ้ง" และบันทึกประวัติลงตาราง disposal ให้
+    const { error: rpcError } = await supabaseClient.rpc('staff_dispose_item', {
+      p_item_id: currentItem.item_id,
+      p_dispose_type: selectedType.value,
+      p_note: note,
+      p_staff_id: staffSession.userId || null,
     });
 
-    if (insertError) throw insertError;
+    if (rpcError) throw rpcError;
 
     document.getElementById('disposeConfirmModal').classList.remove('show');
 

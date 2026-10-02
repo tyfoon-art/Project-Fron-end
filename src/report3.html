@@ -54,7 +54,7 @@
 
     <div class="report-header">
       <h1>แจ้งของหาย / พบของ</h1>
-      <p>เพิ่มรูปถ่ายสิ่งของและรูปตำหนิเฉพาะสำหรับตรวจสอบความเป็นเจ้าของ</p>
+      <p id="reportSubtitle">เพิ่มรูปถ่ายสิ่งของและรูปตำหนิเฉพาะสำหรับตรวจสอบความเป็นเจ้าของ</p>
     </div>
 
     <div class="form-card">
@@ -62,7 +62,7 @@
       <div class="steps-tracker-top">
         <div class="steps-top-info">
           <span>ขั้นตอน 3 จาก 3</span>
-          <span style="color: #003b7a;">รูปภาพสิ่งของและตำหนิเฉพาะ</span>
+          <span id="stepTitle" style="color: #003b7a;">รูปภาพสิ่งของและตำหนิเฉพาะ</span>
         </div>
         <div class="progress-bar-track">
           <div class="progress-bar-fill step-3"></div>
@@ -79,7 +79,7 @@
           </div>
           <div class="step-node active">
             <div class="step-circle">3</div>
-            <div class="step-label">รูปภาพและตำหนิ</div>
+            <div class="step-label" id="stepLabel3">รูปภาพและตำหนิ</div>
           </div>
         </div>
       </div>
@@ -104,7 +104,7 @@
         <div class="preview-grid" id="previewContainer"></div>
       </div>
 
-      <div class="secret-upload-box">
+      <div class="secret-upload-box" id="secretUploadBox">
         <div class="secret-title">
           <i class="fa-solid fa-lock"></i>
           <span>รูปตำหนิเฉพาะ (ข้อมูลลับ - เห็นเฉพาะเจ้าของโพสต์และเจ้าหน้าที่)</span>

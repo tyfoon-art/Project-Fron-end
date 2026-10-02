@@ -217,6 +217,7 @@ main {
 .item-badge.badge-claiming { background: #8b5cf6; }
 .item-badge.badge-returned { background: #10b981; }
 .item-badge.badge-disposed { background: #64748b; }
+.item-badge.badge-lost { background: #dc2626; color: #ffffff; }
 
 .item-body {
   padding: 18px 20px;

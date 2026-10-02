@@ -147,19 +147,28 @@
           รายละเอียดสิ่งของ
         </div>
 
+        <!-- ตำหนิลับ: JS จะแสดงเฉพาะเจ้าของโพสต์/เจ้าหน้าที่ -->
+        <div id="defectSection" style="display: none; margin-top: 20px;">
+          <h3 class="desc-title">
+            <i class="fa-solid fa-lock" style="color:#b45309;"></i>
+            ตำหนิเฉพาะ
+            <span id="defectViewerBadge" style="font-size:0.75rem; font-weight:500; background:#fef3c7; color:#b45309; border:1px solid #fde68a; border-radius:999px; padding:2px 10px; margin-left:6px;">
+              เห็นได้เฉพาะเจ้าของโพสต์และเจ้าหน้าที่
+            </span>
+          </h3>
+          <div class="desc-box" style="background:#fffbeb; border-color:#fde68a;">
+            <img id="defectImage" src="" alt="ตำหนิเฉพาะ" style="max-width:100%; border-radius:8px; display:none;">
+            <span id="defectNote" style="display:none;"></span>
+            <div id="defectEmpty" style="color:#6b7280; display:none;">ไม่มีการระบุตำหนิเฉพาะ</div>
+          </div>
+        </div>
+
         <div class="owner-actions-row" id="ownerActionsBox" style="display: none;">
           <a href="#" id="btnEditPost" class="btn-edit-post">
             <i class="fa-solid fa-pen-to-square"></i> แก้ไขโพสต์
           </a>
           <button type="button" class="btn-delete-post" id="btnDeletePost" onclick="deleteCurrentItem()">
             <i class="fa-solid fa-trash"></i> ลบโพสต์นี้
-          </button>
-        </div>
-
-        <div class="staff-action-box" id="staffStorageActionBox" style="display: none;">
-          <button type="button" class="btn-staff-storage" onclick="saveItemToStaffStorage()">
-            <i class="fa-solid fa-box-archive"></i>
-            <span>บันทึกสิ่งของเข้าคลัง (Staff Storage)</span>
           </button>
         </div>
       </div>

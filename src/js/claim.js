@@ -3,6 +3,7 @@ import { supabaseClient } from './supabaseClient.js';
 const CLAIMABLE_STATUS = 'อยู่ที่จุดรับฝาก';
 let currentItem = null;
 let currentUserId = null;
+let currentUserProfile = null;
 
 function formatThaiDate(dateStr) {
   if (!dateStr) return '-';
@@ -46,19 +47,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     return;
   }
 
-  const { data: userAccount, error: userError } = await supabaseClient
+const { data: userAccount, error: userError } = await supabaseClient
     .from('user_account')
-    .select('user_id')
+    .select('user_id, full_name, email, phone_number')
     .eq('email', currentUserEmail)
     .maybeSingle();
 
   if (userError || !userAccount) {
-    alert('ไม่พบบัญชีผู้ใช้งาน กรุณาเข้าสู่ระบบใหม่อีกครั้ง');
+    alert('ไม่พบข้อมูลผู้ใช้งาน กรุณาเข้าสู่ระบบใหม่อีกครั้ง');
     window.location.href = `login.html?redirect=claim.html?id=${itemId}`;
     return;
   }
 
   currentUserId = userAccount.user_id;
+  currentUserProfile = userAccount;
 
   document.getElementById('breadcrumbDetailLink').href = `detail.html?id=${itemId}`;
 
@@ -170,14 +172,18 @@ async function submitClaim() {
       id_card_url: idUrl
     });
 
-    // แก้ไข: ไม่กำหนด claim_id เอง
-    const { error } = await supabaseClient
-      .from('claim')
-      .insert([{
-        ownership_evidence: ownershipEvidence,
-        item_id: currentItem.item_id,
-        user_id: currentUserId
-      }]);
+    // เขียนผ่าน RPC create_claim (anon เขียนตารางตรงไม่ได้ เพราะเปิด RLS)
+    const { error } = await supabaseClient.rpc('create_claim', {
+      p_item_id: currentItem.item_id,
+      p_user_id: currentUserId,
+      p_claimant_name: currentUserProfile?.full_name || null,
+      p_claimant_student_id: null,
+      p_description: evidenceText,
+      p_email: currentUserProfile?.email || null,
+      p_faculty: null,
+      p_ownership_evidence: ownershipEvidence,
+      p_phone: currentUserProfile?.phone_number || null
+    });
 
     if (error) throw error;
 

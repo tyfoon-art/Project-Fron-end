@@ -1,3 +1,5 @@
+import './staff-auth.js';
+import { staffSession } from './staff-auth.js';
 import { supabaseClient } from './supabaseClient.js';
 
 /* ============================================================================
@@ -12,13 +14,10 @@ import { supabaseClient } from './supabaseClient.js';
                            found_date_time,
                            storage_room, shelf_id, bin_id,
                            storage_location (ข้อความสรุปตำแหน่งจัดเก็บ),
-                           status, staff_defect_note (ตำหนิเฉพาะ เห็นได้เฉพาะเจ้าหน้าที่),
-                           created_at, updated_at, deleted_at
+                           status, created_at, updated_at, deleted_at
      (status ใช้ enum เดียวกับหน้า dashboard/home: 'รอตรวจสอบ' | 'อยู่ที่จุดรับฝาก'
       | 'กำลังดำเนินการเคลม' | 'คืนสำเร็จ' | 'หมดอายุ/ทำลายทิ้ง')
-
-     >>> ต้องเพิ่มคอลัมน์ใหม่ก่อนใช้งานหน้ารายละเอียดโพสต์ (staff-post-detail.js):
-         alter table public.item add column if not exists staff_defect_note text;
+     (ตำหนิลับเก็บแยกในตาราง item_secret อ่านได้ทาง RPC get_staff_defect_note เท่านั้น)
 
    - public.item_media  : media_id, item_id, url, type, name, size, created_at
    - storage bucket "item-media" : เก็บไฟล์จริง path = `${item_id}/${index}-${filename}`
@@ -39,6 +38,7 @@ const MEDIA_BUCKET = 'item-media';
 
 const MAX_FILES = 5;
 const NEW_ITEM_STATUS = 'อยู่ที่จุดรับฝาก';
+const PENDING_STATUS = 'รอตรวจสอบ';
 
 const existingItemId = new URLSearchParams(window.location.search).get('id');
 const isEditMode = Boolean(existingItemId);
@@ -304,8 +304,9 @@ function lockBasicFields() {
 function simplifyToStorageOnly() {
   // โหมดบันทึกเข้าคลังจากโพสต์: ข้อมูลสิ่งของดูได้จากหน้ารายละเอียดโพสต์อยู่แล้ว
   // หน้านี้จึงเหลือไว้แค่ "ตำแหน่งจัดเก็บ" กับปุ่มบันทึก
-  ['section1Card', 'section2Card', 'mediaCard', 'qrExtra'].forEach((id) => {
-    document.getElementById(id)?.classList.add('hidden');
+  ['section1Card', 'section2Card', 'mediaCard', 'qrExtra', 'foundInfoCard'].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.classList.add('hidden');
   });
 
   const stepNum = document.getElementById('section3StepNum');
@@ -316,13 +317,19 @@ async function loadItemForStorage() {
   try {
     const { data: item, error } = await supabaseClient
       .from(ITEM_TABLE)
-      .select('*')
+      .select('*, report!inner(report_type)')
       .eq('item_id', existingItemId)
+      .eq('status', PENDING_STATUS)
+      .eq('report.report_type', 'found')
+      .is('deleted_at', null)
       .maybeSingle();
 
     if (error) throw error;
     if (!item) {
-      showErrorToast('ไม่พบรายการสิ่งของนี้ในระบบ');
+      showErrorToast('ไม่พบรายการที่อยู่ในสถานะ "รอตรวจสอบ"');
+      setTimeout(() => {
+        window.location.href = 'staff-post-list.html';
+      }, 1800);
       return;
     }
 
@@ -352,6 +359,8 @@ async function loadItemForStorage() {
     document.getElementById('locationLandmark').value = item.location_landmark || '';
     document.getElementById('foundDateTime').value = isoToDatetimeLocal(item.found_date_time);
 
+    setSelectedStorage(item.current_storage_id, item.storage_room || item.storage_location);
+
     lockBasicFields();
     simplifyToStorageOnly();
 
@@ -363,6 +372,69 @@ async function loadItemForStorage() {
     console.error('โหลดข้อมูลสิ่งของไม่สำเร็จ:', error);
     showErrorToast('ไม่สามารถโหลดข้อมูลสิ่งของจากโพสต์ได้');
   }
+}
+
+/* ============================================================================
+   STORAGE POINTS (โหลดตัวเลือกจุดจัดเก็บจากตาราง storage_point)
+   ============================================================================ */
+
+function getSelectedStorage() {
+  const select = document.getElementById('storageRoom');
+  const option = select?.selectedOptions?.[0];
+  return {
+    id: option?.dataset?.id || null,
+    name: select?.value || '',
+  };
+}
+
+function setSelectedStorage(storageId, fallbackName) {
+  const select = document.getElementById('storageRoom');
+  if (!select) return;
+
+  let option = Array.from(select.options).find(
+    (opt) => storageId && opt.dataset.id === storageId,
+  );
+
+  if (!option && fallbackName) {
+    option = Array.from(select.options).find((opt) => opt.value === fallbackName);
+  }
+
+  if (!option && fallbackName) {
+    option = document.createElement('option');
+    option.value = fallbackName;
+    option.dataset.id = storageId || '';
+    option.textContent = fallbackName;
+    select.appendChild(option);
+  }
+
+  if (option) select.value = option.value;
+}
+
+async function loadStoragePoints() {
+  const select = document.getElementById('storageRoom');
+  if (!select) return;
+
+  const { data, error } = await supabaseClient
+    .from('storage_point')
+    .select('storage_id, storage_name, room')
+    .order('storage_name', { ascending: true });
+
+  if (error) {
+    console.error('ไม่สามารถโหลดจุดจัดเก็บได้:', error);
+    return;
+  }
+
+  select.innerHTML = '<option value="">เลือกจุดจัดเก็บ</option>';
+
+  (data || []).forEach((point) => {
+    const option = document.createElement('option');
+    option.value = point.storage_name || '';
+    option.dataset.id = point.storage_id || '';
+    option.textContent = point.room
+      ? `${point.storage_name} (${point.room})`
+      : point.storage_name;
+    select.appendChild(option);
+  });
 }
 
 /* ============================================================================
@@ -394,11 +466,12 @@ function buildStorageLocation() {
 
 async function uploadMediaFiles(itemId) {
   const uploaded = [];
+  const folder = itemId || `tmp-${Date.now()}`;
 
   for (let index = 0; index < selectedFiles.length; index += 1) {
     const file = selectedFiles[index];
     const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-    const path = `${itemId}/${Date.now()}-${index}-${safeName}`;
+    const path = `${folder}/${Date.now()}-${index}-${safeName}`;
 
     const { error: uploadError } = await supabaseClient
       .storage
@@ -413,7 +486,6 @@ async function uploadMediaFiles(itemId) {
       .getPublicUrl(path);
 
     uploaded.push({
-      item_id: itemId,
       url: publicUrlData?.publicUrl || '',
       type: file.type || '',
       name: file.name,
@@ -482,6 +554,7 @@ async function confirmSaveItem() {
 
   try {
     const storageRoom = document.getElementById('storageRoom').value;
+    const storageId = getSelectedStorage().id;
     const shelfId = document.getElementById('shelfId').value.trim();
     const binId = document.getElementById('binId').value.trim();
 
@@ -489,33 +562,26 @@ async function confirmSaveItem() {
       throw new Error('กรุณากรอกตำแหน่งจัดเก็บให้ครบถ้วน');
     }
 
-    const nowIso = new Date().toISOString();
-
     if (isEditMode) {
-      /* ---------- โหมดบันทึกเข้าคลังจากโพสต์: UPDATE รายการเดิม ---------- */
-      const { error: updateError } = await supabaseClient
-        .from(ITEM_TABLE)
-        .update({
-          storage_room: storageRoom,
-          shelf_id: shelfId,
-          bin_id: binId,
-          storage_location: buildStorageLocation(),
-          status: NEW_ITEM_STATUS,
-          updated_at: nowIso,
-        })
-        .eq('item_id', existingItemId);
-
-      if (updateError) throw updateError;
-
-      if (selectedFiles.length) {
-        const mediaRows = await uploadMediaFiles(existingItemId);
-        if (mediaRows.length) {
-          const { error: mediaError } = await supabaseClient
-            .from(MEDIA_TABLE)
-            .insert(mediaRows);
-          if (mediaError) throw mediaError;
-        }
+      /* ---------- โหมดบันทึกเข้าคลังจากโพสต์: รับเข้าคลังผ่าน RPC ---------- */
+      if (!loadedItem || loadedItem.status !== PENDING_STATUS) {
+        throw new Error(`บันทึกเข้าคลังได้เฉพาะโพสต์สถานะ "${PENDING_STATUS}" เท่านั้น`);
       }
+
+      const mediaRows = selectedFiles.length ? await uploadMediaFiles(existingItemId) : [];
+
+      const { error: receiveError } = await supabaseClient.rpc('staff_receive_item', {
+        p_item_id: existingItemId,
+        p_storage_room: storageRoom,
+        p_shelf_id: shelfId,
+        p_bin_id: binId,
+        p_storage_location: buildStorageLocation(),
+        p_storage_id: storageId,
+        p_media: mediaRows,
+        p_staff_id: staffSession.userId || null,
+      });
+
+      if (receiveError) throw receiveError;
     } else {
       /* ---------- โหมดปกติ: กรอกข้อมูลทั้งหมดแล้ว INSERT ใหม่ ---------- */
       const itemName = document.getElementById('itemName').value.trim();
@@ -539,11 +605,9 @@ async function confirmSaveItem() {
         throw new Error('กรุณาอัปโหลดภาพหรือไฟล์อย่างน้อย 1 ไฟล์');
       }
 
-      const itemId = await generateItemId();
       const referenceId = await generateReferenceId();
 
       const newItem = {
-        item_id: itemId,
         reference_id: referenceId,
         item_name: itemName,
         category: categoryNames[mainCategory] || mainCategory,
@@ -560,23 +624,18 @@ async function confirmSaveItem() {
         bin_id: binId,
         storage_location: buildStorageLocation(),
         status: NEW_ITEM_STATUS,
-        created_at: nowIso,
-        updated_at: nowIso,
       };
 
-      const { error: insertError } = await supabaseClient
-        .from(ITEM_TABLE)
-        .insert(newItem);
+      const mediaRows = selectedFiles.length ? await uploadMediaFiles(null) : [];
 
-      if (insertError) throw insertError;
+      const { error: createError } = await supabaseClient.rpc('staff_create_item', {
+        p_item: newItem,
+        p_media: mediaRows,
+        p_staff_id: staffSession.userId || null,
+        p_storage_id: storageId,
+      });
 
-      const mediaRows = await uploadMediaFiles(itemId);
-      if (mediaRows.length) {
-        const { error: mediaError } = await supabaseClient
-          .from(MEDIA_TABLE)
-          .insert(mediaRows);
-        if (mediaError) throw mediaError;
-      }
+      if (createError) throw createError;
     }
 
     document.getElementById('confirmSaveModal').classList.remove('show');
@@ -585,10 +644,27 @@ async function confirmSaveItem() {
     window.location.href = 'staff-overdue-list.html';
   } catch (error) {
     console.error('เกิดข้อผิดพลาดในการบันทึกข้อมูล:', error);
-    showErrorToast(error.message || 'กรุณาลองใหม่อีกครั้ง');
+    showErrorToast(rpcErrorMessage(error) || 'กรุณาลองใหม่อีกครั้ง');
     isSaving = false;
     setSavingUI(false);
   }
+}
+
+function rpcErrorMessage(error) {
+  const code = error?.code || error?.message || '';
+  const messages = {
+    LOST_POST_CANNOT_BE_STORED: 'โพสต์นี้เป็นโพสต์แจ้งหาย ไม่สามารถบันทึกเข้าคลังได้',
+    STAFF_ONLY: 'เฉพาะเจ้าหน้าที่หรือผู้ดูแลระบบเท่านั้นที่สามารถทำรายการนี้ได้',
+    ITEM_NOT_FOUND: 'ไม่พบสิ่งของรายการนี้',
+    ITEM_NOT_PENDING: 'สิ่งของอยู่ในสถานะที่ไม่รอรับเข้าคลังแล้ว',
+    NOT_A_FOUND_POST: 'รับเข้าคลังได้เฉพาะโพสต์แจ้งพบเท่านั้น',
+  };
+
+  if (messages[code]) return messages[code];
+  if (String(code).includes('42501') || String(code).includes('permission')) {
+    return 'ไม่มีสิทธิ์ในการบันทึกเข้าคลัง (ตรวจสอบบทบาทผู้ใช้และนโยบาย RLS)';
+  }
+  return error?.message || 'กรุณาลองใหม่อีกครั้ง';
 }
 
 /* ============================================================================
@@ -629,9 +705,15 @@ function handleFormSubmit(event) {
       document.getElementById('locationDetail').focus();
       return;
     }
-  }
 
-  openConfirmModal();
+    populateConfirmModal();
+    document.getElementById('confirmSaveModal').classList.remove('hidden');
+    document.getElementById('confirmSaveModal').classList.add('show');
+    document.body.classList.add('overflow-hidden');
+  } else {
+    // โหมดรับเข้าคลังจากโพสต์: บันทึกทันที
+    confirmSaveItem();
+  }
 }
 
 /* ============================================================================
@@ -671,6 +753,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   updateLocationDetail();
   renderPreviews();
+
+  await loadStoragePoints();
 
   if (isEditMode) {
     await loadItemForStorage();
