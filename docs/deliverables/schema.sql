@@ -365,3 +365,105 @@ CREATE TABLE notification (
         FOREIGN KEY (claim_id) REFERENCES claim (claim_id)
         ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+-- ============================================================
+-- ภาคผนวก: PostgreSQL / Supabase (ของจริง)
+-- ============================================================
+-- DDL ด้านบนเป็น MySQL 8 (ร่าง/ข้อสันนิษฐาน)
+-- ส่วนนี้เป็นนิยามจริงบน PostgreSQL ที่ตรวจยืนยันกับฐานข้อมูลจริง (Supabase)
+--   - Function: สกัดจาก pg_get_functiondef
+--   - Trigger : สร้างจากรายการที่ตรวจพบใน pg_trigger (CREATE TRIGGER เป็นการประกอบกลับ)
+-- ============================================================
+
+-- ---------- Functions ----------
+
+CREATE OR REPLACE FUNCTION public.set_updated_at()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
+begin
+  new.updated_at := now();
+  return new;
+end;
+$function$;
+
+CREATE OR REPLACE FUNCTION public.item_sync_category()
+ RETURNS trigger
+ LANGUAGE plpgsql
+ SET search_path TO 'public'
+AS $function$
+declare
+  v_cat public.category%rowtype;
+begin
+  if new.category_id is not null
+     and (tg_op = 'INSERT' or new.category_id is distinct from old.category_id) then
+    select * into v_cat from public.category c where c.category_id = new.category_id;
+    if found then
+      if tg_op = 'UPDATE' or nullif(btrim(new.category), '') is null then
+        new.category := v_cat.category_name;
+      end if;
+      if tg_op = 'UPDATE' or nullif(btrim(new.category_key), '') is null then
+        new.category_key := v_cat.category_key;
+      end if;
+    end if;
+  elsif new.category_id is null then
+    select c.category_id into new.category_id
+      from public.category c
+     where (nullif(btrim(new.category_key), '') is not null and c.category_key = new.category_key)
+        or (nullif(btrim(new.category), '') is not null and c.category_name = new.category)
+     order by (c.category_key = new.category_key) desc nulls last
+     limit 1;
+  end if;
+
+  return new;
+end;
+$function$;
+
+CREATE OR REPLACE FUNCTION public.app_sync_item_claim_status(p_item_id uuid)
+ RETURNS void
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public'
+AS $function$
+begin
+  update public.item it
+     set status = case
+                    when exists (
+                      select 1 from public.claim cl
+                       where cl.item_id = it.item_id
+                         and cl.status in ('pending', 'approved', 'more_info')
+                    ) then 'กำลังดำเนินการเคลม'
+                    else 'อยู่ที่จุดรับฝาก'
+                  end
+   where it.item_id = p_item_id
+     and it.status in ('อยู่ที่จุดรับฝาก', 'กำลังดำเนินการเคลม');
+end;
+$function$;
+
+-- ---------- Triggers (5 trigger บน 4 ตาราง) ----------
+
+DROP TRIGGER IF EXISTS trg_user_account_updated_at ON public.user_account;
+CREATE TRIGGER trg_user_account_updated_at
+    BEFORE UPDATE ON public.user_account
+    FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+
+DROP TRIGGER IF EXISTS trg_item_updated_at ON public.item;
+CREATE TRIGGER trg_item_updated_at
+    BEFORE UPDATE ON public.item
+    FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+
+DROP TRIGGER IF EXISTS trg_item_sync_category ON public.item;
+CREATE TRIGGER trg_item_sync_category
+    BEFORE INSERT OR UPDATE ON public.item
+    FOR EACH ROW EXECUTE FUNCTION public.item_sync_category();
+
+DROP TRIGGER IF EXISTS trg_report_updated_at ON public.report;
+CREATE TRIGGER trg_report_updated_at
+    BEFORE UPDATE ON public.report
+    FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+
+DROP TRIGGER IF EXISTS trg_claim_updated_at ON public.claim;
+CREATE TRIGGER trg_claim_updated_at
+    BEFORE UPDATE ON public.claim
+    FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
