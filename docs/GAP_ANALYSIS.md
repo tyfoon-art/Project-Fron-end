@@ -179,4 +179,4 @@
 10. รวมฟอร์มแจ้งพบ/แจ้งหายเหลือหน้าเดียว พร้อมแถบความคืบหน้า
 11. เพิ่ม pagination/debounce ในหน้าค้นหา (F-04)
 12. ลบหรือชี้เป้าหน้า orphan `staff-dispose-process.html` (7.3)
-13. ตรวจ `docs/deliverables/schema.sql` (DDL ร่าง MySQL 8 ครบ 14 ตาราง) เทียบกับฐานข้อมูลจริง + เขียน RPC/RLS/trigger ที่ยังขาด และยืนยันความขัดแย้ง 7.4 (ER_DIAGRAM.md เติมเสร็จแล้ว: diagram + ตาราง 23 relationships)
+13. ตรวจ `docs/deliverables/schema.sql` (DDL ร่าง MySQL 8 ครบ 14 ตาราง + ภาคผนวก PostgreSQL ของ trigger/function) เทียบกับฐานข้อมูลจริง + เขียน RPC/RLS ที่ยังขาด และ trigger สำหรับ `item_history_log`/`notification` (ยืนยันแล้วว่ามี trigger พื้นฐาน 5 ตัว แต่ยังไม่มีตัวเขียน log) และยืนยันความขัดแย้ง 7.4 (ER_DIAGRAM.md เติมเสร็จแล้ว: diagram + ตาราง 23 relationships)
