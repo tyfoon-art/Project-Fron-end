@@ -293,7 +293,7 @@ Lost & Found ICT เป็น Web Application ที่ทำหน้าที�
 
 | # | ตาราง | หน้าที่ | คอลัมน์สำคัญ | สถานะการใช้งาน |
 |---|-------|--------|-------------|----------------|
-| 1 | `category` | หมวดหมู่ของที่พบ (Master Data) เช่น ของใช้ส่วนตัว, อุปกรณ์การเรียน, กุญแจ/บัตร/เอกสาร, อุปกรณ์อิเล็กทรอนิกส์, อื่นๆ | `category_id`, `category_name` | ใช้งานแล้ว |
+| 1 | `category` | หมวดหมู่ของที่พบ (Master Data) เช่น ของใช้ส่วนตัว, อุปกรณ์การเรียน, กุญแจ/บัตร/เอกสาร, อุปกรณ์อิเล็กทรอนิกส์, อื่นๆ | `category_id`, `category_name`, `category_key` | ใช้งานแล้ว |
 | 2 | `claim` | คำร้องขอรับคืน พร้อมผลการตรวจสอบของเจ้าหน้าที่ | `claim_id`, `item_id`, `claimant_name`, `claimant_student_id`, `ownership_evidence`, `status`, `note`, `reviewer_name`, `reviewer_note`, `created_at`, `updated_at`, `approved_at` | ใช้งานแล้ว |
 | 3 | `claim_activity_log` | ประวัติความเคลื่อนไหวของแต่ละคำร้อง (Audit) | `claim_id`, `title` | ใช้งานแล้ว |
 | 4 | `claim_proof` | หลักฐานแนบคำร้อง (รูปบัตรประจำตัว, รูปเจ้าของ) | `claim_id`, `title`, `created_at` | ใช้งานแล้ว |
