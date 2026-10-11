@@ -3,7 +3,7 @@
 พจนานุกรมข้อมูลของระบบ อ้างอิงจากการอ่านโค้ดใน `src/js/*.js` ทั้งหมด
 เอกสารนี้จึงรวบรวมหลักฐานจากฝั่ง client ทุกจุดที่เรียกตารางและ RPC
 คู่กับ [schema.sql](schema.sql) ซึ่งเป็น DDL ร่าง (MySQL 8) ที่สร้างจากแผนภาพ ER — ครบ 14 ตาราง
-แต่ยังไม่ครอบคลุม RPC/RLS/trigger (ในระบบจริงถูกสร้างผ่าน SQL Editor โดยตรง)
+ส่วน RPC/RLS/trigger/function ถูกสร้างผ่าน SQL Editor ของ Supabase และตรวจยืนยันกับฐานข้อมูลจริงแล้ว (ดูหัวข้อ 7)
 
 อัปเดตล่าสุด: จากสถานะโค้ดปัจจุบัน · ชนิด/ความยาวคอลัมน์ใน `schema.sql` เป็นข้อสันนิษฐานจาก diagram
 ซึ่งบางจุดต่างจากหลักฐานโค้ดจริง (เช่น `item_id` โค้ดใช้ข้อความ `ITM-2026-0001` แต่ DDL ร่างเป็น `INT`) — ดูหัวข้อ 8
@@ -17,9 +17,9 @@
 | ตาราง (schema `public`) | 14 | ดูหัวข้อ 3 |
 | RPC ที่โค้ดเรียกจริง | 16 | ดูหัวข้อ 5 |
 | Storage bucket | 4 | `item-media`, `claim-evidence`, `handover-evidence`, `avatars` (หัวข้อ 6) |
-| View | **0** | ไม่พบการเรียก view ใด ๆ ในโค้ด |
-| Trigger | **0** | ไม่พบหลักฐาน (ดูหัวข้อ 7) |
-| Function นอกชุด RPC | **0** | มีเฉพาะ 16 RPC หัวข้อ 5 |
+| View | **0** | ตรวจ `information_schema.views` + `pg_matviews` ใน schema `public` แล้วไม่พบแถว |
+| Trigger | **5** | 4 ตาราง (`user_account`, `item`, `report`, `claim`) — ดูหัวข้อ 7 |
+| Function นอกชุด RPC | **3** | `set_updated_at`, `item_sync_category`, `app_sync_item_claim_status` (ดูหัวข้อ 7) |
 | ตารางที่โค้ดไม่ได้เรียกเลย | 2 | `notification`, `item_history_log` (+ `disposal` อ่านตรงเป็น 0 — เขียนผ่าน RPC เท่านั้น) |
 
 **วิธีเขียน:** การเขียนข้อมูลทุกตารางเกิดผ่าน RPC เท่านั้น — ไม่พบ `.insert()` / `.update()` / `.upsert()` / `.delete()`
@@ -54,6 +54,7 @@
 |---------|---------|----------|
 | `category_id` | ✅ [จริง] uuid (`report.js:28`) | PK |
 | `category_name` | ✅ [จริง] (`browse.js:47-50`) | ชื่อหมวดภาษาไทย |
+| `category_key` | ✅ [จริง] (`item_sync_category` อ้าง `c.category_key`) | คีย์หมวด (ภาษาอังกฤษ) ใช้จับคู่กับ `item.category_key` |
 | `is_active` | ✅ [จริง] (`browse.js:49`, `report.js:14`) | ปิดหมวดที่เลิกใช้โดยไม่ลบแถว |
 
 ### 3.2 `claim` — คำร้องขอรับคืน
@@ -76,7 +77,7 @@
 | `reviewer_name` | ✅ [จริง] (`staff-verify-detail.js:76`, p_reviewer_name) | |
 | `reviewer_note` | ✅ [จริง] (`staff-verify-detail.js:76`, p_reviewer_note) | |
 | `created_at` | ✅ [จริง] (`staff-verify-detail.js:76`) | |
-| `updated_at` | ⬜ [สันนิษฐาน] (`staff-verify-detail.js:13`) | |
+| `updated_at` | ✅ [จริง] ตั้งอัตโนมัติโดย trigger `trg_claim_updated_at` (`set_updated_at`) | |
 | `approved_at` | ✅ [จริง] (`staff-verify-detail.js:76`) | |
 
 ### 3.3 `claim_activity_log` — ประวัติความเคลื่อนไหวของคำร้อง
@@ -137,8 +138,8 @@
 | `item_id` | ⬜ [สันนิษฐาน] text รูปแบบ `ITM-2026-0001` (`staff-inventory-add.js:8`), ✅ [จริง] ใช้ทุกหน้า | PK (ไม่ใช่ uuid — หัวข้อ 8) |
 | `reference_id` | ⬜ [สันนิษฐาน] รูปแบบ `INV-2026-001` (`staff-inventory-add.js:9`, สร้างที่ `:269`) | เลขอ้างอิงคลัง |
 | `item_name` | ✅ [จริง] ทุกหน้า | |
-| `category` | ✅ [จริง] (`staff-verify-detail.js:77`, payload `staff-inventory-add.js:613`) | ชื่อหมวดเป็นข้อความ — ❓ [ต้องยืนยัน] อาจซ้ำกับ `category_id` |
-| `category_key` | ⬜ [สันนิษฐาน] + payload (`staff-inventory-add.js:614`) | คีย์หมวด (`mainCategory`) |
+| `category` | ✅ [จริง] (`staff-verify-detail.js:77`, payload `staff-inventory-add.js:613`) | ชื่อหมวดเป็นข้อความ — ซิงก์อัตโนมัติโดย trigger `trg_item_sync_category` |
+| `category_key` | ✅ [จริง] + payload (`staff-inventory-add.js:614`) | คีย์หมวด (`mainCategory`) — ซิงก์อัตโนมัติโดย `trg_item_sync_category` |
 | `sub_category` | ⬜ [สันนิษฐาน] + payload (`staff-inventory-add.js:615`) | |
 | `category_id` | ✅ [จริง] FK → `category` (`detail.js:110`, `staff-dispose-item.js:94`) | |
 | `description` | ✅ [จริง] (`detail.js`, `browse.js`) | |
@@ -157,7 +158,7 @@
 | `recorded_by` | ✅ [จริง] (`staff-verify-detail.js:77`) | ผู้บันทึกของเข้าคลัง |
 | `status` | ✅ [จริง] ทุกหน้า | `item_status_enum` — หัวข้อ 4 |
 | `created_at` | ✅ [จริง] ทุกหน้า | ฐานนับ 90 วันในโค้ดปัจจุบัน (BR-08 ❓ [ต้องยืนยัน]) |
-| `updated_at` | ⬜ [สันนิษฐาน] (`staff-overdue-list.js:10`) | |
+| `updated_at` | ✅ [จริง] ตั้งอัตโนมัติโดย trigger `trg_item_updated_at` (`set_updated_at`) | |
 | `disposed_at` | ✅ [จริง] (`staff-overdue-list.js:127`) | วันจำหน่าย (ไม่อยู่ใน requirements 7.2) |
 | `deleted_at` | ✅ [จริง] Soft delete ทุกหน้า (`staff-dispose-item.js:92`) | |
 
@@ -171,7 +172,7 @@ location_landmark, found_location, found_date_time, storage_room, shelf_id, bin_
 |---------|---------|----------|
 | `item_id`, `status`, `changed_by`, `changed_at`, `note` | ⬜ [สันนิษฐาน] เฉพาะ requirements 7.2 | ไม่พบโค้ดเรียกตารางนี้แม้แต่ที่เดียว |
 
-**สถานะ:** ยังไม่ทำงาน — ต้องให้ RPC/Trigger เขียนอัตโนมัติทุกครั้งที่สถานะเปลี่ยน (KP-08, BR-09)
+**สถานะ:** ยังไม่ทำงาน — ระบบ**มี trigger อยู่จริง** (ดูหัวข้อ 7) แต่ยังไม่มีตัวใดเขียนตารางนี้ จึงต้องเพิ่ม RPC/Trigger ให้เขียนอัตโนมัติทุกครั้งที่สถานะเปลี่ยน (KP-08, BR-09)
 
 ### 3.9 `item_media` — สื่อประกอบสิ่งของ
 
@@ -333,15 +334,38 @@ RPC ทั้ง 16 ตัวข้างต้นคือชุดที่โ
 
 ## 7. View / Function / Trigger / RLS — สถานะปัจจุบัน
 
+> ตรวจยืนยันกับฐานข้อมูลจริง (Supabase, PostgreSQL) ผ่าน `information_schema` / `pg_*` แล้ว
+
 | รายการ | สถานะในระบบจริง | หลักฐาน / หมายเหตุ |
 |--------|-----------------|---------------------|
-| **View** | ไม่มี | ไม่พบ `.from('v_...')` หรือชื่อ view ใด ๆ |
-| **Trigger** | ไม่มี | ไม่พบหลักฐาน — `item_history_log` ควรเขียนโดย trigger/RPC แต่ยังไม่มี (KP-08) |
-| **Function** | มีเฉพาะ 16 RPC หัวข้อ 5 | `profile.js:142` ยืนยันว่า `update_user_profile` เป็น `SECURITY DEFINER` |
+| **View** | **0** | `information_schema.views` และ `pg_matviews` ใน schema `public` ไม่พบแถว |
+| **Trigger** | **5** (4 ตาราง) | ดูรายการด้านล่าง |
+| **Function นอกชุด RPC** | **3** | `set_updated_at`, `item_sync_category`, `app_sync_item_claim_status` (ดูด้านล่าง) |
+| **Function 16 RPC** | ตามหัวข้อ 5 | `profile.js:142` ยืนยันว่า `update_user_profile` เป็น `SECURITY DEFINER` |
 | **RLS** | เปิดใช้งาน | `claim.js:175` "anon เขียนตารางตรงไม่ได้ เพราะเปิด RLS" · `profile.js:141` `user_account` มีแค่ policy อ่าน · `staff-dispose-item.js:310` "anon ไม่มีสิทธิ์เขียนตารางโดยตรง" |
 | **สิทธิ์หน้าเว็บ** | ฝั่ง client | `requireStaff` (`staff-auth.js`) + `localStorage` — ยังไม่ผูกกับ RLS ระดับแถว (ต้องยืนยันใน `schema.sql`) |
 
-**สิ่งที่ยังขาดใน `schema.sql`** (ตอนนี้มีเฉพาะ `CREATE TABLE` ครบ 14 ตาราง — ยังเป็นข้อเสนอ ไม่ใช่ข้อเท็จจริง):
+**Trigger ทั้งหมดในระบบ**
+
+| ตาราง | trigger | timing / event | เรียก function | หน้าที่ |
+|-------|---------|----------------|----------------|---------|
+| `user_account` | `trg_user_account_updated_at` | BEFORE UPDATE | `set_updated_at()` | ตั้ง `updated_at = now()` |
+| `item` | `trg_item_updated_at` | BEFORE UPDATE | `set_updated_at()` | ตั้ง `updated_at = now()` |
+| `item` | `trg_item_sync_category` | BEFORE INSERT, BEFORE UPDATE | `item_sync_category()` | เติม/ซิงก์ `category` + `category_key` จาก `category_id` (ถ้า `category_id` ว่าง จะย้อนหา id จาก `category_key`/`category`) |
+| `report` | `trg_report_updated_at` | BEFORE UPDATE | `set_updated_at()` | ตั้ง `updated_at = now()` |
+| `claim` | `trg_claim_updated_at` | BEFORE UPDATE | `set_updated_at()` | ตั้ง `updated_at = now()` |
+
+**Function นอกชุด RPC**
+
+| function | ประเภท | หน้าที่ |
+|----------|--------|---------|
+| `set_updated_at()` | trigger | `new.updated_at := now()` (ใช้ร่วมกับ 4 trigger ข้างต้น) |
+| `item_sync_category()` | trigger | ซิงก์ชื่อ/คีย์หมวดของ `item` กับตาราง `category` สองทาง |
+| `app_sync_item_claim_status(p_item_id uuid)` | `SECURITY DEFINER` | ปรับ `item.status` ตามสถานะ `claim` (`pending`/`approved`/`more_info` → `กำลังดำเนินการเคลม`; ไม่งั้น → `อยู่ที่จุดรับฝาก`) |
+
+> **หมายเหตุ:** ไม่มี trigger บน `item_history_log` — ตารางนี้ยังไม่ถูกเขียนโดยอัตโนมัติ (KP-08, BR-09)
+
+**สิ่งที่ยังขาดใน `schema.sql`** (ตอนนี้มีเฉพาะ `CREATE TABLE` ครบ 14 ตาราง + ภาคผนวก PostgreSQL ของ trigger/function ที่ยืนยันแล้ว — ส่วนที่เหลือยังเป็นข้อเสนอ ไม่ใช่ข้อเท็จจริง):
 1. Trigger/RPC เขียน `item_history_log` ทุกครั้งที่ `item.status` เปลี่ยน (KP-08, BR-09)
 2. View หรือ RPC สถิติแดชบอร์ด (F-10: อัตราคืนสำเร็จ, จุดเสี่ยง, หมวดหมู่หายบ่อย)
 3. การแจ้งเตือนอัตโนมัติเมื่อเกิน 90 วัน → เขียน `notification` (BR-08, F-05)
@@ -374,5 +398,5 @@ RPC ทั้ง 16 ตัวข้างต้นคือชุดที่โ
 | ตาราง | สถานะ | สิ่งที่ขาด | อ้างอิง |
 |-------|-------|-----------|---------|
 | `notification` | ไม่มีการอ่าน/เขียนเลย | หน้าจอแจ้งเตือน + การเขียนเมื่อจับคู่/เกิน 90 วัน | F-05, TS-06, BR-08 |
-| `item_history_log` | ไม่มีการอ่าน/เขียนเลย | Trigger/RPC เขียนอัตโนมัติทุกครั้งที่สถานะเปลี่ยน | KP-08, BR-09 |
+| `item_history_log` | ไม่มีการอ่าน/เขียนเลย | เพิ่ม Trigger/RPC เขียนอัตโนมัติทุกครั้งที่สถานะเปลี่ยน (ยังไม่มี trigger ตัวใดเขียนตารางนี้) | KP-08, BR-09 |
 | `disposal` | เขียนผ่าน RPC เท่านั้น ไม่มีหน้าอ่านโดยตรง | รายงานประวัติการจำหน่าย (หน้าเว็บนับจาก `item.disposed_at` แทน) | F-09 |
