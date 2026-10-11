@@ -200,7 +200,7 @@ npm run dev
 - **14 ตาราง** แยกตามขอบเขตงาน (ดูรายการในข้อ **4. สร้างตารางฐานข้อมูล**)
 - **16 RPC** เป็นจุดที่ตรรกะเชิงธุรกิจทุกอย่างถูกรวมไว้
 - **Soft delete** ด้วยคอลัมน์ `deleted_at` และ **สถานะสิ่งของ** (`item.status`) เป็นตัวกำหนดว่าหน้าไหนแสดงปุ่มอะไรให้ใคร
-- ยังไม่มี View, Function นอกชุด RPC และ Trigger ในโค้ด เพราะยังไม่มีไฟล์ SQL เก็บไว้ในโปรเจกต์
+- ฐานข้อมูลจริงมี **trigger 5 ตัว** (4 ตาราง) ได้แก่ `set_updated_at` และ `item_sync_category` พร้อม function ช่วย `app_sync_item_claim_status` และ**ไม่มี view** · แต่ยังไม่มีไฟล์ SQL เก็บไว้ในโปรเจกต์ (รายละเอียดที่ [DATA_DICTIONARY §7](./docs/deliverables/DATA_DICTIONARY.md))
 
 ### ที่เก็บไฟล์ (Supabase Storage)
 
