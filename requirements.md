@@ -80,7 +80,7 @@ Lost & Found ICT เป็น Web Application ที่ทำหน้าที�
 
 - ค้นหาแบบข้อความจากชื่อหรือคำอธิบายสิ่งของ **ไม่สนใจตัวพิมพ์เล็ก-ใหญ่**
 - ตัวกรองขั้นสูงตามประเภท/หมวดหมู่สิ่งของ, ช่วงวันที่พบ/หาย, สถานที่ (อาคาร, ชั้น, ห้องเรียน, โรงอาหาร, ป้อมยาม)
-- ตัวกรองหลายตัวทำงานร่วมกัน (AND) และรองรับการจัดเรียงลำดับตามความใหม่หรือสถานะ
+- ตัวกรองหลายตัวทำงานร่วมกัน (AND) และรองรับการจัดเรียงลำดับตามความใหม่ (เวลาโพสต์ `created_at` ล่าสุดก่อน) — สถานะ/หมวดหมู่ใช้เป็นตัวกรอง ไม่ใช่ตัวเรียง (`browse.js:127`)
 - ข้อมูลจะไม่ถูกดันตกเหมือนหน้าฟีดแชท และคงอยู่ให้ค้นหาย้อนหลังได้
 - แสดงข้อความ `"ไม่พบรายการสิ่งของที่ตรงกับเงื่อนไขการค้นหา"` พร้อมปุ่มล้างตัวกรองทั้งหมด
 
@@ -300,7 +300,7 @@ Lost & Found ICT เป็น Web Application ที่ทำหน้าที�
 | 3 | `claim_activity_log` | ประวัติความเคลื่อนไหวของแต่ละคำร้อง (Audit) | `claim_id`, `title` | ใช้งานแล้ว |
 | 4 | `claim_proof` | หลักฐานแนบคำร้อง (รูปบัตรประจำตัว, รูปเจ้าของ) | `claim_id`, `name`, `url`, `created_at` | ใช้งานแล้ว |
 | 5 | `disposal` | การจำหน่ายออก / ทำลายของ | `item_id`, `dispose_type`, `disposed_at`, `days_in_storage`, `note` | ใช้งานแล้ว |
-| 6 | `handover` | การส่งมอบของคืนให้เจ้าของ | `claim_id`, `item_id`, `recipient_name`, `handover_date`, `staff_name`, `proof_image_url`, `proof_urls` | ใช้งานแล้ว |
+| 6 | `handover` | การส่งมอบของคืนให้เจ้าของ | `handover_id`, `claim_id`, `item_id`, `recipient_name`, `handover_date`, `staff_name`, `proof_image_url`, `proof_urls`, `signature_image_url`, `proof_file_count`, `note` | ใช้งานแล้ว — แดชบอร์ดแสดง `handover_id` เป็นรหัสรายการ และเปิดหลักฐานจาก `proof_image_url` (`staff-dashboard.js:100-148`) |
 | 7 | `item` | **ตารางหลักของระบบ** — รายการสิ่งของพร้อมสถานะและตำแหน่งจัดเก็บ | `item_id`, `item_name`, `category_id`, `category`, `category_key`, `description`, `image_url`, `found_date_time`, `found_location`, `location_zone`, `location_detail`, `location_landmark`, `reference_id`, `sub_category`, `current_storage_id`, `storage_room`, `shelf_id`, `bin_id`, `storage_location`, `matched_item_id`, `recorded_by`, `status`, `disposed_at`, `deleted_at`, `created_at`, `updated_at` | ใช้งานแล้ว |
 | 8 | `item_history_log` | ประวัติสถานะของแต่ละชิ้น (ทุกการเปลี่ยนสถานะตั้งแต่แจ้งพบจนถึงจำหน่าย) | `item_id`, `status`, `changed_by`, `changed_at`, `note` | มีตารางแล้ว แต่ยังไม่ได้เชื่อมโยงกับหน้าเว็บ — ต้องทำให้เขียนอัตโนมัติทุกครั้งที่สถานะเปลี่ยน |
 | 9 | `item_media` | รูปภาพประกาศของ (สื่อประกอบของสิ่งของ) | `item_id`, `name`, `url`, `type`, `size` | ใช้งานแล้ว |
@@ -321,6 +321,7 @@ Lost & Found ICT เป็น Web Application ที่ทำหน้าที�
 | `public.report_type_enum` | `lost`, `found` |
 | `public.item_status_enum` | `รอตรวจสอบ`, `อยู่ที่จุดรับฝาก`, `กำลังดำเนินการเคลม`, `คืนสำเร็จ`, `หมดอายุ/ทำลายทิ้ง` |
 | `claim.status` (ค่าที่โค้ดเขียนจริง) | `pending`, `more_info`, `approved`, `rejected`, `completed` |
+| `claim.claim_status` (คอลัมน์คู่ขนานใน `schema.sql:207`) | หน้าเจ้าหน้าที่ + `profile.js:105` อ่าน `status`; `activity.js:151` อ่าน `claim_status` และแปลงค่า `handed_over` (`activity.js:179`) ซึ่งไม่อยู่ในชุดค่าของ `status` |
 
 ### 6.3 Stored Procedure / RPC ที่ใช้
 
@@ -370,7 +371,7 @@ Lost & Found ICT เป็น Web Application ที่ทำหน้าที�
 | **Q-L** | แจ้งเตือนอัตโนมัติเมื่อจับคู่ได้ / อนุมัติคำร้อง | `notification` | ระบบอัตโนมัติ | ตารางมีแล้ว แต่ยังไม่ได้เชื่อมจุดสั่งงาน |
 | **Q-M** | จับคู่ของหายกับของที่พบอัตโนมัติ | `item`, `report` | ระบบอัตโนมัติ | **ยังไม่ได้พัฒนา** — มีเพียงคอลัมน์ `matched_item_id` ที่ยังไม่ได้ถูกเขียนค่า |
 
-> **หมายเหตุ (Q-E):** โค้ดใน `src/js/activity.js` เรียกคอลัมน์ `claim.claim_status` และแปลงค่า `handed_over` แต่ตาราง `claim` ระบุคอลัมน์ `status` และค่าใน enum ไม่มี `handed_over` ต้องปรับให้ชื่อคอลัมน์และค่าสถานะให้ตรงกันก่อนส่งมอบ
+> **หมายเหตุ (Q-E):** โค้ดใน `src/js/activity.js` เรียกคอลัมน์ `claim.claim_status` และแปลงค่า `handed_over` แต่ตาราง `claim` มี **ทั้ง** คอลัมน์ `status` (ค่า `pending/more_info/approved/rejected/completed`) และ `claim_status` (`schema.sql:206-207`) โดย `handed_over` ไม่ใช่ค่าของ `status` ขณะที่หน้าเจ้าหน้าที่และสถิติผู้ใช้อ่าน `status` จึงต้องตั้งค่าทั้งสองคอลัมน์ให้ตรงกันตอนส่งมอบ (`QUERIES.sql:266-269`) ก่อนส่งมอบ
 
 ---
 
@@ -459,7 +460,7 @@ Lost & Found ICT เป็น Web Application ที่ทำหน้าที�
 | **D-01** | **Source Code ของระบบ** | โค้ด Frontend และการเรียกใช้งานฐานข้อมูลทั้งหมด จัดเก็บใน Git Repository พร้อมประวัติการ commit ที่สื่อความหมาย |
 | **D-02** | **เอกสารข้อกำหนดระบบ (Requirements)** | เอกสารนี้ พร้อมระบุว่าฟีเจอร์ใดทำแล้ว/ยังไม่ทำ ตามขอบเขตในหัวข้อ 3 |
 | **D-03** | **แผนภาพ ER Diagram และ Relational Schema** | แสดงความสัมพันธ์ของตารางทั้งหมดในฐานข้อมูล พร้อมระบุ Cardinality และ Primary/Foreign Key |
-| **D-04** | **สคริปต์สร้างฐานข้อมูล (DDL)** | `CREATE TABLE` ทุกตาราง พร้อมข้อจำกัดด้านความถูกต้องของข้อมูล (NOT NULL, CHECK, UNIQUE), Foreign Key, Index และ Enum ที่ใช้ในหัวข้อ 6 |
+| **D-04** | **สคริปต์สร้างฐานข้อมูล (DDL)** | `CREATE TABLE` ทุกตาราง พร้อมข้อจำกัดด้านความถูกต้องของข้อมูล (NOT NULL, CHECK, UNIQUE), Foreign Key, Index และ Enum ที่ใช้ในหัวข้อ 6 — **สถานะปัจจุบัน:** `docs/deliverables/schema.sql` มีครบ 14 ตาราง + FK/UNIQUE/Index แต่**ยังไม่มี CHECK constraint** (รวมถึงรูปแบบชื่อ/เบอร์โทร) จึงยังไม่ครบตามเกณฑ์นี้ |
 | **D-05** | **ข้อมูลตัวอย่างสำหรับทดสอบ (Seed Data)** | ชุดข้อมูลตัวอย่างที่ครอบคลุมทุกสถานะของสิ่งของและคำร้อง เพื่อให้สามารถทดสอบระบบได้ทันทีหลังติดตั้ง |
 | **D-06** | **Stored Procedure / Function / Trigger** | ตรรกะเชิงธุรกิจที่ย้ายไปไว้ฝั่งฐานข้อมูล เช่น `create_report`, `staff_receive_item`, `get_staff_defect_note` พร้อมเอกสารอธิบายพารามิเตอร์และค่าที่คืนกลับ · ตามหัวข้อ 6.3 |
 | **D-07** | **นโยบายควบคุมสิทธิ์ (RLS Policies)** | กฎ Row Level Security ที่บังคับใช้ Information Masking และสิทธิ์ตามบทบาท ตาม BR-03 และ BR-07 รวมถึงการปิดสิทธิ์อ่านตำหนิลับใน `item_secret` จากผู้ใช้ทั่วไป |
