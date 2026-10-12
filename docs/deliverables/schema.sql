@@ -2,6 +2,10 @@
 -- Lost & Found system - generated from the schema diagram
 -- NOTE: data types / lengths / ON DELETE rules are assumptions
 --       (the diagram shows only column names, PKs and FKs).
+-- NOTE (อัปเดต 2026-10-12): ชนิด id ปรับตามโค้ดที่รันจริง —
+--       item.item_id / claim.claim_id เป็นข้อความรหัสอ่านง่าย (VARCHAR(20))
+--       user_account.user_id / category.category_id / storage_point.storage_id
+--       เป็น uuid (CHAR(36)) ดู DATA_DICTIONARY หัวข้อ 8
 -- ============================================================
 
 
@@ -32,7 +36,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- user_account
 -- ------------------------------------------------------------
 CREATE TABLE user_account (
-    user_id        INT UNSIGNED  NOT NULL AUTO_INCREMENT,
+    user_id        CHAR(36)      NOT NULL,
     email          VARCHAR(255)  NOT NULL,
     password_hash  VARCHAR(255)  NOT NULL,
     full_name      VARCHAR(150)  NOT NULL,
@@ -52,7 +56,7 @@ CREATE TABLE user_account (
 -- category
 -- ------------------------------------------------------------
 CREATE TABLE category (
-    category_id    INT UNSIGNED  NOT NULL AUTO_INCREMENT,
+    category_id    CHAR(36)      NOT NULL,
     category_name  VARCHAR(100)  NOT NULL,
     category_key   VARCHAR(50)   NOT NULL,
     is_active      TINYINT(1)    NOT NULL DEFAULT 1,
@@ -66,7 +70,7 @@ CREATE TABLE category (
 -- storage_point
 -- ------------------------------------------------------------
 CREATE TABLE storage_point (
-    storage_id     INT UNSIGNED  NOT NULL AUTO_INCREMENT,
+    storage_id     CHAR(36)      NOT NULL,
     storage_name   VARCHAR(100)  NOT NULL,
     room           VARCHAR(100)  NULL,
     description    TEXT          NULL,
@@ -79,11 +83,11 @@ CREATE TABLE storage_point (
 -- item
 -- ------------------------------------------------------------
 CREATE TABLE item (
-    item_id             INT UNSIGNED  NOT NULL AUTO_INCREMENT,
+    item_id             VARCHAR(20)   NOT NULL,
     reference_id        VARCHAR(50)   NULL,
     item_name           VARCHAR(200)  NOT NULL,
     description         TEXT          NULL,
-    category_id         INT UNSIGNED  NULL,
+    category_id         CHAR(36)      NULL,
     category            VARCHAR(100)  NULL,
     category_key        VARCHAR(50)   NULL,
     sub_category        VARCHAR(100)  NULL,
@@ -92,16 +96,16 @@ CREATE TABLE item (
     location_landmark   VARCHAR(255)  NULL,
     found_location      VARCHAR(255)  NULL,
     found_date_time     DATETIME      NULL,
-    current_storage_id  INT UNSIGNED  NULL,
+    current_storage_id  CHAR(36)      NULL,
     storage_location    VARCHAR(255)  NULL,
     storage_room        VARCHAR(100)  NULL,
     shelf_id            VARCHAR(50)   NULL,
     bin_id              VARCHAR(50)   NULL,
-    status              VARCHAR(30)   NOT NULL DEFAULT 'found',
-    recorded_by         INT UNSIGNED  NULL,
+    status              VARCHAR(30)   NOT NULL DEFAULT 'รอตรวจสอบ',
+    recorded_by         CHAR(36)      NULL,
     disposed_at         DATETIME      NULL,
     image_url           VARCHAR(500)  NULL,
-    matched_item_id     INT UNSIGNED  NULL,
+    matched_item_id     VARCHAR(20)   NULL,
     created_at          DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at          DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     deleted_at          DATETIME      NULL,
@@ -132,7 +136,7 @@ CREATE TABLE item (
 -- ------------------------------------------------------------
 CREATE TABLE item_media (
     media_id    INT UNSIGNED  NOT NULL AUTO_INCREMENT,
-    item_id     INT UNSIGNED  NOT NULL,
+    item_id     VARCHAR(20)   NOT NULL,
     name        VARCHAR(255)  NULL,
     url         VARCHAR(500)  NOT NULL,
     type        VARCHAR(50)   NULL,
@@ -150,7 +154,7 @@ CREATE TABLE item_media (
 -- item_secret  (1:1 with item)
 -- ------------------------------------------------------------
 CREATE TABLE item_secret (
-    item_id      INT UNSIGNED  NOT NULL,
+    item_id      VARCHAR(20)   NOT NULL,
     defect_note  TEXT          NULL,
     updated_at   DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (item_id),
@@ -165,8 +169,8 @@ CREATE TABLE item_secret (
 -- ------------------------------------------------------------
 CREATE TABLE report (
     report_id          INT UNSIGNED  NOT NULL AUTO_INCREMENT,
-    item_id            INT UNSIGNED  NULL,
-    user_id            INT UNSIGNED  NULL,
+    item_id            VARCHAR(20)   NULL,
+    user_id            CHAR(36)      NULL,
     report_type        VARCHAR(30)   NOT NULL,
     incident_location  VARCHAR(255)  NULL,
     incident_datetime  DATETIME      NULL,
@@ -188,9 +192,9 @@ CREATE TABLE report (
 -- claim
 -- ------------------------------------------------------------
 CREATE TABLE claim (
-    claim_id             INT UNSIGNED  NOT NULL AUTO_INCREMENT,
-    item_id              INT UNSIGNED  NOT NULL,
-    user_id              INT UNSIGNED  NULL,
+    claim_id             VARCHAR(20)   NOT NULL,
+    item_id              VARCHAR(20)   NOT NULL,
+    user_id              CHAR(36)      NULL,
     claimant_name        VARCHAR(150)  NOT NULL,
     claimant_student_id  VARCHAR(20)   NULL,
     faculty              VARCHAR(150)  NULL,
@@ -223,7 +227,7 @@ CREATE TABLE claim (
 -- ------------------------------------------------------------
 CREATE TABLE claim_proof (
     proof_id    INT UNSIGNED  NOT NULL AUTO_INCREMENT,
-    claim_id    INT UNSIGNED  NOT NULL,
+    claim_id    VARCHAR(20)   NOT NULL,
     name        VARCHAR(255)  NULL,
     url         VARCHAR(500)  NOT NULL,
     created_at  DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -240,7 +244,7 @@ CREATE TABLE claim_proof (
 -- ------------------------------------------------------------
 CREATE TABLE claim_activity_log (
     log_id      INT UNSIGNED  NOT NULL AUTO_INCREMENT,
-    claim_id    INT UNSIGNED  NOT NULL,
+    claim_id    VARCHAR(20)   NOT NULL,
     title       VARCHAR(255)  NOT NULL,
     created_at  DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (log_id),
@@ -256,9 +260,9 @@ CREATE TABLE claim_activity_log (
 -- ------------------------------------------------------------
 CREATE TABLE handover (
     handover_id         INT UNSIGNED  NOT NULL AUTO_INCREMENT,
-    item_id             INT UNSIGNED  NOT NULL,
-    claim_id            INT UNSIGNED  NULL,
-    staff_id            INT UNSIGNED  NULL,
+    item_id             VARCHAR(20)   NOT NULL,
+    claim_id            VARCHAR(20)   NULL,
+    staff_id            CHAR(36)      NULL,
     recipient_name      VARCHAR(150)  NOT NULL,
     handover_date       DATETIME      NOT NULL,
     staff_name          VARCHAR(150)  NULL,
@@ -289,8 +293,8 @@ CREATE TABLE handover (
 -- ------------------------------------------------------------
 CREATE TABLE disposal (
     disposal_id   INT UNSIGNED  NOT NULL AUTO_INCREMENT,
-    item_id       INT UNSIGNED  NOT NULL,
-    staff_id      INT UNSIGNED  NULL,
+    item_id       VARCHAR(20)   NOT NULL,
+    staff_id      CHAR(36)      NULL,
     dispose_type  VARCHAR(50)   NOT NULL,
     disposed_at   DATETIME      NOT NULL,
     note          TEXT          NULL,
@@ -312,10 +316,10 @@ CREATE TABLE disposal (
 -- ------------------------------------------------------------
 CREATE TABLE item_history_log (
     log_id            INT UNSIGNED  NOT NULL AUTO_INCREMENT,
-    item_id           INT UNSIGNED  NOT NULL,
-    user_id           INT UNSIGNED  NULL,
-    storage_point_id  INT UNSIGNED  NULL,
-    claim_id          INT UNSIGNED  NULL,
+    item_id           VARCHAR(20)   NOT NULL,
+    user_id           CHAR(36)      NULL,
+    storage_point_id  CHAR(36)      NULL,
+    claim_id          VARCHAR(20)   NULL,
     action_type       VARCHAR(50)   NOT NULL,
     description       TEXT          NULL,
     created_at        DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -344,9 +348,9 @@ CREATE TABLE item_history_log (
 -- ------------------------------------------------------------
 CREATE TABLE notification (
     notification_id    INT UNSIGNED  NOT NULL AUTO_INCREMENT,
-    user_id            INT UNSIGNED  NOT NULL,
-    item_id            INT UNSIGNED  NULL,
-    claim_id           INT UNSIGNED  NULL,
+    user_id            CHAR(36)      NOT NULL,
+    item_id            VARCHAR(20)   NULL,
+    claim_id           VARCHAR(20)   NULL,
     notification_type  VARCHAR(50)   NOT NULL,
     message            TEXT          NOT NULL,
     is_read            TINYINT(1)    NOT NULL DEFAULT 0,

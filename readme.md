@@ -118,6 +118,7 @@ VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 | `create_report` | สร้างรายการแจ้งของหาย / แจ้งพบของ พร้อมบันทึกตำหนิลับลง `item_secret` |
 | `staff_create_item` | เจ้าหน้าที่สร้างรายการสิ่งของที่รับเข้ามาใหม่ |
 | `delete_report` | ยกเลิกโพสต์ของผู้ใช้เอง |
+| `update_report` | แก้ไขโพสต์ของผู้ใช้เอง (ส่งรูปเป็น `null` เพื่อคงรูปเดิมไว้) |
 | `get_staff_defect_note` | อ่านตำหนิลับจาก `item_secret` โดยตรวจสอบสิทธิ์ก่อน |
 | `create_claim` | ยื่นคำร้องขอรับคืนพร้อมหลักฐาน |
 | `staff_review_claim` | ตรวจสอบ อนุมัติ หรือปฏิเสธคำร้อง พร้อมบันทึกประวัติ |
@@ -139,7 +140,7 @@ VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 npm run dev
 ```
 
-ระบบจะเปิดเบราว์เซอร์ไปที่ `http://localhost:5174/src/login.html` (หน้าเข้าสู่ระบบ) ให้อัตโนมัติ
+ระบบจะเปิดเบราว์เซอร์ไปที่ http://localhost:5173/src/register.html (หน้าเข้าสู่ระบบ) ให้อัตโนมัติ
 
 หลังแก้ไขไฟล์ใน `.env` ต้อง **รีสตาร์ท dev server** อีกครั้งจึงจะมีผล
 
@@ -147,7 +148,7 @@ npm run dev
 
 ### ผู้ใช้งานทั่วไป
 
-1. เปิด `http://localhost:5174/src/login.html` แล้วสมัครสมาชิกหรือเข้าสู่ระบบ
+1. เปิด `(http://localhost:5173/src/register.html)` แล้วสมัครสมาชิกหรือเข้าสู่ระบบ
 2. จะถูกพาไปยังหน้าหลัก `home.html` ซึ่งแสดงรายการสิ่งของล่าสุด
 3. กด **แจ้งของหาย / พบของ** เพื่อเริ่มกรอกข้อมูล 3 ขั้นตอน
 4. ค้นหาหรือคัดกรองสิ่งของจากเมนูค้นหา หรือเปิด `browse.html`
@@ -158,7 +159,7 @@ npm run dev
 
 ### เจ้าหน้าที่ / Admin
 
-1. เข้าสู่ระบบด้วยบัญชีที่มี `role` เป็น `staff` ระบบจะพาไปยัง `staff-dashboard.html` โดยอัตโนมัติ
+1. เข้าสู่ระบบด้วยบัญชีที่มี `role` เป็น `staff` ระบบจะพาไปยัง `staff-dashboard.html` โดยอัตโนมัติ ส่วนบัญชี `admin` จะพาไปยัง `admin-storage-points.html` (หน้าจัดการสถานที่เก็บ) และถูกจำกัดให้ใช้ได้เฉพาะหน้านั้นกับ `staff-profile.html`
 2. ตรวจสอบคิวคำร้องที่ `staff-verify-claims.html`
    - เปิดรายละเอียดเพื่อดูหลักฐานและตำหนิที่ใช้ยืนยันสิทธิ์
    - เลือก **อนุมัติ** / **ขอข้อมูลเพิ่ม** / **ปฏิเสธ** พร้อมระบุเหตุผล
@@ -175,7 +176,7 @@ npm run dev
 และ **Stored Procedure / RPC** สำหรับตรรกะเชิงธุรกิจ → **PostgreSQL** · รูปภาพเก็บบน **Supabase Storage**
 
 ไม่มี Node.js server แยกต่างหาก ตรรกะเชิงธุรกิจที่กระทบหลายตารางจึงอยู่ที่ฝั่งฐานข้อมูล
-ผ่าน RPC 16 ตัว (ดูรายการในข้อ **5. สร้าง Stored Procedure / RPC**)
+ผ่าน RPC 17 ตัว (ดูรายการในข้อ **5. สร้าง Stored Procedure / RPC**)
 
 ### การยืนยันตัวตน
 
@@ -183,7 +184,7 @@ npm run dev
   ซึ่งเก็บทุกบทบาท (`user`, `staff`, `admin`) ในตารางเดียว แยกด้วยคอลัมน์ `role`
 - ไม่มีการเขียนระบบ JWT หรือ hashing รหัสผ่านเองในฝั่ง JavaScript
 - `supabase.auth` ถูกใช้เฉพาะจุดลืมรหัสผ่าน (`resetPasswordForEmail`) และการเช็ค session ในบางหน้า
-  (`forgotpassword.js`, `profile.js`, `browse.js`) — ยังไม่มี OAuth หรือ Magic link
+  (`forgotpassword.js`, `browse.js`) — ยังไม่มี OAuth หรือ Magic link
 - หน้าของเจ้าหน้าที่และผู้ดูแลถูกคุ้มกันด้วย `requireStaff` ใน `src/js/staff-auth.js` ทุกหน้า
 
 ### การควบคุมสิทธิ์
@@ -198,7 +199,7 @@ npm run dev
 ### ฐานข้อมูล
 
 - **14 ตาราง** แยกตามขอบเขตงาน (ดูรายการในข้อ **4. สร้างตารางฐานข้อมูล**)
-- **16 RPC** เป็นจุดที่ตรรกะเชิงธุรกิจทุกอย่างถูกรวมไว้
+- **17 RPC** เป็นจุดที่ตรรกะเชิงธุรกิจทุกอย่างถูกรวมไว้
 - **Soft delete** ด้วยคอลัมน์ `deleted_at` และ **สถานะสิ่งของ** (`item.status`) เป็นตัวกำหนดว่าหน้าไหนแสดงปุ่มอะไรให้ใคร
 - ฐานข้อมูลจริงมี **trigger 5 ตัว** (4 ตาราง) ได้แก่ `set_updated_at` และ `item_sync_category` พร้อม function ช่วย `app_sync_item_claim_status` และ**ไม่มี view** · แต่ยังไม่มีไฟล์ SQL เก็บไว้ในโปรเจกต์ (รายละเอียดที่ [DATA_DICTIONARY §7](./docs/deliverables/DATA_DICTIONARY.md))
 
@@ -225,7 +226,7 @@ npm run dev
 | [requirements.md](./requirements.md) | ข้อกำหนดฉบับเต็มของระบบ 11 หัวข้อ: วัตถุประสงค์ (G-1–G-5) ฟีเจอร์ (F-01–F-10) กฎทางธุรกิจ (BR-01–BR-09) ขั้นตอนการใช้งาน (WF-01–WF-08) โครงสร้างฐานข้อมูล 14 ตาราง ตัวอย่าง Query (Q-A–Q-M) ข้อจำกัด (C1–C8) สิ่งที่ไม่ต้องทำ (N-01–N-13) หลักการออกแบบ (KP-01–KP-08) และสิ่งที่ต้องส่งมอบ (D-01–D-11) |
 | [docs/DESIGN_DECISIONS.md](./docs/DESIGN_DECISIONS.md) | บันทึกการตัดสินใจออกแบบ 20 ข้อ (DD-01–DD-20) พร้อมทางเลือกที่พิจารณา เหตุผล ผลกระทบ และสถานะ |
 | [docs/GAP_ANALYSIS.md](./docs/GAP_ANALYSIS.md) | เทียบระบบปัจจุบันกับ requirements 8 หัวข้อ: สรุปภาพรวม · ตาราง FR (F-01–F-10) · ตาราง BR-01–BR-09 · UI ที่เพิ่มรอบนี้ (ไฟล์จริง) · วิธีที่ตรวจสอบ · สิ่งที่ยังไม่ทำ · ขั้นตอนถัดไป |
-| [docs/deliverables/DATA_DICTIONARY.md](./docs/deliverables/DATA_DICTIONARY.md) | พจนานุกรมข้อมูล 14 ตาราง + 16 RPC + Storage 4 bucket + ชุดค่าสถานะ พร้อมระดับหลักฐานรายคอลัมน์ (✅ จริง / ⬜ สันนิษฐาน / ❓ ต้องยืนยัน) |
+| [docs/deliverables/DATA_DICTIONARY.md](./docs/deliverables/DATA_DICTIONARY.md) | พจนานุกรมข้อมูล 14 ตาราง + 17 RPC + Storage 4 bucket + ชุดค่าสถานะ พร้อมระดับหลักฐานรายคอลัมน์ (✅ จริง, ⬜ สันนิษฐาน, ❓ ต้องยืนยัน) |
 | [docs/deliverables/ER_DIAGRAM.md](./docs/deliverables/ER_DIAGRAM.md) | แผนภาพ ER แบบเต็ม (Mermaid erDiagram) 14 ตาราง + ตารางสรุป Relationship 23 เส้น (1:1 / 1:N) พร้อม FK และระดับหลักฐาน |
-| [docs/deliverables/schema.sql](./docs/deliverables/schema.sql) | DDL ร่าง (MySQL 8 / InnoDB) ครบ 14 ตาราง + 24 FK — ยังไม่รวม enum/RLS/RPC |
+| [docs/deliverables/schema.sql](./docs/deliverables/schema.sql) | DDL ร่าง (MySQL 8 / InnoDB) ครบ 14 ตาราง + 24 FK — ยังไม่รวม enum/RLS/ชุด RPC หลัก แต่มีภาคผนวก PostgreSQL (ฟังก์ชัน 3 ตัว + ทริกเกอร์ 5 ตัว) ที่สกัดจากฐานข้อมูลจริง |
 | [docs/deliverables/QUERIES.sql](./docs/deliverables/QUERIES.sql) | ตัวอย่างคำสั่ง SQL ตาม Q-A–Q-M ครบ 13 operation (MySQL 8 ให้ตรง schema.sql) |

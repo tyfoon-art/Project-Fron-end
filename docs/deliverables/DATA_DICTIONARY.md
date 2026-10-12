@@ -15,7 +15,7 @@
 | หมวด | จำนวน | หมายเหตุ |
 |------|------|----------|
 | ตาราง (schema `public`) | 14 | ดูหัวข้อ 3 |
-| RPC ที่โค้ดเรียกจริง | 16 | ดูหัวข้อ 5 |
+| RPC ที่โค้ดเรียกจริง | 17 | ดูหัวข้อ 5 |
 | Storage bucket | 4 | `item-media`, `claim-evidence`, `handover-evidence`, `avatars` (หัวข้อ 6) |
 | View | **0** | ตรวจ `information_schema.views` + `pg_matviews` ใน schema `public` แล้วไม่พบแถว |
 | Trigger | **5** | 4 ตาราง (`user_account`, `item`, `report`, `claim`) — ดูหัวข้อ 7 |
@@ -275,11 +275,11 @@ location_landmark, found_location, found_date_time, storage_room, shelf_id, bin_
 |--------|-----|---------|
 | `disposal.dispose_type` | `donate` \| `destroy` \| `other` | `staff-dispose-item.html:94-110` |
 | `user_account.role` | `user` \| `staff` \| `admin` | `profile.js:69` |
-| โดเมนอีเมล | ทั่วไป: `@gmail.com`, `@up.ac.th` · เจ้าหน้าที่: `@staff.com` เท่านั้น | `profile.js:8-9`, `register.js:125` |
+| โดเมนอีเมล | ทั่วไป: `@gmail.com`, `@up.ac.th` · เจ้าหน้าที่: `@staff.com` เท่านั้น · admin: อีเมลคงที่ `admin1@admin.com` | `profile.js:8-9`, `register.js:125`, `login.js:4` |
 
 ---
 
-## 5. RPC ทั้ง 16 ตัว (ที่โค้ดเรียกจริง)
+## 5. RPC ทั้ง 17 ตัว (ที่โค้ดเรียกจริง)
 
 | # | RPC | หน้าที่ | ผู้เรียก | พารามิเตอร์ที่สังเกตได้ |
 |---|-----|--------|---------|------------------------|
@@ -288,19 +288,20 @@ location_landmark, found_location, found_date_time, storage_room, shelf_id, bin_
 | 3 | `update_user_profile` | แก้โปรไฟล์ผู้ใช้ (SECURITY DEFINER) | `profile.js` | `p_user_id, p_full_name, p_email, p_phone_number, p_avatar_url` |
 | 4 | `staff_upsert_profile` | เพิ่ม/แก้โปรไฟล์เจ้าหน้าที่ | `staff-profile.js` | `p_staff_id, p_full_name, p_email, p_phone` |
 | 5 | `staff_update_avatar` | เปลี่ยนรูปโปรไฟล์เจ้าหน้าที่ | `staff-profile.js` | `p_staff_id, p_avatar_url` |
-| 6 | `create_report` | สร้างโพสต์แจ้งหาย/แจ้งพบ (+ รูปลับ) | `report3.js:138` | `p_report_type, p_user_id, p_item_name, p_category_id, p_description, p_image_url, p_incident_location, p_incident_datetime, p_secret_image` |
+| 6 | `create_report` | สร้างโพสต์แจ้งหาย/แจ้งพบ (+ รูปลับ) | `report3.js:256` | `p_report_type, p_user_id, p_item_name, p_category_id, p_description, p_image_url, p_incident_location, p_incident_datetime, p_secret_image` |
 | 7 | `delete_report` | ยกเลิกโพสต์ของตนเอง (Soft delete) | `detail.js` | `p_report_id, p_user_id` |
-| 8 | `staff_create_item` | เจ้าหน้าที่สร้างรายการของใหม่ | `staff-inventory-add.js:631` | `p_item` (obj 16 คีย์), `p_media` (arr), `p_staff_id, p_storage_id` |
-| 9 | `staff_receive_item` | รับฝากเข้าจุดเก็บ + ตำแหน่งจริง | `staff-inventory-add.js:573` | `p_item_id, p_storage_room, p_shelf_id, p_bin_id, p_storage_location, p_storage_id, p_media, p_staff_id` |
-| 10 | `get_staff_defect_note` | อ่านตำหนิลับ (ตรวจสิทธิ์ใน DB) | `detail.js`, `staff-post-detail.js` | `p_item_id, p_user_id` |
-| 11 | `create_claim` | ยื่นคำร้องขอรับคืน | `claim.js:176` | `p_item_id, p_user_id, p_claimant_name, p_claimant_student_id, p_description, p_email, p_faculty, p_ownership_evidence, p_phone` |
-| 12 | `staff_review_claim` | อนุมัติ/ปฏิเสธ/ขอข้อมูลเพิ่ม | `staff-verify-detail.js` | `p_claim_id, p_status, p_reviewer_note, p_reviewer_name, p_staff_id` |
-| 13 | `record_handover` | บันทึกการส่งมอบคืน | `staff-handover.js:528` | `p_claim_id, p_note, p_proof_urls, p_signature_image_url, p_staff_id` |
-| 14 | `staff_dispose_item` | จำหน่ายสิ่งของตกค้าง | `staff-dispose-item.js:311` | `p_item_id, p_dispose_type, p_note, p_staff_id` |
-| 15 | `admin_upsert_storage_point` | เพิ่ม/แก้จุดรับฝาก | `admin-storage-points.js:205` | `p_admin_id, p_storage_id, p_storage_name, p_room, p_description` |
-| 16 | `admin_delete_storage_point` | ปิดจุดรับฝาก | `admin-storage-points.js` | `p_admin_id, p_storage_id` |
+| 8 | `update_report` | แก้ไขโพสต์ของตนเอง — ส่งรูปเป็น `null` เพื่อคงรูปเดิม | `report3.js:241-251` | `p_report_id, p_user_id, p_item_name, p_category_id, p_description, p_image_url, p_incident_location, p_incident_datetime, p_secret_image` |
+| 9 | `staff_create_item` | เจ้าหน้าที่สร้างรายการของใหม่ | `staff-inventory-add.js:631` | `p_item` (obj 16 คีย์), `p_media` (arr), `p_staff_id, p_storage_id` |
+| 10 | `staff_receive_item` | รับฝากเข้าจุดเก็บ + ตำแหน่งจริง | `staff-inventory-add.js:573` | `p_item_id, p_storage_room, p_shelf_id, p_bin_id, p_storage_location, p_storage_id, p_media, p_staff_id` |
+| 11 | `get_staff_defect_note` | อ่านตำหนิลับ (ตรวจสิทธิ์ใน DB) | `detail.js`, `staff-post-detail.js` | `p_item_id, p_user_id` |
+| 12 | `create_claim` | ยื่นคำร้องขอรับคืน | `claim.js:176` | `p_item_id, p_user_id, p_claimant_name, p_claimant_student_id, p_description, p_email, p_faculty, p_ownership_evidence, p_phone` |
+| 13 | `staff_review_claim` | อนุมัติ/ปฏิเสธ/ขอข้อมูลเพิ่ม | `staff-verify-detail.js` | `p_claim_id, p_status, p_reviewer_note, p_reviewer_name, p_staff_id` |
+| 14 | `record_handover` | บันทึกการส่งมอบคืน | `staff-handover.js:528` | `p_claim_id, p_note, p_proof_urls, p_signature_image_url, p_staff_id` |
+| 15 | `staff_dispose_item` | จำหน่ายสิ่งของตกค้าง | `staff-dispose-item.js:311` | `p_item_id, p_dispose_type, p_note, p_staff_id` |
+| 16 | `admin_upsert_storage_point` | เพิ่ม/แก้จุดรับฝาก | `admin-storage-points.js:205` | `p_admin_id, p_storage_id, p_storage_name, p_room, p_description` |
+| 17 | `admin_delete_storage_point` | ปิดจุดรับฝาก | `admin-storage-points.js` | `p_admin_id, p_storage_id` |
 
-RPC ทั้ง 16 ตัวข้างต้นคือชุดที่โค้ดเรียกจริงทั้งหมด — ไม่มี RPC ค้างจากเอกสารข้อกำหนดเหลืออีกแล้ว
+RPC ทั้ง 17 ตัวข้างต้นคือชุดที่โค้ดเรียกจริงทั้งหมด — ไม่มี RPC ค้างจากเอกสารข้อกำหนดเหลืออีกแล้ว
 
 ### ข้อผิดพลาดที่โค้ดตรวจสอบ (ต้องคงไว้เมื่อเขียน RPC ใน `schema.sql`)
 
@@ -341,7 +342,7 @@ RPC ทั้ง 16 ตัวข้างต้นคือชุดที่โ
 | **View** | **0** | `information_schema.views` และ `pg_matviews` ใน schema `public` ไม่พบแถว |
 | **Trigger** | **5** (4 ตาราง) | ดูรายการด้านล่าง |
 | **Function นอกชุด RPC** | **3** | `set_updated_at`, `item_sync_category`, `app_sync_item_claim_status` (ดูด้านล่าง) |
-| **Function 16 RPC** | ตามหัวข้อ 5 | `profile.js:142` ยืนยันว่า `update_user_profile` เป็น `SECURITY DEFINER` |
+| **Function 17 RPC** | ตามหัวข้อ 5 | `profile.js:142` ยืนยันว่า `update_user_profile` เป็น `SECURITY DEFINER` |
 | **RLS** | เปิดใช้งาน | `claim.js:175` "anon เขียนตารางตรงไม่ได้ เพราะเปิด RLS" · `profile.js:141` `user_account` มีแค่ policy อ่าน · `staff-dispose-item.js:310` "anon ไม่มีสิทธิ์เขียนตารางโดยตรง" |
 | **สิทธิ์หน้าเว็บ** | ฝั่ง client | `requireStaff` (`staff-auth.js`) + `localStorage` — ยังไม่ผูกกับ RLS ระดับแถว (ต้องยืนยันใน `schema.sql`) |
 
