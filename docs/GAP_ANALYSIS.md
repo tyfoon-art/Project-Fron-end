@@ -32,9 +32,9 @@
 | โครงสร้างระบบ | สถานะ |
 |--------------|--------|
 | ตารางฐานข้อมูล | มีครบ 14 ตาราง (`src/js` เรียกจริง) |
-| RPC ที่ถูกเรียกจริง | 16 ตัว |
+| RPC ที่ถูกเรียกจริง | 17 ตัว |
 | ตารางที่โค้ดไม่เคยเรียก | `item_history_log`, `notification` (`disposal` เขียนผ่าน RPC เท่านั้น) |
-| UI | 24 หน้าใน `src/` ↔ 23 ไฟล์ JS + `staff-auth.js` + `supabaseClient.js` |
+| UI | 24 หน้าใน `src/` ↔ 24 ไฟล์ JS + `staff-auth.js` + `supabaseClient.js` (เพิ่ม `reportDraftImages.js` — helper เก็บรูปชั่วคราวด้วย IndexedDB) |
 | Storage bucket | 4 ตัว (`item-media`, `claim-evidence`, `handover-evidence`, `avatars`) |
 
 ---
@@ -44,8 +44,8 @@
 | ID | ฟีเจอร์ | สถานะ | หลักฐานหลัก | ช่องว่าง |
 |----|--------|-------|-------------|---------|
 | F-01 | ยืนยันตัวตนและจัดการบัญชีผู้ใช้ | ⚠️ ทำแล้ว (มี 2 จุดผิดพลาด) | `register.js:112` `register_user`, `login.js:94` `verify_login`, `profile.js` `update_user_profile` | ลืมรหัสผ่านใช้ `supabase.auth.resetPasswordForEmail` (`forgotpassword.js:49-55`) แต่ login เป็น RPC → ไม่ได้อีเมลกลับ · สิทธิ์อิง `localStorage` แก้ค่าเองได้ |
-| F-02 | แจ้งพบสิ่งของ + ซ่อนข้อมูลสำคัญ | ⚠️ ทำแล้ว (ผิดแบบ 1 จุด) | `report3.js:138` `create_report`, `detail.js:312-380` `get_staff_defect_note` | รูปหลัก/รูปลับส่งเป็น **base64** เข้า DB (ขัด KP-07/TS-04) · ต้องยืนยันว่าข้อมูลลับลง `item_secret` จริง |
-| F-03 | แจ้งของหาย | ✅ ทำแล้ว | `report.js`→`report2.js`→`report3.js` ใช้เส้นทางเดียวกับ F-02 แยกด้วย `report_type` | ฟอร์มแยก 3 หน้า เสี่ยงข้อมูลสูญหายเมื่อสัญญาณหลุด (C3) |
+| F-02 | แจ้งพบสิ่งของ + ซ่อนข้อมูลสำคัญ | ⚠️ ทำแล้ว (ผิดแบบ 1 จุด) | `report3.js:256` `create_report`, `detail.js:312-380` `get_staff_defect_note` · ตรวจขนาดรูป >5 MB แจ้งทันทีที่เลือก (`report3.js:93-98,158-163`) | รูปหลัก/รูปลับส่งเป็น **base64** เข้า DB (ขัด KP-07/TS-04) · ต้องยืนยันว่าข้อมูลลับลง `item_secret` จริง |
+| F-03 | แจ้งของหาย | ✅ ทำแล้ว | `report.js`→`report2.js`→`report3.js` ใช้เส้นทางเดียวกับ F-02 แยกด้วย `report_type` | ฟอร์มแยก 3 หน้า — บรรเทาความเสี่ยงข้อมูล/รูปหายแล้วด้วย `reportDraftImages.js` (IndexedDB) + restore จาก `sessionStorage` (C3) |
 | F-04 | ค้นหาและคัดกรอง | ทำแล้ว (กรองฝั่ง client) | `browse.js:82-190` ดึงรายการที่ยังไม่ปิดเคสมาแล้วกรองในเบราว์เซอร์ | ไม่มี pagination/debounce — ดึงข้อมูลทั้งก้อนมากรองในเครื่อง |
 | F-05 | จับคู่อัตโนมัติและแจ้งเตือน | ❌ ยังไม่ทำ | `detail.js:229-245` **อ่าน** `matched_item_id` อย่างเดียว ไม่มีโค้ดเขียน | ไม่มี `notification`, ไม่มีป้ายแจ้งเตือนบนหน้าเว็บ |
 | F-06 | ยื่นคำร้องและยืนยันสิทธิ์ | ⚠️ ทำแล้ว (2 จุดผิดพลาด) | `claim.js:176` `create_claim`, `staff-verify-detail.js` `staff_review_claim` | `activity.js:151` อ่าน `claim.claim_status` แต่ที่อื่นใช้ `status` · หลักฐานเก็บ 2 ที่ (JSON `ownership_evidence` + ตาราง `claim_proof`) |
@@ -65,7 +65,7 @@
 | BR-03 | ซ่อนข้อมูลลับ อ่านผ่าน RPC เท่านั้น | 🔶 ทำแล้วบางส่วน | อ่านผ่าน `rpc('get_staff_defect_note')` (`detail.js:312-380`) · แยกตาราง `item_secret` | รูปลับถูกส่งเป็น base64 ไปกับ `create_report` (`report3.js:245-270`) — ต้องยืนยันปลายทาง ไม่ขัด KP-07/TS-04 |
 | BR-04 | 1 คำร้อง "รอตรวจสอบ" ต่อคนต่อของ · กันผู้แจ้งพบยื่นของตัวเอง | ⚠️ ต้องยืนยันใน DB | ไม่พบการตรวจฝั่งโค้ดใน `claim.js` | `create_claim` ต้องตรวจเองในฝั่งฐานข้อมูล — ดู DATA_DICTIONARY §8 ข้อ 12 |
 | BR-05 | เปลี่ยนสถานะตามลำดับ ปิดเคสเมื่อ `คืนสำเร็จ`/`หมดอายุ/ทำลายทิ้ง` | ✅ ทำแล้ว | ยื่นคำร้องได้เฉพาะ `อยู่ที่จุดรับฝาก` (`claim.js:3,84,113`) · ปิดเคส `CLOSED_STATUSES` (`detail.js:145`) · สถานะเปลี่ยนผ่าน RPC + ตรวจ `ITEM_NOT_PENDING`/`STAFF_ONLY` (`staff-inventory-add.js:656-660`) | ตรรกะอยู่ใน RPC ที่ยังไม่มี SQL ในโปรเจกต์ — ต้องเก็บไว้ใน `schema.sql` |
-| BR-06 | เจ้าของแก้/ยกเลิกโพสต์ได้เฉพาะก่อนเข้าคลัง | 🔶 ทำแล้วบางส่วน | `delete_report` + ตรวจ `NOT_OWNER`/`EDIT_NOT_ALLOWED`/`REPORT_NOT_FOUND` (`detail.js:414-418`) | เงื่อนไขจริงคือ "เฉพาะสถานะ `รอตรวจสอบ`" ไม่ใช่ `แจ้งพบ`/`แจ้งหาย` ตามสเปก · ระบุตัวเจ้าของจาก `localStorage` |
+| BR-06 | เจ้าของแก้/ยกเลิกโพสต์ได้เฉพาะก่อนเข้าคลัง | 🔶 ทำแล้วบางส่วน | `delete_report` + ตรวจ `NOT_OWNER`/`EDIT_NOT_ALLOWED`/`REPORT_NOT_FOUND` (`detail.js:414-418`) | แจ้งพบแก้/ลบได้เฉพาะสถานะ `รอตรวจสอบ` ส่วนแจ้งหายแก้/ลบได้ทุกสถานะ (`detail.js:156,159,391`; `report.js:69`) · ระบุตัวเจ้าของจาก `localStorage` (แก้เองได้) |
 | BR-07 | เฉพาะ staff ประจำจุดนั้น หรือ Admin เท่านั้นที่อนุมัติคำร้อง | 🔶 ทำแล้วบางส่วน | ทุกหน้า staff เรียก `requireStaff` (`staff-auth.js`) · `staff_review_claim` รับ `p_staff_id` | **ไม่พบการจำกัดตาม "จุดรับฝากของสิ่งของ"** — staff คนใดก็อนุมัติได้ทุกจุด · ต้องยืนยันว่า RPC ตรวจ role ใน DB |
 | BR-08 | เกิน 90 วันนับจาก "วันที่รับฝาก" + แจ้ง Admin | 🔶 ทำแล้วบางส่วน | `DISPOSAL_DAYS = 90` + รายการตกค้าง + จำหน่ายผ่าน `staff_dispose_item` (`staff-overdue-list.js:21,60-80`, `staff-dispose-item.js:311`) | นับจาก `item.created_at` ไม่ใช่วันรับฝาก (`staff-overdue-list.js:60-80`) · **ไม่มีการแจ้งเตือน** — `notification` ไม่มีโค้ดเรียก |
 | BR-09 | บันทึกการส่งมอบถาวร ไม่ให้ลบ/แก้ | ✅ ทำแล้ว | `record_handover` บันทึกผู้รับ/วันเวลา/เจ้าหน้าที่/รูป/ลายเซ็น (`staff-handover.js:528-533`) · ไม่มีหน้าไหนลบ/แก้ `handover` (และ client ไม่มี `.delete` เลย) | `item_history_log` ยังไม่ถูกเขียน — ประวัติสถานะรายชิ้น (KP-08) ยังขาด · ต้องยืนยัน policy ห้ามลบใน `schema.sql` |
@@ -82,11 +82,13 @@
 | `login.html` | เปลี่ยนชื่อจาก `Login.html` | ✅ ใช้งานแล้ว | ล็อกอินผู้ใช้ทั่วไป |
 | `report2.html` | เปลี่ยนชื่อจาก `report-step2.html` | ✅ ใช้งานแล้ว | ขั้นที่ 2 ของฟอร์มแจ้งพบ/แจ้งหาย |
 | `report3.html` | เปลี่ยนชื่อจาก `report-step3.html` | ✅ ใช้งานแล้ว | ขั้นที่ 3 (สรุป + บันทึก) |
-| `admin-storage-points.html` | **เพิ่มใหม่** | ✅ ใช้งานแล้ว | จัดการจุดรับฝาก — เฉพาะ admin (`admin-storage-points.js`) |
+| `admin-storage-points.html` | **เพิ่มใหม่** | ✅ ใช้งานแล้ว | จัดการจุดรับฝาก (เพิ่ม/แก้ไข/ลบ) — เฉพาะ admin (`admin-storage-points.js`) |
 | `staff-post-list.html` | **เพิ่มใหม่** | ✅ ใช้งานแล้ว | รายการโพสต์ที่รับเข้าคลังได้ — เฉพาะ staff (`staff-post-list.js`) |
 | `staff-post-detail.html` | **เพิ่มใหม่** | ✅ ใช้งานแล้ว | รายละเอียดโพสต์ฝั่งเจ้าหน้าที่ + ปุ่มบันทึกเข้าคลัง (`staff-post-detail.js`) |
 | `staff-dispose-item.html` | **เพิ่มใหม่** | ✅ ใช้งานแล้ว | หน้าจำหน่ายสิ่งของตกค้างแทน `staff-dispose-process.html` เป็น 1 ขั้นตอน (`staff-dispose-item.js`) |
 | `staff-dispose-process.html` | มีจากเวอร์ชันก่อนหน้า | ⚠️ **หน้า orphan** | อ้าง `js/staff-dispose-process.js` **ที่ไม่มีไฟล์** และไม่มีหน้าไหนลิงก์มาหา — ถูกแทนที่ด้วย `staff-dispose-item.html` แล้ว |
+
+เพิ่มไฟล์ JS ใหม่ `src/js/reportDraftImages.js` — helper เก็บรูปที่เลือกไว้ชั่วคราวด้วย IndexedDB ระหว่าง 3 ขั้นตอนโพสต์ (ไม่มีหน้า HTML ของตัวเอง)
 
 อีก 16 หน้าที่เหลือ (`activity`, `browse`, `claim`, `detail`, `forgotpassword`, `home`, `profile`, `register`, `report`,
 `staff-dashboard`, `staff-handover`, `staff-inventory-add`, `staff-overdue-list`, `staff-profile`,
@@ -98,13 +100,13 @@
 
 การตรวจนี้ครอบคลุมลำดับชั้นต่อไปนี้ ไม่หยุดแค่ build ผ่าน:
 
-1. **อ่านโค้ดจริงทั้งหมด** — เปิดทุกไฟล์ใน `src/js/*.js` (24 ไฟล์) และ `src/*.html` แล้ว
+1. **อ่านโค้ดจริงทั้งหมด** — เปิดทุกไฟล์ใน `src/js/*.js` (26 ไฟล์) และ `src/*.html` แล้ว
    ทุกข้อสรุปในหัวข้อ 3–4 มีหลักฐาน `file:line` กำกับ ไม่มีข้อใดที่ใช้การเดาจากชื่อไฟล์
 2. **ตรวจความครบไฟล์ HTML ↔ JS** — ตรวจ `<script src>` ของทุกหน้า เทียบกับไฟล์ใน `src/js/`:
    ตรงกัน 23/24 หน้า · ยกเว้น `staff-dispose-process.html` ที่ชี้ `js/staff-dispose-process.js` ซึ่งไม่มีอยู่จริง
 3. **ตรวจลิงก์ข้ามหน้า** — grep ทุก `href="*.html"` ใน `src/`:
    `staff-dispose-process.html` ไม่มีหน้าใดเข้าถึงได้ (orphan)
-4. **สแกนการเรียกฐานข้อมูล** — รายการ `.from(...)` / `.rpc(...)` ทั้งหมดใน `src/js` ครบ 16 RPC และ
+4. **สแกนการเรียกฐานข้อมูล** — รายการ `.from(...)` / `.rpc(...)` ทั้งหมดใน `src/js` ครบ 17 RPC และ
    ตรงกับตาราง RPC ใน DATA_DICTIONARY §5 · ไม่พบ `.insert()`/`.update()`/`.delete()` ที่เขียนตารางตรงจาก client
 5. **Build** — `npm run build` (Vite) ผ่าน และ `dist/` มีผลลัพธ์จริง ·
    แต่ build ผ่าน = ยืนยัน **syntax + ลิงก์ import เท่านั้น** ไม่ยืนยันว่าระบบทำงานถูกต้อง
@@ -137,7 +139,7 @@
 | นับ 90 วันจาก `item.created_at` ไม่ใช่วันรับฝากจริง | `staff-overdue-list.js:60-80` | จัดของ"เกินกำหนด"เร็วเกินจริง · BR-08 | กลาง |
 | ยืนยันตัวตนหน้าเว็บด้วย `supabase.auth.getUser()` ทั้งที่ระบบล็อกอิน custom | `browse.js:22-50` | สถานะผู้ใช้ไม่ตรงกับระบบล็อกอินจริง | กลาง |
 | ไม่มี debounce / pagination ในหน้าค้นหา | `browse.js` | ช้าเมื่อข้อมูลเยอะ | กลาง |
-| ฟอร์มแจ้งพบ/แจ้งหายแยก 3 หน้า | `report.html`–`report3.html` | เสี่ยงข้อมูลสูญหายเมื่อสัญญาณหลุด | ต่ำ |
+| ฟอร์มแจ้งพบ/แจ้งหายแยก 3 หน้า | `report.html`–`report3.html` | ยังแยก 3 หน้า แต่บรรเทาความเสี่ยงข้อมูล/รูปหายแล้วด้วย IndexedDB + `sessionStorage` (`reportDraftImages.js`) | ต่ำ (บรรเทาแล้ว) |
 
 ### 7.3 ตรวจพบในรอบนี้
 
