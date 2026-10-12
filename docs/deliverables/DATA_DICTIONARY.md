@@ -64,15 +64,15 @@
 | `claim_id` | ⬜ [สันนิษฐาน] text รูปแบบ `CLM-24-0891` (`staff-verify-claims.js:7`) | PK |
 | `item_id` | ✅ [จริง] FK → `item` (`staff-verify-detail.js:77`) | สิ่งของที่ยื่นคำร้อง |
 | `user_id` | ✅ [จริง] (`activity.js:157` `.eq('user_id', ...)`) | ผู้ยื่นคำร้อง — ไม่อยู่ใน requirements 7.2 แต่โค้ดใช้จริง |
-| `claimant_name` | ✅ [จริง] (`staff-verify-detail.js:75`) | |
+| `claimant_name` | ✅ [จริง] (`staff-verify-detail.js:75`) | กติกาฝั่งเว็บ: 2–100 ตัวอักษร ไทย/อังกฤษ (`validators.js:5-26`) — ไม่มี CHECK ใน DB |
 | `claimant_student_id` | ✅ [จริง] (`staff-verify-detail.js:75`) | ยังส่ง `null` เสมอ (`claim.js:180`) |
 | `faculty` | ✅ [จริง] (`staff-verify-detail.js:76`) | ยังส่ง `null` เสมอ (`claim.js:183`) |
-| `phone` | ✅ [จริง] (`staff-verify-detail.js:76`, `create_claim` p_phone) | |
+| `phone` | ✅ [จริง] (`staff-verify-detail.js:76`, `create_claim` p_phone) | เบอร์ 10 หลัก ขึ้นต้นด้วย 0 (`/^0\d{9}$/`, `validators.js:14`) — ไม่ผ่าน validator ตอนยื่นคำร้อง |
 | `email` | ✅ [จริง] (`staff-verify-detail.js:76`, `create_claim` p_email) | |
 | `description` | ✅ [จริง] (`staff-verify-detail.js:76`, `create_claim` p_description) | ข้อความให้การ |
 | `ownership_evidence` | ✅ [จริง] (`activity.js:153`, `create_claim` p_ownership_evidence) | JSON แนบหลักฐาน (ดูข้อขัดแย้งหัวข้อ 8) |
-| `status` | ✅ [จริง] (`staff-verify-detail.js:76`, `staff-verify-claims.js:79`) | enum คำร้อง — หัวข้อ 4 |
-| `claim_status` | ❓ [ต้องยืนยัน] (`activity.js:151` อ่านอย่างเดียว) | ชื่อคอลัมน์ที่ขัดกับที่อื่น — หัวข้อ 8 |
+| `status` | ✅ [จริง] (`staff-verify-detail.js:76`, `staff-verify-claims.js:79`, `profile.js:105`) | enum คำร้อง — หัวข้อ 4 · หน้าเจ้าหน้าที่และสถิติผู้ใช้อ่านคอลัมน์นี้ |
+| `claim_status` | ✅ [จริง] (`schema.sql:207`, `activity.js:151` อ่านอย่างเดียว) | คอลัมน์สถานะคู่ขนาน (default `pending`, มี index `idx_claim_status`) — `activity.js` อ่านคอลัมน์นี้และแปลงค่า `handed_over` (หัวข้อ 4, 8) |
 | `note` | ✅ [จริง] (`staff-verify-claims.js:79`) | |
 | `reviewer_name` | ✅ [จริง] (`staff-verify-detail.js:76`, p_reviewer_name) | |
 | `reviewer_note` | ✅ [จริง] (`staff-verify-detail.js:76`, p_reviewer_note) | |
@@ -119,15 +119,15 @@
 
 | คอลัมน์ | หลักฐาน | คำอธิบาย |
 |---------|---------|----------|
-| `handover_id` | ⬜ [สันนิษฐาน] (`staff-handover.js:11`) | PK |
-| `claim_id` | ⬜ [สันนิษฐาน] + p_claim_id (`staff-handover.js:528`) | FK → `claim` |
+| `handover_id` | ✅ [จริง] (`staff-dashboard.js:100`, rendered `:143`) | PK · dashboard แสดงค่านี้เป็น "รหัสรายการ" ไม่ใช่ `claim_id` (schema.sql ร่าง = `INT UNSIGNED AUTO_INCREMENT` แต่ค่าจริงที่พบเป็น UUID — ชนิดยังต้องยืนยัน) |
+| `claim_id` | ⬜ [สันนิษฐาน] + p_claim_id (`staff-handover.js:528`) | FK → `claim` — dashboard **ไม่ได้** select/show คอลัมน์นี้ |
 | `item_id` | ✅ [จริง] (`staff-dashboard.js:106`) | FK → `item` |
 | `recipient_name` | ✅ [จริง] (`staff-dashboard.js:101`) | ชื่อผู้รับ |
-| `handover_date` | ✅ [จริง] (`staff-dashboard.js:102`) | |
+| `handover_date` | ✅ [จริง] (`staff-dashboard.js:102`) | เรียงจากใหม่สุด (`staff-dashboard.js:108`) |
 | `staff_name` | ✅ [จริง] (`staff-dashboard.js:103`) | เจ้าหน้าที่ผู้ส่งมอบ |
-| `proof_image_url` | ✅ [จริง] (`staff-dashboard.js:104`) | ภาพหลักฐาน |
-| `proof_urls` | ⬜ [สันนิษฐาน] jsonb (`staff-handover.js:12`, p_proof_urls) | หลายไฟล์ |
-| `signature_image_url` | ⬜ [สันนิษฐาน] (`staff-handover.js:13`, p_signature_image_url) | ลายเซ็น |
+| `proof_image_url` | ✅ [จริง] (`staff-dashboard.js:104`, modal `:148,175,287`) | ภาพหลักฐาน — modal แสดง**เฉพาะ**คอลัมน์นี้ |
+| `proof_urls` | ⬜ [สันนิษฐาน] jsonb (`staff-handover.js:12`, p_proof_urls) | หลายไฟล์ — dashboard ไม่ได้อ่าน |
+| `signature_image_url` | ⬜ [สันนิษฐาน] (`staff-handover.js:13`, p_signature_image_url) | ลายเซ็น — dashboard ไม่ได้อ่าน |
 | `proof_file_count` | ⬜ [สันนิษฐาน] (`staff-handover.js:13`) | |
 | `note` | ✅ [จริง] (`staff-dashboard.js:105`, p_note) | |
 
@@ -157,7 +157,7 @@
 | `matched_item_id` | ✅ [จริง] อ่านอย่างเดียว (`detail.js:229-245`) | ❓ [ต้องยืนยัน] ไม่มีโค้ดเขียนค่านี้ — F-05 |
 | `recorded_by` | ✅ [จริง] (`staff-verify-detail.js:77`) | ผู้บันทึกของเข้าคลัง |
 | `status` | ✅ [จริง] ทุกหน้า | `item_status_enum` — หัวข้อ 4 |
-| `created_at` | ✅ [จริง] ทุกหน้า | ฐานนับ 90 วันในโค้ดปัจจุบัน (BR-08 ❓ [ต้องยืนยัน]) |
+| `created_at` | ✅ [จริง] ทุกหน้า | **เวลาโพสต์** — ตั้งจาก DB default `CURRENT_TIMESTAMP` (client ไม่ส่งค่า) · ใช้เรียงกระดาน/กิจกรรม · เป็นฐานนับ 90 วันในโค้ดปัจจุบัน (BR-08 ❓ [ต้องยืนยัน]) |
 | `updated_at` | ✅ [จริง] ตั้งอัตโนมัติโดย trigger `trg_item_updated_at` (`set_updated_at`) | |
 | `disposed_at` | ✅ [จริง] (`staff-overdue-list.js:127`) | วันจำหน่าย (ไม่อยู่ใน requirements 7.2) |
 | `deleted_at` | ✅ [จริง] Soft delete ทุกหน้า (`staff-dispose-item.js:92`) | |
@@ -212,10 +212,11 @@ location_landmark, found_location, found_date_time, storage_room, shelf_id, bin_
 | `user_id` | ✅ [จริง] (`activity.js:78`, `.eq('user_id', userId)` ที่ `:80`) | uuid → `user_account` |
 | `report_type` | ✅ [จริง] (`activity.js:74`) | `report_type_enum`: `lost` \| `found` (`report.js:60`) |
 | `incident_location` | ✅ [จริง] (`activity.js:75`) | |
-| `incident_datetime` | ✅ [จริง] (`activity.js:76`, timestamptz `report3.js:126`) | |
+| `incident_datetime` | ✅ [จริง] (`activity.js:76`, timestamptz `report3.js:126`) | **เวลาที่พบ/หาย** — ผู้ใช้กรอกเอง (`report2.html:98,104` → `report3.js:227`) ไม่ใช่เวลาโพสต์ |
 | `description` | ⬜ [สันนิษฐาน] (requirements 7.2) + p_description (`report3.js:143`) | ❓ [ต้องยืนยัน] ปลายทางจริงอาจเป็น `item.description` — หน้าเว็บอ่านจาก `item` เสมอ |
 | `image_url` | ⬜ [สันนิษฐาน] (requirements 7.2) + p_image_url (`report3.js:144`) | ❓ [ต้องยืนยัน] ปลายทางจริงอาจเป็น `item.image_url` (base64) |
 | `deleted_at` | ⬜ [สันนิษฐาน] (requirements 7.2) + `delete_report` = Soft delete | |
+| `created_at` | ✅ [จริง] (`activity.js:81` `.order('created_at', ...)`) | **เวลาโพสต์** — DB default `CURRENT_TIMESTAMP` (`schema.sql:177`), client ไม่ส่งค่า |
 
 ### 3.13 `storage_point` — จุดรับฝาก (Master Data)
 
@@ -234,8 +235,8 @@ location_landmark, found_location, found_date_time, storage_room, shelf_id, bin_
 | `user_id` | ✅ [จริง] uuid (`report3.js:140`) | PK |
 | `email` | ✅ [จริง] (`profile.js:46`, `forgotpassword.js:34`) | ซ้ำไม่ได้ (`EMAIL_ALREADY_EXISTS`) |
 | `password` | ⬜ [สันนิษฐาน] (requirements 7.2) + p_password (`register.js:115`) | ❓ [ต้องยืนยัน] โอนรหัสผ่านเข้า RPC — ต้องยืนยันว่าถูก hash ใน DB |
-| `full_name` | ✅ [จริง] (`profile.js:46`) | |
-| `phone_number` | ✅ [จริง] (`profile.js:46`) | |
+| `full_name` | ✅ [จริง] (`profile.js:46`) | VARCHAR(150) · กติกาฝั่งเว็บ 2–100 ตัวอักษร ไทย/อังกฤษ (`validators.js:5-26`) — ไม่มี CHECK ใน DB |
+| `phone_number` | ✅ [จริง] (`profile.js:46`) | VARCHAR(20) · กติกาฝั่งเว็บ `/^0\d{9}$/` 10 หลัก + กรองเฉพาะตัวเลข (`validators.js:14,47-57`) — สมัครสมาชิกยังส่ง `null` (`register.js:124`) |
 | `avatar_url` | ✅ [จริง] (`profile.js:46`) | base64 หรือ URL จาก bucket `avatars` |
 | `role` | ✅ [จริง] (`browse.js:16`, `profile.js:46`) | `user` \| `staff` \| `admin` (`profile.js:69`) |
 
@@ -264,11 +265,13 @@ location_landmark, found_location, found_date_time, storage_room, shelf_id, bin_
 - หมายเหตุ: requirements 7.2 ระบุ `แจ้งพบ`/`แจ้งหาย` เป็นค่าสถานะ — **โค้ดไม่ได้ใช้** สองคำนี้เป็นเพียงป้ายบนหน้าจอ
   (มาจาก `report_type` ไม่ใช่ `item.status`) — ดูหัวข้อ 8
 
-### `claim.status` (ตาราง `claim`)
-`pending` | `more_info` | `approved` | `rejected` | `completed`
-- `pending` = รอพิจารณา (`staff-verify-claims.js:26`), `more_info` = ขอข้อมูลเพิ่ม (`:27`)
-- `approved` → ปุ่มส่งมอบปรากฏ (`staff-handover.js:9`), `completed` = ส่งมอบแล้ว (`staff-handover.js:53`)
-- ❓ [ต้องยืนยัน] `activity.js:151` อ่าน `claim_status` แทน `status` — หัวข้อ 8
+### `claim.status` / `claim.claim_status` (ตาราง `claim`)
+- `claim.status` = `pending` | `more_info` | `approved` | `rejected` | `completed`
+  - `pending` = รอพิจารณา (`staff-verify-claims.js:26`), `more_info` = ขอข้อมูลเพิ่ม (`:27`)
+  - `approved` → ปุ่มส่งมอบปรากฏ (`staff-handover.js:9`), `completed` = ส่งมอบแล้ว (`staff-handover.js:53`)
+  - สถานะคำร้องในตาราง **และ** สถิติผู้ใช้ (`profile.js:105` `.eq('status','completed')`) อ่านคอลัมน์นี้
+- `claim.claim_status` = คอลัมน์คู่ขนาน (`schema.sql:207`) — `activity.js:151` อ่านคอลัมน์นี้ และแปลงค่า `handed_over` → "รับของเรียบร้อยแล้ว" (`activity.js:179`) ซึ่ง **ไม่ใช่** ค่าของ `status` (หัวข้อ 8)
+- `QUERIES.sql:266-269` ระบุว่า `record_handover` ต้องตั้ง **ทั้งสองคอลัมน์ = `completed`**
 
 ### ค่าอื่น ๆ
 | ชุดค่า | ค่า | หลักฐาน |
@@ -368,7 +371,7 @@ RPC ทั้ง 17 ตัวข้างต้นคือชุดที่โ
 
 **สิ่งที่ยังขาดใน `schema.sql`** (ตอนนี้มีเฉพาะ `CREATE TABLE` ครบ 14 ตาราง + ภาคผนวก PostgreSQL ของ trigger/function ที่ยืนยันแล้ว — ส่วนที่เหลือยังเป็นข้อเสนอ ไม่ใช่ข้อเท็จจริง):
 1. Trigger/RPC เขียน `item_history_log` ทุกครั้งที่ `item.status` เปลี่ยน (KP-08, BR-09)
-2. View หรือ RPC สถิติแดชบอร์ด (F-10: อัตราคืนสำเร็จ, จุดเสี่ยง, หมวดหมู่หายบ่อย)
+2. View หรือ RPC สถิติแดชบอร์ด (F-10: อัตราคืนสำเร็จ, จุดเสี่ยง, หมวดหมู่หายบ่อย) — ปัจจุบันตัวเลขสถิติทั้งหมดนับฝั่ง client: แดชบอร์ดเจ้าหน้าที่นับจากตาราง `handover` (`staff-dashboard.js:200-213`) และสถิติผู้ใช้นับจาก `report` (lost/found) + `claim.status='completed'` (`profile.js:88-110`)
 3. การแจ้งเตือนอัตโนมัติเมื่อเกิน 90 วัน → เขียน `notification` (BR-08, F-05)
 4. Index สำหรับ `item.status`, `item.current_storage_id`, `claim.item_id`, `report.user_id`
 5. นโยบาย RLS รายตารางให้ตรงพฤติกรรมที่โค้ดคาดหวัง (หัวข้อ 7.4 ของ requirements)
@@ -379,7 +382,7 @@ RPC ทั้ง 17 ตัวข้างต้นคือชุดที่โ
 
 | # | หัวข้อ | requirements 7.2 / เอกสาร | โค้ดใช้จริง | ต้องยืนยันว่า |
 |---|--------|--------------------------|------------|--------------|
-| 1 | คอลัมน์สถานะคำร้อง | `status` | `activity.js:151` อ่าน `claim_status` | มีคอลัมน์ไหนจริง (โค้ดสองไฟล์ขัดกัน) |
+| 1 | คอลัมน์สถานะคำร้อง | `status` | `claim` มีทั้ง `status` และ `claim_status` (`schema.sql:206-207`) · หน้าเจ้าหน้าที่ + `profile.js:105` อ่าน `status` · `activity.js:151` อ่าน `claim_status` + แปลงค่า `handed_over` (`:179`) | ค่าจริงของ `claim_status` — `handed_over` เป็นค่าที่ `status` ไม่มี (ต้องตั้งทั้งสองคอลัมน์เท่ากันตอนส่งมอบ) |
 | 2 | `claim_proof` | `title` | `name` (`staff-verify-detail.js:89`) | ชื่อคอลัมน์จริง |
 | 3 | `storage_point` | `storage_room`, `storage_location` | `room`, `description` (`admin-storage-points.js:130`) | ชื่อคอลัมน์จริง + มี `is_active` ไหม |
 | 4 | `item_media` | `image_url` | `url` (`staff-post-detail.js:193`) | ชื่อคอลัมน์จริง |
