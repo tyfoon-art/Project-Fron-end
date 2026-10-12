@@ -15,18 +15,66 @@ function formatThaiDate(dateStr) {
   return `${d.getDate()} ${months[d.getMonth()]} ${buddhistYear}`;
 }
 
-function markFileSelected(boxId, titleId, descId, file) {
-  document.getElementById(boxId).classList.add('has-file');
-  document.getElementById(titleId).textContent = 'เลือกไฟล์แล้ว';
-  document.getElementById(descId).textContent = file.name;
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+
+// ช่องอัปโหลดหลักฐาน: เลือกไฟล์แล้วลบออกได้ (กรณีเลือกผิด) โดยไม่ต้องเลือกไฟล์ใหม่มาทับ
+function setupUploadBox({ boxId, titleId, descId, inputId, removeBtnId, allowPdf }) {
+  const box = document.getElementById(boxId);
+  const title = document.getElementById(titleId);
+  const desc = document.getElementById(descId);
+  const input = document.getElementById(inputId);
+  const removeBtn = document.getElementById(removeBtnId);
+  const defaultTitle = title.textContent;
+  const defaultDesc = desc.innerHTML;
+
+  function clearFile() {
+    input.value = '';
+    box.classList.remove('has-file');
+    title.textContent = defaultTitle;
+    desc.innerHTML = defaultDesc;
+    removeBtn.style.display = 'none';
+  }
+
+  input.addEventListener('change', () => {
+    const file = input.files[0];
+    if (!file) {
+      clearFile();
+      return;
+    }
+
+    const isAllowedType = file.type.startsWith('image/') || (allowPdf && file.type === 'application/pdf');
+    if (!isAllowedType) {
+      clearFile();
+      alert(allowPdf ? 'รองรับเฉพาะไฟล์รูปภาพหรือ PDF เท่านั้น' : 'รองรับเฉพาะไฟล์รูปภาพเท่านั้น');
+      return;
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      clearFile();
+      alert('ไฟล์มีขนาดเกิน 5 MB กรุณาเลือกไฟล์ใหม่');
+      return;
+    }
+
+    box.classList.add('has-file');
+    title.textContent = 'เลือกไฟล์แล้ว';
+    desc.textContent = file.name;
+    removeBtn.style.display = '';
+  });
+
+  removeBtn.addEventListener('click', (event) => {
+    event.stopPropagation(); // ไม่ให้คลิกทะลุไปเปิดหน้าต่างเลือกไฟล์ของกล่องอัปโหลด
+    clearFile();
+  });
 }
 
-document.getElementById('proofImgInput').addEventListener('change', (e) => {
-  if (e.target.files[0]) markFileSelected('proofBox', 'proofBoxTitle', 'proofBoxDesc', e.target.files[0]);
+setupUploadBox({
+  boxId: 'proofBox', titleId: 'proofBoxTitle', descId: 'proofBoxDesc',
+  inputId: 'proofImgInput', removeBtnId: 'proofRemoveBtn', allowPdf: false
 });
 
-document.getElementById('idCardInput').addEventListener('change', (e) => {
-  if (e.target.files[0]) markFileSelected('idBox', 'idBoxTitle', 'idBoxDesc', e.target.files[0]);
+setupUploadBox({
+  boxId: 'idBox', titleId: 'idBoxTitle', descId: 'idBoxDesc',
+  inputId: 'idCardInput', removeBtnId: 'idRemoveBtn', allowPdf: true
 });
 
 document.addEventListener('DOMContentLoaded', async () => {

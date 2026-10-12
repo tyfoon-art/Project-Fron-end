@@ -276,6 +276,29 @@ body {
   word-break: break-all;
 }
 
+.upload-remove-btn {
+  margin-top: 4px;
+  padding: 5px 12px;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #dc2626;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.upload-remove-btn:hover {
+  background: #fee2e2;
+}
+
+.upload-box .upload-remove-btn i {
+  font-size: 11px;
+  color: inherit;
+  margin: 0;
+}
+
 .privacy-box {
   background: #f0f9ff;
   border: 1px solid #bae6fd;

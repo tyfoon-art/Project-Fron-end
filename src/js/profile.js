@@ -1,4 +1,5 @@
 import { supabaseClient } from './supabaseClient.js';
+import { validateFullName, validateEmailFormat, validatePhone, applyFieldLimits } from './validators.js';
 
 // กติกาโดเมนอีเมลเดียวกับหน้า login.html:
 //   ผู้ดูแลระบบ : admin1@admin.com เท่านั้น
@@ -153,17 +154,19 @@ async function handleSave(event) {
   const emailInput = document.getElementById('emailInput');
   const phoneInput = document.getElementById('phoneInput');
 
-  if (!nameInput.value.trim()) {
-    document.getElementById('nameError').textContent = 'กรุณากรอกชื่อ - นามสกุล';
+  const nameMessage = validateFullName(nameInput.value);
+  if (nameMessage) {
+    document.getElementById('nameError').textContent = nameMessage;
     document.getElementById('nameError').style.display = 'block';
     nameInput.classList.add('error');
     isValid = false;
   }
 
   const updatedEmail = emailInput.value.trim().toLowerCase();
+  const emailMessage = validateEmailFormat(updatedEmail);
 
-  if (!updatedEmail || !updatedEmail.includes('@')) {
-    document.getElementById('emailError').textContent = 'กรุณากรอกอีเมลให้ถูกต้อง';
+  if (emailMessage) {
+    document.getElementById('emailError').textContent = emailMessage;
     document.getElementById('emailError').style.display = 'block';
     emailInput.classList.add('error');
     isValid = false;
@@ -177,8 +180,9 @@ async function handleSave(event) {
     isValid = false;
   }
 
-  if (!phoneInput.value.trim()) {
-    document.getElementById('phoneError').textContent = 'กรุณากรอกเบอร์โทรศัพท์';
+  const phoneMessage = validatePhone(phoneInput.value);
+  if (phoneMessage) {
+    document.getElementById('phoneError').textContent = phoneMessage;
     document.getElementById('phoneError').style.display = 'block';
     phoneInput.classList.add('error');
     isValid = false;
@@ -263,6 +267,11 @@ async function confirmLogout() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  applyFieldLimits({
+    name: document.getElementById('nameInput'),
+    email: document.getElementById('emailInput'),
+    phone: document.getElementById('phoneInput')
+  });
   loadUserData();
 });
 

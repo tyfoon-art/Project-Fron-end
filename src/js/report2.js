@@ -20,6 +20,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   restoreFromSessionStorage();
 
+  // จำค่าทุกครั้งที่ผู้ใช้แก้ไข เพื่อให้ยังอยู่เมื่อกด "ย้อนกลับ" (ทั้งปุ่มในหน้าและปุ่มของเบราว์เซอร์) แล้วกลับมาใหม่
+  ['locationInput', 'dateInput', 'timeInput'].forEach(id => {
+    const input = document.getElementById(id);
+    if (!input) return;
+    input.addEventListener('input', saveDraft);
+    input.addEventListener('change', saveDraft);
+  });
+
   if (sessionStorage.getItem('report_edit_item_id')) {
     const heading = document.querySelector('.report-header h1');
     if (heading) heading.textContent = 'แก้ไขโพสต์';
@@ -27,7 +35,16 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // โหมดแก้ไขต้องย้อนกลับไปพร้อม id + mode=edit ไม่งั้น report.html จะมองว่าเป็นการเริ่มโพสต์ใหม่
+// เก็บค่าที่กรอกค้างไว้ลง sessionStorage (ยังไม่ตรวจความถูกต้อง — ตรวจตอนกด "ถัดไป")
+function saveDraft() {
+  sessionStorage.setItem('report_incident_location', document.getElementById('locationInput')?.value.trim() || '');
+  sessionStorage.setItem('report_date', document.getElementById('dateInput')?.value || '');
+  sessionStorage.setItem('report_time', document.getElementById('timeInput')?.value || '');
+}
+
 function goBack() {
+  saveDraft();
+
   const editItemId = sessionStorage.getItem('report_edit_item_id');
   window.location.href = editItemId
     ? `report.html?id=${editItemId}&mode=edit`

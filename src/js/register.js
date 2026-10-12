@@ -1,4 +1,10 @@
 import { supabaseClient } from './supabaseClient.js';
+import { validateFullName, validateEmailFormat, applyFieldLimits } from './validators.js';
+
+applyFieldLimits({
+  name: document.getElementById('fullname'),
+  email: document.getElementById('email'),
+});
 
 // จัดการปุ่มเปิด-ปิดรหัสผ่านช่องที่ 1
 const toggleBtn1 = document.getElementById('togglePassBtn1');
@@ -56,8 +62,9 @@ document.getElementById('registerForm').addEventListener('submit', async (event)
   let isValid = true;
   let firstInvalidInput = null;
 
-  if (!fullname) {
-    showError('fullname', 'fullnameError', 'กรุณากรอกชื่อ-นามสกุล');
+  const fullnameMessage = validateFullName(fullname);
+  if (fullnameMessage) {
+    showError('fullname', 'fullnameError', fullnameMessage);
     isValid = false;
     if (!firstInvalidInput) firstInvalidInput = document.getElementById('fullname');
   }
@@ -66,8 +73,9 @@ document.getElementById('registerForm').addEventListener('submit', async (event)
   const isUp = email.endsWith('@up.ac.th');
   const isStaff = email.endsWith('@staff.com');
 
-  if (!email) {
-    showError('email', 'emailError', 'กรุณากรอกอีเมล');
+  const emailMessage = validateEmailFormat(email);
+  if (emailMessage) {
+    showError('email', 'emailError', emailMessage);
     isValid = false;
     if (!firstInvalidInput) firstInvalidInput = document.getElementById('email');
   } else if (!isGmail && !isUp && !isStaff) {

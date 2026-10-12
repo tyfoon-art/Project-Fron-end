@@ -76,7 +76,7 @@ async function loadItems() {
       .eq('status', PENDING_STATUS)
       .eq('report.report_type', 'found')
       .is('deleted_at', null)
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: true }); // โพสต์เก่าสุดก่อน — รายการที่รอนานที่สุดควรถูกตรวจก่อน
 
     if (error) throw error;
 

@@ -97,17 +97,10 @@ async function renderHomePage() {
   });
 
   // --------------------------------------------------------------------------
-  // เรียงลำดับ: เรียงจากวันที่เกิดเหตุล่าสุด (ใหม่สุด -> เก่าสุด)
+  // เรียงลำดับ: เรียงตามวันและเวลาที่โพสต์ (created_at) ใหม่สุด -> เก่าสุด
+  // ไม่ใช้วันที่เกิดเหตุ เพราะผู้ใช้อาจพบของนานแล้วแต่เพิ่งมาโพสต์
   // --------------------------------------------------------------------------
-  visibleItems.sort((a, b) => {
-    const reportA = Array.isArray(a.report) ? a.report[0] : a.report;
-    const reportB = Array.isArray(b.report) ? b.report[0] : b.report;
-
-    const dateA = new Date(reportA?.incident_datetime || a.created_at).getTime();
-    const dateB = new Date(reportB?.incident_datetime || b.created_at).getTime();
-
-    return dateB - dateA; // ล่าสุดขึ้นก่อน
-  });
+  visibleItems.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
   // ตัดแสดงเฉพาะตามจำนวนที่กำหนดไว้
   const recentItems = visibleItems.slice(0, MAX_RECENT_ITEMS);

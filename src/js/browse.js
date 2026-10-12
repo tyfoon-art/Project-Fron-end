@@ -116,14 +116,15 @@ async function fetchItemsFromSupabase() {
       timestamp: (rep && rep.incident_datetime)
         ? new Date(rep.incident_datetime).toISOString()
         : new Date(item.created_at).toISOString(),
+      postedAt: item.created_at,
       type: rep ? rep.report_type : 'found',
       status: item.status || 'รอตรวจสอบ',
       poster: (rep && rep.user && rep.user.full_name) || 'ผู้แจ้งประกาศ'
     };
   });
 
-  // เรียงลำดับจากวันที่ล่าสุด (ใหม่สุด -> เก่าสุด)
-  formattedItems.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+  // เรียงตามวันและเวลาที่โพสต์ (ใหม่สุด -> เก่าสุด) — timestamp คือวันที่เกิดเหตุ ใช้แสดงผล/กรองเท่านั้น
+  formattedItems.sort((a, b) => new Date(b.postedAt) - new Date(a.postedAt));
 
   return formattedItems;
 }

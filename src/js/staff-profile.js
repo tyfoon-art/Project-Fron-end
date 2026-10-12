@@ -1,6 +1,7 @@
 import './staff-auth.js';
 import { staffSession } from './staff-auth.js';
 import { supabaseClient } from './supabaseClient.js';
+import { validateFullName, validateEmailFormat, validatePhone, applyFieldLimits } from './validators.js';
 
 /* ============================================================================
    ข้อสมมติฐานเรื่องโครงสร้างตาราง/สตอเรจ (แก้ชื่อ table/column/bucket ให้ตรงกับของจริงได้ที่นี่)
@@ -96,8 +97,10 @@ async function handleProfileSubmit(event) {
   const email = document.getElementById('input-email').value.trim();
   const phone = document.getElementById('input-phone').value.trim();
 
-  if (!fullname || !email || !phone) {
-    alert('กรุณากรอกข้อมูลโปรไฟล์ให้ครบถ้วนก่อนบันทึก!');
+  const validationMessage =
+    validateFullName(fullname) || validateEmailFormat(email) || validatePhone(phone);
+  if (validationMessage) {
+    alert(validationMessage);
     return;
   }
 
@@ -208,6 +211,12 @@ async function handleLogoutConfirm() {
    ============================================================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
+  applyFieldLimits({
+    name: document.getElementById('input-fullname'),
+    email: document.getElementById('input-email'),
+    phone: document.getElementById('input-phone'),
+  });
+
   document.getElementById('profile-form')?.addEventListener('submit', handleProfileSubmit);
   document.getElementById('change-photo-btn')?.addEventListener('click', () => {
     document.getElementById('profile-image-input')?.click();

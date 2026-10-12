@@ -78,7 +78,7 @@ async function renderReportedItems(userId) {
       item:item_id ( item_name, description, status, image_url, deleted_at )
     `)
     .eq('user_id', userId)
-    .order('incident_datetime', { ascending: false });
+    .order('created_at', { ascending: false }); // เรียงตามเวลาที่โพสต์ ไม่ใช่เวลาที่เกิดเหตุ
 
   if (error) {
     console.error('โหลดประกาศของฉันไม่สำเร็จ:', error);

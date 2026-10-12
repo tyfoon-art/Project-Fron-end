@@ -190,7 +190,8 @@ async function loadItemDetail() {
   }
 
   document.getElementById('posterName').textContent = reporterName;
-  document.getElementById('posterTimeAgo').textContent = getTimeAgo(incidentAt || item.created_at);
+  // เวลาที่โพสต์ = เวลาที่ระบบบันทึกโพสต์ (created_at) ไม่ใช่เวลาที่พบ/ทำหายซึ่งผู้ใช้กรอกเอง
+  document.getElementById('posterTimeAgo').textContent = getTimeAgo(item.created_at);
 
   const posterAvatarImg = document.getElementById('posterAvatarImg');
   posterAvatarImg.src = reporterAvatarUrl || `https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(reporterName)}`;

@@ -85,7 +85,7 @@ async function fetchClaims() {
       created_at,
       item:item_id ( item_id, item_name, category, category_key, description )
     `)
-    .order('created_at', { ascending: false });
+    .order('created_at', { ascending: true });
 
   if (error) throw error;
   return data || [];
@@ -136,6 +136,7 @@ function renderRow(claim) {
   row.dataset.category = category;
   row.dataset.status = status;
   row.dataset.date = dateKey;
+  row.dataset.createdAt = claim.created_at || ''; // เวลาเต็ม ใช้เรียงลำดับ (dataset.date มีแค่วัน ใช้กรอง)
   row.dataset.search = `${claimId} ${itemName} ${claim.claimant_name || ''}`.toLowerCase();
 
   row.innerHTML = `
@@ -207,9 +208,9 @@ function applySorting() {
   const rows = Array.from(tbody.querySelectorAll('.claim-row'));
 
   rows.sort((a, b) => {
-    const dateA = new Date(a.dataset.date || 0);
-    const dateB = new Date(b.dataset.date || 0);
-    return sortType === 'oldest' ? dateA - dateB : dateB - dateA;
+    const dateA = new Date(a.dataset.createdAt || 0);
+    const dateB = new Date(b.dataset.createdAt || 0);
+    return sortType === 'latest' ? dateB - dateA : dateA - dateB;
   });
 
   rows.forEach((row) => tbody.appendChild(row));
@@ -230,7 +231,7 @@ function resetFilters() {
   document.getElementById('categoryFilter').value = 'all';
   document.getElementById('dateFilter').value = 'all';
   document.getElementById('searchInput').value = '';
-  document.getElementById('sortFilter').value = 'latest';
+  document.getElementById('sortFilter').value = 'oldest';
 
   setActiveStatusTab('all');
   applySorting();
