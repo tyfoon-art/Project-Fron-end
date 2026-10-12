@@ -24,9 +24,9 @@
 --       ผู้เรียกใช้: ทุกกลุ่ม
 -- ============================================================
 
--- สมัครสมาชิก
+-- สมัครสมาชิก (เบอร์โทร 10 หลัก ขึ้นต้นด้วย 0 ตาม validators.js:14 — ห้ามมีขีด)
 INSERT INTO user_account (email, password_hash, full_name, phone_number, role)
-VALUES ('student@up.ac.th', '<hash>', 'ธนกร ใจดี', '081-234-5678', 'user');
+VALUES ('student@up.ac.th', '<hash>', 'ธนกร ใจดี', '0812345678', 'user');
 
 -- เข้าสู่ระบบ (ค้นหาด้วยอีเมล เพื่อตรวจรหัสผ่าน)
 SELECT user_id, email, password_hash, full_name, role, avatar_url, is_active
@@ -37,7 +37,7 @@ WHERE email = 'student@up.ac.th'
 -- แก้ไขโปรไฟล์
 UPDATE user_account
 SET full_name    = 'ธนกร ใจดี (แก้ไข)',
-    phone_number = '082-345-6789',
+    phone_number = '0823456789',
     avatar_url   = 'https://BUCKET/avatars/u5.png',
     updated_at   = NOW()
 WHERE user_id = '11111111-1111-1111-1111-111111111111';
@@ -173,7 +173,7 @@ ORDER BY c.created_at DESC;
 INSERT INTO claim (claim_id, item_id, user_id, claimant_name, claimant_student_id, faculty,
                    phone, email, description, ownership_evidence, status, claim_status)
 VALUES ('CLM-24-0891', 'ITM-2026-0001', '11111111-1111-1111-1111-111111111111',
-        'ธนกร ใจดี', '6612345', 'วิทยาศาสตร์', '081-234-5678',
+        'ธนกร ใจดี', '6612345', 'วิทยาศาสตร์', '0812345678',
         'student@up.ac.th', 'เป้ของผมสะพายประจำวัน', 'มีรูปเป้และบัตรประจำตัว',
         'pending', 'pending');
 
@@ -203,7 +203,9 @@ SET status             = 'อยู่ที่จุดรับฝาก',
     updated_at         = NOW()
 WHERE item_id = 'ITM-2026-0001';
 
--- รายการคงคลังทั้งหมด พร้อมจุดเก็บ (staff-inventory-add.js)
+-- [ตัวอย่างประกอบ] รายการคงคลังทั้งหมด พร้อมจุดเก็บ และเรียงตามเวลาโพสต์
+-- หมายเหตุ: staff-inventory-add.js ไม่มี query เรียง created_at DESC ของจริง
+--          (มีแค่ดึง item รายชิ้นตาม id และเรียง storage_name/category_name) — ตัวอย่างนี้เป็นภาพรวมเท่านั้น
 SELECT i.item_id, i.reference_id, i.item_name, i.status,
        s.storage_name, s.room, i.created_at
 FROM item i
@@ -223,11 +225,11 @@ ORDER BY category_name;
 --       ตาราง: claim, claim_activity_log, item   | ผู้เรียกใช้: เจ้าหน้าที่
 -- ============================================================
 
--- รายการคำร้องที่รอการพิจารณา
-SELECT c.claim_id, i.item_name, c.claimant_name, c.claim_status, c.created_at
+-- รายการคำร้องที่รอการพิจารณา (คิวของเจ้าหน้าที่อ่านคอลัมน์ status — staff-verify-claims.js:83,88)
+SELECT c.claim_id, i.item_name, c.claimant_name, c.status, c.created_at
 FROM claim c
 JOIN item i ON i.item_id = c.item_id
-WHERE c.claim_status IN ('pending', 'more_info')
+WHERE c.status IN ('pending', 'more_info')
 ORDER BY c.created_at ASC;
 
 -- หลักฐานทั้งหมดของคำร้องหนึ่ง ๆ
@@ -378,8 +380,10 @@ WHERE item_id = f.item_id;
 
 -- ============================================================
 -- สรุปคำร้องแบ่งตามสถานะ
+-- หมายเหตุ: ไม่มีหน้า/RPC ใด GROUP BY สถานะคำร้องจริง — แดชบอร์ดเจ้าหน้าที่นับจากตาราง handover
+--          ใช้คอลัมน์ status (คอลัมน์ที่หน้าเจ้าหน้าที่และสถิติผู้ใช้อ่าน); claim_status เป็นคอลัมน์คู่ขนาน
 -- ============================================================
-SELECT claim_status, COUNT(*) AS cnt
+SELECT status, COUNT(*) AS cnt
 FROM claim
-GROUP BY claim_status
+GROUP BY status
 ORDER BY cnt DESC;
