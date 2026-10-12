@@ -140,7 +140,7 @@ VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 npm run dev
 ```
 
-ระบบจะเปิดเบราว์เซอร์ไปที่ `http://localhost:5173/src/register.html` (หน้าเข้าสู่ระบบ) ให้อัตโนมัติ
+ระบบจะเปิดเบราว์เซอร์ไปที่ http://localhost:5173/src/register.html (หน้าเข้าสู่ระบบ) ให้อัตโนมัติ
 
 หลังแก้ไขไฟล์ใน `.env` ต้อง **รีสตาร์ท dev server** อีกครั้งจึงจะมีผล
 
