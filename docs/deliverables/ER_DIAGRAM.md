@@ -67,7 +67,8 @@ erDiagram
         uuid user_id FK
         text report_type "lost | found"
         text incident_location
-        timestamp incident_datetime
+        timestamp incident_datetime "เวลาที่พบ/หาย (ผู้ใช้กรอก)"
+        timestamp created_at "เวลาโพสต์ (DB default)"
     }
     ITEM_HISTORY_LOG {
         char log_id PK
@@ -90,6 +91,7 @@ erDiagram
         char item_id FK
         uuid user_id FK
         text status "pending | more_info | approved | rejected | completed"
+        text claim_status "คอลัมน์คู่ขนาน (schema.sql:207) — activity.js อ่านค่า handed_over"
         text claimant_name
         text reviewer_name
     }
@@ -112,12 +114,13 @@ erDiagram
         timestamp disposed_at
     }
     HANDOVER {
-        uuid handover_id PK
+        int handover_id PK "schema.sql:262 = INT UNSIGNED AUTO_INCREMENT"
         char claim_id FK
         char item_id FK
         uuid staff_user_id FK "ใน schema.sql คือ staff_id (MySQL)"
         text recipient_name
         text staff_name
+        text proof_image_url "หลักฐานที่ dashboard แสดง"
         jsonb proof_urls
     }
 
