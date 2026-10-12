@@ -144,6 +144,7 @@ const statusDisplayMap = {
   rejected: { text: 'ปฏิเสธคำร้อง' },
   more_info: { text: 'ขอข้อมูลเพิ่มเติม' },
   pending: { text: 'รอการตรวจสอบ' },
+  completed: { text: 'ส่งมอบแล้ว' },
 };
 
 function getStatusText(status) {
@@ -179,8 +180,16 @@ function updateDecisionButtons() {
   goToHandoverBtn.classList.add('hidden');
   moreInfoBtn.disabled = false;
   rejectBtn.disabled = false;
+  moreInfoBtn.classList.remove('hidden');
+  rejectBtn.classList.remove('hidden');
 
-  if (currentClaim.status === 'approved') {
+  if (currentClaim.status === 'completed') {
+    // ส่งมอบแล้ว = จบกระบวนการ -> ซ่อนปุ่มตัดสินทั้งหมด เหลือแค่ดูรายละเอียดและประวัติ
+    approveBtn.classList.add('hidden');
+    moreInfoBtn.classList.add('hidden');
+    rejectBtn.classList.add('hidden');
+    document.getElementById('reviewerNote').readOnly = true;
+  } else if (currentClaim.status === 'approved') {
     // อนุมัติแล้ว -> ซ่อนปุ่มอนุมัติ, ปิดปุ่มขอข้อมูล/ปฏิเสธ, โชว์ปุ่มส่งคืนเจ้าของแทน
     approveBtn.classList.add('hidden');
     moreInfoBtn.disabled = true;
@@ -422,7 +431,10 @@ async function confirmApproval() {
   } catch (error) {
     console.error('เกิดข้อผิดพลาดในการอนุมัติคำร้อง:', error);
     resetApproveButton();
-    showSimpleMessage('ไม่สามารถบันทึกการอนุมัติได้ กรุณาลองใหม่อีกครั้ง', 'warning');
+    // RPC staff_review_claim ส่งเหตุผลเป็นข้อความภาษาไทยมาให้ (เช่น ส่งมอบไปแล้ว / มีคำร้องอื่นอนุมัติแล้ว)
+    // แสดงเหตุผลจริงแทนการบอกให้ลองใหม่ ซึ่งทำให้เข้าใจผิดว่าต้องกดซ้ำ
+    const reason = /[฀-๿]/.test(error?.message || '') ? error.message : '';
+    showSimpleMessage(reason || 'ไม่สามารถบันทึกการอนุมัติได้ กรุณาลองใหม่อีกครั้ง', 'warning');
   }
 }
 

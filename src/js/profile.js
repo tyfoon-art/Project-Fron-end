@@ -81,7 +81,8 @@ async function loadUserData() {
 
 // ============================================================
 // สถิติการใช้งาน: นับจากตาราง report (แจ้งหาย/แจ้งพบ) และ claim (รับคืนสำเร็จ)
-// ค่า enum ใน DB เป็นตัวพิมพ์เล็กทั้งหมด ('lost' / 'found' / 'approved')
+// ค่า enum ใน DB เป็นตัวพิมพ์เล็กทั้งหมด ('lost' / 'found' / 'completed')
+// คำร้องเปลี่ยนเป็น 'completed' เมื่อเจ้าหน้าที่บันทึกการส่งมอบแล้ว ('approved' = อนุมัติแต่ยังไม่ได้รับของ)
 // ============================================================
 async function loadStats(userId) {
   try {
@@ -100,7 +101,7 @@ async function loadStats(userId) {
         .from('claim')
         .select('*', { count: 'exact', head: true })
         .eq('user_id', userId)
-        .eq('status', 'approved')
+        .eq('status', 'completed')
     ]);
 
     document.getElementById('statLostCount').textContent = lostRes.count ?? 0;

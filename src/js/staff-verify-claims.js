@@ -7,8 +7,9 @@ import { supabaseClient } from './supabaseClient.js';
    - public.claim : claim_id (text, เช่น "CLM-24-0891"), item_id (FK -> item.item_id),
                     claimant_name, status, note, created_at, updated_at
      (status ของ "คำร้อง" เป็นคนละชุดกับ status ของ "สิ่งของ" ในตาราง item:
-      'pending' | 'approved' | 'rejected' | 'more_info')
-   - public.item  : ใช้ join เอาชื่อ/หมวดหมู่ของสิ่งของมาแสดง
+      'pending' | 'approved' | 'rejected' | 'more_info' | 'completed'
+      โดย 'completed' = ส่งมอบสิ่งของคืนแล้ว ตั้งโดย RPC record_handover)
+   - public.item: ใช้ join เอาชื่อ/หมวดหมู่ของสิ่งของมาแสดง
                     (item_id, item_name, category, category_key, description)
    ============================================================================ */
 
@@ -26,9 +27,10 @@ const statusDisplayMap = {
   rejected: { text: 'ปฏิเสธคำร้อง', action: 'ดูรายละเอียด' },
   more_info: { text: 'ขอข้อมูลเพิ่มเติม', action: 'ดูรายละเอียด' },
   pending: { text: 'รอตรวจสอบ', action: 'ตรวจสอบ' },
+  completed: { text: 'ส่งมอบแล้ว', action: 'ดูรายละเอียด' },
 };
 
-// แปลงค่า status จากฐานข้อมูลให้เป็นหนึ่งใน 4 ค่าที่รู้จักเสมอ
+// แปลงค่า status จากฐานข้อมูลให้เป็นหนึ่งใน 5 ค่าที่รู้จักเสมอ
 // (กันกรณี null, ตัวพิมพ์ใหญ่, มีช่องว่าง หรือค่าที่ไม่รู้จัก)
 function normalizeStatus(status) {
   const key = String(status ?? '').trim().toLowerCase();

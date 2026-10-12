@@ -564,6 +564,10 @@ function goToDashboard() {
    ============================================================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
+  // ชื่อผู้ส่งมอบ = เจ้าหน้าที่ที่เข้าสู่ระบบอยู่ (ตรงกับที่ RPC record_handover บันทึกจาก p_staff_id)
+  document.getElementById('staffNameInput').value =
+    staffSession.fullName || staffSession.email || 'เจ้าหน้าที่';
+
   loadClaim();
   setTimeout(resizeCanvas, 150);
 

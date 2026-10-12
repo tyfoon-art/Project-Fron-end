@@ -296,6 +296,7 @@ main {
 .status-badge.approved { background: #d1fae5; color: #047857; border-color: #a7f3d0; }
 .status-badge.rejected { background: #fee2e2; color: #b91c1c; border-color: #fecaca; }
 .status-badge.more_info { background: #f1f5f9; color: #475569; border-color: #e2e8f0; }
+.status-badge.completed { background: #d1fae5; color: #047857; border-color: #a7f3d0; }
 
 /* --------------------------------------------------------------------------
    Action buttons
@@ -323,13 +324,15 @@ main {
   background: #002a5c;
 }
 
-.action-button.approved {
+.action-button.approved,
+.action-button.completed {
   border: 1px solid #a7f3d0;
   color: #047857;
   background: #ffffff;
 }
 
-.action-button.approved:hover {
+.action-button.approved:hover,
+.action-button.completed:hover {
   background: #d1fae5;
 }
 
