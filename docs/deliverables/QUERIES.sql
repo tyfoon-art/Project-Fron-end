@@ -10,7 +10,12 @@
 --     เท่านั้น (ดู DATA_DICTIONARY.md หัวข้อ 5) ส่วน SELECT นี้คือรูปแบบเดียว
 --     กับที่หน้าเว็บเรียกผ่าน ORM
 --  3) ค่าสถานะ item.status ที่ใช้กรองอ้างจากโค้ดจริงใน src/js (ภาษาไทย)
---       ซึ่งต่างจากค่า DEFAULT 'found' ใน schema.sql ที่เป็นเพียงข้อกำหนดตั้งต้น
+--       (ค่าเริ่มต้น 'รอตรวจสอบ' ตรงกับ DEFAULT ใน schema.sql)
+--  4) ชนิด id ตาม schema.sql ที่ปรับให้ตรงโค้ด:
+--       item.item_id / claim.claim_id = ข้อความรหัสอ่านง่าย (VARCHAR(20))
+--         เช่น 'ITM-2026-0001', 'CLM-24-0891' (ไม่ใช่ AUTO_INCREMENT)
+--       user_id / category_id / storage_id = uuid (CHAR(36))
+--     ตัวอย่างด้านล่างใช้ค่าสมมติให้อ่านง่าย
 -- ============================================================
 
 
@@ -35,7 +40,7 @@ SET full_name    = 'ธนกร ใจดี (แก้ไข)',
     phone_number = '082-345-6789',
     avatar_url   = 'https://BUCKET/avatars/u5.png',
     updated_at   = NOW()
-WHERE user_id = 5;
+WHERE user_id = '11111111-1111-1111-1111-111111111111';
 
 
 -- ============================================================
@@ -43,17 +48,19 @@ WHERE user_id = 5;
 --       ตาราง: report, item, item_media   | ผู้เรียกใช้: ผู้ใช้ทั่วไป
 -- ============================================================
 
--- บันทึกประกาศ: สร้าง item เป็นของชิ้นนั้นก่อน
-INSERT INTO item (reference_id, item_name, description, category_id, category,
+-- บันทึกประกาศ: สร้าง item เป็นของชิ้นนั้นก่อน (item_id เป็นรหัสอ่านง่ายกำหนดเอง)
+INSERT INTO item (item_id, reference_id, item_name, description, category_id, category,
                   found_location, found_date_time, status)
-VALUES ('REF-2026-0001', 'เป้สะพายสีดำ', 'เป้ใบเล็กมีกระเป๋าหน้า', 3, 'กระเป๋า',
+VALUES ('ITM-2026-0001', 'REF-2026-0001', 'เป้สะพายสีดำ', 'เป้ใบเล็กมีกระเป๋าหน้า',
+        '22222222-2222-2222-2222-222222222222', 'กระเป๋า',
         'อาคารเรียนรวม ชั้น 1', '2026-10-08 14:30:00', 'รอตรวจสอบ');
 
--- นำ item_id ที่เพิ่งสร้างมาใช้กับ report (เหตุการณ์ที่ผู้ใช้แจ้ง)
-SET @new_item_id = LAST_INSERT_ID();
+-- นำ item_id มาใช้กับ report (เหตุการณ์ที่ผู้ใช้แจ้ง)
+SET @new_item_id = 'ITM-2026-0001';
 
 INSERT INTO report (item_id, user_id, report_type, incident_location, incident_datetime)
-VALUES (@new_item_id, 5, 'lost', 'อาคารเรียนรวม ชั้น 1', '2026-10-08 14:30:00');
+VALUES (@new_item_id, '11111111-1111-1111-1111-111111111111', 'lost',
+        'อาคารเรียนรวม ชั้น 1', '2026-10-08 14:30:00');
 
 -- รูป/ไฟล์ประกอบประกาศ (0..N ไฟล์)
 INSERT INTO item_media (item_id, name, url, type)
@@ -97,7 +104,7 @@ SELECT i.item_id, i.item_name, c.category_name
 FROM item i
 LEFT JOIN category c ON c.category_id = i.category_id
 WHERE i.deleted_at IS NULL
-  AND c.category_id = 3;
+  AND c.category_id = '22222222-2222-2222-2222-222222222222';
 
 
 -- ============================================================
@@ -117,23 +124,23 @@ LEFT JOIN category     c ON c.category_id       = i.category_id
 LEFT JOIN storage_point s ON s.storage_id       = i.current_storage_id
 LEFT JOIN report       r ON r.item_id           = i.item_id
 LEFT JOIN user_account u ON u.user_id           = i.recorded_by
-WHERE i.item_id = 1
+WHERE i.item_id = 'ITM-2026-0001'
   AND i.deleted_at IS NULL;
 
 -- รูป/ไฟล์ทั้งหมดของชิ้นนี้
 SELECT media_id, name, url, type
 FROM item_media
-WHERE item_id = 1;
+WHERE item_id = 'ITM-2026-0001';
 
 -- ข้อมูลลับ (ตำหนิสังเกต) - เฉพาะเจ้าหน้าที่/บุคคลที่ได้รับสิทธิ์เท่านั้น
 SELECT defect_note
 FROM item_secret
-WHERE item_id = 1;
+WHERE item_id = 'ITM-2026-0001';
 
 -- สิ่งของที่จับคู่แล้ว (self FK matched_item_id)
 SELECT matched_item_id
 FROM item
-WHERE item_id = 1
+WHERE item_id = 'ITM-2026-0001'
   AND matched_item_id IS NOT NULL;
 
 
@@ -146,14 +153,14 @@ WHERE item_id = 1
 SELECT r.report_id, i.item_name, r.report_type, r.created_at
 FROM report r
 JOIN item i ON i.item_id = r.item_id
-WHERE r.user_id = 5
+WHERE r.user_id = '11111111-1111-1111-1111-111111111111'
 ORDER BY r.created_at DESC;
 
 -- คำร้องขอคืนของฉัน (ตรงกับ activity.js - ใช้คอลัมน์ claim_status)
 SELECT c.claim_id, i.item_name, c.claim_status, c.created_at
 FROM claim c
 JOIN item i ON i.item_id = c.item_id
-WHERE c.user_id = 5
+WHERE c.user_id = '11111111-1111-1111-1111-111111111111'
 ORDER BY c.created_at DESC;
 
 
@@ -162,14 +169,15 @@ ORDER BY c.created_at DESC;
 --       ตาราง: claim, claim_proof, item   | ผู้เรียกใช้: ผู้ใช้ทั่วไป
 -- ============================================================
 
--- ยื่นคำร้อง
-INSERT INTO claim (item_id, user_id, claimant_name, claimant_student_id, faculty,
+-- ยื่นคำร้อง (claim_id เป็นรหัสอ่านง่ายกำหนดเอง)
+INSERT INTO claim (claim_id, item_id, user_id, claimant_name, claimant_student_id, faculty,
                    phone, email, description, ownership_evidence, status, claim_status)
-VALUES (1, 5, 'ธนกร ใจดี', '6612345', 'วิทยาศาสตร์', '081-234-5678',
+VALUES ('CLM-24-0891', 'ITM-2026-0001', '11111111-1111-1111-1111-111111111111',
+        'ธนกร ใจดี', '6612345', 'วิทยาศาสตร์', '081-234-5678',
         'student@up.ac.th', 'เป้ของผมสะพายประจำวัน', 'มีรูปเป้และบัตรประจำตัว',
         'pending', 'pending');
 
-SET @new_claim_id = LAST_INSERT_ID();
+SET @new_claim_id = 'CLM-24-0891';
 
 -- แนบหลักฐาน (0..N ไฟล์)
 INSERT INTO claim_proof (claim_id, name, url)
@@ -179,7 +187,7 @@ VALUES (@new_claim_id, 'หลักฐาน 1 - รูปเป้', 'https://
 -- ตรวจสอบข้อมูลสิ่งของที่ขอคืน (ให้ผู้ยื่นเขียนคำอธิบายประกอบ)
 SELECT item_name, description, image_url
 FROM item
-WHERE item_id = 1;
+WHERE item_id = 'ITM-2026-0001';
 
 
 -- ============================================================
@@ -190,10 +198,10 @@ WHERE item_id = 1;
 -- รับฝากเข้าคลัง: ตั้งตำแหน่งเก็บ + ผู้บันทึก + เปลี่ยนสถานะ
 UPDATE item
 SET status             = 'อยู่ที่จุดรับฝาก',
-    current_storage_id = 2,
-    recorded_by        = 9,
+    current_storage_id = '33333333-3333-3333-3333-333333333333',
+    recorded_by        = '44444444-4444-4444-4444-444444444444',
     updated_at         = NOW()
-WHERE item_id = 1;
+WHERE item_id = 'ITM-2026-0001';
 
 -- รายการคงคลังทั้งหมด พร้อมจุดเก็บ (staff-inventory-add.js)
 SELECT i.item_id, i.reference_id, i.item_name, i.status,
@@ -225,11 +233,11 @@ ORDER BY c.created_at ASC;
 -- หลักฐานทั้งหมดของคำร้องหนึ่ง ๆ
 SELECT proof_id, name, url
 FROM claim_proof
-WHERE claim_id = 3;
+WHERE claim_id = 'CLM-24-0891';
 
 -- บันทึกความเคลื่อนไหวของคำร้อง (ตอนตรวจสอบ / เปลี่ยนสถานะ)
 INSERT INTO claim_activity_log (claim_id, title)
-VALUES (3, 'เจ้าหน้าที่เริ่มตรวจสอบคำร้อง');
+VALUES ('CLM-24-0891', 'เจ้าหน้าที่เริ่มตรวจสอบคำร้อง');
 
 -- พิจารณาอนุมัติ
 UPDATE claim
@@ -238,7 +246,7 @@ SET status        = 'approved',
     reviewer_name = 'นส.เจ้าหน้าที่',
     reviewer_note = 'หลักฐานครบถ้วน',
     approved_at   = NOW()
-WHERE claim_id = 3;
+WHERE claim_id = 'CLM-24-0891';
 
 
 -- ============================================================
@@ -249,7 +257,8 @@ WHERE claim_id = 3;
 -- บันทึกการส่งมอบ (record_handover)
 INSERT INTO handover (item_id, claim_id, staff_id, recipient_name, handover_date,
                       staff_name, proof_urls, note)
-VALUES (1, 3, 9, 'ธนกร ใจดี', NOW(), 'นส.เจ้าหน้าที่',
+VALUES ('ITM-2026-0001', 'CLM-24-0891', '44444444-4444-4444-4444-444444444444',
+        'ธนกร ใจดี', NOW(), 'นส.เจ้าหน้าที่',
         '["https://BUCKET/handover-evidence/ho01_a.jpg","https://BUCKET/handover-evidence/ho01_b.jpg"]',
         'ตรวจเอกสารและตัวตนผู้รับเรียบร้อย');
 
@@ -257,12 +266,12 @@ VALUES (1, 3, 9, 'ธนกร ใจดี', NOW(), 'นส.เจ้าหน�
 UPDATE claim
 SET status       = 'completed',
     claim_status = 'completed'
-WHERE claim_id = 3;
+WHERE claim_id = 'CLM-24-0891';
 
 UPDATE item
 SET status     = 'คืนสำเร็จ',
     updated_at = NOW()
-WHERE item_id = 1;
+WHERE item_id = 'ITM-2026-0001';
 
 
 -- ============================================================
@@ -278,14 +287,15 @@ WHERE status = 'อยู่ที่จุดรับฝาก'
 
 -- บันทึกการจำหน่าย (staff_dispose_item)
 INSERT INTO disposal (item_id, staff_id, dispose_type, disposed_at, note)
-VALUES (10, 9, 'donate', NOW(), 'ของค้างเก็บเกิน 90 วัน');
+VALUES ('ITM-2026-0010', '44444444-4444-4444-4444-444444444444', 'donate', NOW(),
+        'ของค้างเก็บเกิน 90 วัน');
 
 -- เปลี่ยนสถานะสิ่งของเป็นจำหน่ายแล้ว
 UPDATE item
 SET status     = 'หมดอายุ/ทำลายทิ้ง',
     disposed_at = NOW(),
     updated_at = NOW()
-WHERE item_id = 10;
+WHERE item_id = 'ITM-2026-0010';
 
 
 -- ============================================================
@@ -323,13 +333,15 @@ ORDER BY media_count DESC;
 
 -- สร้างการแจ้งเตือน (จุดสั่งงาน: จับคู่ได้ / อนุมัติคำร้อง / ฯลฯ)
 INSERT INTO notification (user_id, item_id, claim_id, notification_type, message)
-VALUES (5, 1, NULL, 'item_matched', 'ระบบพบสิ่งของที่ตรงกับประกาศของคุณ: เป้สะพายสีดำ'),
-       (5, NULL, 3,  'claim_approved', 'คำร้องขอคืนของคุณได้รับการอนุมัติ');
+VALUES ('11111111-1111-1111-1111-111111111111', 'ITM-2026-0001', NULL, 'item_matched',
+        'ระบบพบสิ่งของที่ตรงกับประกาศของคุณ: เป้สะพายสีดำ'),
+       ('11111111-1111-1111-1111-111111111111', NULL, 'CLM-24-0891', 'claim_approved',
+        'คำร้องขอคืนของคุณได้รับการอนุมัติ');
 
 -- รายการแจ้งเตือนที่ยังไม่ได้อ่าน (ป้ายแจ้งเตือน)
 SELECT notification_id, notification_type, message, created_at
 FROM notification
-WHERE user_id = 5
+WHERE user_id = '11111111-1111-1111-1111-111111111111'
   AND is_read = 0
 ORDER BY created_at DESC;
 
