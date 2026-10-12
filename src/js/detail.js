@@ -376,6 +376,9 @@ function editCurrentItem() {
     return;
   }
 
+  // ล้างร่างการแก้ไขที่ค้างอยู่ เพื่อให้ report.html ดึงข้อมูลล่าสุดของโพสต์มาแสดงใหม่
+  sessionStorage.removeItem('report_edit_item_id');
+
   window.location.href = `report.html?id=${itemId}&mode=edit`;
 }
 

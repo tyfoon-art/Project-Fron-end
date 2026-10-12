@@ -48,9 +48,9 @@ async function loadProfile() {
 
   const { data: profile, error: profileError } = await supabaseClient
     .from(PROFILE_TABLE)
-    .select('full_name, email, phone_number, avatar_url')
+    .select('full_name, email, phone_number, avatar_url, role')
     .eq('user_id', currentUserId)
-    .eq('role', 'staff')
+    .in('role', ['staff', 'admin'])
     .maybeSingle();
 
   if (profileError) {
@@ -67,6 +67,13 @@ async function loadProfile() {
   document.getElementById('input-phone').value = phone;
   document.getElementById('display-fullname').textContent = fullName || '-';
   document.getElementById('main-avatar').src = avatarUrl;
+
+  const role = profile?.role || staffSession.role;
+  document.getElementById('role-badge').textContent =
+    role === 'admin' ? 'ผู้ดูแลระบบ (Admin)' : 'เจ้าหน้าที่ (Staff)';
+
+  // อีเมลผู้ดูแลระบบเปลี่ยนไม่ได้ (RPC staff_upsert_profile ปฏิเสธ)
+  if (role === 'admin') document.getElementById('input-email').readOnly = true;
 }
 
 /* ============================================================================

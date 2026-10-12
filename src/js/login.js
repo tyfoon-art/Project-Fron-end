@@ -10,6 +10,7 @@ function getEmailDomain(email) {
 }
 
 function isAllowedDomain(email) {
+  if (email === ADMIN_EMAIL) return true;
   const domain = getEmailDomain(email);
   return domain === STAFF_DOMAIN || USER_DOMAINS.includes(domain);
 }
@@ -116,7 +117,8 @@ async function handleLogin(event) {
     if (profile.role === 'staff' || profile.role === 'admin') {
       localStorage.setItem('userRole', profile.role);
       localStorage.setItem('isStaff', 'true');
-      window.location.href = 'staff-dashboard.html';
+      // ผู้ดูแลระบบจัดการเฉพาะสถานที่เก็บ จึงไปหน้านั้นโดยตรง
+      window.location.href = profile.role === 'admin' ? 'admin-storage-points.html' : 'staff-dashboard.html';
     } else {
       localStorage.removeItem('userRole');
       localStorage.removeItem('isStaff');

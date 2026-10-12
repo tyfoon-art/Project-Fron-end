@@ -321,11 +321,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const isAccepting = localStorage.getItem('system_accepting_reports') !== 'false';
   updateSystemStatusUI(isAccepting);
 
-  // ลิงก์จัดการสถานที่เก็บ แสดงเฉพาะผู้ดูแลระบบ (role='admin')
-  if (localStorage.getItem('userRole') === 'admin') {
-    document.getElementById('admin-nav-item')?.classList.remove('hidden');
-  }
-
   document.getElementById('toggle-system-btn')?.addEventListener('click', toggleSystemStatus);
   document.getElementById('refresh-btn')?.addEventListener('click', fetchRealtimeDashboardData);
   document.getElementById('proof-modal-close')?.addEventListener('click', closeProofModal);

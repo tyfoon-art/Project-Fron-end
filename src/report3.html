@@ -92,7 +92,7 @@
             <i class="fa-solid fa-cloud-arrow-up"></i>
           </div>
           <div class="upload-title">คลิกเพื่ออัปโหลด หรือลากไฟล์รูปภาพมาวางที่นี่</div>
-          <div class="upload-desc">รองรับเฉพาะไฟล์รูปถ่าย (PNG, JPG, JPEG, WEBP) — ระบบจะบันทึกรูปแรกเป็นรูปหลักของประกาศ</div>
+          <div class="upload-desc">รองรับเฉพาะไฟล์รูปถ่าย (PNG, JPG, JPEG, WEBP) ขนาดไม่เกิน 5 MB — ระบบจะบันทึกรูปแรกเป็นรูปหลักของประกาศ</div>
           <div class="upload-btn-fake">เลือกไฟล์รูปถ่าย</div>
           <input type="file" id="fileInput" accept="image/png, image/jpeg, image/webp" style="display: none;" onchange="handleFiles(this.files)">
         </div>
@@ -118,13 +118,15 @@
             <i class="fa-solid fa-key"></i>
           </div>
           <div class="upload-title secret-upload-title">คลิกอัปโหลดรูปตำหนิลับ (1 รูป)</div>
+          <div class="upload-desc">รองรับรูปขนาดไม่เกิน 5 MB</div>
           <div class="upload-btn-fake secret-upload-btn">เลือกรูปลับตำหนิ</div>
           <input type="file" id="secretFileInput" accept="image/png, image/jpeg, image/webp" style="display: none;" onchange="handleSecretFile(this.files)">
         </div>
+        <div class="error-text" id="secretImageError">รูปภาพมีขนาดเกิน 5 MB กรุณาเลือกรูปใหม่</div>
 
         <div id="secretPreviewContainer" class="secret-preview-box" style="display: none;">
           <img id="secretImgTag" src="" alt="Secret Preview">
-          <button type="button" class="btn-remove-img" onclick="removeSecretImage()"><i class="fa-solid fa-xmark"></i></button>
+          <button type="button" class="btn-remove-img" id="btnRemoveSecret" onclick="removeSecretImage()"><i class="fa-solid fa-xmark"></i></button>
         </div>
       </div>
 

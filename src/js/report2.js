@@ -19,7 +19,20 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   restoreFromSessionStorage();
+
+  if (sessionStorage.getItem('report_edit_item_id')) {
+    const heading = document.querySelector('.report-header h1');
+    if (heading) heading.textContent = 'แก้ไขโพสต์';
+  }
 });
+
+// โหมดแก้ไขต้องย้อนกลับไปพร้อม id + mode=edit ไม่งั้น report.html จะมองว่าเป็นการเริ่มโพสต์ใหม่
+function goBack() {
+  const editItemId = sessionStorage.getItem('report_edit_item_id');
+  window.location.href = editItemId
+    ? `report.html?id=${editItemId}&mode=edit`
+    : 'report.html';
+}
 
 function restoreFromSessionStorage() {
   const savedLocation = sessionStorage.getItem('report_incident_location');
@@ -120,3 +133,4 @@ function validateAndNext() {
 // module script ไม่ leak ฟังก์ชันออกไปเป็น global โดยอัตโนมัติ จึงแปะเข้า window
 window.clearError = clearError;
 window.validateAndNext = validateAndNext;
+window.goBack = goBack;
